@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
 import Link from 'next/link'
 import Head from 'next/head'
+import NavBar from './NavBar'
 
 type Props = {
   children?: ReactNode
@@ -15,12 +16,7 @@ const Layout = ({ children, title = 'This is the default title' }: Props) => (
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     </Head>
     <header>
-      <nav>
-        <Link href="/">Home</Link> | <Link href="/about">About</Link> |{' '}
-        <Link href="/users">Users List</Link> |{' '}
-        <Link href="/login">Login</Link> |{' '}
-        <a href="/api/users">Users API</a>
-      </nav>
+      <NavBar/>
     </header>
     {children}
     <footer>
