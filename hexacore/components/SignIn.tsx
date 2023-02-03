@@ -11,84 +11,92 @@ import {
 } from '@nextui-org/react';
 import { LoginMail } from '../components/LoginMail';
 import { LoginPassword } from '../components/LoginPassword';
-import {auth} from "../firebase";
 import Link from 'next/link'
+import {useState, useEffect} from "react";
+import {auth, logInWithEmailAndPassword, app, signInWithGoogle} from "../firebase";
+import { useRouter } from 'next/navigation';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { getAuth } from 'firebase/auth';
+
 
   
 export default function SignIn() {
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('emailInput'),
-            password: data.get('passwordInput'),
-        });
-        
-        try {
-            await auth.signInWithEmailAndPassword(
-                data.get('emailInput').toString(),
-                data.get('passwordInput').toString()
-            );
-        } catch (error) {
-            console.error(error);
-        }
-    };
-        
-    const signOut = async () => {
-    await auth.signOut();
 
-    };
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const auth = getAuth(app);
+    const [user, loading, error] = useAuthState(auth);
+    const router = useRouter();
+    useEffect(() => {
+        if (loading) {
+        // maybe trigger a loading screen
+        return;
+        }
+    if (user) console.log("Logged in user " + auth.currentUser.uid.toString());
+  }, [user, loading, router]);
 
     return (
         <div>
             <Container display="flex" alignItems="center" justify="center" css={{ minHeight: '100vh' }}>
-                <Card css={{ mw: '420px', p: '20px' }} variant="bordered" children="undefined">
-                <Text
-                    size={24}
-                    weight="bold"
-                    css={{
-                    as: 'center',
-                    mb: '20px',
-                    }}
-                >
-                    NextUI Login
-                </Text>
-                <Input
-                    name='emailInput'
-                    id='emailInput'
-                    clearable
-                    bordered            
-                    fullWidth
-                    color="primary"
-                    size="lg"
-                    placeholder="Email"
-                    contentLeft={<LoginMail fill="currentColor" size={undefined} height={undefined} width={undefined} />}
-                />
-                <Spacer y={1} />
-                <Input
-                    name='passwordInput'
-                    id='passwordInput'
-                    clearable
-                    bordered
-                    fullWidth
-                    color="primary"
-                    size="lg"
-                    placeholder="Password"
-                    contentLeft={<LoginPassword fill="currentColor" size={undefined} height={undefined} width={undefined} />}
-                    css={{ mb: '6px' }}
-                />
-                <Row justify="space-between">
-                    <Checkbox>
-                    <Text size={14}>Remember me</Text>
-                    </Checkbox>
-                    <Text size={14}>Forgot password?</Text>
-                </Row>
-                <Spacer y={1} />
-                <Row>
-                    <Link href="/register">Not registered yet? Click here to register a new account.</Link> |{' '}
-                </Row>
-                <Spacer y={1} />
-                <Button onClick={SignIn}>Sign in</Button>
+                <Card css={{ mw: '420px', p: '20px' }} variant="bordered">
+                    <Text
+                        size={24}
+                        weight="bold"
+                        css={{
+                        as: 'center',
+                        mb: '20px',
+                        }}
+                    >
+                        Login
+                    </Text>
+                    <Input
+                        name='emailInput'
+                        id='emailInput'
+                        aria-label="Email input"
+                        onChange={e => { setEmail(e.currentTarget.value); }}
+                        clearable
+                        bordered            
+                        fullWidth
+                        color="primary"
+                        size="lg"
+                        placeholder="Email"
+                        contentLeft={<LoginMail fill="currentColor" size={undefined} height={undefined} width={undefined} />}
+                    />
+                    <Spacer y={1} />
+                    <Input
+                        name='passwordInput'
+                        id='passwordInput'
+                        aria-label="password input"
+                        type={"password"}
+                        onChange={e => { setPassword(e.currentTarget.value); }}
+                        clearable
+                        bordered
+                        fullWidth
+                        color="primary"
+                        size="lg"
+                        placeholder="Password"
+                        contentLeft={<LoginPassword fill="currentColor" size={undefined} height={undefined} width={undefined} />}
+                        css={{ mb: '6px' }}
+                    />
+                    
+                    <Row justify="space-between">
+                        <Checkbox>
+                            <Text size={14}>Remember me</Text>
+                        </Checkbox>
+                    </Row>
+                    <Spacer y={1} />
+                    <Row>
+                        <Link href="/register">Not registered yet? Click here to register a new account.</Link>
+                    </Row>
+                        
+                    <Spacer y={1} />
+                        <Link href="/reset">Forgotten password?</Link>
+                    <Spacer y={1} />
+                    <Button  onClick={signInWithGoogle}>
+                        Login with Google
+                    </Button>
+                    <Spacer y={1} />
+                    <Button onPress={() => logInWithEmailAndPassword(email, password)}>Login</Button>
                 </Card>
             </Container>
         </div>
