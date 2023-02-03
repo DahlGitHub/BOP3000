@@ -19,6 +19,12 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 
 const googleProvider = new GoogleAuthProvider();
+const microsoftProvider = new firebase.auth.OAuthProvider("microsoft.com");
+microsoftProvider.setCustomParameters({
+  prompt: "consent",
+  tenant: "52c4340a-af1c-4010-b7e4-08e63d51696f"
+})
+
 const auth = firebase.auth();
 const db = getFirestore(app);
 
@@ -42,6 +48,26 @@ const signInWithGoogle = async () => {
     alert(err.message);
   }
 };
+
+const signInWithMicrosoft = async () => {
+  try {
+    const res = await signInWithPopup(auth, microsoftProvider);
+    const user = res.user;
+    const q = query(collection(db, "users"), where("uid", "==", user.uid));
+    const docs = await getDocs(q);
+    if (docs.docs.length === 0) {
+      await addDoc(collection(db, "users"), {
+        uid: user.uid,
+        name: user.displayName,
+        authProvider: "microsoft",
+        email: user.email,
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    alert(err.message);
+  }
+}
 
 const logInWithEmailAndPassword = async (email, password) => {
     try {
@@ -84,4 +110,4 @@ const logout = () => {
   signOut(auth);
 };
 
-export {auth, db, sendPasswordReset, logInWithEmailAndPassword, signInWithGoogle, registerWithEmailAndPassword, logout, app}
+export {auth, db, sendPasswordReset, logInWithEmailAndPassword, signInWithGoogle, signInWithMicrosoft, registerWithEmailAndPassword, logout, app}

@@ -13,7 +13,7 @@ import { LoginMail } from '../components/LoginMail';
 import { LoginPassword } from '../components/LoginPassword';
 import Link from 'next/link'
 import {useState, useEffect} from "react";
-import {auth, logInWithEmailAndPassword, app, signInWithGoogle} from "../firebase";
+import {auth, logInWithEmailAndPassword, app, signInWithGoogle, signInWithMicrosoft} from "../firebase";
 import { useRouter } from 'next/navigation';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { getAuth } from 'firebase/auth';
@@ -93,7 +93,11 @@ export default function SignIn() {
                         <Link href="/reset">Forgotten password?</Link>
                     <Spacer y={1} />
                     <Button  onClick={signInWithGoogle}>
-                        Login with Google
+                        <img width={30} src='https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-webinar-optimizing-for-success-google-business-webinar-13.png'></img>Login with Google
+                    </Button>
+                    <Spacer y={1} />
+                    <Button  onClick={signInWithMicrosoft}>
+                        <img width={20} src='https://cdn-icons-png.flaticon.com/512/732/732221.png'></img> Login with Microsoft
                     </Button>
                     <Spacer y={1} />
                     <Button onPress={() => logInWithEmailAndPassword(email, password)}>Login</Button>

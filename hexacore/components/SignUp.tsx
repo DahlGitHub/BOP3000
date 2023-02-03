@@ -114,7 +114,7 @@ export default function SignUp() {
                         css={{ mb: '6px' }}
                     />
                     <Row justify="space-between">
-                    <Link href="/login">Already have an account?</Link> |{' '}
+                        <Link href="/login">Already have an account?</Link> |{' '}
                     </Row>
                     <Spacer y={1} />
                     <Button onPress={register}>Sign up</Button>
