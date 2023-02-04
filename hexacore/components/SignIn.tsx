@@ -32,8 +32,8 @@ export default function SignIn() {
         // maybe trigger a loading screen
         return;
         }
-    if (user) console.log("Logged in user " + auth.currentUser.uid.toString());
-  }, [user, loading, router]);
+        if (user) console.log("Logged in user " + auth.currentUser.uid.toString());
+    }, [user, loading, router]);
 
     return (
         <div>
@@ -85,6 +85,8 @@ export default function SignIn() {
                         </Checkbox>
                     </Row>
                     <Spacer y={1} />
+                    <Button onPress={() => logInWithEmailAndPassword(email, password)}>Login</Button>
+                    <Spacer y={1} />
                     <Row>
                         <Link href="/register">Not registered yet? Click here to register a new account.</Link>
                     </Row>
@@ -93,14 +95,17 @@ export default function SignIn() {
                         <Link href="/reset">Forgotten password?</Link>
                     <Spacer y={1} />
                     <Button  onClick={signInWithGoogle}>
-                        <img width={30} src='https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-webinar-optimizing-for-success-google-business-webinar-13.png'></img>Login with Google
+                        <img width={30} src='https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-webinar-optimizing-for-success-google-business-webinar-13.png'/>
+                        <Spacer x={0.2}/>
+                        Login with Google
                     </Button>
                     <Spacer y={1} />
                     <Button  onClick={signInWithMicrosoft}>
-                        <img width={20} src='https://cdn-icons-png.flaticon.com/512/732/732221.png'></img> Login with Microsoft
+                        <img width={20} src='https://cdn-icons-png.flaticon.com/512/732/732221.png'></img>
+                        <Spacer x={0.2}/>
+                        Login with Microsoft
                     </Button>
-                    <Spacer y={1} />
-                    <Button onPress={() => logInWithEmailAndPassword(email, password)}>Login</Button>
+                    
                 </Card>
             </Container>
         </div>
