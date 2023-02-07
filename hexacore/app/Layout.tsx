@@ -5,6 +5,7 @@ import NavBar from './NavBar'
 import Footer from './Footer'
 import HeadPage from './HeadPage'
 
+
 type Props = {
   children?: ReactNode
   title?: string
