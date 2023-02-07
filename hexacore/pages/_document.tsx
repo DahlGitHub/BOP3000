@@ -14,7 +14,10 @@ class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
-        <Head>{CssBaseline.flush()}</Head>
+        <Head>
+          {CssBaseline.flush()}
+          <link rel="stylesheet" href="global.css"/>
+        </Head>
         <body>
           <Main />
           <NextScript />
