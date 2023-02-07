@@ -1,125 +1,113 @@
-import Layout from '../components/Layout'
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {auth} from "../firebase";
+import React from 'react';
+import {
+  Card,
+  Spacer,
+  Button,
+  Text,
+  Input,
+  Row,
+  Checkbox,
+  Container,
+} from '@nextui-org/react';
+import { LoginMail } from '../components/LoginMail';
+import { LoginPassword } from '../components/LoginPassword';
+import Link from 'next/link'
+import {useState, useEffect} from "react";
+import {auth, logInWithEmailAndPassword, app, signInWithGoogle, signInWithMicrosoft} from "../firebase";
+import { useRouter } from 'next/navigation';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { getAuth } from 'firebase/auth';
 
-function Copyright(props: any) {
-    return (
-      <Typography variant="body2" color="text.secondary" align="center" {...props}>
-        {'Copyright © '}
-        <Link color="inherit" href="https://mui.com/">
-          Your Website
-        </Link>{' '}
-        {new Date().getFullYear()}
-        {'.'}
-      </Typography>
-    );
-  }
-  
-const theme = createTheme();
+
   
 export default function SignIn() {
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
-        
-        try {
-            await auth.signInWithEmailAndPassword(
-                data.get('email').toString(),
-                data.get('password').toString()
-            );
-        } catch (error) {
-            console.error(error);
-        }
-        };
-        
-        const signOut = async () => {
-        await auth.signOut();
 
-    };
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const auth = getAuth(app);
+    const [user, loading, error] = useAuthState(auth);
+    const router = useRouter();
+    useEffect(() => {
+        if (loading) {
+        // maybe trigger a loading screen
+        return;
+        }
+        if (user) console.log("Logged in user " + auth.currentUser.uid.toString());
+    }, [user, loading, router]);
 
     return (
-        <ThemeProvider theme={theme}>
-        <Container component="main" maxWidth="xs">
-            <CssBaseline />
-            <Box
-            sx={{
-                marginTop: 8,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-            }}
-            >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-                Sign in
-            </Typography>
-            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                />
-                <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                />
-                <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-                />
-                <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-                >
-                Sign In
-                </Button>
-                <Grid container>
-                <Grid item xs>
-                    <Link href="#" variant="body2">
-                    Forgot password?
-                    </Link>
-                </Grid>
-                <Grid item>
-                    <Link href="/register" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                    </Link>
-                </Grid>
-                </Grid>
-            </Box>
-            </Box>
-            <Copyright sx={{ mt: 8, mb: 4 }} />
-        </Container>
-        </ThemeProvider>
+        <div>
+            <Container display="flex" alignItems="center" justify="center" css={{ minHeight: '100vh' }}>
+                <Card css={{ mw: '420px', p: '20px' }} variant="bordered">
+                    <Text
+                        size={24}
+                        weight="bold"
+                        css={{
+                        as: 'center',
+                        mb: '20px',
+                        }}
+                    >
+                        Login
+                    </Text>
+                    <Input
+                        name='emailInput'
+                        id='emailInput'
+                        aria-label="Email input"
+                        onChange={e => { setEmail(e.currentTarget.value); }}
+                        clearable
+                        bordered            
+                        fullWidth
+                        color="primary"
+                        size="lg"
+                        placeholder="Email"
+                        contentLeft={<LoginMail fill="currentColor" size={undefined} height={undefined} width={undefined} />}
+                    />
+                    <Spacer y={1} />
+                    <Input
+                        name='passwordInput'
+                        id='passwordInput'
+                        aria-label="password input"
+                        type={"password"}
+                        onChange={e => { setPassword(e.currentTarget.value); }}
+                        clearable
+                        bordered
+                        fullWidth
+                        color="primary"
+                        size="lg"
+                        placeholder="Password"
+                        contentLeft={<LoginPassword fill="currentColor" size={undefined} height={undefined} width={undefined} />}
+                        css={{ mb: '6px' }}
+                    />
+                    
+                    <Row justify="space-between">
+                        <Checkbox>
+                            <Text size={14}>Remember me</Text>
+                        </Checkbox>
+                    </Row>
+                    <Spacer y={1} />
+                    <Button onPress={() => logInWithEmailAndPassword(email, password)}>Login</Button>
+                    <Spacer y={1} />
+                    <Row>
+                        <Link href="/register">Not registered yet? Click here to register a new account.</Link>
+                    </Row>
+                        
+                    <Spacer y={1} />
+                        <Link href="/reset">Forgotten password?</Link>
+                    <Spacer y={1} />
+                    <Button  onClick={signInWithGoogle}>
+                        <img width={30} src='https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-webinar-optimizing-for-success-google-business-webinar-13.png'/>
+                        <Spacer x={0.2}/>
+                        Login with Google
+                    </Button>
+                    <Spacer y={1} />
+                    <Button  onClick={signInWithMicrosoft}>
+                        <img width={20} src='https://cdn-icons-png.flaticon.com/512/732/732221.png'></img>
+                        <Spacer x={0.2}/>
+                        Login with Microsoft
+                    </Button>
+                    
+                </Card>
+            </Container>
+        </div>
     );
 }
