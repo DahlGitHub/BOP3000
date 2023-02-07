@@ -9,7 +9,7 @@ const FrontPage = () => {
     <Container lg>
       <Row>
         <Col>
-        <Text h1>Do more</Text>
+        <Text h1 className="underline">Do more</Text>
         <Text h1>Less work</Text>
         </Col>
       </Row>
