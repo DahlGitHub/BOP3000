@@ -27,7 +27,7 @@ return (
             <Dropdown isBordered>
                 <Navbar.Item>
                     <Dropdown.Button auto
-                    color="inherit"
+                    
                     css={{
                     px: 0,
                     dflex: "center",
