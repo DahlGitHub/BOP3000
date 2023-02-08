@@ -12,7 +12,7 @@ type Props = {
 }
 
 const Layout = ({ children, title = 'Hexacore' }: Props) => (
-  <div>
+  <div className='min-h-screen'>
     <HeadPage/>
     <header>
       <NavBar/>
