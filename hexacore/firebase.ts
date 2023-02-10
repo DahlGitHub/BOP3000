@@ -17,16 +17,16 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 const googleProvider = new GoogleAuthProvider();
+
 const microsoftProvider = new firebase.auth.OAuthProvider("microsoft.com");
 microsoftProvider.setCustomParameters({
   prompt: "consent",
   tenant: "52c4340a-af1c-4010-b7e4-08e63d51696f"
 })
-
-const auth = firebase.auth();
-const db = getFirestore(app);
 
 
 const signInWithGoogle = async () => {
