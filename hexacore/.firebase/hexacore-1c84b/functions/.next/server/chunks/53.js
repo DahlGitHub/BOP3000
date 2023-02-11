@@ -77,14 +77,14 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 const app = firebase_compat_app__WEBPACK_IMPORTED_MODULE_2__["default"].initializeApp(firebaseConfig);
+const auth = (0,firebase_auth__WEBPACK_IMPORTED_MODULE_0__.getAuth)(app);
+const db = (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.getFirestore)(app);
 const googleProvider = new firebase_auth__WEBPACK_IMPORTED_MODULE_0__.GoogleAuthProvider();
 const microsoftProvider = new firebase_compat_app__WEBPACK_IMPORTED_MODULE_2__["default"].auth.OAuthProvider("microsoft.com");
 microsoftProvider.setCustomParameters({
     prompt: "consent",
     tenant: "52c4340a-af1c-4010-b7e4-08e63d51696f"
 });
-const auth = firebase_compat_app__WEBPACK_IMPORTED_MODULE_2__["default"].auth();
-const db = (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.getFirestore)(app);
 const signInWithGoogle = async ()=>{
     try {
         const res = await (0,firebase_auth__WEBPACK_IMPORTED_MODULE_0__.signInWithPopup)(auth, googleProvider);

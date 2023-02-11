@@ -1,92 +1,86 @@
-"use strict";
 (() => {
 var exports = {};
 exports.id = 888;
 exports.ids = [888];
 exports.modules = {
 
-/***/ 2648:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 3847:
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
 
-var __webpack_unused_export__;
+"use strict";
+__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(997);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _nextui_org_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6735);
+/* harmony import */ var _nextui_org_react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_nextui_org_react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _styles_global_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9605);
+/* harmony import */ var _styles_global_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_styles_global_css__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(86);
+/* harmony import */ var _fortawesome_fontawesome_svg_core_styles_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5800);
+/* harmony import */ var _fortawesome_fontawesome_svg_core_styles_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_fortawesome_fontawesome_svg_core_styles_css__WEBPACK_IMPORTED_MODULE_4__);
+var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([_fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_3__]);
+_fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_3__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
+// 1. import `NextUIProvider` component
 
-__webpack_unused_export__ = ({
-    value: true
-});
-Object.defineProperty(exports, "Z", ({
-    enumerable: true,
-    get: function() {
-        return _interopRequireDefault;
-    }
-}));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
+
+
+
+
+_fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_3__.config.autoAddCss = false;
+function MyApp({ Component , pageProps  }) {
+    return(// 2. Use at the root of your app
+    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_nextui_org_react__WEBPACK_IMPORTED_MODULE_1__.NextUIProvider, {
+        children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(Component, {
+            ...pageProps
+        })
+    }));
 }
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (MyApp);
+
+__webpack_async_result__();
+} catch(e) { __webpack_async_result__(e); } });
+
+/***/ }),
+
+/***/ 5800:
+/***/ (() => {
+
 
 
 /***/ }),
 
-/***/ 4297:
-/***/ ((module, exports, __webpack_require__) => {
+/***/ 9605:
+/***/ (() => {
 
-
-Object.defineProperty(exports, "__esModule", ({
-    value: true
-}));
-exports["default"] = void 0;
-var _async_to_generator = (__webpack_require__(932)/* ["default"] */ .Z);
-var _interop_require_default = (__webpack_require__(2648)/* ["default"] */ .Z);
-var _react = _interop_require_default(__webpack_require__(6689));
-var _utils = __webpack_require__(9232);
-function appGetInitialProps(_) {
-    return _appGetInitialProps.apply(this, arguments);
-}
-function _appGetInitialProps() {
-    _appGetInitialProps = /**
- * `App` component is used for initialize of pages. It allows for overwriting and full control of the `page` initialization.
- * This allows for keeping state between navigation, custom error handling, injecting additional data.
- */ _async_to_generator(function*({ Component , ctx  }) {
-        const pageProps = yield (0, _utils).loadGetInitialProps(Component, ctx);
-        return {
-            pageProps
-        };
-    });
-    return _appGetInitialProps.apply(this, arguments);
-}
-var _Component;
-class App extends (_Component = _react.default.Component) {
-    render() {
-        const { Component , pageProps  } = this.props;
-        return /*#__PURE__*/ _react.default.createElement(Component, Object.assign({}, pageProps));
-    }
-}
-App.origGetInitialProps = appGetInitialProps;
-App.getInitialProps = appGetInitialProps;
-exports["default"] = App;
-if ((typeof exports.default === "function" || typeof exports.default === "object" && exports.default !== null) && typeof exports.default.__esModule === "undefined") {
-    Object.defineProperty(exports.default, "__esModule", {
-        value: true
-    });
-    Object.assign(exports.default, exports);
-    module.exports = exports.default;
-} //# sourceMappingURL=_app.js.map
 
 
 /***/ }),
 
-/***/ 9232:
+/***/ 6735:
 /***/ ((module) => {
 
-module.exports = require("next/dist/shared/lib/utils.js");
+"use strict";
+module.exports = require("@nextui-org/react");
 
 /***/ }),
 
-/***/ 6689:
+/***/ 997:
 /***/ ((module) => {
 
-module.exports = require("react");
+"use strict";
+module.exports = require("react/jsx-runtime");
+
+/***/ }),
+
+/***/ 86:
+/***/ ((module) => {
+
+"use strict";
+module.exports = import("@fortawesome/fontawesome-svg-core");;
 
 /***/ })
 
@@ -97,7 +91,7 @@ module.exports = require("react");
 var __webpack_require__ = require("../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [932], () => (__webpack_exec__(4297)));
+var __webpack_exports__ = (__webpack_exec__(3847));
 module.exports = __webpack_exports__;
 
 })();
