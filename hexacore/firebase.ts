@@ -9,12 +9,12 @@ import 'firebase/compat/firestore';
 const firebaseConfig = {
   apiKey: "AIzaSyCq3uvuimLnuVrF-f3f1VaN3VD5qip2ChQ",
   authDomain: "hexacore-1c84b.firebaseapp.com",
+  databaseURL: "https://hexacore-1c84b-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "hexacore-1c84b",
   storageBucket: "hexacore-1c84b.appspot.com",
   messagingSenderId: "1090430226645",
   appId: "1:1090430226645:web:b14a47eaf66fc1e9fc525c"
 };
-
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);
 const auth = getAuth(app);
