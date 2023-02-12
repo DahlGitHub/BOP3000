@@ -8,6 +8,8 @@ import {
   Row,
   Checkbox,
   Container,
+  blue,
+  green,
 } from '@nextui-org/react';
 import { LoginMail } from '../components/LoginMail';
 import { LoginPassword } from '../components/LoginPassword';
@@ -17,6 +19,7 @@ import {auth, logInWithEmailAndPassword, app, signInWithGoogle, signInWithMicros
 import { useRouter } from 'next/navigation';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { getAuth } from 'firebase/auth';
+import { color } from '@mui/system';
 
 
   
@@ -32,7 +35,7 @@ export default function SignIn() {
         // maybe trigger a loading screen
         return;
         }
-        if (user) console.log("Logged in user " + auth.currentUser.uid.toString());
+        if (user) console.log("Logged in user " + auth.currentUser.uid.toString() && router.push("./"));
     }, [user, loading, router]);
 
     return (
@@ -85,7 +88,11 @@ export default function SignIn() {
                         </Checkbox>
                     </Row>
                     <Spacer y={1} />
-                    <Button onPress={() => logInWithEmailAndPassword(email, password)}>Login</Button>
+                    <button 
+                        className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
+                        onClick={() => logInWithEmailAndPassword(email, password)}>
+                            Login
+                    </button>
                     <Spacer y={1} />
                     <Row>
                         <Link href="/register">Not registered yet? Click here to register a new account.</Link>
@@ -94,17 +101,21 @@ export default function SignIn() {
                     <Spacer y={1} />
                         <Link href="/reset">Forgotten password?</Link>
                     <Spacer y={1} />
-                    <Button  onClick={signInWithGoogle}>
+                    <button
+                        className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
+                        onClick={signInWithGoogle}>
                         <img width={30} src='https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-webinar-optimizing-for-success-google-business-webinar-13.png'/>
                         <Spacer x={0.2}/>
                         Login with Google
-                    </Button>
+                    </button>
                     <Spacer y={1} />
-                    <Button  onClick={signInWithMicrosoft}>
+                    <button
+                        className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
+                        onClick={signInWithMicrosoft}>
                         <img width={20} src='https://cdn-icons-png.flaticon.com/512/732/732221.png'></img>
                         <Spacer x={0.2}/>
                         Login with Microsoft
-                    </Button>
+                    </button>
                     
                 </Card>
             </Container>

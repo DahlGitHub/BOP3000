@@ -114,10 +114,10 @@ export default function SignUp() {
                         css={{ mb: '6px' }}
                     />
                     <Row justify="space-between">
-                        <Link href="/login">Already have an account?</Link> |{' '}
+                        <Link href="/login">Already have an account?</Link>
                     </Row>
                     <Spacer y={1} />
-                    <Button onPress={register}>Sign up</Button>
+                    <button className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900" onClick={register}>Sign up</button>
                 </Card>
             </Container>
         </div>

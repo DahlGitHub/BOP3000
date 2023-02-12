@@ -3,6 +3,7 @@ import { Container, Navbar, Dropdown, Button, Text, Avatar } from "@nextui-org/r
 import Link from 'next/link';
 import Image from 'next/image';
 import Logo from '/public/images/hexacore.png';
+import { auth, logout } from '../firebase';
 
 const NavBar: NextPage = () => {
     const collapseItems = [
@@ -16,14 +17,16 @@ return (
 <Container>
     <Navbar isBordered variant="sticky">
         <Navbar.Toggle showIn="xs" />
-        <Navbar.Brand>
-            <Image src={Logo} alt="Hexacore" width={35} height={35} />
-            <Text b color="inherit" hideIn="xs">
-                Hexacore
-            </Text>
-        </Navbar.Brand>
-        <Navbar.Content hideIn="xs" variant="underline">
+          <Link href="./">
+            <Navbar.Brand>
             
+            <Image src={Logo} alt="Hexacore" width={35} height={35} />
+                <Text b color="inherit" hideIn="xs">
+                    Hexacore
+                </Text>
+            </Navbar.Brand>
+          </Link>
+        <Navbar.Content hideIn="xs" variant="underline">
             <Dropdown isBordered>
                 <Navbar.Item>
                     <Dropdown.Button auto
@@ -104,7 +107,9 @@ return (
                   Signed in as
                 </Text>
                 <Text b color="inherit" css={{ d: "flex" }}>
-                  zoey@example.com
+                  <p>
+                    {auth.currentUser? auth.currentUser?.email.toString() : "None"}
+                  </p>
                 </Text>
               </Dropdown.Item>
               <Dropdown.Item key="settings" withDivider>
@@ -113,7 +118,13 @@ return (
               <Dropdown.Item key="team_settings">Team Settings</Dropdown.Item>
 
               <Dropdown.Item key="logout" withDivider color="error">
-                Log Out
+                  {!auth.currentUser?  
+                    <Link href="/login">Login</Link>
+                  
+                  :
+                  
+                    <Link href="/login" onClick={logout}>Logout</Link>
+                  }
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>

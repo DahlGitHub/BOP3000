@@ -5,29 +5,22 @@ exports.id = 892;
 exports.ids = [892];
 exports.modules = {
 
-/***/ 6803:
+/***/ 1257:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-// ESM COMPAT FLAG
-__webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "default": () => (/* binding */ users),
-  "getStaticProps": () => (/* binding */ getStaticProps)
+  "Z": () => (/* binding */ components_List)
 });
 
 // EXTERNAL MODULE: external "react/jsx-runtime"
 var jsx_runtime_ = __webpack_require__(997);
+// EXTERNAL MODULE: external "react"
+var external_react_ = __webpack_require__(6689);
 // EXTERNAL MODULE: ./node_modules/next/link.js
 var next_link = __webpack_require__(1664);
 var link_default = /*#__PURE__*/__webpack_require__.n(next_link);
-// EXTERNAL MODULE: ./utils/sample-data.ts
-var sample_data = __webpack_require__(1269);
-// EXTERNAL MODULE: ./app/Layout.tsx + 4 modules
-var Layout = __webpack_require__(5487);
-// EXTERNAL MODULE: external "react"
-var external_react_ = __webpack_require__(6689);
 ;// CONCATENATED MODULE: ./components/ListItem.tsx
 
 
@@ -56,35 +49,55 @@ const List = ({ items  })=>/*#__PURE__*/ jsx_runtime_.jsx("ul", {
     });
 /* harmony default export */ const components_List = (List);
 
-;// CONCATENATED MODULE: ./pages/users/index.tsx
+
+/***/ }),
+
+/***/ 1617:
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   "getStaticProps": () => (/* binding */ getStaticProps)
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(997);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1664);
+/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_link__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _utils_sample_data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1269);
+/* harmony import */ var _app_Layout__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5705);
+/* harmony import */ var _components_List__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1257);
+var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([_app_Layout__WEBPACK_IMPORTED_MODULE_3__]);
+_app_Layout__WEBPACK_IMPORTED_MODULE_3__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
 
 
 
 
 
-const WithStaticProps = ({ items  })=>/*#__PURE__*/ (0,jsx_runtime_.jsxs)(Layout/* default */.Z, {
+const WithStaticProps = ({ items  })=>/*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_app_Layout__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z, {
         title: "Users List | Next.js + TypeScript Example",
         children: [
-            /*#__PURE__*/ jsx_runtime_.jsx("h1", {
+            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("h1", {
                 children: "Users List"
             }),
-            /*#__PURE__*/ (0,jsx_runtime_.jsxs)("p", {
+            /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("p", {
                 children: [
                     "Example fetching data from inside ",
-                    /*#__PURE__*/ jsx_runtime_.jsx("code", {
+                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("code", {
                         children: "getStaticProps()"
                     }),
                     "."
                 ]
             }),
-            /*#__PURE__*/ jsx_runtime_.jsx("p", {
+            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("p", {
                 children: "You are currently on: /users"
             }),
-            /*#__PURE__*/ jsx_runtime_.jsx(components_List, {
+            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_components_List__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z, {
                 items: items
             }),
-            /*#__PURE__*/ jsx_runtime_.jsx("p", {
-                children: /*#__PURE__*/ jsx_runtime_.jsx((link_default()), {
+            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("p", {
+                children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx((next_link__WEBPACK_IMPORTED_MODULE_1___default()), {
                     href: "/",
                     children: "Go home"
                 })
@@ -95,15 +108,17 @@ const getStaticProps = async ()=>{
     // Example for including static props in a Next.js function component page.
     // Don't forget to include the respective types for any props passed into
     // the component.
-    const items = sample_data/* sampleUserData */.w;
+    const items = _utils_sample_data__WEBPACK_IMPORTED_MODULE_2__/* .sampleUserData */ .w;
     return {
         props: {
             items
         }
     };
 };
-/* harmony default export */ const users = (WithStaticProps);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (WithStaticProps);
 
+__webpack_async_result__();
+} catch(e) { __webpack_async_result__(e); } });
 
 /***/ }),
 
@@ -399,6 +414,41 @@ module.exports = require("react-dom");
 
 module.exports = require("react/jsx-runtime");
 
+/***/ }),
+
+/***/ 401:
+/***/ ((module) => {
+
+module.exports = import("firebase/auth");;
+
+/***/ }),
+
+/***/ 3773:
+/***/ ((module) => {
+
+module.exports = import("firebase/compat/app");;
+
+/***/ }),
+
+/***/ 4826:
+/***/ ((module) => {
+
+module.exports = import("firebase/compat/auth");;
+
+/***/ }),
+
+/***/ 741:
+/***/ ((module) => {
+
+module.exports = import("firebase/compat/firestore");;
+
+/***/ }),
+
+/***/ 1492:
+/***/ ((module) => {
+
+module.exports = import("firebase/firestore");;
+
 /***/ })
 
 };
@@ -408,7 +458,7 @@ module.exports = require("react/jsx-runtime");
 var __webpack_require__ = require("../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [210,676,664,121,675,487], () => (__webpack_exec__(6803)));
+var __webpack_exports__ = __webpack_require__.X(0, [210,676,664,121,675,236,705], () => (__webpack_exec__(1617)));
 module.exports = __webpack_exports__;
 
 })();

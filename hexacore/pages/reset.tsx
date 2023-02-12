@@ -57,7 +57,11 @@ function Reset() {
                                 <Link href="/login">Return to login page.</Link>
                             </Row>    
                             <Spacer y={1} />
-                            <Button onPress={() => sendPasswordReset(email) && router.push("/login")}>Send password reset to my email</Button>
+                            <button 
+                                className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900" 
+                                onClick={() => sendPasswordReset(email) && router.push("/login")}>
+                                    Send password reset to my email
+                            </button>
                         </Card>
                     </Container>
         </div>

@@ -2,13 +2,13 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/login": "pages/login.html",
   "/about": "pages/about.html",
-  "/": "pages/index.html",
   "/api/users": "pages/api/users.js",
-  "/reset": "pages/reset.html",
+  "/": "pages/index.html",
+  "/login": "pages/login.html",
   "/register": "pages/register.html",
-  "/users": "pages/users.js",
+  "/reset": "pages/reset.html",
   "/users/[id]": "pages/users/[id].js",
+  "/users": "pages/users.js",
   "/404": "pages/404.html"
 }
