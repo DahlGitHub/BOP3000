@@ -32,7 +32,6 @@ const app = initializeAppIfNecessary();
 const auth = getAuth(app);
 const db = getFirestore(app);
 const database = getDatabase(app);
-
 const googleProvider = new GoogleAuthProvider();
 
 const microsoftProvider = new firebase.auth.OAuthProvider("microsoft.com");
