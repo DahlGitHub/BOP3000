@@ -1,6 +1,6 @@
 
 import Layout from '../app/Layout'
-import UserSettings from '../components/userSettings'
+import UserSettings from '../components/UserSettings'
 
 const Settings = () => (
   <Layout title="Home | Next.js + TypeScript Example">

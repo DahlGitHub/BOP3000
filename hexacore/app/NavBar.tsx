@@ -114,7 +114,7 @@ return (
               </Dropdown.Item>
               <Dropdown.Item key="settings" withDivider>
                 {!auth.currentUser?  
-                  <Link href="/userSettings">User Settings</Link>
+                  <Link href="/settings">User Settings</Link>
                   
                   :
                   
