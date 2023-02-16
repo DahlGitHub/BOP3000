@@ -113,7 +113,13 @@ return (
                 </Text>
               </Dropdown.Item>
               <Dropdown.Item key="settings" withDivider>
-                My Settings
+                {!auth.currentUser?  
+                  <Link href="/userSettings">User Settings</Link>
+                  
+                  :
+                  
+                  <Link href="/login">User Settings</Link>
+                }
               </Dropdown.Item>
               <Dropdown.Item key="team_settings">Team Settings</Dropdown.Item>
 

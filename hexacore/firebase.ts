@@ -5,20 +5,33 @@ import "firebase/auth";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyCq3uvuimLnuVrF-f3f1VaN3VD5qip2ChQ",
-  authDomain: "hexacore-1c84b.firebaseapp.com",
-  projectId: "hexacore-1c84b",
-  storageBucket: "hexacore-1c84b.appspot.com",
-  messagingSenderId: "1090430226645",
-  appId: "1:1090430226645:web:b14a47eaf66fc1e9fc525c"
-};
+import { getDatabase } from "firebase/database";
 
-// Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
+// Your web app's Firebase configuration
+import { initializeApp, getApp } from "firebase/app";
+
+function initializeAppIfNecessary() {
+  try {
+    return getApp();
+  } catch (any) {
+  const firebaseConfig = {
+    apiKey: "AIzaSyCq3uvuimLnuVrF-f3f1VaN3VD5qip2ChQ",
+    authDomain: "hexacore-1c84b.firebaseapp.com",
+    projectId: "hexacore-1c84b",
+    storageBucket: "hexacore-1c84b.appspot.com",
+    messagingSenderId: "1090430226645",
+    appId: "1:1090430226645:web:b14a47eaf66fc1e9fc525c",
+    databaseURL: "https://hexacore-1c84b-default-rtdb.europe-west1.firebasedatabase.app/",
+  };
+
+  return initializeApp(firebaseConfig);
+  }
+}
+
+const app = initializeAppIfNecessary();
 const auth = getAuth(app);
 const db = getFirestore(app);
+const database = getDatabase(app);
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -110,4 +123,4 @@ const logout = () => {
   signOut(auth);
 };
 
-export {auth, db, sendPasswordReset, logInWithEmailAndPassword, signInWithGoogle, signInWithMicrosoft, registerWithEmailAndPassword, logout, app}
+export {auth, db, sendPasswordReset, logInWithEmailAndPassword, signInWithGoogle, signInWithMicrosoft, registerWithEmailAndPassword, logout, app, database}
