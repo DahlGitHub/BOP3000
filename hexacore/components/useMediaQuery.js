@@ -25,3 +25,4 @@ export const useMediaQuery = (width)=> {
 
   return targetReached;
 };
+
