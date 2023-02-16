@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Logo from '/public/images/hexacore.png';
 import { auth, logout } from '../firebase';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const NavBar: NextPage = () => {
     const collapseItems = [
@@ -14,29 +15,31 @@ const NavBar: NextPage = () => {
     "Log Out",
     ];
 return (
-<Container>
-    <Navbar isBordered variant="sticky">
+
+    <Navbar 
+    disableShadow
+    variant="sticky">
         <Navbar.Toggle showIn="xs" />
-          <Link href="./">
+        <Navbar.Content hideIn="xs" variant="underline">
+        <Link href="./">
             <Navbar.Brand>
             
             <Image src={Logo} alt="Hexacore" width={35} height={35} />
-                <Text b color="inherit" hideIn="xs">
+                <Text hideIn="xs">
                     Hexacore
                 </Text>
             </Navbar.Brand>
           </Link>
-        <Navbar.Content hideIn="xs" variant="underline">
             <Dropdown isBordered>
                 <Navbar.Item>
                     <Dropdown.Button auto
-                    
+                    light
                     css={{
                     px: 0,
                     dflex: "center",
                     
                 }} ripple={false}>
-                        Features
+                        Product
                     </Dropdown.Button>
                 </Navbar.Item>
                 <Dropdown.Menu aria-label="ACME features" css={{
@@ -58,31 +61,62 @@ return (
               }}>
                     <Dropdown.Item key="autoscaling" showFullDescription
                         description="ACME scales apps to meet user demand, automagically, based on load.">
-                        Autoscaling
+                        Why Hexacore
                     </Dropdown.Item>
                     <Dropdown.Item key="usage_metrics" showFullDescription
                         description="Real-time metrics to debug issues. Slow query added? We’ll show you exactly where.">
                         Usage Metrics
                     </Dropdown.Item>
-                    <Dropdown.Item key="production_ready" showFullDescription
-                        description="ACME runs on ACME, join us and others serving requests at web scale.">
-                        Production Ready
+                </Dropdown.Menu>
+            </Dropdown>
+            <Dropdown isBordered>
+                <Navbar.Item>
+                    <Dropdown.Button auto
+                    light
+                    css={{
+                    px: 0,
+                    dflex: "center",
+                    
+                }} ripple={false}>
+                        Resources
+                    </Dropdown.Button>
+                </Navbar.Item>
+                <Dropdown.Menu aria-label="ACME features" css={{
+                $$dropdownMenuWidth: "340px",
+                $$dropdownItemHeight: "70px",
+                "& .nextui-dropdown-item": {
+                  py: "$4",
+                  // dropdown item left icon
+                  svg: {
+                    color: "$secondary",
+                    mr: "$4",
+                  },
+                  // dropdown item title
+                  "& .nextui-dropdown-item-content": {
+                    w: "100%",
+                    fontWeight: "$semibold",
+                  },
+                },
+              }}>
+                    <Dropdown.Item key="autoscaling" showFullDescription
+                    icon={<FontAwesomeIcon icon={['fas','book']}/>}
+                        description="ACME scales apps to meet user demand, automagically, based on load.">
+                        Blog
                     </Dropdown.Item>
-                    <Dropdown.Item key="99_uptime" showFullDescription
-                        description="Applications stay on the grid with high availability and high uptime guarantees.">
-                        +99% Uptime
-                    </Dropdown.Item>
-                    <Dropdown.Item key="supreme_support" showFullDescription
-                        description="Overcome any challenge with a supporting team ready to respond.">
-                        +Supreme Support
+                    <Dropdown.Item key="usage_metrics" showFullDescription
+                    icon={<FontAwesomeIcon icon={['fas','user-group']}/>}
+                        description="Real-time metrics to debug issues. Slow query added? We’ll show you exactly where.">
+                        About Us
                     </Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
             <Link href="#">
                 Customers
             </Link>
-            <Link href="/about">About</Link>
-            <Link href="#">Company</Link>
+            <Link href="/about">
+              Pricing
+            </Link>
+            
         </Navbar.Content>
         <Navbar.Content>
             <Dropdown>
@@ -128,6 +162,11 @@ return (
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
+          <button id="theme-toggle" type="button" className="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+    <svg id="theme-toggle-dark-icon" className="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+    <svg id="theme-toggle-light-icon" className="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+</button>
+
         </Navbar.Content>
         <Navbar.Collapse disableAnimation>
           {collapseItems.map((item, index) => (
@@ -141,7 +180,6 @@ return (
             >
               <Link
                 color="inherit"
-               
                 href="#"
               >
                 {item}
@@ -150,7 +188,7 @@ return (
           ))}
         </Navbar.Collapse>
     </Navbar>
-</Container>
+
 )
 }
 
