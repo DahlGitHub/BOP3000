@@ -9,6 +9,7 @@ import { getDatabase } from "firebase/database";
 
 // Your web app's Firebase configuration
 import { initializeApp, getApp } from "firebase/app";
+import { getStorage } from "firebase/storage";
 
 function initializeAppIfNecessary() {
   try {
@@ -32,6 +33,8 @@ const app = initializeAppIfNecessary();
 const auth = getAuth(app);
 const db = getFirestore(app);
 const database = getDatabase(app);
+const storage = getStorage(app);
+
 const googleProvider = new GoogleAuthProvider();
 
 const microsoftProvider = new firebase.auth.OAuthProvider("microsoft.com");
@@ -122,4 +125,4 @@ const logout = () => {
   signOut(auth);
 };
 
-export {auth, db, sendPasswordReset, logInWithEmailAndPassword, signInWithGoogle, signInWithMicrosoft, registerWithEmailAndPassword, logout, app, database}
+export {auth, db, sendPasswordReset, logInWithEmailAndPassword, signInWithGoogle, signInWithMicrosoft, registerWithEmailAndPassword, logout, app, database, storage}
