@@ -17,10 +17,12 @@ class MyDocument extends Document {
         <Head>
           {CssBaseline.flush()}
           <link rel="stylesheet" href="global.css"/>
+  
         </Head>
         <body>
           <Main />
           <NextScript />
+          
         </body>
       </Html>
     );
