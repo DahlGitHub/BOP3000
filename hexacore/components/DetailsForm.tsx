@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import {Container, Image, Row, Col, Grid, Card, Text } from "@nextui-org/react";
 import {useMediaQuery} from './useMediaQuery.js'
 import {auth, db, storage} from "../firebase"
-import { doc, setDoc, addDoc } from "firebase/firestore";
+import { doc, setDoc, addDoc, getDoc } from "firebase/firestore";
 import { useRouter } from 'next/navigation';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
@@ -15,7 +15,11 @@ const DetailsForm = () => {
     const [lastName, setLastName] = React.useState(null);
     const [phone, setPhone] = React.useState(null);
     const router = useRouter();
-    const [fileUrl, setFileUrl] = React.useState(null)
+    const [fileUrl, setFileUrl] = React.useState(null);
+    const userID = auth.currentUser?.uid.toString();
+    const profilePictureUrl = `https://firebasestorage.googleapis.com/v0/b/hexacore-1c84b.appspot.com/o/Image%2F${userID}?alt=media&token=6eb830e3-d840-4e44-80d6-347ecda90fd7 `;
+
+
     
 
     const submit =  (e) => {
@@ -32,7 +36,7 @@ const DetailsForm = () => {
             if (!email) {
                 return
             } else {
-                setDoc(doc(db, "users", auth.currentUser?.uid.toString()), docData)
+                setDoc(doc(db, "users", userID), docData)
             
                 alert("Saved info")
             }
@@ -41,7 +45,7 @@ const DetailsForm = () => {
 
     const filechanged = async (e) =>{
         var file = e.target.files[0];
-        const storageRef = ref(storage, `/Image/${file.name}`);
+        const storageRef = ref(storage, `/Image/${userID}`);
         const uploadTask = uploadBytesResumable(storageRef, file);
   
         uploadTask.on("state_changed",
@@ -61,6 +65,17 @@ const DetailsForm = () => {
             
    }
 
+    const getPicture = async (e) => {
+        const docRef = doc(db, "users", auth.currentUser?.uid.toString(), "picture");
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            console.log("Document data:", docSnap.data());
+          } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }
 
     return (
         <Container lg>
@@ -68,10 +83,23 @@ const DetailsForm = () => {
                 <div className="container mx-auto">
                     <div className="inputs w-full max-w-2xl p-6 mx-auto">
                         <h2 className="text-2xl text-gray-900">Account Settings</h2>
-                        <img className="inline object-cover w-20 h-20 mr-2 rounded-full" src="https://static.thenounproject.com/png/363640-200.png" alt="Profile image"/>
+                        
                         <form className="mt-6 border-t border-gray-400 pt-4">
                         
                             <div className='flex flex-wrap -mx-3 mb-6'>
+                                <div className='w-full md:w-full px-3 mb-6'>
+                                    <img className="inline object-cover w-21 h-21 mr-1 rounded-full" src={profilePictureUrl} placeholder="https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png" alt="profile picture"/>
+                                </div>
+                                <div className='w-full md:w-full px-3 mb-6'>
+                                    <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' htmlFor="imageInput">images</label>
+                                    <input
+                                        type="file"
+                                        className="appearance-none bg-gray-200 text-gray-900 px-2 py-1 shadow-sm border border-gray-400 rounded-md"
+                                        name="img"
+                                        onChange={filechanged}
+                                        required
+                                    />
+                                </div>
                                 <div className='w-full md:w-full px-3 mb-6'>
                                     <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' >email address</label>
                                     <input type="email" onChange={e => { setEmail(e.currentTarget.value); }} className='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500' id='grid-text-1' placeholder='Enter email'  required/>
