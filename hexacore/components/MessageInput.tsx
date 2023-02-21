@@ -1,19 +1,21 @@
 import { Container } from '@nextui-org/react';
 import { useState } from 'react';
-import { getDatabase, ref, set, onValue } from "firebase/database";
-
-
-
+import { Timestamp, doc, addDoc, collection } from 'firebase/firestore';
+import { db } from '../firebase'
 export default () =>{
     const [message, setMessage] = useState('');
     const [row, setRow] = useState(1)
     const [isShiftEnter, setIsShiftEnter] = useState(false)
-    const db = getDatabase()
 
-    const test = (event: React.KeyboardEvent<HTMLInputElement>)=> {}
 
     const sendMessage = (e) => {
       if(e.key === 'Enter' && !e.shiftKey){
+        addDoc(collection(db, '/groups/e5UQ87CZktE0ewgqvWpx/Channel/Hexacore/Messages/'), {
+          userID: 'Z3JOqIeo9D81l74aaCVo',
+          name: 'Henrik Lindam',
+          message: message,
+          sentAt: Timestamp.now()
+        })
         setMessage("");
         setRow(1)
         setIsShiftEnter(false)
@@ -36,14 +38,15 @@ export default () =>{
       
       }
     }
-
+  // trenger å sette inn ny row på wordbreak. trenger å sette max row på hvor mange linjer som kommer.
+  // sette inn forskjellige knapper som emotes fildeling osv
   return ( 
-    <Container className='relative place-content-center'>
+    <Container className='relative place-content-center p-0'>
       <textarea onKeyDown={sendMessage} onChange={type} value={message} rows={row} placeholder='Write here!!!' 
       className="
         resize-none 
         px-5 
-        rounded 
+        break-words
         w-full 
         bg-stone-700 
         text-white
