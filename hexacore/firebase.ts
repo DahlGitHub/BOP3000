@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import{ GoogleAuthProvider, getAuth, signInWithPopup, signInWithEmailAndPassword,createUserWithEmailAndPassword,sendPasswordResetEmail, signOut} from "firebase/auth";
 import {getFirestore, query, getDocs,collection,where,addDoc} from "firebase/firestore";
+import { getDatabase } from "firebase/database";
 import "firebase/auth";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
@@ -9,17 +10,17 @@ import 'firebase/compat/firestore';
 const firebaseConfig = {
   apiKey: "AIzaSyCq3uvuimLnuVrF-f3f1VaN3VD5qip2ChQ",
   authDomain: "hexacore-1c84b.firebaseapp.com",
+  databaseURL: "https://hexacore-1c84b-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "hexacore-1c84b",
   storageBucket: "hexacore-1c84b.appspot.com",
   messagingSenderId: "1090430226645",
   appId: "1:1090430226645:web:b14a47eaf66fc1e9fc525c"
 };
-
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
+const rtdb = getDatabase(app)
 const googleProvider = new GoogleAuthProvider();
 
 const microsoftProvider = new firebase.auth.OAuthProvider("microsoft.com");
@@ -95,6 +96,7 @@ const registerWithEmailAndPassword = async (firstName,lastName, email, password)
   }
 };
 
+//endre melding til sjekk mailen din om du har fått melding hvis ikke sjekk om du har skrevet riktig mail.
 const sendPasswordReset = async (email) => {
   try {
     await sendPasswordResetEmail(auth, email);
