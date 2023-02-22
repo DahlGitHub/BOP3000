@@ -8,12 +8,12 @@
     src: url(../asset/Poppins/Poppins-Regular.ttf);
 }
 
-h1, h2, h3, h4, h5, h6, p, a  {
-    font-family: 'Sans'
+.Sans {
+    font-family: 'Sans'!important;
 }
 
-.Sans {
-    font-family: 'Sans';
+.Poppins {
+    font-family: 'Poppins'!important;
 }
 
 
