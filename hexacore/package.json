@@ -16,6 +16,7 @@
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.6",
     "@nextui-org/react": "^1.0.0-beta.12",
+    "@react-aria/ssr": "^3.4.1",
     "firebase": "^9.16.0",
     "font-awesome": "^4.7.0",
     "github-actions-node-versions": "^1.0.3",
@@ -31,7 +32,7 @@
     "@types/react-dom": "^17.0.1",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.21",
-    "tailwindcss": "^3.2.6",
+    "tailwindcss": "^3.2.7",
     "typescript": "^4.8.3"
   }
 }
