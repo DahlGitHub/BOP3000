@@ -49,7 +49,7 @@ return (
                   py: "$4",
                   // dropdown item left icon
                   svg: {
-                    color: "$secondary",
+                    
                     mr: "$4",
                   },
                   // dropdown item title
@@ -88,7 +88,7 @@ return (
                   py: "$4",
                   // dropdown item left icon
                   svg: {
-                    color: "$secondary",
+                   
                     mr: "$4",
                   },
                   // dropdown item title
@@ -99,12 +99,12 @@ return (
                 },
               }}>
                     <Dropdown.Item key="autoscaling" showFullDescription
-                    icon={<FontAwesomeIcon icon={['fas','book']}/>}
+                    icon={<FontAwesomeIcon icon='book'/>}
                         description="ACME scales apps to meet user demand, automagically, based on load.">
                         Blog
                     </Dropdown.Item>
                     <Dropdown.Item key="usage_metrics" showFullDescription
-                    icon={<FontAwesomeIcon icon={['fas','user-group']}/>}
+                    icon={<FontAwesomeIcon icon='user-group' className='fa-xl text-red-600'/>}
                         description="Real-time metrics to debug issues. Slow query added? We’ll show you exactly where.">
                         About Us
                     </Dropdown.Item>

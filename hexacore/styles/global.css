@@ -1,3 +1,15 @@
+
+
+.Sans {
+    font-family: 'Sans'!important;
+}
+
+.Poppins {
+    font-family: 'Poppins'!important;
+}
+
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
