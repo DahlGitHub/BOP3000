@@ -5,28 +5,6 @@ import { useEffect, useRef, useState } from 'react';
 import { useImmer } from 'use-immer';
 
 const q = query(collection(db, '/groups/e5UQ87CZktE0ewgqvWpx/Channel/Hexacore/Messages/'), orderBy('sentAt', 'asc'), limit(10))
-const getMessages = async () => {
-    try{
-        const arr = new Array();
-        const querySnapshot = await getDocs(q)
-        querySnapshot.forEach( doc => {
-            arr.push(doc.data())
-        })
-        return Promise.all(arr)
-    } catch(error){
-        console.log(error)
-    }
-}
-
-const getRealTimeMessages = () => {
-    const arr = [];
-    const messages = onSnapshot(q, (querySnapshot) =>{
-        querySnapshot.forEach((message)=>{
-            arr.push(message.data())
-        })
-    })
-}
-
 export default () =>{
     const [messages, setMessages] = useImmer([])
 

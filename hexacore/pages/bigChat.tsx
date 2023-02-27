@@ -8,7 +8,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { redirect } from 'next/navigation';
    
 
-export default function BigChat() {
+export default () => {
   const router = useRouter();
   const [user, loading] = useAuthState(auth);
 
@@ -17,10 +17,10 @@ export default function BigChat() {
     //redirect('/')
   }
   
-  return <Layout>
+  return (
     <Container justify='center' className='flex flex-grow'>
-      <Messages/>
+     <Messages/>
       <Message/>
     </Container>
-  </Layout>
+  )
 }
