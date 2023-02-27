@@ -24,7 +24,7 @@ const UserSettings = () => {
                     </div>
                     <div>
                         <FontAwesomeIcon className="fa-5x text-white" icon={['far','user']} />
-                        <h3 className="mb-2 text-xl font-bold dark:text-white">Account</h3>                   
+                        <Link className="mb-2 text-xl font-bold dark:text-white" href="/contactPage">Contact</Link>                  
                     </div>
                     <div>
                         <FontAwesomeIcon className="fa-5x text-white" icon={['far','user']} />
