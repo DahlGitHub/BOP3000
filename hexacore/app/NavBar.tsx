@@ -4,9 +4,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Logo from '/public/images/hexacore.png';
 import { auth, logout } from '../firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const NavBar: NextPage = () => {
+  const [user, loading] = useAuthState(auth);
     const collapseItems = [
     "Profile",
     "Dashboard",
@@ -156,7 +158,7 @@ return (
               <Dropdown.Item key="team_settings">Team Settings</Dropdown.Item>
 
               <Dropdown.Item key="logout" withDivider color="error">
-                  {!auth.currentUser?  
+                  {!user?  
                     <Link href="/login">Login</Link>
                   
                   :
