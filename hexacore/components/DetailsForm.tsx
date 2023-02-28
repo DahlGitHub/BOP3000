@@ -28,8 +28,7 @@ const DetailsForm = () => {
                 email: email,
                 country: country,
                 language: language,
-                firstName: firstName,
-                lastName: lastName,
+                name: firstName,
                 phone: phone,
                 picture: fileUrl
             }

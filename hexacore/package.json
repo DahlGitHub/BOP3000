@@ -17,6 +17,7 @@
     "@mui/material": "^5.11.6",
     "@nextui-org/react": "^1.0.0-beta.12",
     "@react-aria/ssr": "^3.4.1",
+    "algoliasearch": "^4.14.3",
     "firebase": "^9.16.0",
     "font-awesome": "^4.7.0",
     "github-actions-node-versions": "^1.0.3",
@@ -25,6 +26,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-firebase-hooks": "^5.1.1",
+    "react-instantsearch": "^6.39.0",
+    "react-instantsearch-dom": "^6.39.0",
     "use-immer": "^0.8.1"
   },
   "devDependencies": {
