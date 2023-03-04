@@ -13,8 +13,43 @@ const Contacts = () => {
   const [name, setName] = React.useState(null);
   const [email, setEmail] = React.useState(null);
   const [picture, setPicture] = React.useState(null);
+  const [addedUid, setAddedUid] = React.useState(null);
 
   const Hits = ({ hits }) => {
+
+    const handleClick = (props) => {
+      setPicture(props.picture);
+      console.log("Picture: " + props.picture);
+      setName(props.name);
+      console.log("Name: " + props.name);
+      setEmail(props.email);
+      console.log("Email: " + props.email)
+      setAddedUid(props.objectID)
+      console.log("uid: " + props.objectID)
+
+    };
+
+    const submitValues = async (event) => {
+
+      if(name) {
+        
+    
+        const docData = {
+          image: hit.image,
+          name: hit.name,
+          artist: hit.artist,
+          song: hit.music
+          
+        }
+        
+        setDoc(doc(db, "users", auth.currentUser?.uid, "media", "playlists", enteredName, hit.name), docData)
+      } else {
+        
+        return
+      }
+      
+      
+    };
 
     return (
       <>
@@ -46,7 +81,7 @@ const Contacts = () => {
               </p>
             </td>
             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-              <button className="bg-blue-600 font-semibold text-white p-2 w-32 rounded-full hover:bg-blue-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300 m-2">
+              <button onClick={() => handleClick(hit)}  className="bg-blue-600 font-semibold text-white p-2 w-32 rounded-full hover:bg-blue-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300 m-2">
                 Add contact
               </button>
             </td>
@@ -110,21 +145,18 @@ const Contacts = () => {
                       <CustomHits/>
                     </tbody>  
                   </table>
-                  <div
-                    className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
+                  <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
                     <span className="text-xs xs:text-sm text-gray-900">
-                                    Showing 1 to 4 of 50 Entries
-                                </span>
+                      Showing 1 to 4 of 50 Entries
+                    </span>
                     <div className="inline-flex mt-2 xs:mt-0">
-                      <button
-                                        className="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-l">
-                                        Prev
-                                    </button>
+                      <button className="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-l">
+                        Prev
+                      </button>
                       &nbsp; &nbsp;
-                      <button
-                                        className="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-r">
-                                        Next
-                                    </button>
+                      <button className="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-r">
+                        Next
+                      </button>
                     </div>
                   </div>
                 </div>
