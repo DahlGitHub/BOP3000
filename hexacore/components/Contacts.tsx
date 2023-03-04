@@ -2,6 +2,8 @@ import React from 'react';
 import Layout from '../app/Layout'
 import algoliasearch from "algoliasearch/lite";
 import { InstantSearch, SearchBox, connectHits } from "react-instantsearch-dom";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db} from '../firebase';
 
 
 const searchClient = algoliasearch (
@@ -18,6 +20,8 @@ const Contacts = () => {
   const Hits = ({ hits }) => {
 
     const handleClick = (props) => {
+
+      // For testing, skal fjernes
       setPicture(props.picture);
       console.log("Picture: " + props.picture);
       setName(props.name);
@@ -27,29 +31,23 @@ const Contacts = () => {
       setAddedUid(props.objectID)
       console.log("uid: " + props.objectID)
 
-    };
-
-    const submitValues = async (event) => {
-
-      if(name) {
-        
-    
-        const docData = {
-          image: hit.image,
-          name: hit.name,
-          artist: hit.artist,
-          song: hit.music
-          
-        }
-        
-        setDoc(doc(db, "users", auth.currentUser?.uid, "media", "playlists", enteredName, hit.name), docData)
-      } else {
-        
-        return
+      const docData = {
+        email: props.email,
+        name: props.name,
+        picture: props.email,
+        uid: props.objectID
       }
-      
-      
+      if (!props.name) {
+          return
+      } else {
+        setDoc(doc(db, "users", auth.currentUser?.uid.toString(), "contacts", props.objectID), docData)
+    
+        alert("Saved info")
+      }
+
     };
+
+    
 
     return (
       <>
