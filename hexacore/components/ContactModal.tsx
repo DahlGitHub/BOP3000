@@ -2,7 +2,7 @@ import { auth, db} from '../firebase';
 import { doc, setDoc } from "firebase/firestore";
 
 
-const ContactModal = ({ isOpen, onClose, picture, name, uid, email }) => {
+const ContactModal = ({ org, isOpen, onClose, picture, name, uid, email }) => {
 
   
   const submit = () => {
@@ -12,7 +12,8 @@ const ContactModal = ({ isOpen, onClose, picture, name, uid, email }) => {
       email: email,
       name: name,
       picture: picture,
-      uid: uid
+      uid: uid,
+      organisation: org
     }
 
     const thisUserDocData = {
@@ -72,7 +73,9 @@ const ContactModal = ({ isOpen, onClose, picture, name, uid, email }) => {
                   src={picture} className="flex-shrink-0 object-cover object-center btn- flex w-16 h-16 mr-auto -mb-8 ml-auto rounded-full shadow-xl"/>
               <p className="mt-8 text-2xl font-semibold leading-none text-black tracking-tighter lg:text-3xl">
                  {name}</p>
+                 <p className="mt-3 text-base leading-relaxed text-center text-black-200">{org}</p>   
               <p className="mt-3 text-base leading-relaxed text-center text-black-200">{email}</p>
+              
               <div className="w-full mt-6">
                 <a onClick={submit} className="flex text-center items-center justify-center w-full pt-4 pr-10 pb-4 pl-10 text-base
                     font-medium text-white bg-indigo-600 rounded-xl transition duration-500 ease-in-out transform

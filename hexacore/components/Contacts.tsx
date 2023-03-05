@@ -16,6 +16,7 @@ const Contacts = () => {
   const [email, setEmail] = React.useState(null);
   const [picture, setPicture] = React.useState(null);
   const [addedUid, setAddedUid] = React.useState(null);
+  const [org, setOrg] = React.useState(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   function handleModalOpen() {
@@ -31,7 +32,7 @@ const Contacts = () => {
 
     const handleClick = (props) => {
 
-      // For testing, skal fjernes
+      // For testing, console log skal fjernes
       setPicture(props.picture);
       console.log("Picture: " + props.picture);
       setName(props.name);
@@ -40,6 +41,7 @@ const Contacts = () => {
       console.log("Email: " + props.email)
       setAddedUid(props.objectID)
       console.log("uid: " + props.objectID)
+      setOrg(props.org)
 
       handleModalOpen()
 
@@ -67,7 +69,7 @@ const Contacts = () => {
               </div>
             </td>
             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-              <p className="text-gray-900 whitespace-no-wrap">Kroa i Bø</p>
+              <p className="text-gray-900 whitespace-no-wrap">{hit.organisation}</p>
             </td>
             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
               <p className="text-gray-900 whitespace-no-wrap">
@@ -99,7 +101,7 @@ const Contacts = () => {
         
         
       <div className="bg-white p-8 rounded-md w-full z-1">
-        <ContactModal isOpen={isModalOpen} onClose={handleModalClose} picture={picture} name={name} uid={addedUid} email={email}/>
+        <ContactModal isOpen={isModalOpen} onClose={handleModalClose} org={org} picture={picture} name={name} uid={addedUid} email={email}/>
         
           <div className=" flex items-center justify-between pb-6">
             
