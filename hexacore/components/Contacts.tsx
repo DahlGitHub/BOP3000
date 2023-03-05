@@ -46,10 +46,6 @@ const Contacts = () => {
       handleModalOpen()
 
     };
-
-    
-    
-
     
 
     return (
@@ -108,14 +104,13 @@ const Contacts = () => {
             
             <div>
               <h2 className="text-gray-600 font-semibold">Contacts</h2>
-              <span className="text-xs">Add more contacts?</span>
+              <span className="text-xs">Search through our userbase</span>
             </div>
             <div className="flex items-center justify-between">
               <div className="flex bg-gray-50 items-center p-2 rounded-md">
                 <SearchBox translations={{placeholder: 'Search for users'}}/>
               </div>
                 <div className="lg:ml-40 ml-10 space-x-8">
-                  <button className="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">Add contacts</button>
                   <button className="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">Manage contacts</button>
                 </div>
               </div>
@@ -132,7 +127,7 @@ const Contacts = () => {
                         </th>
                         <th
                           className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                          Workplace
+                          Organisation
                         </th>
                         <th
                           className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
