@@ -2,8 +2,8 @@ import React from 'react';
 import Layout from '../app/Layout'
 import algoliasearch from "algoliasearch/lite";
 import { InstantSearch, SearchBox, connectHits } from "react-instantsearch-dom";
-import { doc, setDoc } from "firebase/firestore";
-import { auth, db} from '../firebase';
+
+import ContactModal from './ContactModal'
 
 
 const searchClient = algoliasearch (
@@ -16,6 +16,16 @@ const Contacts = () => {
   const [email, setEmail] = React.useState(null);
   const [picture, setPicture] = React.useState(null);
   const [addedUid, setAddedUid] = React.useState(null);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  function handleModalOpen() {
+    setIsModalOpen(true);
+  }
+
+  function handleModalClose() {
+    setIsModalOpen(false);
+  }
+  
 
   const Hits = ({ hits }) => {
 
@@ -31,21 +41,12 @@ const Contacts = () => {
       setAddedUid(props.objectID)
       console.log("uid: " + props.objectID)
 
-      const docData = {
-        email: props.email,
-        name: props.name,
-        picture: props.email,
-        uid: props.objectID
-      }
-      if (!props.name) {
-          return
-      } else {
-        setDoc(doc(db, "users", auth.currentUser?.uid.toString(), "contacts", props.objectID), docData)
-    
-        alert("Saved info")
-      }
+      handleModalOpen()
 
     };
+
+    
+    
 
     
 
@@ -93,9 +94,16 @@ const Contacts = () => {
 
   return (
     <Layout title="Hexacore">
+      
       <InstantSearch searchClient={searchClient} indexName="users">
-        <div className="bg-white p-8 rounded-md w-full">
+        
+        
+      <div className="bg-white p-8 rounded-md w-full z-1">
+        <ContactModal isOpen={isModalOpen} onClose={handleModalClose} picture={picture} name={name} uid={addedUid} email={email}/>
+        
           <div className=" flex items-center justify-between pb-6">
+            
+            
             <div>
               <h2 className="text-gray-600 font-semibold">Contacts</h2>
               <span className="text-xs">Add more contacts?</span>
