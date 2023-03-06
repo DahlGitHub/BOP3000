@@ -35,7 +35,6 @@ export default function SignIn() {
         // maybe trigger a loading screen
         return;
         }
-        if (user) console.log("Logged in user " + auth.currentUser.uid.toString() && router.push("./"));
     }, [user, loading, router]);
 
     return (

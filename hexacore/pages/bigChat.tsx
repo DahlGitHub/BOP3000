@@ -13,7 +13,6 @@ export default () => {
   const [user, loading] = useAuthState(auth);
 
   if(user){
-    console.log(user)
     //redirect('/')
   }
   
