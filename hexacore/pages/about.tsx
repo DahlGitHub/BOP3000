@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Layout from '../app/Layout'
+import Layout from '../components/Layout/Layout'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'

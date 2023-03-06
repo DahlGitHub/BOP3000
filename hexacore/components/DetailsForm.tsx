@@ -52,23 +52,15 @@ const DetailsForm = () => {
           
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             setFileUrl(downloadURL)
-            console.log("FileUrl " + downloadURL);
+
           });
         }
       );
-            
+         
    }
-
     const getPicture = async (e) => {
         const docRef = doc(db, "users", auth.currentUser?.uid.toString(), "picture");
         const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
-          } else {
-            // doc.data() will be undefined in this case
-            console.log("No such document!");
-        }
     }
 
     return (

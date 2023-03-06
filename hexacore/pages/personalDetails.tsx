@@ -1,5 +1,5 @@
 
-import Layout from '../app/Layout'
+import Layout from '../components/Layout/Layout'
 import DetailsForm from '../components/DetailsForm'
 import UserSettings from '../components/userSettings'
 
