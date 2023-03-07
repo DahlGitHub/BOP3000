@@ -92,11 +92,12 @@ const Contacts = () => {
 
   return (
     <>
-      <div className='min-w-fit'>
+      <div className='max-h-fit'>
+        <br/>
         <InstantSearch searchClient={searchClient} indexName="users">
           
           
-        <div className="bg-white p-8 rounded-md min-w-fit min-h-fit z-1">
+        <div className="bg-white p-8 rounded-md max-w-fit min-h-fit z-1">
           <ContactModal isOpen={isModalOpen} onClose={handleModalClose} org={org} picture={picture} name={name} uid={addedUid} email={email}/>
           
             <div className=" flex items-center justify-between pb-6">
