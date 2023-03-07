@@ -35,6 +35,7 @@ export default function SignIn() {
         // maybe trigger a loading screen
         return;
         }
+        if (user) router.push("./dashboard");
     }, [user, loading, router]);
 
     return (
