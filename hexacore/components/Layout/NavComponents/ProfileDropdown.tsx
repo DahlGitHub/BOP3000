@@ -59,7 +59,7 @@ export default () => {
                             </p>
                             </Text>
                         </Dropdown.Item>
-                        <Dropdown.Item key="Dashbord" css={{ height: "$18" }}>
+                        <Dropdown.Item key="Dashbord" withDivider>
                             <Link href='./dashboard'className='w-full h-full block' >Dashboard</Link>
                         </Dropdown.Item>
                         <Dropdown.Item key="logout" withDivider color="error">
