@@ -6,7 +6,7 @@ import Login from '../login';
 const inbox = () => {
   return (
     <DashboardLayout>
-        <Contacts/>
+        
     </DashboardLayout>
   )
 }
