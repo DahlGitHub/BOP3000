@@ -59,6 +59,9 @@ export default () => {
                             </p>
                             </Text>
                         </Dropdown.Item>
+                        <Dropdown.Item key="Dashbord" css={{ height: "$18" }}>
+                            <Link href='./dashboard'className='w-full h-full block' >Dashboard</Link>
+                        </Dropdown.Item>
                         <Dropdown.Item key="logout" withDivider color="error">
                             <Link href='./' onClick={logout} className='w-full h-full block' >{setLogMessage()}</Link>
                         </Dropdown.Item>
