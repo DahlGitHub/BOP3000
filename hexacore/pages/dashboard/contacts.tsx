@@ -6,6 +6,7 @@ import Login from '../login';
 const contacts = () => {
   return (
     <DashboardLayout>
+      <br/>
       <Contacts/>
     </DashboardLayout>
   )

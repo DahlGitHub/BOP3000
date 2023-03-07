@@ -152,10 +152,10 @@ return (
                 {!auth.currentUser?  
                   <Link href="/login">User Settings</Link>
                   :
-                  <Link href="/settings">User Settings</Link>
+                  <Link href="/personalDetails">User Settings</Link>
                 }
               </Dropdown.Item>
-              <Dropdown.Item key="team_settings">Team Settings</Dropdown.Item>
+              <Dropdown.Item key="team_settings"><Link href="/dashboard">Dashboard</Link></Dropdown.Item>
 
               <Dropdown.Item key="logout" withDivider color="error">
                   {!user?  
