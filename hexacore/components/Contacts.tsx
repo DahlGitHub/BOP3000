@@ -1,5 +1,4 @@
 import React from 'react';
-import Layout from '../app/Layout'
 import algoliasearch from "algoliasearch/lite";
 import { InstantSearch, SearchBox, connectHits } from "react-instantsearch-dom";
 
