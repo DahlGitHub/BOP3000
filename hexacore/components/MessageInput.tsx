@@ -6,8 +6,7 @@ export default () =>{
     const [message, setMessage] = useState('');
     const [row, setRow] = useState(1)
     const [isShiftEnter, setIsShiftEnter] = useState(false)
-
-
+    
     const sendMessage = (e) => {
       if(e.key === 'Enter' && !e.shiftKey){
         addDoc(collection(db, '/groups/e5UQ87CZktE0ewgqvWpx/Channel/Hexacore/Messages/'), {
@@ -27,8 +26,6 @@ export default () =>{
     const type = (e) => {
       if(isShiftEnter){
       setMessage(e.target.value)
-      //console.log(e.nativeEvent.inputType)
-      //console.log(e.nativeEvent)
       if(e.nativeEvent.inputType === 'insertLineBreak'){
         setRow(row+1)
       } else if(e.nativeEvent.inputType === 'deleteContentBackward'){

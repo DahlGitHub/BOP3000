@@ -1,5 +1,5 @@
 import { Container  } from '@nextui-org/react';
-import Layout from '../app/Layout';
+import Layout from '../components/Layout/Layout'
 import Message from '../components/MessageInput'
 import Messages from '../components/MessageList'
 import { useRouter } from 'next/router';
@@ -13,7 +13,6 @@ export default () => {
   const [user, loading] = useAuthState(auth);
 
   if(user){
-    console.log(user)
     //redirect('/')
   }
   
