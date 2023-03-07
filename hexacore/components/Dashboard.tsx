@@ -7,6 +7,7 @@ import Logo from "/public/images/hexacore.png";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faUserFriends } from "@fortawesome/free-solid-svg-icons";
+import ProfileDropdown from "./Layout/NavComponents/ProfileDropdown";
 
 const SidebarItems = [
   { id: 1, name: "Dashboard", icon: <FontAwesomeIcon icon={faUser}/>,link: "/dashboard" },
@@ -43,59 +44,7 @@ const Dashboard = () => {
       <div className="flex items-center">
           <div className="flex items-center ml-3">
             <div>
-             
-            <Navbar.Content>
-            <Dropdown>
-            <Dropdown.Trigger>
-            <Navbar.Item>
-            <Avatar
-                  bordered
-                  as="button"
-                  color="secondary"
-                  size="md"
-                  src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                />
-            </Navbar.Item>
-            </Dropdown.Trigger>
-            <Dropdown.Menu
-              aria-label="User menu actions"
-              color="secondary"
-              onAction={(actionKey) => console.log({ actionKey })}
-            >
-              <Dropdown.Item key="profile" css={{ height: "$18" }}>
-                <Text b color="inherit" css={{ d: "flex" }}>
-                  Signed in as
-                </Text>
-                <Text b color="inherit" css={{ d: "flex" }}>
-                  <p>
-                    {auth.currentUser? auth.currentUser?.email.toString() : "None"}
-                  </p>
-                </Text>
-              </Dropdown.Item>
-              <Dropdown.Item key="settings" withDivider>
-                {!auth.currentUser?  
-                  <Link href="/login">User Settings</Link>
-                  :
-                  <Link href="/settings">User Settings</Link>
-                }
-              </Dropdown.Item>
-              <Dropdown.Item key="team_settings">Team Settings</Dropdown.Item>
-
-              <Dropdown.Item key="logout" withDivider color="error">
-                  {!auth.currentUser?  
-                    <Link href="/login">Login</Link>
-                  
-                  :
-                  
-                    <Link href="/login" onClick={logout}>Logout</Link>
-                  }
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-
-
-        </Navbar.Content>
-              
+              <ProfileDropdown/>
             </div>
        
           </div>
