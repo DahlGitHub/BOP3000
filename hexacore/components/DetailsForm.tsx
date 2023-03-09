@@ -1,14 +1,16 @@
 import React, { Fragment } from "react";
 import {Container} from "@nextui-org/react";
 import {auth, db, storage} from "../firebase"
-import { doc, setDoc, addDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc, getDoc } from "firebase/firestore";
 import { useRouter } from 'next/navigation';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
 const DetailsForm = () => {
     const [email, setEmail] = React.useState(null);
     const [country, setCountry] = React.useState(null);
-    const [firstName, setFirstName] = React.useState(null);
+    const [name, setName] = React.useState(null);
+    const [org, setOrg] = React.useState(null);
+    const [bio, setBio] = React.useState(null);
     const [phone, setPhone] = React.useState(null);
     const router = useRouter();
     const [fileUrl, setFileUrl] = React.useState(null);
@@ -17,23 +19,103 @@ const DetailsForm = () => {
 
 
     
-
-    const submit =  (e) => {
+    const submitName =  (e) => {
         e.preventDefault();
-            const docData = {
-                email: email,
-                country: country,
-                name: firstName,
-                phone: phone,
-                picture: fileUrl
-            }
-            if (!email) {
-                return
-            } else {
-                setDoc(doc(db, "users", userID), docData)
-            
-                alert("Saved info")
-            }
+        const docData = {
+            name: name  
+        }
+        if (!name) {
+            return
+        } else {
+            updateDoc(doc(db, "users", userID), docData)
+        
+            alert("Saved info")
+        }
+
+    }
+    
+    const submitEmail =  (e) => {
+        e.preventDefault();
+        const docData = {
+            email: email  
+        }
+        if (!email) {
+            return
+        } else {
+            updateDoc(doc(db, "users", userID), docData)
+        
+            alert("Saved info")
+        }
+
+    }
+    const submitPicture = (e) => {
+        e.preventDefault();
+        const docData = {
+            picture: fileUrl
+        }
+        if (!fileUrl) {
+            return
+        } else {
+            updateDoc(doc(db, "users", userID), docData)
+        
+            alert("Saved info")
+        }
+
+    }
+    const submitCountry =  (e) => {
+        e.preventDefault();
+        const docData = {
+            country: country 
+        }
+        if (!country) {
+            return
+        } else {
+            updateDoc(doc(db, "users", userID), docData)
+        
+            alert("Saved info")
+        }
+
+    }
+    const submitOrg =  (e) => {
+        e.preventDefault();
+        const docData = {
+            organisation: org  
+        }
+        if (!org) {
+            return
+        } else {
+            updateDoc(doc(db, "users", userID), docData)
+        
+            alert("Saved info")
+        }
+
+    }
+    const submitBio =  (e) => {
+        e.preventDefault();
+        const docData = {
+            bio: bio 
+        }
+        if (!bio) {
+            return
+        } else {
+            updateDoc(doc(db, "users", userID), docData)
+        
+            alert("Saved info")
+        }
+
+    }
+    const submitPhone =  (e) => {
+        e.preventDefault();
+        const docData = {
+            phone: phone 
+        }
+        if (!phone) {
+            return
+        } else {
+            updateDoc(doc(db, "users", userID), docData)
+        
+            alert("Saved info")
+        }
 
     }
 
@@ -52,23 +134,15 @@ const DetailsForm = () => {
           
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             setFileUrl(downloadURL)
-            console.log("FileUrl " + downloadURL);
+
           });
         }
       );
-            
+         
    }
-
     const getPicture = async (e) => {
         const docRef = doc(db, "users", auth.currentUser?.uid.toString(), "picture");
         const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
-          } else {
-            // doc.data() will be undefined in this case
-            console.log("No such document!");
-        }
     }
 
     return (
@@ -82,7 +156,8 @@ const DetailsForm = () => {
                         
                             <div className='flex flex-wrap -mx-3 mb-6'>
                                 <div className='w-full md:w-full px-3 mb-6'>
-                                    <img className="inline object-cover w-21 h-21 mr-1 rounded-full" src={profilePictureUrl} placeholder="https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png" alt="profile picture"/>
+                                <img
+                                    src={profilePictureUrl} className="flex-shrink-0 object-cover object-center btn- flex w-40 h-40 mr-auto -mb-8 ml-auto rounded-full shadow-xl"/>
                                 </div>
                                 <div className='w-full md:w-full px-3 mb-6'>
                                     <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' htmlFor="imageInput">images</label>
@@ -93,10 +168,22 @@ const DetailsForm = () => {
                                         onChange={filechanged}
                                         required
                                     />
+                                    <button onClick={submitPicture} className="appearance-none bg-gray-200 text-gray-900 px-2 py-1 shadow-sm border border-gray-400 rounded-md mr-3">save changes</button>
+                                </div>
+                                <div className='w-full md:w-full px-3 mb-6'>
+                                    <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' >Name</label>
+                                    <input type="email" onChange={e => { setName(e.currentTarget.value); }} className='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500' id='grid-text-1' placeholder='Enter your name'  required/>
+                                    <button onClick={submitName} className="appearance-none bg-gray-200 text-gray-900 px-2 py-1 shadow-sm border border-gray-400 rounded-md mr-3">save changes</button>
                                 </div>
                                 <div className='w-full md:w-full px-3 mb-6'>
                                     <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' >email address</label>
                                     <input type="email" onChange={e => { setEmail(e.currentTarget.value); }} className='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500' id='grid-text-1' placeholder='Enter email'  required/>
+                                    <button onClick={submitEmail} className="appearance-none bg-gray-200 text-gray-900 px-2 py-1 shadow-sm border border-gray-400 rounded-md mr-3">save changes</button>
+                                </div>
+                                <div className='w-full md:w-full px-3 mb-6'>
+                                    <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' >Organisation</label>
+                                    <input type="text" onChange={e => { setOrg(e.currentTarget.value); }} className='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500' id='grid-text-1' placeholder='Enter organisation name'  required/>
+                                    <button onClick={submitOrg} className="appearance-none bg-gray-200 text-gray-900 px-2 py-1 shadow-sm border border-gray-400 rounded-md mr-3">save changes</button>
                                 </div>
                                 <div className='w-full md:w-full px-3 mb-6 '>
                                     <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>password</label>
@@ -115,20 +202,21 @@ const DetailsForm = () => {
                                         <div className="pointer-events-none absolute top-0 mt-3  right-0 flex items-center px-2 text-gray-600">
                                             <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                                         </div>
+                                        <button onClick={submitCountry} className="appearance-none bg-gray-200 text-gray-900 px-2 py-1 shadow-sm border border-gray-400 rounded-md mr-3">save changes</button>
                                     </div>
                                 </div>
                                 
                                 <div className='w-full md:w-full px-3 mb-6'>
                                         <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Phone number</label>
                                         <input type="number" onChange={e => { setPhone(e.currentTarget.value); }} className='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500'  required/>
+                                        <button onClick={submitPhone} className="appearance-none bg-gray-200 text-gray-900 px-2 py-1 shadow-sm border border-gray-400 rounded-md mr-3">save changes</button>
                                     </div>
                                     <div className='w-full md:w-full px-3 mb-6'>
                                         <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' >Bio</label>
-                                        <textarea className='bg-gray-100 rounded-md border leading-normal resize-none w-full h-20 py-2 px-3 shadow-inner border border-gray-400 font-medium placeholder-gray-700 focus:outline-none focus:bg-white'  required></textarea>
+                                        <textarea onChange={e => { setBio(e.currentTarget.value); }} className='bg-gray-100 rounded-md border leading-normal resize-none w-full h-20 py-2 px-3 shadow-inner border border-gray-400 font-medium placeholder-gray-700 focus:outline-none focus:bg-white'  required></textarea>
+                                        <button onClick={submitBio} className="appearance-none bg-gray-200 text-gray-900 px-2 py-1 shadow-sm border border-gray-400 rounded-md mr-3">save changes</button>
                                     </div>
-                                    <div className="flex justify-end">
-                                        <button onClick={submit} className="appearance-none bg-gray-200 text-gray-900 px-2 py-1 shadow-sm border border-gray-400 rounded-md mr-3">save changes</button>
-                                    </div>
+                                    
                                 
                             </div>
                         </form>

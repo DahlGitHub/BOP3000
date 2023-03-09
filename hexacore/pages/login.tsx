@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Layout from '../app/Layout'
+import Layout from '../components/Layout/Layout'
 import SignIn from '../components/SignIn'
 
 const Login = () => (
