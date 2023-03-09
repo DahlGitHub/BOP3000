@@ -97,7 +97,7 @@ const Contacts = () => {
           
           
         <div className="bg-white p-8 rounded-md max-w-fit min-h-fit z-1">
-          <ContactModal isOpen={isModalOpen} onClose={handleModalClose} org={org} picture={picture} name={name} uid={addedUid} email={email}/>
+          <ContactModal isOpen={isModalOpen} onClose={handleModalClose}  picture={picture} name={name} uid={addedUid} email={email}/>
           
             <div className=" flex items-center justify-between pb-6">
               
