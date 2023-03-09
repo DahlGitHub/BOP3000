@@ -1,9 +1,10 @@
-import React, { Fragment } from "react";
+import React, { useState, useEffect } from 'react';
 import {Container} from "@nextui-org/react";
 import {auth, db, storage} from "../firebase"
 import { doc, setDoc, updateDoc, getDoc } from "firebase/firestore";
 import { useRouter } from 'next/navigation';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { collection, query, where, getDocs } from "firebase/firestore";
 
 const DetailsForm = () => {
     const [email, setEmail] = React.useState(null);
@@ -15,9 +16,26 @@ const DetailsForm = () => {
     const router = useRouter();
     const [fileUrl, setFileUrl] = React.useState(null);
     const userID = auth.currentUser?.uid.toString();
-    const profilePictureUrl = `https://firebasestorage.googleapis.com/v0/b/hexacore-1c84b.appspot.com/o/Image%2F${userID}?alt=media&token=6eb830e3-d840-4e44-80d6-347ecda90fd7 `;
+    const [profilePicture, setProfilePicture] = React.useState(null);
 
 
+    useEffect(() => {
+        async function fetchRequests() {
+
+            const docRef = doc(db, "users", auth.currentUser?.uid);
+            const docSnap = await getDoc(docRef);
+            
+            if (docSnap.exists()) {
+              console.log("Document data:", docSnap.data());
+              setProfilePicture(docSnap.data().picture)
+            } else {
+              // doc.data() will be undefined in this case
+              console.log("No such document!")
+            }
+        }
+    
+        fetchRequests();
+    }, []); // Run this effect only once on component mount
     
     const submitName =  (e) => {
         e.preventDefault();
@@ -121,7 +139,7 @@ const DetailsForm = () => {
 
     const filechanged = async (e) =>{
         var file = e.target.files[0];
-        const storageRef = ref(storage, `/Image/${userID}`);
+        const storageRef = ref(storage, `/Image/${fileUrl}`);
         const uploadTask = uploadBytesResumable(storageRef, file);
   
         uploadTask.on("state_changed",
@@ -132,12 +150,12 @@ const DetailsForm = () => {
         },
         () => {
           
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             setFileUrl(downloadURL)
 
-          });
+        });
         }
-      );
+    );
          
    }
     const getPicture = async (e) => {
@@ -157,7 +175,7 @@ const DetailsForm = () => {
                             <div className='flex flex-wrap -mx-3 mb-6'>
                                 <div className='w-full md:w-full px-3 mb-6'>
                                 <img
-                                    src={profilePictureUrl} className="flex-shrink-0 object-cover object-center btn- flex w-40 h-40 mr-auto -mb-8 ml-auto rounded-full shadow-xl"/>
+                                    src={profilePicture? profilePicture : "https://cdn-icons-png.flaticon.com/512/147/147142.png"} className="flex-shrink-0 object-cover object-center btn- flex w-40 h-40 mr-auto -mb-8 ml-auto rounded-full shadow-xl"/>
                                 </div>
                                 <div className='w-full md:w-full px-3 mb-6'>
                                     <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' htmlFor="imageInput">images</label>
