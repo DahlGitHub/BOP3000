@@ -5,7 +5,6 @@ import { InstantSearch, SearchBox, connectHits } from "react-instantsearch-dom";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db} from '../firebase';
 
-
 const searchClient = algoliasearch (
   "FH6G88713S",
   "6821b8b5ec64e3c780fe083eb55e5a7d"
