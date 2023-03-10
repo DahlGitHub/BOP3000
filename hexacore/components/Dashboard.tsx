@@ -60,7 +60,7 @@ const Dashboard = () => {
         {SidebarItems.map(({ ...item}) => {
           return (
          <li>
-            <Link href={item.link} className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+            <Link href={item.link} className="flex items-center p-2 text-base font-normal text-gray-700 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                 {item.icon}
                 <span className="flex-1 ml-3 whitespace-nowrap">{item.name}</span>
             </Link>
@@ -70,7 +70,7 @@ const Dashboard = () => {
          <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"/>
          <ul className='w-full'>
          <li>
-            <Link href="/dashboard/settings" className=" flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+            <Link href="/dashboard/settings" className="flex items-center p-2 text-base font-normal text-gray-700 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
               <FontAwesomeIcon icon={faGears} />
                <div className="flex-1 ml-3">Settings</div>
             </Link>
