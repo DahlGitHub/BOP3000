@@ -1,5 +1,5 @@
 import React from 'react'
-import Contacts from '../../components/Contacts';
+import Contacts from '../../components/Contact/Contacts';
 import DashboardLayout from '../../components/DashboardLayout';
 import Login from '../login';
 
