@@ -5,8 +5,11 @@ import { auth, logout, db, storage } from '../../../firebase';
 import { doc, setDoc, addDoc, getDoc } from "firebase/firestore";
 import { useRouter } from 'next/navigation';
 import Link from 'next/link'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRightToBracket } from "@fortawesome/.free-solid-svg-icons-mY0uWkAd";
 
 export default () => {
+    const iconFont = <FontAwesomeIcon icon={faRightToBracket} />
     const router = useRouter()
     const [user, loading] = useAuthState(auth);
     const [fileUrl, setFileUrl] = React.useState(null);
@@ -22,6 +25,8 @@ export default () => {
     const getPicture = async (e) => {
         const docRef = doc(db, "users", auth.currentUser?.uid.toString(), "picture");
         const docSnap = await getDoc(docRef);
+
+    
     }
     if(user){
         return (
@@ -87,7 +92,7 @@ export default () => {
                                 as="button"
                                 color="secondary"
                                 size="md"
-                                src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                                
                                 />
                         </Navbar.Item>
                     </Dropdown.Trigger>
