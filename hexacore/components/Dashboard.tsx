@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { Dropdown, Navbar, Text, Avatar, Image } from "@nextui-org/react";
+import { Dropdown, Navbar, Text, Avatar, Image, Collapse } from "@nextui-org/react";
 import { auth, logout } from '../firebase';
 import type { NextPage } from 'next'
 import Link from 'next/link';
@@ -14,6 +14,7 @@ const SidebarItems = [
   { id: 2, name: "Kanban", icon: <FontAwesomeIcon icon={faUser} /> ,link: "/dashboard/kanban" },
   { id: 3, name: "Inbox",  icon: <FontAwesomeIcon icon={faUser} />,link: "/dashboard/inbox" },
   { id: 4, name: "Contacts", icon: <FontAwesomeIcon icon={faUserFriends} />,link: "/dashboard/contacts" },
+  { id: 5, name: "Teams", icon: <FontAwesomeIcon icon={faUserFriends} />,link: "/dashboard/teams" },
 ];
 
 const Dashboard = () => {
