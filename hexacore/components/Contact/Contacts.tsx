@@ -95,30 +95,30 @@ const Contacts = () => {
 
   return (
     <>
-      <div className='max-w-fit'>
+      <div className='max-w-fit min-h-fit'>
         <br/>
         <InstantSearch searchClient={searchClient} indexName="users">
           
-          
-        <div className="bg-white p-8 rounded-md min-w-fit min-h-fit z-1">
-          <ContactModal isOpen={isModalOpen} onClose={handleModalClose}  picture={picture} name={name} uid={addedUid} email={email}/>
-          
-            <div className=" flex items-center justify-between pb-6">
-              
-              
-              <div>
-                <h2 className="text-gray-600 font-semibold">Contacts</h2>
-                <span className="text-xs">Search through our userbase</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex bg-gray-50 items-center p-2 rounded-md">
-                  <SearchBox translations={{placeholder: 'Search for users'}}/>
+        <br/> 
+          <div className="bg-white p-8 rounded-md min-w-fit min-h-fit z-1">
+            <ContactModal isOpen={isModalOpen} onClose={handleModalClose}  picture={picture} name={name} uid={addedUid} email={email}/>
+            
+              <div className=" flex items-center justify-between pb-6">
+                
+                
+                <div>
+                  <h2 className="text-gray-600 font-semibold">Contacts</h2>
+                  <span className="text-xs">Search through our userbase</span>
                 </div>
-                  <div className="lg:ml-40 ml-10 space-x-8">
-                    <button onClick={contactRequests} className="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">Contact requests</button>
+                <div className="flex items-center justify-between">
+                  <div className="flex bg-gray-50 items-center p-2 rounded-md">
+                    <SearchBox translations={{placeholder: 'Search for users'}}/>
+                  </div>
+                    <div className="lg:ml-40 ml-10 space-x-8">
+                      <button onClick={contactRequests} className="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">Contact requests</button>
+                    </div>
                   </div>
                 </div>
-              </div>
               <div>
                 <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
                   <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
@@ -154,7 +154,7 @@ const Contacts = () => {
               </div>
           </div>
         </InstantSearch>
-        </div>
+      </div>
     </>
   )
 }
