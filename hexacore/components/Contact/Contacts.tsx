@@ -16,7 +16,6 @@ const Contacts = () => {
   const [email, setEmail] = React.useState(null);
   const [picture, setPicture] = React.useState(null);
   const [addedUid, setAddedUid] = React.useState(null);
-  const [org, setOrg] = React.useState(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const router = useRouter()
 
@@ -46,7 +45,6 @@ const Contacts = () => {
       console.log("Email: " + props.email)
       setAddedUid(props.objectID)
       console.log("uid: " + props.objectID)
-      setOrg(props.org)
 
       handleModalOpen()
 

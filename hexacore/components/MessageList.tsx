@@ -28,7 +28,8 @@ export default () =>{
     return(
         <div className="
             bg-stone-700 
-            h-72
+            min-h-fit
+            min-w-80
             border-solid 
             border-2
             border-black
@@ -42,7 +43,7 @@ export default () =>{
                     return (
                         <div key={index + 'div'} className='relative my-5'>
                             <button key={index + 'icon'} className="flex-none rounded-full bg-purple-900">pro</button>
-                            <div key={index + 'chat'} className='flex-wrap w-64 pl-4'>
+                            <div key={index + 'chat'} className='flex-wrap min-w-fit pl-4'>
                                 <p  className='text-red-400'>Henrik Lindam {message.sentAt.timestampValue}</p>
                                 <p>{message.message}</p>
                             </div>
