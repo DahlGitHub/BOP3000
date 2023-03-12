@@ -79,7 +79,7 @@ const ContactModal = ({ isOpen, onClose, picture, name, uid, email }) => {
                 <a onClick={submit} className="flex text-center items-center justify-center w-full pt-4 pr-10 pb-4 pl-10 text-base
                     font-medium text-white bg-indigo-600 rounded-xl transition duration-500 ease-in-out transform
                     hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Add contact</a>
+                    Send contact request</a>
               </div>
             </div>
               </div>
