@@ -1,5 +1,5 @@
 import { Container } from '@nextui-org/react';
-import { collection, query, onSnapshot, limit, orderBy, getDocs, getDoc, doc } from 'firebase/firestore';
+import { collection, query, onSnapshot, limit, orderBy, getDocs, getDoc, doc, where } from 'firebase/firestore';
 import { db } from '../firebase'
 import { useEffect, useRef, useState } from 'react';
 import { useImmer } from 'use-immer';
@@ -8,19 +8,37 @@ const qMessages = query(collection(db, '/groups/e5UQ87CZktE0ewgqvWpx/Channel/Hex
 const qChatters = query(collection(db, '/groups/e5UQ87CZktE0ewgqvWpx/Members/'))
 export default () =>{
     const [messages, setMessages] = useImmer([])
-    const chathva = useRef(new Map())
-    const [chatters, setChatters] = useImmer([])
+    const chattersID = useRef(new Map())
+    const chatters = useRef(new Map())
+    //const [chatters, setChatters] = useImmer([])
 
 
     useEffect(()=>{
-
-        const chatter = async ()=>{
-        const sjekk = await getDoc(doc(db, 'users', "YXDwpny3TKXGUKNmAxrX4o77dQ52"))
-        chathva.current.set(sjekk.data().uid, sjekk.data())
-
+        
+        const getID = async ()=>{
+        const querySnapshot = await getDocs(qChatters);
+        querySnapshot.forEach(async(id) => {
+            if(!chattersID.current.has(id.data())){
+               chattersID.current.set(id.data(), id.data())
+            }
+        });
+        getPerson()
         }
+        getID()
+        const queryUser = query(collection(db, 'users'), where('uid', '==', chattersID.current.forEach))
 
-        chatter()
+        const getPerson = () =>{  
+            chattersID.current.forEach(async(id)=>{
+            const person = await getDoc(doc(db, 'users', id.uid))
+            //
+            chatters.current.set(person.data().uid, person.data())
+        })
+        } 
+        
+
+        
+        
+        
 
         onSnapshot(qMessages, (querySnapshot) =>{
             querySnapshot.docChanges().forEach(async (change)=>{
@@ -33,9 +51,9 @@ export default () =>{
                     
                     //trenger å catche om brukeren ikke eksisterer lengre
                 //}
-
+                console.log(chatters.current.get(change.doc.data().uid))
                 const connect = {
-                    user: chathva.current.get(change.doc.data().uid),
+                    user: chatters.current.get(change.doc.data().uid),
                     message: change.doc.data()
                 }
 
@@ -68,7 +86,7 @@ export default () =>{
         ">
             {
                 messages.map((message) => {
-                    console.log(message.message)
+                   //console.log(message)
                     return (
                         <div key={index + 'div'} className='relative my-5'>
                             <img key={index + ' image'} className="object-cover w-8 h-8 rounded-full" src={message.user.picture} alt=""/>
