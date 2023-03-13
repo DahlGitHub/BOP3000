@@ -1,7 +1,7 @@
 import React from 'react'
 import DashboardLayout from '../../../components/DashboardLayout'
-import TeamCalendar from '../../../components/TeamCalendar'
-import TeamMenuLayout from '../../../components/TeamMenuLayout'
+import TeamCalendar from '../../../components/Team/TeamCalendar'
+import TeamMenuLayout from '../../../components/Team/TeamMenuLayout'
 
 
 const calendar = () => {
