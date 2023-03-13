@@ -139,7 +139,7 @@ const DetailsForm = () => {
 
     const filechanged = async (e) =>{
         var file = e.target.files[0];
-        const storageRef = ref(storage, `/Image/${auth.currentUser?.uid}` );
+        const storageRef = ref(storage, `/Image/${auth.currentUser?.uid}`);
         const uploadTask = uploadBytesResumable(storageRef, file);
   
         uploadTask.on("state_changed",
