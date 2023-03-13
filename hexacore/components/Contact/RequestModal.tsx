@@ -1,36 +1,67 @@
 import { auth, db} from '../../firebase';
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, deleteDoc } from "firebase/firestore";
+import { Spacer } from '@nextui-org/react';
 
 
-const ContactModal = ({ isOpen, onClose, picture, name, uid, email }) => {
+const RequestModal = ({ isOpen, onClose, picture, name, uid, email }) => {
 
   
-  const submit = () => {
-    onClose()
+    const submit = () => {
+        onClose()
 
-    const addedUserDocData = {
-      email: email,
-      name: name,
-      picture: picture,
-      uid: uid,
+        const addedUserDocData = {
+        email: email,
+        name: name,
+        picture: picture,
+        uid: uid,
+        }
+
+        const thisUserDocData = {
+        email: auth.currentUser?.email,
+        name: auth.currentUser?.displayName,
+        uid: auth.currentUser?.uid,
+        picture:`https://firebasestorage.googleapis.com/v0/b/hexacore-1c84b.appspot.com/o/Image%2F${auth.currentUser?.uid}?alt=media&token=6eb830e3-d840-4e44-80d6-347ecda90fd7 `
+
+        }
+
+        if (!name) {
+        console.log("contact addition failed.")
+            return
+        } else {
+            setDoc(doc(db, "users", uid, "contacts", auth.currentUser?.uid), thisUserDocData)
+            setDoc(doc(db, "users", auth.currentUser?.uid, "contacts", uid), addedUserDocData)
+            deleteDoc(doc(db, "users", uid, "sent-requests", auth.currentUser?.uid))
+            deleteDoc(doc(db, "users", auth.currentUser?.uid, "contact-requests", uid))
+        }
     }
 
-    const thisUserDocData = {
-      email: auth.currentUser?.email,
-      name: auth.currentUser?.displayName,
-      uid: auth.currentUser?.uid,
-      picture:`https://firebasestorage.googleapis.com/v0/b/hexacore-1c84b.appspot.com/o/Image%2F${auth.currentUser?.uid}?alt=media&token=6eb830e3-d840-4e44-80d6-347ecda90fd7 `
+    const decline = () => {
+        onClose()
 
-    }
+        const addedUserDocData = {
+        email: email,
+        name: name,
+        picture: picture,
+        uid: uid,
+        }
 
-    if (!name) {
-      console.log("contact addition failed.")
-        return
-    } else {
-      setDoc(doc(db, "users", uid, "contact-requests", auth.currentUser?.uid), thisUserDocData)
-      setDoc(doc(db, "users", auth.currentUser?.uid, "sent-requests", uid), addedUserDocData)
+        const thisUserDocData = {
+        email: auth.currentUser?.email,
+        name: auth.currentUser?.displayName,
+        uid: auth.currentUser?.uid,
+        picture:`https://firebasestorage.googleapis.com/v0/b/hexacore-1c84b.appspot.com/o/Image%2F${auth.currentUser?.uid}?alt=media&token=6eb830e3-d840-4e44-80d6-347ecda90fd7 `
+
+        }
+
+        if (!name) {
+        console.log("contact addition failed.")
+            return
+        } else {
+            
+            deleteDoc(doc(db, "users", uid, "sent-requests", auth.currentUser?.uid))
+            deleteDoc(doc(db, "users", auth.currentUser?.uid, "contact-requests", uid))
+        }
     }
-  }
 
   return (
     <div
@@ -79,7 +110,12 @@ const ContactModal = ({ isOpen, onClose, picture, name, uid, email }) => {
                 <a onClick={submit} className="flex text-center items-center justify-center w-full pt-4 pr-10 pb-4 pl-10 text-base
                     font-medium text-white bg-indigo-600 rounded-xl transition duration-500 ease-in-out transform
                     hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Send contact request</a>
+                    Add contact</a>
+                <Spacer/>
+                <a onClick={decline} className="flex text-center items-center justify-center w-full pt-4 pr-10 pb-4 pl-10 text-base
+                    font-medium text-white bg-indigo-600 rounded-xl transition duration-500 ease-in-out transform
+                    hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Decline invitation</a>
               </div>
             </div>
               </div>
@@ -100,4 +136,4 @@ const ContactModal = ({ isOpen, onClose, picture, name, uid, email }) => {
   )
 }
 
-export default ContactModal
+export default RequestModal
