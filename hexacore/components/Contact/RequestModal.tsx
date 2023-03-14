@@ -3,57 +3,35 @@ import { doc, setDoc, deleteDoc } from "firebase/firestore";
 import { Spacer } from '@nextui-org/react';
 
 
-const RequestModal = ({ isOpen, onClose, picture, name, uid, email }) => {
+const RequestModal = ({ isOpen, onClose, uid, picture, email,name }) => {
 
   
-    const submit = () => {
-        onClose()
+  const submit = () => {
+    onClose()
 
-        const addedUserDocData = {
-        email: email,
-        name: name,
-        picture: picture,
-        uid: uid,
-        }
-
-        const thisUserDocData = {
-        email: auth.currentUser?.email,
-        name: auth.currentUser?.displayName,
-        uid: auth.currentUser?.uid,
-        picture:`https://firebasestorage.googleapis.com/v0/b/hexacore-1c84b.appspot.com/o/Image%2F${auth.currentUser?.uid}?alt=media&token=6eb830e3-d840-4e44-80d6-347ecda90fd7 `
-
-        }
-
-        if (!name) {
-        console.log("contact addition failed.")
-            return
-        } else {
-            setDoc(doc(db, "users", uid, "contacts", auth.currentUser?.uid), thisUserDocData)
-            setDoc(doc(db, "users", auth.currentUser?.uid, "contacts", uid), addedUserDocData)
-            deleteDoc(doc(db, "users", uid, "sent-requests", auth.currentUser?.uid))
-            deleteDoc(doc(db, "users", auth.currentUser?.uid, "contact-requests", uid))
-        }
+    const addedUserDocData = {
+      uid: uid,
     }
+
+    const thisUserDocData = {
+      uid: auth.currentUser?.uid,
+    }
+
+    if (!uid) {
+      console.log("contact addition failed.")
+        return
+    } else {
+        setDoc(doc(db, "users", uid, "contacts", auth.currentUser?.uid), thisUserDocData)
+        setDoc(doc(db, "users", auth.currentUser?.uid, "contacts", uid), addedUserDocData)
+        deleteDoc(doc(db, "users", uid, "sent-requests", auth.currentUser?.uid))
+        deleteDoc(doc(db, "users", auth.currentUser?.uid, "contact-requests", uid))
+    }
+  }
 
     const decline = () => {
         onClose()
 
-        const addedUserDocData = {
-        email: email,
-        name: name,
-        picture: picture,
-        uid: uid,
-        }
-
-        const thisUserDocData = {
-        email: auth.currentUser?.email,
-        name: auth.currentUser?.displayName,
-        uid: auth.currentUser?.uid,
-        picture:`https://firebasestorage.googleapis.com/v0/b/hexacore-1c84b.appspot.com/o/Image%2F${auth.currentUser?.uid}?alt=media&token=6eb830e3-d840-4e44-80d6-347ecda90fd7 `
-
-        }
-
-        if (!name) {
+        if (!uid) {
         console.log("contact addition failed.")
             return
         } else {
