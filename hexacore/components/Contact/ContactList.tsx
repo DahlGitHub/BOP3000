@@ -15,7 +15,6 @@ const ContactList = ({ isOpen, onClose, onOpen }) => {
     useEffect(() => {
         async function fetchRequests() {
             const querySnapshot = await getDocs(collection(db, "users", auth.currentUser?.uid, "contacts"));
-            const elements = [];
           
             const promises = querySnapshot.docs.map(async (doc) => {
               const userId = doc.data().uid;
@@ -55,19 +54,21 @@ const ContactList = ({ isOpen, onClose, onOpen }) => {
                     <h2 className="px-5 text-lg font-medium text-gray-800 dark:text-white">Contacts</h2>
                     
                     <div className="mt-8 space-y-4">
-                        
 
-                        {contacts.map((contact) => (
+                        {contacts.length ? contacts.map((contact) => (
                             <div key={contact.key}>
                                 {contact}
                             </div>
-                        ))}
+                        )) : <p className="text-center py-4 px-4 text-sm font-medium text-gray-700 capitalize dark:text-white">No contacts found.</p>}
+                        
                         <Link href={"/dashboard/contacts"} className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                             Add more contacts
                         </Link>
+                        
                         <button onClick={onClose} className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                             Hide contacts
                         </button>
+                    
                     </div>
                 </div>
             </div>

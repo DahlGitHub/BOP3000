@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import algoliasearch from "algoliasearch/lite";
-import { InstantSearch, SearchBox, connectHits } from "react-instantsearch-dom";
-import DashboardLayout from '../../components/DashboardLayout';
 import { useRouter } from 'next/navigation';
 import { db, auth } from '../../firebase';
 import { collection, query, where, getDocs, getDoc, doc } from "firebase/firestore";
@@ -14,7 +11,6 @@ const ContactRequests = () => {
   const [picture, setPicture] = React.useState(null);
   const [addedUid, setAddedUid] = React.useState(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [requests, setRequests] = React.useState([]);
   const [contact, setContact] = React.useState([]);
   
   const router = useRouter()
@@ -53,57 +49,57 @@ const ContactRequests = () => {
 
     
     
-    useEffect(() => {
-      async function fetchRequests() {
-        const querySnapshot = await getDocs(collection(db, "users", auth.currentUser?.uid, "contact-requests"));
-            const elements = [];
-          
-            const promises = querySnapshot.docs.map(async (doc) => {
-              const userId = doc.data().uid;
-              const userDoc = await getDoc(docImport(db, "users", userId));
-              const userData = userDoc.data();
-              const element = (
+  useEffect(() => {
+    async function fetchRequests() {
+      const querySnapshot = await getDocs(collection(db, "users", auth.currentUser?.uid, "contact-requests"));
+          const elements = [];
+        
+          const promises = querySnapshot.docs.map(async (doc) => {
+            const userId = doc.data().uid;
+            const userDoc = await getDoc(docImport(db, "users", userId));
+            const userData = userDoc.data();
+            const element = (
 
-                
-                <tr key={doc.id}>
-                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 w-10 h-10">
-                        <img className="w-full h-full rounded-full" src={userData.picture} alt="" />
-                      </div>
-                      <div className="ml-3">
-                        <p className="text-gray-900 whitespace-no-wrap">
-                          {userData.name}
-                        </p>
-                      </div>
+              
+              <tr key={doc.id}>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0 w-10 h-10">
+                      <img className="w-full h-full rounded-full" src={userData.picture} alt="" />
                     </div>
-                  </td>
-                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    <p className="text-gray-900 whitespace-no-wrap">
-                      {userData.email}
-                    </p>
-                  </td>
-                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    <p className="text-gray-900 whitespace-no-wrap">
-                      2
-                    </p>
-                  </td>
-                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    <button  onClick={() => handleClick(userData)} className="bg-blue-600 font-semibold text-white p-2 w-32 rounded-full hover:bg-blue-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300 m-2">
-                      Respond
-                    </button>
-                  </td>
-                </tr>
-              );
-          elements.push(element);
-        });
-  
-        await Promise.all(promises);
-        setContact(elements); // set the elements array instead of results
-      }
-  
-      fetchRequests();
-    }, []); // Run this effect only once on component mount
+                    <div className="ml-3">
+                      <p className="text-gray-900 whitespace-no-wrap">
+                        {userData.name}
+                      </p>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  <p className="text-gray-900 whitespace-no-wrap">
+                    {userData.email}
+                  </p>
+                </td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  <p className="text-gray-900 whitespace-no-wrap">
+                    2
+                  </p>
+                </td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  <button  onClick={() => handleClick(userData)} className="bg-blue-600 font-semibold text-white p-2 w-32 rounded-full hover:bg-blue-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300 m-2">
+                    Respond
+                  </button>
+                </td>
+              </tr>
+            );
+        elements.push(element);
+      });
+
+      await Promise.all(promises);
+      setContact(elements); // set the elements array instead of results
+    }
+
+    fetchRequests();
+  }, []); // Run this effect only once on component mount
         
 
   return (
