@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Timestamp, doc, addDoc, collection } from 'firebase/firestore';
 import { auth, db } from '../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth';
-export default () =>{
+export default ({id}) =>{
     const [message, setMessage] = useState('');
     const [row, setRow] = useState(1)
     const [isShiftEnter, setIsShiftEnter] = useState(false)
@@ -11,7 +11,7 @@ export default () =>{
     
     const sendMessage = (e) => {
       if(e.key === 'Enter' && !e.shiftKey){
-        addDoc(collection(db, '/groups/e5UQ87CZktE0ewgqvWpx/Channel/Hexacore/Messages/'), {
+        addDoc(collection(db, id+'/Messages/'), {
           uid: user.uid,
           message: message,
           sentAt: Timestamp.now()

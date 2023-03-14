@@ -4,20 +4,13 @@ import { db } from '../firebase'
 import { useEffect, useRef, useState } from 'react';
 import { useImmer } from 'use-immer';
 
-const qMessages = query(collection(db, '/groups/e5UQ87CZktE0ewgqvWpx/Channel/Hexacore/Messages/'), orderBy('sentAt', 'asc'), limit(10))
-const qChatters = query(collection(db, '/groups/e5UQ87CZktE0ewgqvWpx/Members/'))
-export default () =>{
+
+export default ({id}) =>{
+    const qMessages = query(collection(db, id+'/Messages/'), orderBy('sentAt', 'asc'), limit(10))
+    const qChatters = query(collection(db, id+'/Members/'))
     const [messages, setMessages] = useImmer([])
     let chatters = useRef(new Map())
-    //const [chatters, setChatters] = useImmer(new Map())
 
-    /*const getPeople =async () => {
-        const queryChatters = await getDocs(qChatters);
-        queryChatters.forEach(async (id)=>{
-            const data = (await getDoc(doc(db, 'users', id.data().uid))).data()
-            chatters.current.set(data.uid, data)
-        })
-    }*/
     const getPeople = async () => {
         const queryChatters = await getDocs(qChatters);
         const chattersMap = new Map();
