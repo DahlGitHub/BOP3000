@@ -33,7 +33,7 @@ export default () =>{
         return chattersMap;
       }
     useEffect(()=>{
-        //chatters.current = getPeople()
+        //lage en sjekk som kan sjekke medlemmer kun når medlemmer endrer seg
         const chattersmap = getPeople().then((data)=>{
             onSnapshot(qMessages, async (querySnapshot) =>{
                 await querySnapshot.docChanges().forEach(async (message)=>{  
