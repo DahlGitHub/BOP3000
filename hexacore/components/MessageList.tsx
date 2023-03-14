@@ -1,26 +1,57 @@
 import { Container } from '@nextui-org/react';
-import { collection, query, onSnapshot, limit, orderBy, getDocs } from 'firebase/firestore';
+import { collection, query, onSnapshot, limit, orderBy, getDocs, getDoc, doc, where } from 'firebase/firestore';
 import { db } from '../firebase'
 import { useEffect, useRef, useState } from 'react';
 import { useImmer } from 'use-immer';
 
-const q = query(collection(db, '/groups/e5UQ87CZktE0ewgqvWpx/Channel/Hexacore/Messages/'), orderBy('sentAt', 'asc'), limit(10))
+const qMessages = query(collection(db, '/groups/e5UQ87CZktE0ewgqvWpx/Channel/Hexacore/Messages/'), orderBy('sentAt', 'asc'), limit(10))
+const qChatters = query(collection(db, '/groups/e5UQ87CZktE0ewgqvWpx/Members/'))
 export default () =>{
     const [messages, setMessages] = useImmer([])
+    let chatters = useRef(new Map())
+    //const [chatters, setChatters] = useImmer(new Map())
 
+    /*const getPeople =async () => {
+        const queryChatters = await getDocs(qChatters);
+        queryChatters.forEach(async (id)=>{
+            const data = (await getDoc(doc(db, 'users', id.data().uid))).data()
+            chatters.current.set(data.uid, data)
+        })
+    }*/
+    const getPeople = async () => {
+        const queryChatters = await getDocs(qChatters);
+        const chattersMap = new Map();
+        
+        for (const docSnap of queryChatters.docs) {
+          const id = docSnap.data().uid;
+          const docRef = doc(db, 'users', id);
+          const snapshot = await getDoc(docRef);
+          const data = snapshot.data();
+          chattersMap.set(id, data);
+        }
+      
+        return chattersMap;
+      }
     useEffect(()=>{
-        onSnapshot(q, (querySnapshot) =>{
-            querySnapshot.docChanges().forEach((change)=>{
-                if(change.type === 'added'){
-                    setMessages(messages => [...messages, change.doc.data()])
-                }
-                if(change.type === 'modified'){
-                    // logikk for å endre meldingen som har blitt endret
-                    setMessages(messages)
-                }
-                if(change.type === 'removed'){
-                    //logikk som fjerner meldingen
-                }
+        //lage en sjekk som kan sjekke medlemmer kun når medlemmer endrer seg
+        const chattersmap = getPeople().then((data)=>{
+            onSnapshot(qMessages, async (querySnapshot) =>{
+                await querySnapshot.docChanges().forEach(async (message)=>{  
+                    const connect = {
+                        user: data.get(message.doc.data().uid),
+                        message: message.doc.data()
+                    }
+                    if(message.type === 'added'){
+                        setMessages(messages => [...messages, connect])
+                    }
+                    if(message.type === 'modified'){
+                        // logikk for å endre meldingen som har blitt endret
+                        setMessages(messages)
+                    }
+                    if(message.type === 'removed'){
+                        //logikk som fjerner meldingen
+                    }
+                })
             })
         })
     }, [])
@@ -40,12 +71,13 @@ export default () =>{
         ">
             {
                 messages.map((message) => {
+                   //console.log(message)
                     return (
                         <div key={index + 'div'} className='relative my-5'>
-                            <button key={index + 'icon'} className="flex-none rounded-full bg-purple-900">pro</button>
+                            <img key={index + ' image'} className="object-cover w-8 h-8 rounded-full" src={message.user.picture} alt=""/>
                             <div key={index + 'chat'} className='flex-wrap min-w-fit pl-4'>
-                                <p  className='text-red-400'>Henrik Lindam {message.sentAt.timestampValue}</p>
-                                <p>{message.message}</p>
+                                <p  className='text-red-400'>{message.user.name}</p>
+                                <p key={index + 'message'}>{message.message.message}</p>
                             </div>
                             <button key={index++ + 'edit'} className='absolute right-0 top-0 bg-purple-900'>edit</button>
                         </div>

@@ -1,17 +1,18 @@
 import { Container } from '@nextui-org/react';
 import { useState } from 'react';
 import { Timestamp, doc, addDoc, collection } from 'firebase/firestore';
-import { db } from '../firebase'
+import { auth, db } from '../firebase'
+import { useAuthState } from 'react-firebase-hooks/auth';
 export default () =>{
     const [message, setMessage] = useState('');
     const [row, setRow] = useState(1)
     const [isShiftEnter, setIsShiftEnter] = useState(false)
+    const [user, loading] = useAuthState(auth)
     
     const sendMessage = (e) => {
       if(e.key === 'Enter' && !e.shiftKey){
         addDoc(collection(db, '/groups/e5UQ87CZktE0ewgqvWpx/Channel/Hexacore/Messages/'), {
-          userID: 'Z3JOqIeo9D81l74aaCVo',
-          name: 'Henrik Lindam',
+          uid: user.uid,
           message: message,
           sentAt: Timestamp.now()
         })
