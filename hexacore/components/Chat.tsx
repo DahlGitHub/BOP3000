@@ -1,6 +1,6 @@
 import { Container  } from '@nextui-org/react';
-import Message from '../components/MessageInput'
-import Messages from '../components/MessageList'
+import Message from './MessageInput'
+import Messages from './MessageList'
 import { useRouter } from 'next/router';
 import { auth } from '../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -12,7 +12,6 @@ export default () => {
   const router = useRouter();
   const [user, loading] = useAuthState(auth);
 
-  
 const chatID = 'Chat/User1IDandUser2ID'
 
 //const referenceCollection = collection(db, 'chat/'+chatID)

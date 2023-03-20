@@ -1,4 +1,3 @@
-import { Container } from '@nextui-org/react';
 import { collection, query, onSnapshot, limit, orderBy, getDocs, getDoc, doc, where } from 'firebase/firestore';
 import { db } from '../firebase'
 import { useEffect, useRef, useState } from 'react';
@@ -25,6 +24,7 @@ export default ({id}) =>{
       
         return chattersMap;
       }
+      
     useEffect(()=>{
         //lage en sjekk som kan sjekke medlemmer kun når medlemmer endrer seg
         const chattersmap = getPeople().then((data)=>{

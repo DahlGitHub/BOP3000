@@ -1,7 +1,7 @@
 import React from 'react'
 import DashboardLayout from '../../components/DashboardLayout';
 import ContactList from '../../components/Contact/ContactList';
-import ChatTest from '../../components/ChatTest';
+import ChatTest from '../../components/Chat';
 
 const contactChat = () => {
 
