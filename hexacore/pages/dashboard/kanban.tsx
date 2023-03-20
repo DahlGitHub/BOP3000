@@ -5,7 +5,9 @@ import Kanban from '../../components/Kanban/Kanban';
 const kanban = () => {
   return (
     <DashboardLayout>
-        <Kanban/>
+    <div className='max-w-fit'>
+      <Kanban/>
+      </div>
     </DashboardLayout>
   )
 }

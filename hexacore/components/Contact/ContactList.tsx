@@ -2,6 +2,7 @@ import { db, auth } from '../../firebase';
 import { collection, query, where, getDocs, getDoc, doc } from "firebase/firestore";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { onAuthStateChanged } from 'firebase/auth';
 
 
 const ContactList = ({ isOpen, onClose, onOpen }) => {
@@ -9,6 +10,18 @@ const ContactList = ({ isOpen, onClose, onOpen }) => {
     const [contacts, setContacts] = React.useState([]);
     
     const docImport = doc;
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // User is signed in, see docs for a list of available properties
+          // https://firebase.google.com/docs/reference/js/firebase.User
+          const uid = user.uid;
+          // ...
+        } else {
+          // User is signed out
+          // ...
+        }
+      });
     
     
 
