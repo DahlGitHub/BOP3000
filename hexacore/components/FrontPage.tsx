@@ -3,6 +3,7 @@ import {Container, Image, Row, Col, Grid, Card, Text } from "@nextui-org/react";
 import {useMediaQuery} from './useMediaQuery.js'
 import Hero from "./FrontPageComps/Hero";
 import FrontpageCard from "./FrontPageComps/FrontpageCard";
+import FrontpagePoints from "./FrontPageComps/FrontpagePoints";
 
 
 
@@ -12,8 +13,11 @@ const FrontPage = () => {
 
 
   return (
-    <div>
+    <div className="bg-white dark:bg-gray-900">
         <Hero/>
+        <FrontpagePoints/>
+        <FrontpageCard/>
+        <FrontpageCard/>
         <FrontpageCard/>
     </div>
   );
