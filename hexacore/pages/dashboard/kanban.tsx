@@ -5,7 +5,7 @@ const kanban = () => {
   return (
     <DashboardLayout>
         
-hi
+    
     </DashboardLayout>
   )
 }

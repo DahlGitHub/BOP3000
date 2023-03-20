@@ -20,9 +20,11 @@ const SidebarItems = [
 const Dashboard = () => {
   
 
+  const router = useRouter();
 
-
-
+  const settings = () => {
+    router.push("/personalDetails")
+  }
 
   return ( 
   <>
