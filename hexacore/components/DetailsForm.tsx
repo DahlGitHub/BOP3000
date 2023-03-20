@@ -89,6 +89,9 @@ const DetailsForm = () => {
         }
     );     
    }
+   // trenger en loading bar for når du laster opp bildet
+   // trenger å hente bilde også på refresh
+   
    if(user){
     return (
         <Container lg>
