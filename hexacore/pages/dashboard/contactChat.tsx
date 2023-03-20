@@ -1,7 +1,7 @@
 import React from 'react'
 import DashboardLayout from '../../components/DashboardLayout';
 import ContactList from '../../components/Contact/ContactList';
-import ChatTest from '../../components/ChatTest';
+import ChatTest from '../../components/Chat/Chat';
 
 const contactChat = () => {
 
@@ -19,7 +19,8 @@ const contactChat = () => {
     <DashboardLayout>
         
         <section className="bg-white dark:bg-gray-900 flex min-h-screen">
-        <ContactList isOpen={isListOpen} onClose={handleListClose} onOpen={handleListOpen}/>
+        {//<ContactList isOpen={isListOpen} onClose={handleListClose} onOpen={handleListOpen}/>
+        }
           <div className="gap-16 items-center py-8 px-4 mx-auto max-w-screen-xl lg:grid lg:grid-cols-2 lg:py-16 lg:px-6">
             <ChatTest/>
               
