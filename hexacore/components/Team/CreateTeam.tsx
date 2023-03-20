@@ -10,10 +10,14 @@ const CreateTeam = () => {
   const id = uuid().replaceAll('-','');
   const [newId, setNewId] = useState('');
 
-  const [components, setTeam] = useState([]);
+  const [components, setTeam] = useState([testID]);
+
+  function testID() {
+    () => setNewId(id)
+  }
 
   function addTeam() {
-    setTeam([...components, () => setNewId(id)])
+    setTeam([...components, testID])
   }
 
   return (
