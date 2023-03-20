@@ -1,5 +1,5 @@
 import { collection, query, onSnapshot, limit, orderBy, getDocs, getDoc, doc, where } from 'firebase/firestore';
-import { db } from '../firebase'
+import { db } from '../../firebase'
 import { useEffect, useRef, useState } from 'react';
 import { useImmer } from 'use-immer';
 
@@ -17,6 +17,7 @@ export default ({id}) =>{
         for (const docSnap of queryChatters.docs) {
           const id = docSnap.data().uid;
           const docRef = doc(db, 'users', id);
+          // const docRef = await getAuth.getUser(id)
           const snapshot = await getDoc(docRef);
           const data = snapshot.data();
           chattersMap.set(id, data);
