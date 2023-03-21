@@ -45,22 +45,22 @@ const CreateVideoChatModal = ({ isOpen, onClose, location, roomName }) => {
                 className="text-lg leading-6 font-medium text-gray-900"
                 id="modal-headline"
               >
-                Add Contact?
+                Room created!
               </h3>
               <div className="mt-2">
               <div className="flex flex-col items-center pt-6 pr-6 pb-6 pl-6">
               <img
                   src={""} className="flex-shrink-0 object-cover object-center btn- flex w-16 h-16 mr-auto -mb-8 ml-auto rounded-full shadow-xl"/>
               <p className="mt-8 text-2xl font-semibold leading-none text-black tracking-tighter lg:text-3xl">
-                 Hei</p>
+                 {roomName}</p>
                   
-              <p className="mt-3 text-base leading-relaxed text-center text-black-200">hei</p>
+              <p className="mt-3 text-base leading-relaxed text-center text-black-200">{location}</p>
               
               <div className="w-full mt-6">
                 <a onClick={submit} className="flex text-center items-center justify-center w-full pt-4 pr-10 pb-4 pl-10 text-base
                     font-medium text-white bg-indigo-600 rounded-xl transition duration-500 ease-in-out transform
                     hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Send contact request</a>
+                    Take me there</a>
               </div>
             </div>
               </div>

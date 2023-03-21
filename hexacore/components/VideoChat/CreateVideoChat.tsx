@@ -35,6 +35,7 @@ const CreateVideoChat = () => {
                     
                     setRoomNameState(roomName)
                     setWindowLocation(window.location)
+                    handleModalOpen
                     
                 }
             });
@@ -47,10 +48,16 @@ const CreateVideoChat = () => {
     return(
         <div className="bg-white dark:bg-gray-900 flex min-h-screen">
             <CreateVideoChatModal isOpen={isModalOpen} onClose={handleModalClose} location={windowLocation} roomName={roomNameState}/>
-            <div className="m-20">
-            <label className='block uppercase mx-auto text-grey-900 dark:text-white text-xs font-bold mb-2' >What name should we give the room?</label>
-                <input type={"text"} onChange={e => { setRoomNameState(e.currentTarget.value); }} ></input>
-                <button className="text-white bg-white">Hei</button>
+            <div className="m-auto">
+                <div className="m-5">
+                    <label className='block mx-auto text-grey-900 dark:text-white text-xs font-bold mb-2' >What name should we give the room?</label>
+                    <input type={"text"} onChange={e => { setRoomNameState(e.currentTarget.value); }} />
+                </div>
+                <div className="m-5">
+                    <button onClick={() => handleModalOpen()} className="ml-10 mt-10 inline-flex justify-center max-w-40 rounded-md border border-gray-300 shadow-sm px-10 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm">
+                        Create room
+                    </button>
+                </div>
             </div>
         </div>
     )
