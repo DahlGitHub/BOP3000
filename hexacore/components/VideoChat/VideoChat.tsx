@@ -57,8 +57,8 @@ const VideoChat = () => {
 
     return(
         <div className="flex flex-wrap justify-center">
-            <div id="publisher" className="w-80 h-full mb-30 p-4"></div>
-            <div id="subscriber" className="w-80 h-full p-4"></div>
+            <div id="publisher" className="w-80 h-full mb-30 p-4"/>
+            <div id="subscriber" className="w-80 h-full p-4"/>
             
     </div>
     )

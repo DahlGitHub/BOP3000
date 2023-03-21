@@ -14,7 +14,7 @@ const SidebarItems = [
   { id: 2, name: "Kanban", icon: <FontAwesomeIcon icon={faUser} /> ,link: "/dashboard/kanban" },
   { id: 3, name: "Inbox",  icon: <FontAwesomeIcon icon={faUser} />,link: "/dashboard/inbox" },
   { id: 4, name: "Contacts", icon: <FontAwesomeIcon icon={faUserFriends} />,link: "/dashboard/contactChat" },
-  { id: 4, name: "VideoChat", icon: <FontAwesomeIcon icon={faUserFriends} />,link: "/videoChat" }
+  { id: 4, name: "VideoChat", icon: <FontAwesomeIcon icon={faUserFriends} />,link: "/dashboard/videoChat" }
   
 ];
 
