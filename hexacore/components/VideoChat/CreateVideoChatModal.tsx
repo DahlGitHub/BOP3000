@@ -4,13 +4,13 @@ import { auth, db} from '../../firebase';
 import { doc, setDoc } from "firebase/firestore";
 
 
-const CreateVideoChatModal = ({ isOpen, onClose, location, roomName }) => {
+const CreateVideoChatModal = ({ isOpen, onClose, location, roomName, showNext }) => {
 
   
   const submit = () => {
     onClose()
 
-    
+    showNext()
   }
 
   return (
@@ -54,13 +54,13 @@ const CreateVideoChatModal = ({ isOpen, onClose, location, roomName }) => {
               <p className="mt-8 text-2xl font-semibold leading-none text-black tracking-tighter lg:text-3xl">
                  {roomName}</p>
                   
-              <p className="mt-3 text-base leading-relaxed text-center text-black-200">{location}</p>
+              <a href={location} className="mt-3 text-base leading-relaxed text-center text-black-200">Link</a>
               
               <div className="w-full mt-6">
-                <a onClick={submit} className="flex text-center items-center justify-center w-full pt-4 pr-10 pb-4 pl-10 text-base
+                <button onClick={() => submit()} className="flex text-center items-center justify-center w-full pt-4 pr-10 pb-4 pl-10 text-base
                     font-medium text-white bg-indigo-600 rounded-xl transition duration-500 ease-in-out transform
                     hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Take me there</a>
+                    Take me there</button>
               </div>
             </div>
               </div>

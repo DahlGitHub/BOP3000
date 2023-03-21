@@ -19,6 +19,7 @@
     "@nextui-org/react": "^1.0.0-beta.12",
     "@opentok/client": "^2.24.7",
     "@react-aria/ssr": "^3.4.1",
+    "@vonage/video-express": "^1.4.2",
     "algoliasearch": "^4.15.0",
     "firebase": "^9.17.2",
     "font-awesome": "^4.7.0",

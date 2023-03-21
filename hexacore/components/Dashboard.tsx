@@ -3,7 +3,6 @@ import { Dropdown, Navbar, Text, Avatar, Image } from "@nextui-org/react";
 import { auth, logout } from '../firebase';
 import type { NextPage } from 'next'
 import Link from 'next/link';
-import Logo from "/public/images/hexacore.png";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faUserFriends } from "@fortawesome/free-solid-svg-icons";
@@ -40,7 +39,7 @@ const Dashboard = () => {
             </svg>
          </button>
         <a href="/" className="flex ml-2 md:mr-24">
-        <img src={Logo.src} alt="Hexacore" width={35} height={35} />
+        <img src="https://firebasestorage.googleapis.com/v0/b/hexacore-1c84b.appspot.com/o/hexacore.png?alt=media&token=0dc0577b-2ff1-4ff5-84b3-2e1896af25e0" alt="Hexacore" width={35} height={35} />
           <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Logo</span>
         </a>
       </div>
