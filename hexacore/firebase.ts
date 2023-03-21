@@ -8,6 +8,7 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import { initializeApp, getApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
+import { onAuthStateChanged } from "firebase/auth";
 
 function initializeAppIfNecessary() {
   try {
@@ -27,13 +28,27 @@ function initializeAppIfNecessary() {
   }
 }
 
+
+
 // Initialize Firebase
 const app = initializeAppIfNecessary();
+
 const auth = getAuth(app);
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/firebase.User
+    const uid = user.uid;
+    // ...
+  } else {
+    // User is signed out
+    // ...
+  }
+});
+
 const db = getFirestore(app);
 const database = getDatabase(app);
 const storage = getStorage(app);
-const uid = auth.currentUser?.uid.toString();
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -42,6 +57,8 @@ microsoftProvider.setCustomParameters({
   prompt: "consent",
   tenant: "52c4340a-af1c-4010-b7e4-08e63d51696f"
 })
+
+
 
 
 const signInWithGoogle = async () => {
@@ -98,7 +115,7 @@ const registerWithEmailAndPassword = async (name, email, password) => {
       uid: user.uid,
       name,
       authProvider: "local",
-      email,
+      email: user.email,
     });
   } catch (err) {
 
@@ -120,4 +137,4 @@ const logout = () => {
   signOut(auth);
 };
 
-export {auth, db, sendPasswordReset, logInWithEmailAndPassword, signInWithGoogle, signInWithMicrosoft, registerWithEmailAndPassword, logout, app, database, storage, uid}
+export {auth, db, sendPasswordReset, logInWithEmailAndPassword, signInWithGoogle, signInWithMicrosoft, registerWithEmailAndPassword, logout, app, database, storage}

@@ -1,13 +1,10 @@
-import React from 'react'
-import DashboardLayout from '../../components/DashboardLayout';
-import UserSettings from '../../components/userSettings';
+import DashboardLayout from '../../components/DashboardLayout'
+import DetailsForm from '../../components/DetailsForm'
 
-const settings = () => {
-  return (
-    <DashboardLayout>
-        <UserSettings/>
-    </DashboardLayout>
-  )
-}
+const PersonalDetails = () => (
+  <DashboardLayout>
+    <DetailsForm />
+  </DashboardLayout>
+)
 
-export default settings
+export default PersonalDetails

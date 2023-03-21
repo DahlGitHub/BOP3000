@@ -5,29 +5,22 @@ import { auth, logout, db, storage } from '../../../firebase';
 import { doc, setDoc, addDoc, getDoc } from "firebase/firestore";
 import { useRouter } from 'next/navigation';
 import Link from 'next/link'
+import { faSignIn } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-
 
 export default () => {
-    const iconFont = <FontAwesomeIcon icon={faRightFromBracket}/>
+    
     const router = useRouter()
     const [user, loading] = useAuthState(auth);
     const [fileUrl, setFileUrl] = React.useState(null);
     const userID = user?.uid.toString();
-    const profilePictureUrl = `https://firebasestorage.googleapis.com/v0/b/hexacore-1c84b.appspot.com/o/Image%2F${userID}?alt=media&token=6eb830e3-d840-4e44-80d6-347ecda90fd7 `;
+    
     const setLogMessage = () => {
         if(user){
             return 'Log out'
         } else{
             return 'Login'
         }
-    }
-    const getPicture = async (e) => {
-        const docRef = doc(db, "users", auth.currentUser?.uid.toString(), "picture");
-        const docSnap = await getDoc(docRef);
-
-    
     }
     if(user){
         return (
@@ -40,7 +33,7 @@ export default () => {
                                 as="button"
                                 color="secondary"
                                 size="md"
-                                src={profilePictureUrl}
+                                src={user.photoURL}
                                 />
                         </Navbar.Item>
                     </Dropdown.Trigger>
@@ -50,7 +43,7 @@ export default () => {
                     onAction={ (action) => {
                         switch(action){
                             case 'profile': {
-                                router.push('/settings')
+                                router.push('dashboard/settings')
                             }
                         }
                     }}
@@ -84,33 +77,9 @@ export default () => {
     } else{
         return(
             <Navbar.Content>
-                <Dropdown>
-                    <Dropdown.Trigger>     
-                        <Navbar.Item onClick={()=>{
-                            router.push('/login')
-                        }}>
-                            <Avatar
-                                bordered
-                                as="button"
-                                color="secondary"
-                                size="md"
-                                
-                                />
-                        </Navbar.Item>
-                    </Dropdown.Trigger>
-                    <Dropdown.Menu
-                    aria-label="User menu actions"
-                    color="secondary"
-                    onAction={(action) => {
-                        switch(action){
-                            case 'login': {
-                                router.push('/login')
-                            }
-                        }
-                    }}
-                    >
-                    </Dropdown.Menu>
-                </Dropdown>
+                <Link href='/login'>
+                    <FontAwesomeIcon icon={faSignIn}/>
+                </Link>
             </Navbar.Content>
         )
     }
