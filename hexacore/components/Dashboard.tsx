@@ -13,7 +13,7 @@ const SidebarItems = [
   { id: 1, name: "Dashboard", icon: <FontAwesomeIcon icon={faUser}/>,link: "/dashboard" },
   { id: 2, name: "Kanban", icon: <FontAwesomeIcon icon={faUser} /> ,link: "/dashboard/kanban" },
   { id: 3, name: "Inbox",  icon: <FontAwesomeIcon icon={faUser} />,link: "/dashboard/inbox" },
-  { id: 4, name: "Contacts", icon: <FontAwesomeIcon icon={faUserFriends} />,link: "/dashboard/contacts" },
+  { id: 4, name: "Contacts", icon: <FontAwesomeIcon icon={faUserFriends} />,link: "/dashboard/contactChat" },
   { id: 5, name: "Teams", icon: <FontAwesomeIcon icon={faUserFriends} />,link: "/dashboard/teams" },
 ];
 

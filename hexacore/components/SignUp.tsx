@@ -35,7 +35,7 @@ export default function SignUp() {
       };
       useEffect(() => {
         if (loading) return;
-        if (user) router.push('/settings');
+        if (user) router.push('./dashboard');
       }, [user, loading, router]);
 
     return (
