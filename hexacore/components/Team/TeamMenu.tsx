@@ -14,7 +14,7 @@ const TeamMenu = () => {
     <div className='w-64 absolute '>
     
       <div className='items-center p-2'>
-      <CreateTeam name="" uid="" isOpen={""} onClose={""} ownerid=""/>
+      <CreateTeam/>
       </div>
 
     </div>
