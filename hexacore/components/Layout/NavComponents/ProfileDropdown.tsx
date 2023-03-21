@@ -6,10 +6,11 @@ import { doc, setDoc, addDoc, getDoc } from "firebase/firestore";
 import { useRouter } from 'next/navigation';
 import Link from 'next/link'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRightToBracket } from "@fortawesome/.free-solid-svg-icons-mY0uWkAd";
+import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+
 
 export default () => {
-    const iconFont = <FontAwesomeIcon icon={faRightToBracket} />
+    const iconFont = <FontAwesomeIcon icon={faRightFromBracket}/>
     const router = useRouter()
     const [user, loading] = useAuthState(auth);
     const [fileUrl, setFileUrl] = React.useState(null);

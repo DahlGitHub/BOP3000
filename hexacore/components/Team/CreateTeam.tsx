@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolderPlus, faSitemap, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import {Collapse, Input, Spacer, Text } from "@nextui-org/react";
 import { TestTeam } from './TestTeam';
-import { collection, getDocs, getDoc, addDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, getDoc, addDoc, doc, query } from 'firebase/firestore';
 import { auth, db } from '../../firebase';
 import TeamModal from './TeamModal';
 
@@ -12,32 +12,43 @@ import TeamModal from './TeamModal';
 const CreateTeam = ()  => {
 
   const [teams, setTeams] = React.useState([]);
-
-
-  async function fetchRequests() {
-        
-    const queryTeams = await getDocs(collection(db, 'groups'));
   
-    const promises = queryTeams.docs.map(async (doc) => {
 
-      
-
-      const element = (
-        <button className="flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
-          {doc.data().name}
-        </button>
-      );
   
-      return element;
-    });
-    const results = await Promise.all(promises);
-    setTeams(results);
-}
 
   useEffect(() => {
-  
-    fetchRequests();
-  }, []); // Run this effect only once on component mount
+    const fetchTeams = async () => {
+      const querySnapshot = await getDocs(query(collection(db, "groups")));
+      const fetchedTeams = querySnapshot.docs.map((doc) => {
+        const teamData = doc.data();
+        console.log(teamData.name)
+          return (
+            <Collapse.Group accordion={false}>
+            <Collapse title={
+              <button className="flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
+                {teamData.name}
+              </button>
+            }>
+              <div>
+                <div>
+                <img src={teamData.picture}/>
+                <Text className='flex items-center text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700' >h</Text>
+                </div>
+                <Text className='flex items-center text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700' >Table</Text>
+              </div>
+              </Collapse>                
+            </Collapse.Group>
+          );
+    });
+    
+    setTeams(fetchedTeams);
+  };
+  fetchTeams()
+    
+  }, []);
+
+
+
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -54,22 +65,12 @@ const CreateTeam = ()  => {
   return (
     <div>
 
-      <TeamModal isOpen={isModalOpen} onClose={handleModalClose} refresh={ () => fetchRequests() }/>
+      <TeamModal isOpen={isModalOpen} onClose={handleModalClose} />
 
   
       
        {teams.map((team) => (
-      <Collapse.Group accordion={false}>
-       <Collapse title={team}>
-        <div>
-          <div>
-          <img src={team} className="flex-shrink-0 object-cover object-center btn- flex w-40 h-40 mr-auto -mb-8 ml-auto rounded-full shadow-xl"/>
-          <Text className='flex items-center text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700' >h</Text>
-          </div>
-          <Text className='flex items-center text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700' >Table</Text>
-        </div>
-        </Collapse>                
-      </Collapse.Group>
+          <div>{team}</div>
         ))}
       <div className='grid place-items-center'>
       <button type="button" onClick={handleModalOpen} className="text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2">

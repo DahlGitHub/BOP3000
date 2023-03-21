@@ -5,7 +5,7 @@ import {useState, useEffect} from "react";
 import { v4 as uuidv4 } from 'uuid'
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
-const TeamModal = ({isOpen, onClose, refresh}) => {
+const TeamModal = ({isOpen, onClose}) => {
     
     const [name, setName] = useState("");
     const [picture, setFileUrl] = useState(null)
@@ -51,7 +51,7 @@ const TeamModal = ({isOpen, onClose, refresh}) => {
             }
         }
         
-        refresh()
+        
 
     return (
       <div
