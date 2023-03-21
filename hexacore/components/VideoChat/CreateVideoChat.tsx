@@ -48,8 +48,9 @@ const CreateVideoChat = () => {
         <div className="bg-white dark:bg-gray-900 flex min-h-screen">
             <CreateVideoChatModal isOpen={isModalOpen} onClose={handleModalClose} location={windowLocation} roomName={roomNameState}/>
             <div className="m-20">
+            <label className='block uppercase mx-auto text-grey-900 dark:text-white text-xs font-bold mb-2' >What name should we give the room?</label>
                 <input type={"text"} onChange={e => { setRoomNameState(e.currentTarget.value); }} ></input>
-                <button id="createRoomBtn" className="text-white bg-white">Hei</button>
+                <button className="text-white bg-white">Hei</button>
             </div>
         </div>
     )
