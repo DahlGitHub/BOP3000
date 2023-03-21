@@ -11,17 +11,7 @@ const ContactList = ({ isOpen, onClose, onOpen }) => {
     
     const docImport = doc;
 
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-          // User is signed in, see docs for a list of available properties
-          // https://firebase.google.com/docs/reference/js/firebase.User
-          const uid = user.uid;
-          // ...
-        } else {
-          // User is signed out
-          // ...
-        }
-      });
+    
     
     
 
@@ -52,7 +42,7 @@ const ContactList = ({ isOpen, onClose, onOpen }) => {
         }
       
         fetchRequests();
-      }, []); // Run this effect only once on component mount
+    }, []); // Run this effect only once on component mount
   
 
     return (

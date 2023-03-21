@@ -13,11 +13,12 @@ const SidebarItems = [
   { id: 1, name: "Dashboard", icon: <FontAwesomeIcon icon={faUser}/>,link: "/dashboard" },
   { id: 2, name: "Kanban", icon: <FontAwesomeIcon icon={faUser} /> ,link: "/dashboard/kanban" },
   { id: 3, name: "Inbox",  icon: <FontAwesomeIcon icon={faUser} />,link: "/dashboard/inbox" },
-  { id: 4, name: "Contacts", icon: <FontAwesomeIcon icon={faUserFriends} />,link: "/dashboard/contactChat" }
+  { id: 4, name: "Contacts", icon: <FontAwesomeIcon icon={faUserFriends} />,link: "/dashboard/contactChat" },
+  { id: 4, name: "VideoChat", icon: <FontAwesomeIcon icon={faUserFriends} />,link: "/videoChat" }
   
 ];
 
-const Dashboard = () => {
+const Dashboard = () => { 
   
 
   const router = useRouter();
@@ -28,7 +29,7 @@ const Dashboard = () => {
 
   return ( 
   <>
-<nav className="absolute top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+<nav className="absolute top-0 z-50 w-full  bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
   <div className="px-3 py-3 lg:px-5 lg:pl-3">
     <div className="flex items-center justify-between">
       <div className="flex items-center justify-start">
