@@ -17,8 +17,6 @@ const FrontPage = () => {
         <Hero/>
         <FrontpagePoints/>
         <FrontpageCard/>
-        <FrontpageCard/>
-        <FrontpageCard/>
     </div>
   );
 }
