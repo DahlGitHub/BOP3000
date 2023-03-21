@@ -2,28 +2,30 @@ import { db, auth } from '../../firebase';
 import { collection, query, where, getDocs, getDoc, doc } from "firebase/firestore";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import Chat from '../Chat/Chat';
+
 
 
 const ContactList = ({ isOpen, onClose, onOpen }) => {
-
+    const router = useRouter()
     const [contacts, setContacts] = React.useState([]);
-    
     const docImport = doc;
-    
+    const [chat, setChat] = useState('')
     
 
     useEffect(() => {
         async function fetchRequests() {
-            console.log(auth.currentUser?.uid)
             const querySnapshot = await getDocs(collection(db, "users", auth.currentUser?.uid, "contacts"));
           
             const promises = querySnapshot.docs.map(async (doc) => {
               const userId = doc.data().uid;
               const userDoc = await getDoc(docImport(db, "users", userId));
               const userData = userDoc.data();
-          
+              const chatID = [auth.currentUser.uid.toLowerCase(), userId.toLowerCase()].sort().join('')
+            
               const element = (
-                <button key={doc.id} className="flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
+                <button key={doc.id} onClick={()=>setChat(chatID)} className="flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
                   <img className="object-cover w-8 h-8 rounded-full" src={userData.picture} alt=""/>
                   <div className="text-left rtl:text-right">
                     <h1 className="text-sm font-medium text-gray-700 capitalize dark:text-white">{userData.name}</h1>
@@ -44,6 +46,7 @@ const ContactList = ({ isOpen, onClose, onOpen }) => {
   
 
     return (
+        <section className="bg-white dark:bg-gray-900 flex min-h-screen">
         <div>
             <div
             className={`${
@@ -87,6 +90,15 @@ const ContactList = ({ isOpen, onClose, onOpen }) => {
                 </div>
             </div>
         </div>
+        {}
+        <div className="gap-16 items-center py-8 px-4 mx-auto max-w-screen-xl lg:grid lg:grid-cols-2 lg:py-16 lg:px-6">
+            {chat.length > 0
+            ? <Chat chatID={chat}/>
+            : <p>hei</p>
+            }
+            
+          </div>
+        </section>
     )
 }
 

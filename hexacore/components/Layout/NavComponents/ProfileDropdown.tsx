@@ -42,7 +42,7 @@ export default () => {
                     onAction={ (action) => {
                         switch(action){
                             case 'profile': {
-                                router.push('/settings')
+                                router.push('dashboard/settings')
                             }
                         }
                     }}
