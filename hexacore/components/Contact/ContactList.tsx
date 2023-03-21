@@ -17,6 +17,7 @@ const ContactList = ({ isOpen, onClose, onOpen }) => {
 
     useEffect(() => {
         async function fetchRequests() {
+            console.log(auth.currentUser?.uid)
             const querySnapshot = await getDocs(collection(db, "users", auth.currentUser?.uid, "contacts"));
           
             const promises = querySnapshot.docs.map(async (doc) => {

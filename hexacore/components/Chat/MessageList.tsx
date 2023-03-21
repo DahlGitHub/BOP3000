@@ -1,37 +1,31 @@
-import { Container } from '@nextui-org/react';
 import { collection, query, onSnapshot, limit, orderBy, getDocs, getDoc, doc, where } from 'firebase/firestore';
-import { db } from '../firebase'
+import { db } from '../../firebase'
 import { useEffect, useRef, useState } from 'react';
 import { useImmer } from 'use-immer';
 
-const qMessages = query(collection(db, '/groups/e5UQ87CZktE0ewgqvWpx/Channel/Hexacore/Messages/'), orderBy('sentAt', 'asc'), limit(10))
-const qChatters = query(collection(db, '/groups/e5UQ87CZktE0ewgqvWpx/Members/'))
-export default () =>{
+
+export default ({id}) =>{
+    const qMessages = query(collection(db, id+'/Messages/'), orderBy('sentAt', 'asc'), limit(10))
+    const qChatters = query(collection(db, id+'/Members/'))
     const [messages, setMessages] = useImmer([])
     let chatters = useRef(new Map())
-    //const [chatters, setChatters] = useImmer(new Map())
 
-    /*const getPeople =async () => {
-        const queryChatters = await getDocs(qChatters);
-        queryChatters.forEach(async (id)=>{
-            const data = (await getDoc(doc(db, 'users', id.data().uid))).data()
-            chatters.current.set(data.uid, data)
-        })
-    }*/
     const getPeople = async () => {
         const queryChatters = await getDocs(qChatters);
         const chattersMap = new Map();
         
         for (const docSnap of queryChatters.docs) {
           const id = docSnap.data().uid;
-          const docRef = doc(db, 'users', id);
-          const snapshot = await getDoc(docRef);
-          const data = snapshot.data();
-          chattersMap.set(id, data);
+          //const docRef = doc(db, 'users', id);
+          // const docRef = await getAuth.getUser(id)
+          //const snapshot = await getDoc(docRef);
+          //const data = snapshot.data();
+          chattersMap.set(id, docSnap.data());
         }
       
         return chattersMap;
       }
+      
     useEffect(()=>{
         //lage en sjekk som kan sjekke medlemmer kun når medlemmer endrer seg
         const chattersmap = getPeople().then((data)=>{
@@ -74,7 +68,7 @@ export default () =>{
                    //console.log(message)
                     return (
                         <div key={index + 'div'} className='relative my-5'>
-                            <img key={index + ' image'} className="object-cover w-8 h-8 rounded-full" src={message.user.picture} alt=""/>
+                            <img key={index + ' image'} className="object-cover w-8 h-8 rounded-full" src={message.user.photo} alt=""/>
                             <div key={index + 'chat'} className='flex-wrap min-w-fit pl-4'>
                                 <p  className='text-red-400'>{message.user.name}</p>
                                 <p key={index + 'message'}>{message.message.message}</p>
