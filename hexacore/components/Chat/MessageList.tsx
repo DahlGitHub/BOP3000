@@ -1,4 +1,4 @@
-import { collection, query, onSnapshot, limit, orderBy, getDocs, getDoc, doc, where } from 'firebase/firestore';
+import { collection, query, onSnapshot, limit, orderBy, getDocs, getDoc, doc, where, QuerySnapshot } from 'firebase/firestore';
 import { db } from '../../firebase'
 import { useEffect, useRef, useState } from 'react';
 import { useImmer } from 'use-immer';
@@ -9,45 +9,42 @@ export default ({id}) =>{
     const qChatters = query(collection(db, id+'/Members/'))
     const [messages, setMessages] = useImmer([])
     let chatters = useRef(new Map())
-
-    const getPeople = async () => {
-        const queryChatters = await getDocs(qChatters);
-        const chattersMap = new Map();
-        
-        for (const docSnap of queryChatters.docs) {
-          const id = docSnap.data().uid;
-          //const docRef = doc(db, 'users', id);
-          // const docRef = await getAuth.getUser(id)
-          //const snapshot = await getDoc(docRef);
-          //const data = snapshot.data();
-          chattersMap.set(id, docSnap.data());
-        }
-      
-        return chattersMap;
-      }
       
     useEffect(()=>{
         //lage en sjekk som kan sjekke medlemmer kun når medlemmer endrer seg
-        const chattersmap = getPeople().then((data)=>{
-            onSnapshot(qMessages, async (querySnapshot) =>{
-                await querySnapshot.docChanges().forEach(async (message)=>{  
-                    const connect = {
-                        user: data.get(message.doc.data().uid),
-                        message: message.doc.data()
-                    }
-                    if(message.type === 'added'){
-                        setMessages(messages => [...messages, connect])
-                    }
-                    if(message.type === 'modified'){
-                        // logikk for å endre meldingen som har blitt endret
-                        setMessages(messages)
-                    }
-                    if(message.type === 'removed'){
-                        //logikk som fjerner meldingen
-                    }
-                })
+        onSnapshot(qChatters, async (querySnapshot) =>{
+            await querySnapshot.docChanges().forEach(async (member)=>{ 
+                if(member.type === 'added'){
+                    chatters.current.set(member.doc.data().uid, member.doc.data())
+                }
+                if(member.type === 'modified'){
+                    // logikk for å endre medlemmer som har blitt endret
+                }
+                if(member.type === 'removed'){
+                    //logikk som fjerner medlem
+                }
             })
         })
+
+        onSnapshot(qMessages, async (querySnapshot) =>{
+            await querySnapshot.docChanges().forEach(async (message)=>{ 
+                const connect = {
+                    user: chatters.current.get(message.doc.data().uid),
+                    message: message.doc.data()
+                }
+                if(message.type === 'added'){
+                    setMessages(messages => [...messages, connect])
+                }
+                if(message.type === 'modified'){
+                    // logikk for å endre meldingen som har blitt endret
+                    setMessages(messages)
+                }
+                if(message.type === 'removed'){
+                    //logikk som fjerner meldingen
+                }
+            })
+        })
+
     }, [])
     let index = 0;
     return(

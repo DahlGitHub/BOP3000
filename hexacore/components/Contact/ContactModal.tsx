@@ -19,7 +19,7 @@ const ContactModal = ({ isOpen, onClose, picture, name, uid, email }) => {
       email: auth.currentUser?.email,
       name: auth.currentUser?.displayName,
       uid: auth.currentUser?.uid,
-      picture:`https://firebasestorage.googleapis.com/v0/b/hexacore-1c84b.appspot.com/o/Image%2F${auth.currentUser?.uid}?alt=media&token=6eb830e3-d840-4e44-80d6-347ecda90fd7 `
+      picture:auth.currentUser?.photoURL
 
     }
 
