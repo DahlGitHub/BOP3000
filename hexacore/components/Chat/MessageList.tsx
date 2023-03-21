@@ -16,11 +16,11 @@ export default ({id}) =>{
         
         for (const docSnap of queryChatters.docs) {
           const id = docSnap.data().uid;
-          const docRef = doc(db, 'users', id);
+          //const docRef = doc(db, 'users', id);
           // const docRef = await getAuth.getUser(id)
-          const snapshot = await getDoc(docRef);
-          const data = snapshot.data();
-          chattersMap.set(id, data);
+          //const snapshot = await getDoc(docRef);
+          //const data = snapshot.data();
+          chattersMap.set(id, docSnap.data());
         }
       
         return chattersMap;
@@ -68,7 +68,7 @@ export default ({id}) =>{
                    //console.log(message)
                     return (
                         <div key={index + 'div'} className='relative my-5'>
-                            <img key={index + ' image'} className="object-cover w-8 h-8 rounded-full" src={message.user.picture} alt=""/>
+                            <img key={index + ' image'} className="object-cover w-8 h-8 rounded-full" src={message.user.photo} alt=""/>
                             <div key={index + 'chat'} className='flex-wrap min-w-fit pl-4'>
                                 <p  className='text-red-400'>{message.user.name}</p>
                                 <p key={index + 'message'}>{message.message.message}</p>
