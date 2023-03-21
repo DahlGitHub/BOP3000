@@ -4,14 +4,26 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Chat from '../Chat/Chat';
-
-
+import { onAuthStateChanged } from 'firebase/auth';
 
 const ContactList = ({ isOpen, onClose, onOpen }) => {
     const router = useRouter()
     const [contacts, setContacts] = React.useState([]);
     const docImport = doc;
+
     const [chat, setChat] = useState('')
+        onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // User is signed in, see docs for a list of available properties
+          // https://firebase.google.com/docs/reference/js/firebase.User
+          const uid = user.uid;
+          // ...
+        } else {
+          // User is signed out
+          // ...
+        }
+      });
+
     
 
     useEffect(() => {
