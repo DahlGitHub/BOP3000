@@ -22,7 +22,7 @@ import { getAuth } from 'firebase/auth';
 import { color } from '@mui/system';
 
 
-  
+
 export default function SignIn() {
 
     const [email, setEmail] = useState("");
