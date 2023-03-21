@@ -8,15 +8,15 @@ import { collection, query, onSnapshot, limit, orderBy, getDocs, getDoc, doc, wh
 import { db } from '../../firebase'
    
 
-export default () => {
+export default ({chatID}) => {
   const router = useRouter();
   const [user, loading] = useAuthState(auth);
 
-const chatID = 'Chat/User1IDandUser2ID'
+const chat = `Chat/${chatID}`
 
 //const referenceCollection = collection(db, 'chat/'+chatID)
 if(user){
-  setDoc(doc(db, chatID, 'Members/', user.uid), {
+  setDoc(doc(db, chat, 'Members/', user.uid), {
     uid: user.uid,
     name: user.displayName,
     photo: user.photoURL
@@ -28,11 +28,11 @@ if(user){
       {
       //trenger å vite hvor den skal hente data fra
       }
-     <Messages id={chatID}/>
+     <Messages id={chat}/>
       {
       //trenger å vite hvor den skal skrive til
       }
-      <Message id={chatID}/>
+      <Message id={chat}/>
     </Container>
   )
 }

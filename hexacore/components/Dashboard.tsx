@@ -1,11 +1,11 @@
 import React, { useState, useMemo } from "react";
-import { Dropdown, Navbar, Text, Avatar, Image } from "@nextui-org/react";
+import { Dropdown, Navbar, Text, Avatar, Image, Collapse } from "@nextui-org/react";
 import { auth, logout } from '../firebase';
 import type { NextPage } from 'next'
 import Link from 'next/link';
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faUserFriends } from "@fortawesome/free-solid-svg-icons";
+import { faGears, faUser, faUserFriends } from "@fortawesome/free-solid-svg-icons";
 import ProfileDropdown from "./Layout/NavComponents/ProfileDropdown";
 
 const SidebarItems = [
@@ -13,6 +13,7 @@ const SidebarItems = [
   { id: 2, name: "Kanban", icon: <FontAwesomeIcon icon={faUser} /> ,link: "/dashboard/kanban" },
   { id: 3, name: "Inbox",  icon: <FontAwesomeIcon icon={faUser} />,link: "/dashboard/inbox" },
   { id: 4, name: "Contacts", icon: <FontAwesomeIcon icon={faUserFriends} />,link: "/dashboard/contactChat" },
+  { id: 5, name: "Teams", icon: <FontAwesomeIcon icon={faUserFriends} />,link: "/dashboard/teams" },
   { id: 4, name: "VideoChat", icon: <FontAwesomeIcon icon={faUserFriends} />,link: "/dashboard/videoChat" }
   
 ];
@@ -61,7 +62,7 @@ const Dashboard = () => {
         {SidebarItems.map(({ ...item}) => {
           return (
          <li>
-            <Link href={item.link} className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+            <Link href={item.link} className="flex items-center p-2 text-base font-normal text-gray-700 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                 {item.icon}
                 <span className="flex-1 ml-3 whitespace-nowrap">{item.name}</span>
             </Link>
@@ -69,12 +70,12 @@ const Dashboard = () => {
           )})}
           </ul>
          <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"/>
-         <ul className='bottom-0 absolute w-full pr-6'>
+         <ul className='w-full'>
          <li>
-            <a href="#" className=" flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-               <svg aria-hidden="true" className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clipRule="evenodd"></path></svg>
-               <div onClick={settings} className="flex-1 ml-3">Settings</div>
-            </a>
+            <Link href="/dashboard/settings" className="flex items-center p-2 text-base font-normal text-gray-700 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+              <FontAwesomeIcon icon={faGears} />
+               <div className="flex-1 ml-3">Settings</div>
+            </Link>
          </li>
          
       </ul>
