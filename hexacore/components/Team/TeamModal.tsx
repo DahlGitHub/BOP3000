@@ -1,28 +1,52 @@
-import { auth, db} from '../../firebase';
+import { auth, db, storage} from '../../firebase';
 import { doc, collection, addDoc, setDoc } from "firebase/firestore";
 import { Input } from '@nextui-org/react';
 import {useState, useEffect} from "react";
 import { v4 as uuidv4 } from 'uuid'
-
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
 const TeamModal = ({isOpen, onClose, refresh}) => {
     
     const [name, setName] = useState("");
-    
+    const [picture, setFileUrl] = useState(null)
+
+    const filechanged = async (e) =>{
+        var file = e.target.files[0];
+        const storageRef = ref(storage, `/Team/${auth.currentUser?.uid}`);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+  
+        uploadTask.on("state_changed",
+        (snapshot) => {
+        },
+        (error) => {
+          alert(error);
+        },
+        () => {
+          
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setFileUrl(downloadURL)
+
+        });
+        }
+    );
+         
+   }
 
     const submit = () => {
         onClose()
         
         const teamuid = uuidv4().replaceAll("-","");
 
-        if (!name) {
+        if (!name && !picture) {
         console.log("none test")
             return
         } else {
+           
             addDoc(collection(db, 'groups'), {
                 name: name,
                 ownerId: auth.currentUser?.uid,
-                teamuid: teamuid
+                teamuid: teamuid,
+                picture: picture
             })
             }
         }
@@ -80,7 +104,13 @@ const TeamModal = ({isOpen, onClose, refresh}) => {
                         placeholder="Team name"
                     
                     />
-                    
+                    <input
+                                        type="file"
+                                        className="appearance-none bg-gray-200 text-gray-900 px-2 py-1 shadow-sm border border-gray-400 rounded-md"
+                                        name="img"
+                                        onChange={filechanged}
+                                        required
+                                    />
                 <p className="mt-3 text-base leading-relaxed text-center text-black-200"></p>
                 
                 <div className="w-full mt-6">

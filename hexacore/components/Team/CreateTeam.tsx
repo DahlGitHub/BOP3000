@@ -12,7 +12,7 @@ import TeamModal from './TeamModal';
 const CreateTeam = ()  => {
 
   const [teams, setTeams] = React.useState([]);
-  const docImport = doc;
+
 
   async function fetchRequests() {
         
@@ -20,6 +20,7 @@ const CreateTeam = ()  => {
   
     const promises = queryTeams.docs.map(async (doc) => {
 
+      
 
       const element = (
         <button className="flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
@@ -61,7 +62,10 @@ const CreateTeam = ()  => {
       <Collapse.Group accordion={false}>
        <Collapse title={team}>
         <div>
+          <div>
+          <img src={team} className="flex-shrink-0 object-cover object-center btn- flex w-40 h-40 mr-auto -mb-8 ml-auto rounded-full shadow-xl"/>
           <Text className='flex items-center text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700' >h</Text>
+          </div>
           <Text className='flex items-center text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700' >Table</Text>
         </div>
         </Collapse>                
