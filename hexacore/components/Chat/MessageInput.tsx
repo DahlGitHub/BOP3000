@@ -12,6 +12,7 @@ export default ({id}) =>{
     const [user, loading] = useAuthState(auth)
     
     const sendMessage = (e) => {
+      console.log(e)
       if(e.key === 'Enter' && !e.shiftKey){
         addDoc(collection(db, id+'/Messages/'), {
           uid: user.uid,
@@ -50,7 +51,7 @@ export default ({id}) =>{
               {
               // "Button doesn't work yet" 
               }
-              <button onClick={sendMessage} className="inline-flex justify-center m-2 p-1 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600">
+              <button className="inline-flex justify-center m-2 p-1 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600">
                 <svg aria-hidden="true" className="w-6 h-6 rotate-90" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
                 <span className="sr-only">Send message</span>
               </button>

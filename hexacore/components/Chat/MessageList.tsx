@@ -9,6 +9,7 @@ export default ({id}) =>{
     const qMessages = query(collection(db, id+'/Messages/'), orderBy('sentAt', 'asc'), limit(10))
     const qChatters = query(collection(db, id+'/Members/'))
     const [messages, setMessages] = useImmer([])
+    
     let chatters = useRef(new Map())
       
     useEffect(()=>{
@@ -51,33 +52,37 @@ export default ({id}) =>{
     return(
 
                         <div className="flex flex-col h-full overflow-x-auto mb-4">
-                            <div className="flex flex-col h-full">
+                            <div className="flex flex-col h-screen">
                                 <div className="grid grid-cols-12 gap-y-2">
                                     {messages.map((message) => {
                                         if(message.user.uid != auth.currentUser?.uid) {
                                            return (
                                            <div key={index + 'div'} className="col-start-1 col-end-8 p-3 rounded-lg">
                                                 <div>
-                                                <p className='text-gray-800 p-3'>{message.sentAt}</p>
-                                                <p className='text-gray-800 p-3'>{message.user.name}</p>
+                                                <span className='text-gray-800 p-3'>{message.user.name}</span>
+                                                <small className='text-gray-500 p-3'>21/03 17:15</small>
                                                 </div>
                                                 <div className="flex flex-row items-center">
                                                     <img key={index + ' image'} src={message.user.photo} className="object-cover w-10 h-10 rounded-full mx-2" alt=""/>
                                                     <div key={index + 'chat'} className="relative ml-3 text-sm bg-white py-2 px-4 rounded-xl">
-                                                        <div key={index + 'message'}>{message.message.message}</div>
+                                                        <div key={index++ + 'message'}>{message.message.message}</div>
                                                     </div>
                                                 </div>
                                             </div> 
                                         ) 
 
                                         } else {
+                                            
                                             return (
                                             <div key={index + 'div'} className="col-start-6 col-end-13 p-3 rounded-lg">
-                                                <p  className='text-gray-800 p-3 text-end'>{message.user.name}</p>
+                                                <div className='text-end'>
+                                                <small className='text-gray-500 small p-3'>21/03 17:15</small>
+                                                <span  className='text-gray-800 p-3'>{message.user.name}</span>
+                                                </div>
                                                 <div className="flex items-center justify-start flex-row-reverse">
                                                     <img key={index + ' image'} src={message.user.photo} className="object-cover w-10 h-10 rounded-full mx-2" alt=""/>
                                                     <div key={index + 'chat'} className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 rounded-xl">
-                                                        <div key={index + 'message'}>{message.message.message}</div>
+                                                        <div key={index++ + 'message'}>{message.message.message}</div>
                                                     </div>
                                                 </div>
                                             </div>
