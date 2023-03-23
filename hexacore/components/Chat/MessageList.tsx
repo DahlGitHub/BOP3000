@@ -2,6 +2,7 @@ import { collection, query, onSnapshot, limit, orderBy, getDocs, getDoc, doc, wh
 import { db, auth } from '../../firebase'
 import { useEffect, useRef, useState } from 'react';
 import { useImmer } from 'use-immer';
+import { Text } from '@nextui-org/react';
 
 
 export default ({id}) =>{
@@ -48,48 +49,53 @@ export default ({id}) =>{
     }, [])
     let index = 0;
     return(
-        <div className="
-            bg-white 
-            min-h-fit
-            min-w-80
-            text-white
-            overflow-auto
-            w-full
-            px-5
-        ">
-            {
-                messages.map((message) => {
-                   //console.log(message)
-                   if(message.user.uid == auth.currentUser?.uid) {
-                    return (
-                       
-                        <div key={index + 'div'} className='relative my-5'>
-                            <img key={index + ' image'} className="object-cover w-8 h-8 rounded-full" src={message.user.photo} alt=""/>
-                            <div key={index + 'chat'} className='flex-wrap min-w-fit pl-4'>
-                                <p  className='text-red-400'>{message.user.name}</p>
-                                <p key={index + 'message'}>{message.message.message}</p>
+
+                        <div className="flex flex-col h-full overflow-x-auto mb-4">
+                            <div className="flex flex-col h-full">
+                                <div className="grid grid-cols-12 gap-y-2">
+                                    {messages.map((message) => {
+                                        if(message.user.uid != auth.currentUser?.uid) {
+                                           return (
+                                           <div key={index + 'div'} className="col-start-1 col-end-8 p-3 rounded-lg">
+                                                <div>
+                                                <p className='text-gray-800 p-3'>{message.sentAt}</p>
+                                                <p className='text-gray-800 p-3'>{message.user.name}</p>
+                                                </div>
+                                                <div className="flex flex-row items-center">
+                                                    <img key={index + ' image'} src={message.user.photo} className="object-cover w-10 h-10 rounded-full mx-2" alt=""/>
+                                                    <div key={index + 'chat'} className="relative ml-3 text-sm bg-white py-2 px-4 rounded-xl">
+                                                        <div key={index + 'message'}>{message.message.message}</div>
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                        ) 
+
+                                        } else {
+                                            return (
+                                            <div key={index + 'div'} className="col-start-6 col-end-13 p-3 rounded-lg">
+                                                <p  className='text-gray-800 p-3 text-end'>{message.user.name}</p>
+                                                <div className="flex items-center justify-start flex-row-reverse">
+                                                    <img key={index + ' image'} src={message.user.photo} className="object-cover w-10 h-10 rounded-full mx-2" alt=""/>
+                                                    <div key={index + 'chat'} className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 rounded-xl">
+                                                        <div key={index + 'message'}>{message.message.message}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            )
+                                        }
+                                        
+                                    })}
+                                    
+
+                                    
+
+                                </div>
                             </div>
-                            <button key={index++ + 'edit'} className='absolute right-0 top-0 bg-purple-900'>edit</button>
-                        </div>
-                        
-                    )
-                   } else {
-                    return (
-                       
-                        <div key={index + 'div'} className='relative my-5'>
-                            <img key={index + ' image'} className="object-cover w-8 h-8 rounded-full" src={message.user.photo} alt=""/>
-                            <div key={index + 'chat'} className='flex-wrap min-w-fit pl-4'>
-                                <p  className='text-blue-400'>{message.user.name}</p>
-                                <p key={index + 'message'}>{message.message.message}</p>
-                            </div>
-                            <button key={index++ + 'edit'} className='absolute right-0 top-0 bg-purple-900'>edit</button>
-                        </div>
-                        
-                    )
-                   }
-                })
-            }
-        </div>
-       
+                        </div> 
+                             
+
+        
+                    
+
     )
 }
