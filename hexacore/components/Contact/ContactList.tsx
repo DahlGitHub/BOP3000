@@ -58,7 +58,7 @@ const ContactList = ({ isOpen, onClose, onOpen }) => {
   
 
     return (
-        <section className="bg-white dark:bg-gray-900 flex min-h-screen">
+        <section className="bg-white dark:bg-gray-900 flex">
         <div>
             <div
             className={`${
