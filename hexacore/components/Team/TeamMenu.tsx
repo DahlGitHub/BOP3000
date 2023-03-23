@@ -1,6 +1,6 @@
 import React from 'react'
 import { Collapse, Text } from "@nextui-org/react";
-import CreateTeam from './CreateTeam';
+import CreateTeam from './teamModal';
 import { faFolderPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
