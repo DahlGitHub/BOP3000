@@ -1,5 +1,5 @@
 import { collection, query, onSnapshot, limit, orderBy, getDocs, getDoc, doc, where, QuerySnapshot } from 'firebase/firestore';
-import { db } from '../../firebase'
+import { db, auth } from '../../firebase'
 import { useEffect, useRef, useState } from 'react';
 import { useImmer } from 'use-immer';
 
@@ -49,12 +49,9 @@ export default ({id}) =>{
     let index = 0;
     return(
         <div className="
-            bg-stone-700 
+            bg-white 
             min-h-fit
             min-w-80
-            border-solid 
-            border-2
-            border-black
             text-white
             overflow-auto
             w-full
@@ -63,7 +60,9 @@ export default ({id}) =>{
             {
                 messages.map((message) => {
                    //console.log(message)
+                   if(message.user.uid == auth.currentUser?.uid) {
                     return (
+                       
                         <div key={index + 'div'} className='relative my-5'>
                             <img key={index + ' image'} className="object-cover w-8 h-8 rounded-full" src={message.user.photo} alt=""/>
                             <div key={index + 'chat'} className='flex-wrap min-w-fit pl-4'>
@@ -72,7 +71,22 @@ export default ({id}) =>{
                             </div>
                             <button key={index++ + 'edit'} className='absolute right-0 top-0 bg-purple-900'>edit</button>
                         </div>
+                        
                     )
+                   } else {
+                    return (
+                       
+                        <div key={index + 'div'} className='relative my-5'>
+                            <img key={index + ' image'} className="object-cover w-8 h-8 rounded-full" src={message.user.photo} alt=""/>
+                            <div key={index + 'chat'} className='flex-wrap min-w-fit pl-4'>
+                                <p  className='text-blue-400'>{message.user.name}</p>
+                                <p key={index + 'message'}>{message.message.message}</p>
+                            </div>
+                            <button key={index++ + 'edit'} className='absolute right-0 top-0 bg-purple-900'>edit</button>
+                        </div>
+                        
+                    )
+                   }
                 })
             }
         </div>
