@@ -3,7 +3,6 @@ import React, { useState, useEffect} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolderPlus, faSitemap, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import {Collapse, Input, Spacer, Text } from "@nextui-org/react";
-import { TestTeam } from './TestTeam';
 import { collection, getDocs, getDoc, addDoc, doc, query, where } from 'firebase/firestore';
 import { auth, db } from '../../firebase';
 import CreateTeam from './createTeam';
