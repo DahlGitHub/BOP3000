@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faUserFriends } from "@fortawesome/free-solid-svg-icons";
 import { Button, Input } from "@nextui-org/react";
-import { arrayUnion, collection, doc, onSnapshot, orderBy, query, setDoc, updateDoc } from 'firebase/firestore';
+import { arrayRemove, arrayUnion, collection, doc, onSnapshot, orderBy, query, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useImmer } from 'use-immer';
 // array med objekter
@@ -67,19 +67,26 @@ export default function Home() {
     }
   }, []);
 
-  const onDragEnd = (re) => {
+  const onDragEnd = async (re) => {
     if (!re.destination) return;
     let newBoardData = boardData;
     var dragItem = newBoardData[parseInt(re.source.droppableId)-1].items[re.source.index];
-    newBoardData[parseInt(re.source.droppableId)-1].items.splice(
+   /* newBoardData[parseInt(re.source.droppableId)-1].items.splice(
       re.source.index,
       1
-    ); 
-    newBoardData[parseInt(re.destination.droppableId)-1].items.splice(
+    ); */
+    await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardData[parseInt(re.source.droppableId)-1].id), {
+      items: arrayRemove(dragItem)
+    })
+    /*const getDocument = await
+    newBoardData[parseInt(re.destination.droppableId)].items.splice(
       re.destination.index,
       0,
       dragItem
-    );
+    );*/
+    await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardData[parseInt(re.destination.droppableId)-1].id), {
+      items: arrayUnion(dragItem)
+    })
     //setBoardData(newBoardData);
   };
 
