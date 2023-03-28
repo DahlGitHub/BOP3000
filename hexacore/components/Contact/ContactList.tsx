@@ -103,7 +103,7 @@ const ContactList = ({ isOpen, onClose, onOpen }) => {
             </div>
         </div>
         {}
-        <div className="">
+        <div className="max-w-screen">
             {chat.length > 0
             ? <Chat chatID={chat}/>
             : <p>hei</p>

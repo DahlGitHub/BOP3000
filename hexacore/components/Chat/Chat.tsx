@@ -6,6 +6,7 @@ import { auth } from '../../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { collection, query, onSnapshot, limit, orderBy, getDocs, getDoc, doc, where, setDoc } from 'firebase/firestore';
 import { db } from '../../firebase'
+import ProfileDropdown from '../Layout/NavComponents/ProfileDropdown';
    
 
 export default ({chatID}) => {
@@ -24,10 +25,11 @@ if(user){
 }
   
   return (
-    <div className="flex h-screen antialiased text-gray-800">
-      <div className="flex flex-row h-full w-full overflow-x-hidden">
+    <div className="flex h-screen antialiased text-gray-800 w-screen">
+      <div className="flex flex-row h-full overflow-x-hidden">
         <div className="flex flex-col flex-auto h-full p-2">
             <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4">
+              
               {
               //trenger å vite hvor den skal hente data fra
               }
