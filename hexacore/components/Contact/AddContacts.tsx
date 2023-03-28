@@ -33,24 +33,13 @@ const Contacts = () => {
   
 
   const Hits = ({ hits }) => {
-
     const handleClick = (props) => {
-
-      // For testing, console log skal fjernes
       setPicture(props.picture);
-      console.log("Picture: " + props.picture);
       setName(props.name);
-      console.log("Name: " + props.name);
       setEmail(props.email);
-      console.log("Email: " + props.email)
       setAddedUid(props.objectID)
-      console.log("uid: " + props.objectID)
-
       handleModalOpen()
-
     };
-    
-
     return (
       <>
         {hits.map(hit => (

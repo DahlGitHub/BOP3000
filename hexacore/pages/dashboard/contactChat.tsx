@@ -6,19 +6,11 @@ import ProfileDropdown from '../../components/Layout/NavComponents/ProfileDropdo
 
 const contactChat = () => {
 
-  const [isListOpen, setIsListOpen] = React.useState(true);
-
-  function handleListOpen() {
-      setIsListOpen(true);
-  }
   
-  function handleListClose() {
-    setIsListOpen(false);
-  }
 
   return (
     <DashboardLayout>
-        <ContactList isOpen={isListOpen} onClose={handleListClose} onOpen={handleListOpen}/>
+        <ContactList/>
     </DashboardLayout>
   )
 }
