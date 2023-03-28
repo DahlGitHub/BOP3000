@@ -5,8 +5,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Chat from '../Chat/Chat';
 import { onAuthStateChanged } from 'firebase/auth';
+import Drawer from '../Drawer';
 
-const ContactList = ({ isOpen, onClose, onOpen }) => {
+const ContactList = () => {
     const router = useRouter()
     const [contacts, setContacts] = React.useState([]);
     const docImport = doc;
@@ -55,54 +56,48 @@ const ContactList = ({ isOpen, onClose, onOpen }) => {
       
         fetchRequests();
       }, []); // Run this effect only once on component mount
+
+      const MainContent = () => {
+        return (
+          <>
+            {contacts.length ? (
+              <>
+                {contacts.map((contact) => (
+                  <div key={contact.key}>{contact}</div>
+                ))}
+              </>
+            ) : (
+              <p className="text-center py-4 px-4 text-sm font-medium text-gray-700 capitalize dark:text-white">No contacts found.</p>
+            )}
+            
+            
+            <button onClick={() => router.push("./contacts")} className="flex items-center w-full p-2 text-center font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                Add more contacts
+            </button>
+          </>
+        );
+      };
+      
+      // Render MainContent inside the Drawer component
+
+    const [isListOpen, setIsListOpen] = React.useState(true);
+
+    function handleListOpen() {
+        setIsListOpen(true);
+    }
+    
+    function handleListClose() {
+        setIsListOpen(false);
+    }
+      
   
 
     return (
         <section className="bg-white dark:bg-gray-900 flex min-h-screen">
         <div>
-            <div
-            className={`${
-                isOpen ? 'block' : 'hidden'
-            } `}
-            >
-                <div className="h-relative w-auto py-8 overflow-y-auto bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700">
-                    
-                    <h2 className="px-5 text-lg font-medium text-gray-800 dark:text-white">Contacts</h2>
-                    
-                    <div className="mt-8 space-y-4">
-
-                        {contacts.length ? contacts.map((contact) => (
-                            <div key={contact.key}>
-                                {contact}
-                            </div>
-                        )) : <p className="text-center py-4 px-4 text-sm font-medium text-gray-700 capitalize dark:text-white">No contacts found.</p>}
-                        
-                        <Link href={"/dashboard/contacts"} className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                            Add more contacts
-                        </Link>
-                        
-                        <button onClick={onClose} className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                            Hide contacts
-                        </button>
-                    
-                    </div>
-                </div>
-            </div>
-            <div
-            className={`${
-                isOpen ? 'hidden' : 'block'
-            } `}
-            >
-                <div className="max-h-fit w-auto py-8 overflow-y-auto bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700">
-                    <div className="mt-8">
-                        <button onClick={onOpen} className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                            Show contacts
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <Drawer mainContent={<MainContent/>} title="Contacts" isOpen={isListOpen} open={handleListOpen} close={handleListClose} />
         </div>
-        {}
+        
         <div className="gap-16 items-center py-8 px-4 mx-auto max-w-screen-xl lg:grid lg:grid-cols-2 lg:py-16 lg:px-6">
             {chat.length > 0
             ? <Chat chatID={chat}/>
