@@ -1,6 +1,6 @@
 import React from 'react'
 import Contacts from '../../components/Contact/AddContacts';
-import DashboardLayout from '../../components/DashboardLayout';
+import DashboardLayout from '../../components/Layout/Dashboard/DashboardLayout';
 import Login from '../login';
 
 const contacts = () => {

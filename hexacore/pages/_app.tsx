@@ -6,15 +6,11 @@ import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 config.autoAddCss = false
 import { library } from '@fortawesome/fontawesome-svg-core'
-import * as Icons from '@fortawesome/free-solid-svg-icons';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { fab } from '@fortawesome/free-brands-svg-icons'
 
 
-const iconList = Object
-  .keys(Icons)
-  .filter(key => key !== "fas" && key !== "prefix" )
-  .map(icon => Icons[icon])
-
-library.add(...iconList)
+library.add( fas )
 
 function MyApp({ Component, pageProps }) {
   return (

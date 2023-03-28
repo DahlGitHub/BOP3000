@@ -1,6 +1,6 @@
 import React from 'react'
 
-import DashboardLayout from '../../components/DashboardLayout';
+import DashboardLayout from '../../components/Layout/Dashboard/DashboardLayout';
 import TeamMenu from '../../components/Team/TeamMenu';
 
 

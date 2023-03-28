@@ -1,4 +1,4 @@
-import DashboardLayout from '../../components/DashboardLayout'
+import DashboardLayout from '../../components/Layout/Dashboard/DashboardLayout'
 import DetailsForm from '../../components/DetailsForm'
 
 const PersonalDetails = () => (

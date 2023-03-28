@@ -1,5 +1,5 @@
 import React from 'react'
-import DashboardLayout from '../../components/DashboardLayout';
+import DashboardLayout from '../../components/Layout/Dashboard/DashboardLayout';
 
 const friends = () => {
   return (
