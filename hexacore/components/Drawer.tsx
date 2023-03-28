@@ -14,7 +14,7 @@ const Drawer = ({mainContent, title, isOpen, open, close}) => {
             >
                 <div className="h-screen w-auto py-8 overflow-y-auto bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700">
                     
-                    <h1 className="mt-10 text-center text-lg leading-6 font-medium text-white">{title}</h1>
+                    <h1 className="text-center text-lg leading-6 font-medium text-gray-900 dark:text-white">{title}</h1>
                     
                     <div className="mt-8 space-y-4">
 

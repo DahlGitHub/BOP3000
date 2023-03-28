@@ -98,7 +98,7 @@ const ContactList = () => {
             <Drawer mainContent={<MainContent/>} title="Contacts" isOpen={isListOpen} open={handleListOpen} close={handleListClose} />
         </div>
         
-        <div className="gap-16 items-center py-8 px-4 mx-auto max-w-screen-xl lg:grid lg:grid-cols-2 lg:py-16 lg:px-6">
+        <div className="gap-16 items-center max-w-screen-xl lg:grid lg:grid-cols-2">
             {chat.length > 0
             ? <Chat chatID={chat}/>
             : <p>hei</p>
