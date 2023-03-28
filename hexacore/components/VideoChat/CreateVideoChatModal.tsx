@@ -50,7 +50,7 @@ const CreateVideoChatModal = ({ isOpen, onClose, location, roomName, showNext })
               <div className="mt-2">
               <div className="flex flex-col items-center pt-6 pr-6 pb-6 pl-6">
               <img
-                  src={""} className="flex-shrink-0 object-cover object-center btn- flex w-16 h-16 mr-auto -mb-8 ml-auto rounded-full shadow-xl"/>
+                  src={"https://cdn.pixabay.com/photo/2016/03/31/14/37/check-mark-1292787__340.png"} className="flex-shrink-0 object-cover object-center btn- flex w-16 h-16 mr-auto -mb-8 ml-auto rounded-full shadow-xl"/>
               <p className="mt-8 text-2xl font-semibold leading-none text-black tracking-tighter lg:text-3xl">
                  {roomName}</p>
                   
