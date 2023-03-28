@@ -26,25 +26,32 @@ function createGuidId() {
 // groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid/dokumentid
 export default function Home() {
   const [ready, setReady] = useState(false);
-  const [boardData, setBoardData] = useImmer([]);
+  const [boardData, setBoardData] = useImmer ([]);
   const [showForm, setShowForm] = useState(false);
   const [selectedBoard, setSelectedBoard] = useState(0);
   const [newList, setNewList] = useState('');
 
   useEffect(() => {
     const q = query(collection(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid'), orderBy('order', 'asc'))
-    const getKanban = onSnapshot(q, (snapshot) => {
+    onSnapshot(q, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
         if (change.type === 'added') {
-          setBoardData(boardData => [...boardData, change.doc.data()])
+          setBoardData((boardData) => {
+            const newData = change.doc.data();
+            const newBoardData = [...boardData];
+            newBoardData[change.newIndex] = newData;
+            return newBoardData;
+          });
+
         }
         if (change.type === 'modified') {
-          console.log('change.doc.data()')
-          boardData.map((board, index) => {
-            if(board.id === change.doc.id) {
-              setBoardData(boardData => [boardData[index] = change.doc.data()])
-            }
-          })
+          console.log(change)
+          setBoardData((boardData) => {
+            const newData = change.doc.data();
+            const newBoardData = [...boardData];
+            newBoardData[change.newIndex] = newData;
+            return newBoardData;
+          });
         }
         if (change.type === 'removed') {
           boardData.map((board, index) => {
@@ -62,14 +69,13 @@ export default function Home() {
 
   const onDragEnd = (re) => {
     if (!re.destination) return;
-  
     let newBoardData = boardData;
-    var dragItem = newBoardData[parseInt(re.source.droppableId)].items[re.source.index];
-    newBoardData[parseInt(re.source.droppableId)].items.splice(
+    var dragItem = newBoardData[parseInt(re.source.droppableId)-1].items[re.source.index];
+    newBoardData[parseInt(re.source.droppableId)-1].items.splice(
       re.source.index,
       1
     ); 
-    newBoardData[parseInt(re.destination.droppableId)].items.splice(
+    newBoardData[parseInt(re.destination.droppableId)-1].items.splice(
       re.destination.index,
       0,
       dragItem
@@ -86,7 +92,6 @@ export default function Home() {
       }
       else {
         const boardId = e.target.attributes['data-id'].value;
-        console.log(boardId)
         const item = {
           id: createGuidId(),
           title: val,
@@ -98,10 +103,7 @@ export default function Home() {
         await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardData[boardId-1].id), {
           items: arrayUnion(item)
         })
-        let newBoardData = boardData;
-        newBoardData[boardId]?.items.push(item);
-        setBoardData(newBoardData);
-        
+
         e.target.value = '';
         setShowForm(false);
       }
@@ -149,7 +151,7 @@ export default function Home() {
               </button>
             </li>
           </ul>
-          <Input value={newList} onChange={e => setNewList(e.target.value)} placeholder='Add list'></Input>
+          <Input aria-label='addList' aria-hidden='false' value={newList} onChange={e => setNewList(e.target.value)} placeholder='Add list'></Input>
           <Button className='text-black bg-indigo-800' onClick={addList}>Add</Button>
         </div>
 
@@ -158,7 +160,7 @@ export default function Home() {
           <DragDropContext onDragEnd={onDragEnd}>
             <div className="flex gap-5 flex-none w-fit my-5 overflow-x overflow-x-auto p-5">
               {boardData.map((board) => {
-                const bIndex = board.order+1
+                const bIndex = (board.order+1).toString();
                 return (
                   <div key={board.name}>
                     <Droppable droppableId={bIndex}>
