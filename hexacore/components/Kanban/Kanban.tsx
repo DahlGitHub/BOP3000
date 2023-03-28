@@ -1,6 +1,4 @@
 import React from 'react'
-
-import Image from "next/dist/client/image";
 import {
   ChevronDownIcon,
   PlusIcon,
@@ -13,42 +11,73 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faUserFriends } from "@fortawesome/free-solid-svg-icons";
+import { Button, Input } from "@nextui-org/react";
+import { arrayUnion, collection, doc, onSnapshot, orderBy, query, setDoc, updateDoc } from 'firebase/firestore';
+import { db } from '../../firebase';
+import { useImmer } from 'use-immer';
+// array med objekter
+// objektet må ha ett navn og en liste med items objekter
+
 
 function createGuidId() {
   const randomNumber = Math.floor(Math.random() * 1000000000000);
   return randomNumber;
 }
-
+// groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid/dokumentid
 export default function Home() {
   const [ready, setReady] = useState(false);
-  const [boardData, setBoardData] = useState(BoardData);
+  const [boardData, setBoardData] = useImmer([]);
   const [showForm, setShowForm] = useState(false);
   const [selectedBoard, setSelectedBoard] = useState(0);
+  const [newList, setNewList] = useState('');
 
   useEffect(() => {
-    if (process.browser) {
+    const q = query(collection(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid'), orderBy('order', 'asc'))
+    const getKanban = onSnapshot(q, (snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === 'added') {
+          setBoardData(boardData => [...boardData, change.doc.data()])
+        }
+        if (change.type === 'modified') {
+          console.log('change.doc.data()')
+          boardData.map((board, index) => {
+            if(board.id === change.doc.id) {
+              setBoardData(boardData => [boardData[index] = change.doc.data()])
+            }
+          })
+        }
+        if (change.type === 'removed') {
+          boardData.map((board, index) => {
+            if(board.id === change.doc.id) {
+              boardData.splice(index, 1);
+            }
+          })
+        }
+      });
+    })
+    if (process) {
       setReady(true);
     }
   }, []);
 
   const onDragEnd = (re) => {
     if (!re.destination) return;
+  
     let newBoardData = boardData;
-    var dragItem =
-      newBoardData[parseInt(re.source.droppableId)].items[re.source.index];
+    var dragItem = newBoardData[parseInt(re.source.droppableId)].items[re.source.index];
     newBoardData[parseInt(re.source.droppableId)].items.splice(
       re.source.index,
       1
-    );
+    ); 
     newBoardData[parseInt(re.destination.droppableId)].items.splice(
       re.destination.index,
       0,
       dragItem
     );
-    setBoardData(newBoardData);
+    //setBoardData(newBoardData);
   };
 
-  const onTextAreaKeyPress = (e) => {
+  const onTextAreaKeyPress = async (e) => {
     if(e.keyCode === 13) //Enter
     {
       const val = e.target.value;
@@ -57,25 +86,38 @@ export default function Home() {
       }
       else {
         const boardId = e.target.attributes['data-id'].value;
+        console.log(boardId)
         const item = {
           id: createGuidId(),
           title: val,
-          priority: 0,
+          priority: 2,
           chat:0,
           attachment: 0,
           assignees: []
         }
+        await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardData[boardId-1].id), {
+          items: arrayUnion(item)
+        })
         let newBoardData = boardData;
-        newBoardData[boardId].items.push(item);
+        newBoardData[boardId]?.items.push(item);
         setBoardData(newBoardData);
-        setShowForm(false);
+        
         e.target.value = '';
+        setShowForm(false);
       }
     }
   }
-
+  const addList = async () => {
+    if(newList.length === 0) return;
+    const id = createGuidId().toString()
+    await setDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', id), {
+      id: id,
+      order: boardData.length,
+      name: newList,
+      items: []
+    })
+  }
   return (
-    
       <div className="pt-20 pl-10 flex flex-col h-screen">
         {/* Board header */}
         <div className="flex flex-initial">
@@ -99,26 +141,6 @@ export default function Home() {
               />
             </li>
             <li>
-              <img
-                src="https://firebasestorage.googleapis.com/v0/b/hexacore-1c84b.appspot.com/o/Image%2F6y2HiDmxeueYcT3Hp87MyzE25lk2?alt=media&token=0bfbfdbb-2bbd-41a1-b760-5456c5a7c200"
-                width="36"
-                height="36"
-                
-                className=" rounded-full "
-                alt=''
-              />
-            </li>
-            <li>
-              <img
-                src="https://firebasestorage.googleapis.com/v0/b/hexacore-1c84b.appspot.com/o/Image%2F6y2HiDmxeueYcT3Hp87MyzE25lk2?alt=media&token=0bfbfdbb-2bbd-41a1-b760-5456c5a7c200"
-                width="36"
-                height="36"
-                
-                className=" rounded-full "
-                alt=''
-              />
-            </li>
-            <li>
               <button
                 className="border border-dashed flex items-center w-9 h-9 border-gray-500 justify-center
                 rounded-full"
@@ -127,16 +149,19 @@ export default function Home() {
               </button>
             </li>
           </ul>
+          <Input value={newList} onChange={e => setNewList(e.target.value)} placeholder='Add list'></Input>
+          <Button className='text-black bg-indigo-800' onClick={addList}>Add</Button>
         </div>
 
         {/* Board columns */}
         {ready && (
           <DragDropContext onDragEnd={onDragEnd}>
-            <div className="flex gap-5 flex-none w-fit my-5 overflow-x p-5">
-              {boardData.map((board, bIndex) => {
+            <div className="flex gap-5 flex-none w-fit my-5 overflow-x overflow-x-auto p-5">
+              {boardData.map((board) => {
+                const bIndex = board.order+1
                 return (
                   <div key={board.name}>
-                    <Droppable droppableId={bIndex.toString()}>
+                    <Droppable droppableId={bIndex}>
                       {(provided, snapshot) => (
                         <div
                           {...provided.droppableProps}

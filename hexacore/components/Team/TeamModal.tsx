@@ -5,7 +5,7 @@ import { faFolderPlus, faSitemap, faUserCircle } from '@fortawesome/free-solid-s
 import {Collapse, Input, Spacer, Text } from "@nextui-org/react";
 import { collection, getDocs, getDoc, addDoc, doc, query, where } from 'firebase/firestore';
 import { auth, db } from '../../firebase';
-import CreateTeam from './createTeam';
+import CreateTeam from './CreateTeam';
 
 
 const TeamModal = ()  => {
@@ -17,23 +17,25 @@ const TeamModal = ()  => {
       const getTeams = usersGroups.docs.forEach(async(group)=>{
         const team = await getDoc(doc(db, `groups/${group.data().teamuid}`)).then((doc)=>{
           const teamData = doc.data();
-          return (
-            <Collapse.Group accordion={false}>
-            <Collapse title={
-              <button className="flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
-                {teamData.name}
-              </button>
-            }>
-              <div>
+          if(teamData){
+            return (
+              <Collapse.Group accordion={false}>
+              <Collapse title={
+                <button className="flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
+                  {teamData.name}
+                </button>
+              }>
                 <div>
-                <img src={teamData.picture}/>
-                <Text className='flex items-center text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700' >h</Text>
+                  <div>
+                  <img src={teamData.picture}/>
+                  <Text className='flex items-center text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700' >h</Text>
+                  </div>
+                  <Text className='flex items-center text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700' >Table</Text>
                 </div>
-                <Text className='flex items-center text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700' >Table</Text>
-              </div>
-              </Collapse>                
-            </Collapse.Group>
-          );
+                </Collapse>                
+              </Collapse.Group>
+            );
+          }
         })
         setTeams(teams=>[...teams, team])
       })
