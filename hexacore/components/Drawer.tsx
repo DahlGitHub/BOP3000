@@ -12,7 +12,7 @@ const Drawer = ({mainContent, title, isOpen, open, close}) => {
                 isOpen ? 'block' : 'hidden'
             } `}
             >
-                <div className="h-screen w-auto py-8 overflow-y-auto bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700">
+                <div className="h-[calc(100vh-70px)] w-auto py-8 overflow-y-auto bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700">
                     
                     <h1 className="text-center text-lg leading-6 font-medium text-gray-900 dark:text-white">{title}</h1>
                     

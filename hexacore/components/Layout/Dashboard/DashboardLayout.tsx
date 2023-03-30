@@ -25,7 +25,7 @@ const DashboardLayout = ({ children }) => {
 
       :
       
-      <div className="w-full p-4">
+      <div className="w-full">
         { children }
       </div>
       
