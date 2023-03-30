@@ -1,5 +1,4 @@
-import React from "react";
-import Image from "next/dist/client/image";
+import React, { useEffect, useState } from "react";
 import {
     ChevronDownIcon,
     PlusIcon,
@@ -9,8 +8,26 @@ import {
 import { Draggable } from "react-beautiful-dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faUserFriends } from "@fortawesome/free-solid-svg-icons";
+import { Avatar, Dropdown } from "@nextui-org/react";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { db } from "../../firebase";
 
 function CardItem({ data, index }) {
+  const [members, setMembers] = useState([]);
+
+  const q = query(collection(db, '/groups/a82bcf3fff364e71b2a8bb39903be3dd/members'))
+  
+  const getMembers = async () => {
+    const members = await getDocs(q)
+    const membersData = members.docs.map((doc) => {
+      return doc.data()
+    })
+  
+    setMembers(membersData)
+  }
+  useEffect(() => {
+    getMembers()
+  }, []);
   return (
     <Draggable index={index} draggableId={data.id.toString()}>
       {(provided) => (
@@ -59,7 +76,6 @@ function CardItem({ data, index }) {
                       src={ass.avt}
                       width="36"
                       height="36"
-                      
                       className=" rounded-full "
                       alt=""
                     />
@@ -67,20 +83,55 @@ function CardItem({ data, index }) {
                 );
               })}
               <li>
-                <button
-                  className="border border-dashed flex items-center w-9 h-9 border-gray-500 justify-center
-                    rounded-full"
-                >
-                  <PlusCircleIcon className="w-5 h-5 text-gray-500" />
-                </button>
+                <Dropdown>
+                  {
+                    //className="border border-dashed flex items-center w-9 h-9 border-gray-500 justify-center
+                    //rounded-full"
+                    //må hente alle medlemmer i gruppen
+                  }
+                  <Dropdown.Button auto icon={<PlusCircleIcon className="w-5 h-5 text-gray-500" />}></Dropdown.Button>
+                    <Dropdown.Menu aria-label="Static Actions">
+                      <Dropdown.Item key="new">Add people to task</Dropdown.Item>
+                      <Dropdown.Item key="label" withDivider>Assigned people</Dropdown.Item>
+                      {data.assignees.map((members)=>{
+                        <Dropdown.Item>
+                          <Avatar
+                                bordered
+                                as="button"
+                                color="secondary"
+                                size="md"
+                                src={members.photoURL}
+                                />
+                                {members.name}
+                        </Dropdown.Item>
+                      })}
+                      <Dropdown.Item key="members" withDivider color="error">
+                        Members
+                      </Dropdown.Item>
+                      {members.map((member)=>{
+                        {console.log(member)}
+                        <Dropdown.Item>
+                          <Avatar
+                                bordered
+                                as="button"
+                                color="secondary"
+                                size="md"
+                                src={member.photo}
+                                />
+                                {member.name}
+                        </Dropdown.Item>
+                      })}
+                    </Dropdown.Menu>
+                </Dropdown>
               </li>
             </ul>
           </div>
         </div>
-        
       )}
     </Draggable>
   );
 }
 
 export default CardItem;
+
+

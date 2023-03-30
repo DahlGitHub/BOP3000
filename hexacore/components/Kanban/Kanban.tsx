@@ -26,7 +26,7 @@ function createGuidId() {
 // groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid/dokumentid
 export default function Home() {
   const [ready, setReady] = useState(false);
-  const [boardData, setBoardData] = useImmer ([]);
+  const [boardData, setBoardData] = useState ([]);
   const [showForm, setShowForm] = useState(false);
   const [selectedBoard, setSelectedBoard] = useState(0);
   const [newList, setNewList] = useState('');
@@ -45,10 +45,10 @@ export default function Home() {
 
         }
         if (change.type === 'modified') {
-          console.log(change)
           setBoardData((boardData) => {
             const newData = change.doc.data();
             const newBoardData = [...boardData];
+            if(newBoardData[change.newIndex] === newData) return newBoardData;
             newBoardData[change.newIndex] = newData;
             return newBoardData;
           });
@@ -66,28 +66,28 @@ export default function Home() {
       setReady(true);
     }
   }, []);
+  //animasjoner er litt for aggressive
+  //mangler å kunne melde seg på kort
+  //mangler å kunne sette prioritet på kort
 
   const onDragEnd = async (re) => {
     if (!re.destination) return;
-    let newBoardData = boardData;
-    var dragItem = newBoardData[parseInt(re.source.droppableId)-1].items[re.source.index];
-   /* newBoardData[parseInt(re.source.droppableId)-1].items.splice(
+    var dragItem = boardData[parseInt(re.source.droppableId)-1].items[re.source.index];
+    boardData[parseInt(re.source.droppableId)-1].items.splice(
       re.source.index,
       1
-    ); */
-    await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardData[parseInt(re.source.droppableId)-1].id), {
-      items: arrayRemove(dragItem)
-    })
-    /*const getDocument = await
-    newBoardData[parseInt(re.destination.droppableId)].items.splice(
+    )
+    boardData[parseInt(re.destination.droppableId)-1].items.splice(
       re.destination.index,
       0,
       dragItem
-    );*/
-    await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardData[parseInt(re.destination.droppableId)-1].id), {
-      items: arrayUnion(dragItem)
+    )
+    await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardData[parseInt(re.source.droppableId)-1].id), {
+      items: boardData[parseInt(re.source.droppableId)-1].items
     })
-    //setBoardData(newBoardData);
+    await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardData[parseInt(re.destination.droppableId)-1].id), {
+      items: boardData[parseInt(re.destination.droppableId)-1].items
+    })
   };
 
   const onTextAreaKeyPress = async (e) => {
@@ -137,7 +137,6 @@ export default function Home() {
             p-1 bg-white ml-5 shadow-xl"
             />
           </div>
-
           <ul className="flex space-x-3 ml-10">
             <li>
               <img
@@ -203,6 +202,7 @@ export default function Home() {
                                       index={iIndex}
                                       
                                     />
+                                    
                                   );
                                 })}
                               {provided.placeholder}
