@@ -8,6 +8,11 @@ module.exports = {
     // Or if using `src` directory:
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  variants: {
+    extend: {
+        display: ["group-hover"],
+    },
+},
   theme: {
     extend: {},
   },
