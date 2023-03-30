@@ -63,7 +63,7 @@ const Contacts = () => {
               </p>
             </td>
             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-              <p className="text-gray-900 whitespace-no-wrap">
+              <p className="text-gray-900 text-center whitespace-no-wrap">
                 2
               </p>
             </td>
@@ -81,68 +81,69 @@ const Contacts = () => {
   const CustomHits = connectHits(Hits);
 
   return (
-    <>
-      <div className='max-w-fit min-h-fit'>
-        <br/>
-        <InstantSearch searchClient={searchClient} indexName="users">
+  
+    <div className=' h-[calc(100vh-70px)] dark:text-white  dark:bg-gray-800'>
+      
+      <InstantSearch searchClient={searchClient} indexName="users">
+        
+      
+        <div className="bg-white dark:bg-gray-800 p-8 rounded-md min-w-fit min-h-fit z-1">
+          <ContactModal isOpen={isModalOpen} onClose={handleModalClose}  picture={picture} name={name} uid={addedUid} email={email}/>
           
-        <br/> 
-          <div className="bg-white p-8 rounded-md min-w-fit min-h-fit z-1">
-            <ContactModal isOpen={isModalOpen} onClose={handleModalClose}  picture={picture} name={name} uid={addedUid} email={email}/>
-            
-              <div className=" flex items-center justify-between pb-6">
-                
-                
-                <div>
-                  <h2 className="text-gray-600 font-semibold">Contacts</h2>
-                  <span className="text-xs">Search through our userbase</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex bg-gray-50 items-center p-2 rounded-md">
-                    <SearchBox translations={{placeholder: 'Search for users'}}/>
-                  </div>
-                    <div className="lg:ml-40 ml-10 space-x-8">
-                      <button onClick={contactRequests} className="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">Contact requests</button>
-                    </div>
-                  </div>
-                </div>
+            <div className="flex items-center pb-6">
+              
+              
               <div>
-                <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-                  <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
-                    <table className="min-w-fit leading-normal">
-                      <thead>
-                        <tr>
-                          <th
-                            className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                            Name
-                          </th>
-                          <th
-                            className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                            Email
-                          </th>
-                          <th
-                            className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                            Mutual groups
-                          </th>
-                          <th
-                            className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                            Add contact
-                          </th>
-                        </tr>
-                      </thead>
-                      
-                      <tbody>
-                        <CustomHits/>
-                      </tbody>  
-                    </table>
-                    
+                <h2 className="text-gray-600 dark:text-white font-semibold">Users</h2>
+                <span className="text-xs">Search through our userbase</span>
+              </div>
+              <div className="flex items-center ml-10 justify-between">
+                <div className="flex bg-gray-50 items-center p-2 rounded-md">
+                  <SearchBox translations={{placeholder: 'Search for users'}}/>
+                </div>
+                  <div className="lg:ml-40 ml-10 space-x-8">
+                    <button onClick={contactRequests} className="bg-blue-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">Contact requests</button>
                   </div>
                 </div>
               </div>
-          </div>
-        </InstantSearch>
-      </div>
-    </>
+            <div>
+              <div className=" sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+                <div className="inline-block max-w-fit shadow rounded-lg overflow-hidden">
+                  <table className="min-w-fit leading-normal">
+                    <thead>
+                      <tr>
+                        <th
+                          className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                          Name
+                        </th>
+                        <th
+                          className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                          Email
+                        </th>
+                        <th
+                          className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                          Mutual groups
+                        </th>
+                        <th
+                          className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                          Add contact
+                        </th>
+                      </tr>
+                    </thead>
+                    
+                    <tbody>
+                      <CustomHits/>
+                    </tbody>  
+                  </table>
+                  
+                </div>
+              </div>
+            </div>
+        </div>
+      </InstantSearch>
+    </div>
+    
+
   )
 }
 
