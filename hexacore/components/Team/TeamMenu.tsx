@@ -6,6 +6,7 @@ import {Collapse, Input, Spacer, Text } from "@nextui-org/react";
 import { collection, getDocs, getDoc, addDoc, doc, query, where } from 'firebase/firestore';
 import { auth, db } from '../../firebase';
 import CreateTeam from './CreateTeamModal';
+import Drawer from '../Drawer';
 
 
 const TeamMenu = ()  => {
@@ -58,26 +59,41 @@ const TeamMenu = ()  => {
     setIsModalOpen(false);
   }
 
-
-
-  return (
-    <div className='h-[calc(100vh-70px)] bg-white  dark:text-white  dark:bg-gray-800'>
-      <div className='w-64 border border-gray-700'>
-
-        <CreateTeam isOpen={isModalOpen} onClose={handleModalClose} />
-
-    
-        
+  const MainContent = () => {
+    return(
+      <>
         {teams.map((team) => (
           <div>{team}</div>
         ))}
         <div className='grid place-items-center'>
-        <button type="button" onClick={handleModalOpen} className="text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2">
-          <FontAwesomeIcon className='pr-2' icon={faFolderPlus}/>
-          
-          Create a team
-        </button>
+          <button type="button" onClick={handleModalOpen} className="text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2">
+            <FontAwesomeIcon className='pr-2' icon={faFolderPlus}/>
+            
+            Create a team
+          </button>
         </div>
+      </>
+    )
+  }
+  const [isListOpen, setIsListOpen] = React.useState(true);
+
+  function handleListOpen() {
+    setIsListOpen(true);
+  }
+
+  function handleListClose() {
+    setIsListOpen(false);
+  }
+
+
+
+  return (
+    <div className='h-[calc(100vh-70px)] bg-white  dark:text-white  dark:bg-gray-800'>
+      <div className='w-64'>
+
+        <CreateTeam isOpen={isModalOpen} onClose={handleModalClose} />
+        <Drawer mainContent={<MainContent/>} title="Teams" isOpen={isListOpen} open={handleListOpen} close={handleListClose} />
+        
       </div>
     </div>
   )
