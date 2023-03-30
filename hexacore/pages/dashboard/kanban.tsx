@@ -1,5 +1,5 @@
 import React from 'react'
-import DashboardLayout from '../../components/DashboardLayout';
+import DashboardLayout from '../../components/Layout/Dashboard/DashboardLayout';
 import Kanban from '../../components/Kanban/Kanban';
 
 const kanban = () => {
