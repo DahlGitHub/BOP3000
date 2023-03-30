@@ -11,7 +11,6 @@ const contactRequests = () => {
 
     return (
         <DashboardLayout>
-          <br/>
           <ContactRequests/>
         </DashboardLayout>
       )

@@ -103,66 +103,60 @@ const ContactRequests = () => {
         
 
   return (
-    <>
-      <div className='max-w-fit'>
-        <br/>
-          
-        <div className="bg-white p-8 rounded-md min-w-fit min-h-fit z-1">
-          <RequestModal isOpen={isModalOpen} onClose={handleModalClose}  picture={picture} name={name} uid={addedUid} email={email}/>
-          
-            <div className=" flex items-center justify-between pb-6">
-              
-              
-              <div>
-                <h2 className="text-gray-600 font-semibold">Contact Requests</h2>
-                <span className="text-xs">Pending contact requests</span>
+    
+    <div className=' h-[calc(100vh-70px)] bg-white dark:text-white  dark:bg-gray-800'>
+        
+      <div className=" p-8 rounded min-w-fit min-h-fit z-1">
+        <RequestModal isOpen={isModalOpen} onClose={handleModalClose}  picture={picture} name={name} uid={addedUid} email={email}/>
+        
+          <div className="flex items-center pb-6">
+            <div>
+              <h2 className=" font-semibold">Contact Requests</h2>
+              <span className="text-xs">Pending contact requests</span>
+            </div>
+            <div className="flex items-center justify-between">
+                <div className="lg:ml-40 ml-10 space-x-8">
+                  <button onClick={contacts} className="bg-blue-600 ml-80 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">Add Contacts</button>
+                </div>
               </div>
-              <div className="flex items-center justify-between">
-                <div className="flex bg-gray-50 items-center p-2 rounded-md">
+            </div>
+            <div>
+              <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+                <div className="inline-block max-w-fit shadow rounded-lg overflow-hidden">
+                  <table className="min-w-fit leading-normal">
+                    <thead>
+                      <tr>
+                        <th
+                          className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                          Name
+                        </th>
+                        <th
+                          className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                          Email
+                        </th>
+                        <th
+                          className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                          Mutual groups
+                        </th>
+                        <th
+                          className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                          Respond
+                        </th>
+                      </tr>
+                    </thead>
+                      
+                    <tbody>
+                      {contact.length ? contact.map((element) => element) : <p>No requests</p>}
+                    </tbody>  
+                  </table>
                   
                 </div>
-                  <div className="lg:ml-40 ml-10 space-x-8">
-                    <button onClick={contacts} className="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">Add Contacts</button>
-                  </div>
-                </div>
               </div>
-              <div>
-                <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-                  <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
-                    <table className="min-w-fit leading-normal">
-                      <thead>
-                        <tr>
-                          <th
-                            className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                            Name
-                          </th>
-                          <th
-                            className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                            Email
-                          </th>
-                          <th
-                            className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                            Mutual groups
-                          </th>
-                          <th
-                            className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                            Respond
-                          </th>
-                        </tr>
-                      </thead>
-                        
-                      <tbody>
-                        {contact.length ? contact.map((element) => element) : <p>No requests</p>}
-                      </tbody>  
-                    </table>
-                    
-                  </div>
-                </div>
-              </div>
-          </div>
-        
+            </div>
         </div>
-    </>
+      
+      </div>
+    
   )
 }
 
