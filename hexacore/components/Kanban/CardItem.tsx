@@ -9,12 +9,11 @@ import { Draggable } from "react-beautiful-dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faUserFriends } from "@fortawesome/free-solid-svg-icons";
 import { Avatar, Dropdown } from "@nextui-org/react";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { arrayUnion, collection, doc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore";
 import { db } from "../../firebase";
 
 function CardItem({ data, index }) {
   const [members, setMembers] = useState([]);
-
   const q = query(collection(db, '/groups/a82bcf3fff364e71b2a8bb39903be3dd/members'))
   
   const getMembers = async () => {
@@ -24,6 +23,18 @@ function CardItem({ data, index }) {
     })
   
     setMembers(membersData)
+  }
+ 
+  const asignMember = async (member) => {
+    console.log(data)
+    //mangler å sette index på arrayet
+    const q = await query(collection(db, '/groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid'), where('items', 'array-contains', data.id)) 
+    const docRef = await getDocs(q)
+    console.log(docRef.docs)
+    /*await updateDoc(doc(db, '/groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', data.id), {
+      assignees: arrayUnion(members.find((m) => m.id === member))
+    })*/
+
   }
   useEffect(() => {
     getMembers()
@@ -84,42 +95,42 @@ function CardItem({ data, index }) {
               })}
               <li>
                 <Dropdown>
-                  {
-                    //className="border border-dashed flex items-center w-9 h-9 border-gray-500 justify-center
-                    //rounded-full"
-                    //må hente alle medlemmer i gruppen
-                  }
                   <Dropdown.Button auto icon={<PlusCircleIcon className="w-5 h-5 text-gray-500" />}></Dropdown.Button>
-                    <Dropdown.Menu aria-label="Static Actions">
+                    <Dropdown.Menu aria-label="Static Actions"
+                      onAction={ (action) => {
+                          asignMember(action)
+                      }}>
                       <Dropdown.Item key="new">Add people to task</Dropdown.Item>
                       <Dropdown.Item key="label" withDivider>Assigned people</Dropdown.Item>
                       {data.assignees.map((members)=>{
-                        <Dropdown.Item>
-                          <Avatar
-                                bordered
-                                as="button"
-                                color="secondary"
-                                size="md"
-                                src={members.photoURL}
-                                />
+                        return(
+                          <Dropdown.Item key={members.uid}>
+                            <Avatar
+                                  bordered
+                                  as="button"
+                                  color="secondary"
+                                  size="md"
+                                  src={members.photoURL}
+                                  />
                                 {members.name}
-                        </Dropdown.Item>
+                          </Dropdown.Item>
+                        )
                       })}
                       <Dropdown.Item key="members" withDivider color="error">
                         Members
                       </Dropdown.Item>
                       {members.map((member)=>{
-                        {console.log(member)}
-                        <Dropdown.Item>
-                          <Avatar
-                                bordered
-                                as="button"
-                                color="secondary"
-                                size="md"
-                                src={member.photo}
-                                />
-                                {member.name}
+                        return(
+                        <Dropdown.Item icon={<Avatar
+                          bordered
+                          as="button"
+                          color="secondary"
+                          size="md"
+                          src={member.photo}
+                          />}>
+                          {member.name}
                         </Dropdown.Item>
+                        )
                       })}
                     </Dropdown.Menu>
                 </Dropdown>

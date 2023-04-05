@@ -132,31 +132,7 @@ export default function Home() {
         <div className="flex flex-initial">
           <div className="flex items-center">
             <h4 className="text-4xl font-bold text-gray-600">Kanban board</h4>
-            <FontAwesomeIcon icon={faUser}
-              className="w-9 h-9 text-gray-500 rounded-full
-            p-1 bg-white ml-5 shadow-xl"
-            />
           </div>
-          <ul className="flex space-x-3 ml-10">
-            <li>
-              <img
-                src="https://firebasestorage.googleapis.com/v0/b/hexacore-1c84b.appspot.com/o/Image%2F6y2HiDmxeueYcT3Hp87MyzE25lk2?alt=media&token=0bfbfdbb-2bbd-41a1-b760-5456c5a7c200"
-                width="36"
-                height="36"
-                
-                className=" rounded-full "
-                alt=''
-              />
-            </li>
-            <li>
-              <button
-                className="border border-dashed flex items-center w-9 h-9 border-gray-500 justify-center
-                rounded-full"
-              >
-                <PlusIcon className="w-5 h-5 text-gray-500" />
-              </button>
-            </li>
-          </ul>
           <Input aria-label='addList' aria-hidden='false' value={newList} onChange={e => setNewList(e.target.value)} placeholder='Add list'></Input>
           <Button className='text-black bg-indigo-800' onClick={addList}>Add</Button>
         </div>
@@ -186,7 +162,7 @@ export default function Home() {
                             ></span>
                             <h4 className=" p-3 flex justify-between items-center mb-2">
                               <span className="text-2xl text-gray-600">
-                                {board.name}
+                                {board.name+ 'test'}
                               </span>
                               
                             </h4>
