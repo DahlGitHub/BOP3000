@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faUserFriends } from "@fortawesome/free-solid-svg-icons";
 import { Button, Input } from "@nextui-org/react";
-import { arrayRemove, arrayUnion, collection, doc, onSnapshot, orderBy, query, setDoc, updateDoc } from 'firebase/firestore';
+import { arrayRemove, arrayUnion, collection, doc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useImmer } from 'use-immer';
 // array med objekter
@@ -23,6 +23,7 @@ function createGuidId() {
   const randomNumber = Math.floor(Math.random() * 1000000000000);
   return randomNumber;
 }
+
 // groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid/dokumentid
 export default function Home() {
   const [ready, setReady] = useState(false);
@@ -30,8 +31,19 @@ export default function Home() {
   const [showForm, setShowForm] = useState(false);
   const [selectedBoard, setSelectedBoard] = useState(0);
   const [newList, setNewList] = useState('');
+  const [members, setMembers] = useImmer([]);
+  const qMembers = query(collection(db, '/groups/a82bcf3fff364e71b2a8bb39903be3dd/members'))
+
+  const getMembers = async () => {
+    const members = await getDocs(qMembers)
+    const membersData = members.docs.map((doc) => {
+      return doc.data()
+    })
+    setMembers(membersData)
+  }
 
   useEffect(() => {
+    getMembers()
     const q = query(collection(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid'), orderBy('order', 'asc'))
     onSnapshot(q, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
@@ -77,6 +89,7 @@ export default function Home() {
       re.source.index,
       1
     )
+    dragItem.boardId = boardData[parseInt(re.destination.droppableId)-1].id;
     boardData[parseInt(re.destination.droppableId)-1].items.splice(
       re.destination.index,
       0,
@@ -105,6 +118,7 @@ export default function Home() {
           priority: 2,
           chat:0,
           attachment: 0,
+          boardId: boardData[boardId-1].id, 
           assignees: []
         }
         await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardData[boardId-1].id), {
@@ -176,6 +190,7 @@ export default function Home() {
                                       key={item.id}
                                       data={item}
                                       index={iIndex}
+                                      members={members}
                                       
                                     />
                                     
