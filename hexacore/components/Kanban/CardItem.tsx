@@ -77,11 +77,7 @@ function CardItem({ data, index, members }) {
             <div className="flex space-x-2 items-center">
               <span className="flex space-x-1 items-center">
                 <FontAwesomeIcon icon={faUser} className="w-4 h-4 text-gray-500" />
-                <span>{data.chat}</span>
-              </span>
-              <span className="flex space-x-1 items-center">
-                <FontAwesomeIcon icon={faUser} className="w-4 h-4 text-gray-500" />
-                <span>{data.attachment}</span>
+                <span>{data.assignees.length}</span>
               </span>
             </div>
 
