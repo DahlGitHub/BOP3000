@@ -12,6 +12,8 @@ import { Button, Dropdown, Input } from "@nextui-org/react";
 import { arrayUnion, collection, doc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useImmer } from 'use-immer';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 // array med objekter
 // objektet må ha ett navn og en liste med items objekter
 
@@ -185,7 +187,7 @@ export default function Home() {
                               <span className="text-2xl text-gray-600">
                                 {board.name}
                               </span>
-                              
+                              <FontAwesomeIcon icon={faEllipsis}/>
                             </h4>
 
                             <div className="overflow-y-auto h-auto"
@@ -198,7 +200,6 @@ export default function Home() {
                                       data={item}
                                       index={iIndex}
                                       members={members}
-                                      
                                     />
                                     
                                   );
