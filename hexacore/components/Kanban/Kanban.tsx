@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import {
   ChevronDownIcon,
   PlusIcon,
@@ -6,13 +6,10 @@ import {
   PlusCircleIcon,
 } from '@heroicons/react/24/outline'
 import CardItem from "./CardItem";
-import BoardData from "./board-data.json";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faUserFriends } from "@fortawesome/free-solid-svg-icons";
-import { Button, Input } from "@nextui-org/react";
-import { arrayRemove, arrayUnion, collection, doc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc } from 'firebase/firestore';
+import { Button, Dropdown, Input } from "@nextui-org/react";
+import { arrayUnion, collection, doc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useImmer } from 'use-immer';
 // array med objekter
@@ -28,12 +25,13 @@ function createGuidId() {
 export default function Home() {
   const [ready, setReady] = useState(false);
   const [boardData, setBoardData] = useState ([]);
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState(false)
   const [selectedBoard, setSelectedBoard] = useState(0);
   const [newList, setNewList] = useState('');
   const [members, setMembers] = useImmer([]);
+  const [priorityName, setPriorityName] = useState({prio: 0, name: 'Low'});
   const qMembers = query(collection(db, '/groups/a82bcf3fff364e71b2a8bb39903be3dd/members'))
-
+  
   const getMembers = async () => {
     const members = await getDocs(qMembers)
     const membersData = members.docs.map((doc) => {
@@ -77,9 +75,16 @@ export default function Home() {
     if (process) {
       setReady(true);
     }
-  }, []);
-  //animasjoner er litt for aggressive
-  //mangler å kunne melde seg på kort
+    const closeForm = (e) => {
+      //console.log(e.target.className)
+      if(showForm && e.target.className !== 'addTask border-gray-300 rounded focus:ring-purple-400 w-full' ){
+        setShowForm(false)
+      }
+    }
+    document.body.addEventListener('mousedown', closeForm)
+    return () => document.body.removeEventListener('mousedown', closeForm)
+  }, [showForm]);
+
   //mangler å kunne sette prioritet på kort
 
   const onDragEnd = async (re) => {
@@ -108,14 +113,15 @@ export default function Home() {
     {
       const val = e.target.value;
       if(val.length === 0) {
-        setShowForm(false);
+        setShowForm(false)
+
       }
       else {
         const boardId = e.target.attributes['data-id'].value;
         const item = {
           id: createGuidId(),
           title: val,
-          priority: 2,
+          priority: priorityName.prio,
           chat:0,
           attachment: 0,
           boardId: boardData[boardId-1].id, 
@@ -126,7 +132,8 @@ export default function Home() {
         })
 
         e.target.value = '';
-        setShowForm(false);
+        setShowForm(false)
+
       }
     }
   }
@@ -176,7 +183,7 @@ export default function Home() {
                             ></span>
                             <h4 className=" p-3 flex justify-between items-center mb-2">
                               <span className="text-2xl text-gray-600">
-                                {board.name+ 'test'}
+                                {board.name}
                               </span>
                               
                             </h4>
@@ -202,7 +209,23 @@ export default function Home() {
                             {
                               showForm && selectedBoard === bIndex ? (
                                 <div className="p-3">
-                                  <textarea className="border-gray-300 rounded focus:ring-purple-400 w-full" 
+                                  <Dropdown>
+                                    <Dropdown.Button className='bg-white text-black w-full mb-3'>{priorityName.name}</Dropdown.Button>
+                                    <Dropdown.Menu
+                                      disallowEmptySelection
+                                      selectionMode="single"
+                                      selectedKeys={priorityName.name}
+                                      onSelectionChange={(e)=>{
+                                        const split = e.currentKey.split(' ')
+                                        setPriorityName({prio: parseInt(split[0]), name: split[1]})
+                                        
+                                        }}>
+                                      <Dropdown.Item key='0 Low'>Low</Dropdown.Item>
+                                      <Dropdown.Item key='1 Medium'>Medium</Dropdown.Item>
+                                      <Dropdown.Item key='2 High'>High</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                  </Dropdown>
+                                  <textarea className="addTask border-gray-300 rounded focus:ring-purple-400 w-full" 
                                   rows={3} placeholder="Task info" 
                                   data-id={bIndex}
                                   onKeyDown={(e) => onTextAreaKeyPress(e)}/>
@@ -210,7 +233,7 @@ export default function Home() {
                               ): (
                                 <button
                                   className="flex justify-center items-center my-3 space-x-2 text-lg"
-                                  onClick={() => {setSelectedBoard(bIndex); setShowForm(true);}}
+                                  onClick={() => {setSelectedBoard(bIndex); setShowForm(true)}}
                                 >
                                   <span>Add task</span>
                                   <PlusCircleIcon className="w-5 h-5 text-gray-500" />

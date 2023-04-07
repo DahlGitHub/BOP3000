@@ -17,7 +17,7 @@ function CardItem({ data, index, members }) {
   const assignMember = async (member) => {
     //mangler å sette index på arrayet
     const type = member.toString().split(' ')
-    const q = query(collection(db, 'groups', 'a82bcf3fff364e71b2a8bb39903be3dd', 'kanbanid'), where('items', 'array-contains', data));
+    const q = query(collection(db, 'groups', 'a82bcf3fff364e71b2a8bb39903be3dd', 'kanbanid'), where('items', 'array-contains', data))
     const docRef = await getDocs(q)
     docRef.docs.forEach(async(docs) => {
       const items = docs.data().items.map((item) => {
@@ -42,9 +42,6 @@ function CardItem({ data, index, members }) {
       
     })
   }
-  useEffect(() => {
-
-  }, []);
   return (
     <Draggable index={index} draggableId={data.id.toString()}>
       {(provided) => (
@@ -83,7 +80,8 @@ function CardItem({ data, index, members }) {
 
             <ul className="flex space-x-3">
               {data.assignees.map((ass, index) => {
-                console.log(index)
+               // console.log(index)
+               if(members.length > 0){
                 return (
                   <li key={ass}>
                     <img
@@ -94,7 +92,9 @@ function CardItem({ data, index, members }) {
                       alt=""
                     />
                   </li>
-                );
+                )
+               }
+                
               })}
               <li>
                 <Dropdown>
@@ -116,18 +116,20 @@ function CardItem({ data, index, members }) {
                       <Dropdown.Item key="new">Add people to task</Dropdown.Item>
                       <Dropdown.Item key="label" withDivider>Assigned people</Dropdown.Item>
                       {data.assignees.map((member)=>{
-                        console.log(member)
+                       // console.log(member)
+                       if(members.length > 0){
                         return(
-                          <Dropdown.Item key={'remove '+member} icon={<Avatar
-                            bordered
-                            as="button"
-                            color="secondary"
-                            size="md"
+                          <Dropdown.Item key={'remove '+member} icon={<img
                             src={members.find((m) => m.uid === member).photo}
-                            />}>
+                            width="36"
+                            height="36"
+                            className=" rounded-full "
+                            alt=""
+                          />}>
                                 {members.find((m) => m.uid === member).name}
                           </Dropdown.Item>
-                        )
+                          )
+                        }
                       })}
                       <Dropdown.Item key="members" withDivider color="error">
                         Members
@@ -135,13 +137,13 @@ function CardItem({ data, index, members }) {
                       {members.map((member)=>{
                        if( !data.assignees.includes(member.uid)){
                           return(
-                          <Dropdown.Item key={'add '+member.uid} icon={<Avatar
-                            bordered
-                            as="button"
-                            color="secondary"
-                            size="md"
+                          <Dropdown.Item key={'add '+member.uid} icon={<img
                             src={member.photo}
-                            />}>
+                            width="36"
+                            height="36"
+                            className=" rounded-full "
+                            alt=""
+                          />}>
                             {member.name}
                           </Dropdown.Item>
                           )
