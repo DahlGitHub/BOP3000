@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from "react";
 import { getStorage, ref, listAll } from 'firebase/storage';
 import Drawer from "./Drawer";
-import { Document, Page } from 'react-pdf';
-import {pdfFile} from '../public/test.pdf';
+import FileLoader from "./FileLoader";
+
 
 const Files = () => {
   
@@ -26,17 +26,10 @@ const Files = () => {
         // Uh-oh, an error occurred!
         });
 
-    const [numPages, setNumPages] = useState(null);
-    const [pageNumber, setPageNumber] = useState(1);
-  
-    function onDocumentLoadSuccess({ numPages }) {
-      setNumPages(numPages);
-    }
-
     const MainContent = () => {
         return (
           <>
-            hei hei hei hei
+            Hello
           </>
         );
       };
@@ -60,17 +53,10 @@ const Files = () => {
         {
         // Lag en metode for å vise fremvise de ulike metodene
         }
-        <div className="gap-16 items-center max-w-screen-xl lg:grid lg:grid-cols-2">
-
-            <Document file={pdfFile} onLoadSuccess={onDocumentLoadSuccess}>
-                <Page pageNumber={pageNumber} />
-            </Document>
-            <p>
-                Page {pageNumber} of {numPages}
-            </p>
-            
-          </div>
-        </section>
+        <div className="">
+          <FileLoader/>
+        </div>
+      </section>
   </>
 )}
 
