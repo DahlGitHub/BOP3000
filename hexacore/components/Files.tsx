@@ -5,6 +5,7 @@ import FileLoader from "./FileLoader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilePdf, faTractor, faTrash, faTrashCan, faX, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import FileUpload from "./FileUpload";
 
 
 const Files = () => {
@@ -32,6 +33,8 @@ const Files = () => {
     const MainContent = () => {
         return (
           <div>
+            <FileUpload/>
+
             <div className="bg-gray-100 rounded-lg pl-0 mt-2 mr-2 mb-0 ml-2 hover:bg-gray-300">
               <div className="sm:flex sm:items-center sm:justify-between">
                 <div className="flex items-center flex-1 min-w-0">
