@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
-import pdfFile from '../public/pdf/tekst.pdf';
+import pdfFile from '../../public/pdf/tekst.pdf';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
