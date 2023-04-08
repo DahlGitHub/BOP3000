@@ -9,11 +9,11 @@ import CardItem from "./CardItem";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useEffect, useState } from "react";
 import { Button, Dropdown, Input } from "@nextui-org/react";
-import { arrayUnion, collection, doc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc } from 'firebase/firestore';
+import { arrayUnion, collection, deleteDoc, doc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useImmer } from 'use-immer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsis, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 // array med objekter
 // objektet må ha ett navn og en liste med items objekter
 
@@ -41,7 +41,6 @@ export default function Home() {
     })
     setMembers(membersData)
   }
-
   useEffect(() => {
     getMembers()
     const q = query(collection(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid'), orderBy('order', 'asc'))
@@ -66,10 +65,10 @@ export default function Home() {
           });
         }
         if (change.type === 'removed') {
-          boardData.map((board, index) => {
-            if(board.id === change.doc.id) {
-              boardData.splice(index, 1);
-            }
+          setBoardData((boardData) => {
+            const newBoardData = [...boardData];
+            newBoardData.splice(change.oldIndex, 1);
+            return newBoardData;
           })
         }
       });
@@ -78,7 +77,6 @@ export default function Home() {
       setReady(true);
     }
     const closeForm = (e) => {
-      //console.log(e.target.className)
       if(showForm && e.target.className !== 'addTask border-gray-300 rounded focus:ring-purple-400 w-full' ){
         setShowForm(false)
       }
@@ -91,22 +89,22 @@ export default function Home() {
 
   const onDragEnd = async (re) => {
     if (!re.destination) return;
-    var dragItem = boardData[parseInt(re.source.droppableId)-1].items[re.source.index];
-    boardData[parseInt(re.source.droppableId)-1].items.splice(
+    var dragItem = boardData[parseInt(re.source.droppableId)].items[re.source.index];
+    boardData[parseInt(re.source.droppableId)].items.splice(
       re.source.index,
       1
     )
-    dragItem.boardId = boardData[parseInt(re.destination.droppableId)-1].id;
-    boardData[parseInt(re.destination.droppableId)-1].items.splice(
+    dragItem.boardId = boardData[parseInt(re.destination.droppableId)].id;
+    boardData[parseInt(re.destination.droppableId)].items.splice(
       re.destination.index,
       0,
       dragItem
     )
-    await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardData[parseInt(re.source.droppableId)-1].id), {
-      items: boardData[parseInt(re.source.droppableId)-1].items
+    await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardData[parseInt(re.source.droppableId)].id), {
+      items: boardData[parseInt(re.source.droppableId)].items
     })
-    await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardData[parseInt(re.destination.droppableId)-1].id), {
-      items: boardData[parseInt(re.destination.droppableId)-1].items
+    await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardData[parseInt(re.destination.droppableId)].id), {
+      items: boardData[parseInt(re.destination.droppableId)].items
     })
   };
 
@@ -126,16 +124,14 @@ export default function Home() {
           priority: priorityName.prio,
           chat:0,
           attachment: 0,
-          boardId: boardData[boardId-1].id, 
+          boardId: boardData[boardId].id, 
           assignees: []
         }
-        await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardData[boardId-1].id), {
+        await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardData[boardId].id), {
           items: arrayUnion(item)
         })
-
         e.target.value = '';
         setShowForm(false)
-
       }
     }
   }
@@ -149,6 +145,9 @@ export default function Home() {
       items: []
     })
   }
+  const deleteBoard = async (boardID)=>{
+    await deleteDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardID))
+  }
   return (
       <div className="pt-20 pl-10 flex flex-col h-screen">
         {/* Board header */}
@@ -157,15 +156,15 @@ export default function Home() {
             <h4 className="text-4xl font-bold text-gray-600">Kanban board</h4>
           </div>
           <Input aria-label='addList' aria-hidden='false' value={newList} onChange={e => setNewList(e.target.value)} placeholder='Add list'></Input>
-          <Button className='text-black bg-indigo-800' onClick={addList}>Add</Button>
+          <Button className='text-black bg-indigo-800' onPress={addList}>Add</Button>
         </div>
 
         {/* Board columns */}
         {ready && (
           <DragDropContext onDragEnd={onDragEnd}>
             <div className="flex gap-5 flex-none w-fit my-5 overflow-x overflow-x-auto p-5">
-              {boardData.map((board) => {
-                const bIndex = (board.order+1).toString();
+              {boardData.map((board, index) => {
+                const bIndex = index.toString()//(board.order+1);
                 return (
                   <div key={board.name}>
                     <Droppable droppableId={bIndex}>
@@ -187,7 +186,21 @@ export default function Home() {
                               <span className="text-2xl text-gray-600">
                                 {board.name}
                               </span>
-                              <FontAwesomeIcon icon={faEllipsis}/>
+                              <Dropdown>
+                                <Dropdown.Trigger><FontAwesomeIcon className='' icon={faEllipsis}/></Dropdown.Trigger>
+                                <Dropdown.Menu
+                                      disallowEmptySelection
+                                      selectionMode="single"
+                                      onAction={(key)=>{
+                                        if(key === 'delete') deleteBoard(board.id)
+                                      }}
+                                      >
+                                      <Dropdown.Item icon={<FontAwesomeIcon icon={faPenToSquare}/>} key='edit'>Edit name</Dropdown.Item>
+                                      <Dropdown.Section>
+                                        <Dropdown.Item color='error' icon={<FontAwesomeIcon icon={faTrash}/>} key='delete'>Delete list</Dropdown.Item>
+                                      </Dropdown.Section>
+                                    </Dropdown.Menu>
+                              </Dropdown>
                             </h4>
 
                             <div className="overflow-y-auto h-auto"
