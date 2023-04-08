@@ -3,9 +3,10 @@ import { getStorage, ref, listAll } from 'firebase/storage';
 import Drawer from "./Drawer";
 import FileLoader from "./FileLoader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilePdf, faTractor, faTrash, faTrashCan, faX, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faFilePdf, faFilter, faTractor, faTrash, faTrashCan, faX, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import FileUpload from "./FileUpload";
+import FileFilter from "./FileFilter";
 
 
 const Files = () => {
@@ -34,6 +35,10 @@ const Files = () => {
         return (
           <div>
             <FileUpload/>
+
+            <div className="pl-0 mt-2 mr-2 mb-0 ml-2">
+            <FileFilter/>
+            </div>
 
             <div className="bg-gray-100 rounded-lg pl-0 mt-2 mr-2 mb-0 ml-2 hover:bg-gray-300">
               <div className="sm:flex sm:items-center sm:justify-between">
