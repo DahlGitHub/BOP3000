@@ -1,10 +1,5 @@
 import React, { useRef } from 'react'
-import {
-  ChevronDownIcon,
-  PlusIcon,
-  
-  PlusCircleIcon,
-} from '@heroicons/react/24/outline'
+import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import CardItem from "./CardItem";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useEffect, useState } from "react";
@@ -14,9 +9,6 @@ import { db } from '../../firebase';
 import { useImmer } from 'use-immer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
-// array med objekter
-// objektet må ha ett navn og en liste med items objekter
-
 
 function createGuidId() {
   const randomNumber = Math.floor(Math.random() * 1000000000000);
@@ -114,7 +106,6 @@ export default function Home() {
       const val = e.target.value;
       if(val.length === 0) {
         setShowForm(false)
-
       }
       else {
         const boardId = e.target.attributes['data-id'].value;
@@ -163,11 +154,11 @@ export default function Home() {
         {ready && (
           <DragDropContext onDragEnd={onDragEnd}>
             <div className="flex gap-5 flex-none w-fit my-5 overflow-x overflow-x-auto p-5">
-              {boardData.map((board, index) => {
-                const bIndex = index.toString()//(board.order+1);
+              {boardData.map((board, bIndex) => {
                 return (
+                  
                   <div key={board.name}>
-                    <Droppable droppableId={bIndex}>
+                    <Droppable droppableId={bIndex.toString()}>
                       {(provided, snapshot) => (
                         <div
                           {...provided.droppableProps}
@@ -219,7 +210,7 @@ export default function Home() {
                                 })}
                               {provided.placeholder}
                             </div>
-                            
+                        
                             {
                               showForm && selectedBoard === bIndex ? (
                                 <div className="p-3">
