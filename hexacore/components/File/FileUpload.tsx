@@ -7,9 +7,11 @@ import { faFile } from '@fortawesome/free-regular-svg-icons';
 const FileUpload = () => {
 
     const [selectedFile, setSelectedFile] = useState(null);
+    const [fileSize, setFileSize] = useState("");
 
     const handleFileSelect = (e) => {
         setSelectedFile(e.target.files[0]);
+        setFileSize(formatBytes(e.target.files[0].size))
     };
 
     const handleSubmit = (e) => {
@@ -19,12 +21,23 @@ const FileUpload = () => {
 
         
         // Hvis lastet opp, sett deretter filen til null ;)
-        setSelectedFile(null)
+        setSelectedFile(null);
+        setFileSize("");
     };
 
     const handleCancel = () => {
         setSelectedFile(null);
+        setFileSize("");
     };
+
+    const formatBytes = (bytes, decimals = 2) => {
+        if (bytes === 0) return "0 Bytes";
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ["Bytes", "KB", "MB"];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+      };
 
     return (
         <div className="mx-2 mb-5">
@@ -34,8 +47,8 @@ const FileUpload = () => {
                 {selectedFile ? (
                     <div>
                     <div className="flex justify-between items-center bg-gray-100 p-2 rounded-lg mb-4">
-                        <span className="text-sm text-gray-700"><FontAwesomeIcon className='mx-2' icon={faFile}/>{selectedFile.name}</span>
- 
+                        <span className="text-sm text-gray-700 truncate w-48"><FontAwesomeIcon className='mx-2' icon={faFile}/>{selectedFile.name}</span>
+                        <span className="text-sm text-gray-500">{fileSize}</span>
                     </div>
                     <div className="flex items-center space-x-2 text-sm">
                         <button type="submit" onClick={handleSubmit} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full px-2 py-1 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
