@@ -47,7 +47,7 @@ const FileUpload = () => {
                 {selectedFile ? (
                     <div>
                     <div className="flex justify-between items-center bg-gray-100 p-2 rounded-lg mb-4">
-                        <span className="text-sm text-gray-700 truncate w-48"><FontAwesomeIcon className='mx-2' icon={faFile}/>{selectedFile.name}</span>
+                        <span className="text-sm text-gray-700 truncate w-3/4"><FontAwesomeIcon className='mx-2' icon={faFile}/>{selectedFile.name}</span>
                         <span className="text-sm text-gray-500">{fileSize}</span>
                     </div>
                     <div className="flex items-center space-x-2 text-sm">
