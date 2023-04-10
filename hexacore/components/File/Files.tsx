@@ -8,17 +8,23 @@ import { Link } from "react-router-dom";
 import FileUpload from "./FileUpload";
 import FileFilter from "./FileFilter";
 
+// Test data for uhh Firebase
+const files = [
+  { name: "Fullviewwererwe.pdf", size: "246 kb", date: "Jan 30" },
+  { name: "SomeFile.docx", size: "500 kb", date: "Feb 14" },
+  { name: "AnotherFile.jpg", size: "1.5 mb", date: "Mar 1" },
+];
 
 const Files = () => {
   
     const storage = getStorage();
     const listRef = ref(storage, 'files/uid' )
 
-    const remaningStorage = 7.4;
+    const remaningStorage = 1.4;
     const totalStorage = 15;
     const usedStorage = totalStorage - remaningStorage;
     const showStorage = `${(usedStorage / totalStorage) * 100 }%`;
-    
+
     const [showFullView, setShowFullView] = useState(false);
     const toggleShowFullView = () => setShowFullView(prevState => !prevState);
 
@@ -64,49 +70,56 @@ const Files = () => {
             </div>
             </div>
             {showFullView ? (
-            <div className="border shadow-sm p-3 rounded-lg pl-0 mt-2 mr-2 mb-0 ml-2 hover:bg-gray-100">
-            <div className="sm:flex sm:items-center sm:justify-between">
-              <div className="flex items-center flex-1 min-w-0">
-                <FontAwesomeIcon className="flex-shrink-0 object-cover rounded-full w-10 h-10 text-red-600 fa-2xl mx-3"  icon={faFilePdf}/>
-                <div className="mt-0 mr-0 mb-0 flex-1 min-w-0">
-                  <p className="text-gray-800 text-md truncate w-5/6">Fullviewwererwe.pdf</p>
-                  <div className="space-x-5">
-                  <span className="text-sm text-gray-500">246 kb</span>
-                  <span className="text-sm text-gray-500">Jan 30</span>
+            <div>
+              {files.map((file, index) => (
+              <div key={index} className="border shadow-sm p-3 rounded-lg pl-0 mt-2 mr-2 mb-0 ml-2 hover:bg-gray-100">
+                <div className="sm:flex sm:items-center sm:justify-between">
+                  <div className="flex items-center flex-1 min-w-0">
+                    <FontAwesomeIcon className="flex-shrink-0 object-cover rounded-full w-10 h-10 text-red-600 fa-2xl mx-3"  icon={faFilePdf}/>
+                    <div className="mt-0 mr-0 mb-0 flex-1 min-w-0">
+                      <p className="text-gray-800 text-md truncate w-5/6">{file.name}</p>
+                      <div className="space-x-5">
+                      <span className="text-sm text-gray-500">{file.size}</span>
+                      <span className="text-sm text-gray-500">{file.date}</span>
+                      </div>
+                    </div>
+                    
+                  </div>
+                  <div className="mr-0 mb-0 ml-0 pt-0 pr-0 pb-0 flex items-top sm:space-x-6 sm:pl-0 sm:justify-end
+                      sm:mt-0">
+                    <button type="button" className="text-gray-600 inline-flex items-center hover:text-white border border-gray-600 hover:border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 rounded-lg text-sm m-1 px-1.5 py-1 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                      <FontAwesomeIcon className='text-sm' icon={faTrashCan}/>
+                    </button>
                   </div>
                 </div>
-                
               </div>
-              <div className="mr-0 mb-0 ml-0 pt-0 pr-0 pb-0 flex items-top sm:space-x-6 sm:pl-0 sm:justify-end
-                  sm:mt-0">
-                <button type="button" className="text-gray-600 inline-flex items-center hover:text-white border border-gray-600 hover:border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 rounded-lg text-sm m-1 px-1.5 py-1 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
-                  <FontAwesomeIcon className='text-sm' icon={faTrashCan}/>
-                </button>
-              </div>
+              ))}
             </div>
-          </div>
             ) : (
-              <div className="border shadow-sm rounded-lg pl-0 mt-2 mr-2 mb-0 ml-2 hover:bg-gray-100">
-              <div className="sm:flex sm:items-center sm:justify-between">
-                <div className="flex items-center flex-1 min-w-0">
-                  <FontAwesomeIcon className="flex-shrink-0 object-cover rounded-full w-10 h-10 text-red-600 fa-lg"  icon={faFilePdf}/>
-                  <div className="mt-0 mr-0 mb-0 flex-1 min-w-0">
-                    <p className="text-gray-800 text-small ">Smallview.pdf</p>
+              <div>
+                {files.map((file, index) => (
+                <div key={index} className="border shadow-sm rounded-lg pl-0 mt-2 mr-2 mb-0 ml-2 hover:bg-gray-100">
+                <div className="sm:flex sm:items-center sm:justify-between">
+                  <div className="flex items-center flex-1 min-w-0">
+                    <FontAwesomeIcon className="flex-shrink-0 object-cover rounded-full w-10 h-10 text-red-600 fa-lg"  icon={faFilePdf}/>
+                    <div className="mt-0 mr-0 mb-0 flex-1 min-w-0">
+                      <p className="text-gray-800 text-small ">{file.name}</p>
+                    </div>
+                    <div className="mt-0 mr-0 mb-0 flex-2 mx-5 min-w-0">
+                      <p className="text-sm text-gray-500 mx-1">{file.size}</p>
+                    </div>
+                    
                   </div>
-                  <div className="mt-0 mr-0 mb-0 flex-2 mx-5 min-w-0">
-                    <p className="text-sm text-gray-500 mx-1">246 kb</p>
+                  <div className="mr-0 mb-0 ml-0 pt-0 pr-0 pb-0 flex items-center sm:space-x-6 sm:pl-0 sm:justify-end
+                      sm:mt-0">
+                    <button type="button" className="text-gray-600 inline-flex items-center hover:text-white border border-gray-600 hover:border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 rounded-lg text-sm m-1 px-1.5 py-1 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                      <FontAwesomeIcon className='text-sm' icon={faTrashCan}/>
+                    </button>
                   </div>
-                  
-                </div>
-                <div className="mr-0 mb-0 ml-0 pt-0 pr-0 pb-0 flex items-center sm:space-x-6 sm:pl-0 sm:justify-end
-                    sm:mt-0">
-                  <button type="button" className="text-gray-600 inline-flex items-center hover:text-white border border-gray-600 hover:border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 rounded-lg text-sm m-1 px-1.5 py-1 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
-                    <FontAwesomeIcon className='text-sm' icon={faTrashCan}/>
-                  </button>
                 </div>
               </div>
+              ))}
             </div>
-            
             )}
           </div>
         );
