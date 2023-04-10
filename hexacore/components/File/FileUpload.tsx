@@ -8,10 +8,15 @@ const FileUpload = () => {
 
     const [selectedFile, setSelectedFile] = useState(null);
     const [fileSize, setFileSize] = useState("");
+    const [uploadDate, setUploadDate] = useState("");
+
+    const now = new Date();
+    const dateString = now.toLocaleDateString();
 
     const handleFileSelect = (e) => {
         setSelectedFile(e.target.files[0]);
         setFileSize(formatBytes(e.target.files[0].size))
+        
     };
 
     const handleSubmit = (e) => {
@@ -23,6 +28,7 @@ const FileUpload = () => {
         // Hvis lastet opp, sett deretter filen til null ;)
         setSelectedFile(null);
         setFileSize("");
+        setUploadDate(dateString);
     };
 
     const handleCancel = () => {
@@ -49,6 +55,7 @@ const FileUpload = () => {
                     <div className="flex justify-between items-center bg-gray-100 p-2 rounded-lg mb-4">
                         <span className="text-sm text-gray-700 truncate w-3/4"><FontAwesomeIcon className='mx-2' icon={faFile}/>{selectedFile.name}</span>
                         <span className="text-sm text-gray-500">{fileSize}</span>
+                        
                     </div>
                     <div className="flex items-center space-x-2 text-sm">
                         <button type="submit" onClick={handleSubmit} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full px-2 py-1 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -56,6 +63,7 @@ const FileUpload = () => {
                         <button type="button" onClick={handleCancel} className="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 rounded-lg text-sm px-2 py-1 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
                             <FontAwesomeIcon className='mx-1' icon={faTrashCan}/>Cancel</button>
                     </div>
+                    <span className="text-sm text-gray-500">{uploadDate}</span>
                   </div>
             ) : (
                 <div>
