@@ -10,7 +10,7 @@ import FileFilter from "./FileFilter";
 
 // Test data for uhh Firebase
 const files = [
-  { name: "Fullviewwererwe.pdf", size: "246 kb", date: "Jan 30" },
+  { name: "Fullviewwererwewfwefwewefweffwefe.pdf", size: "246 kb", date: "Jan 30" },
   { name: "SomeFile.docx", size: "500 kb", date: "Feb 14" },
   { name: "AnotherFile.jpg", size: "1.5 mb", date: "Mar 1" },
 ];
@@ -103,7 +103,7 @@ const Files = () => {
                   <div className="flex items-center flex-1 min-w-0">
                     <FontAwesomeIcon className="flex-shrink-0 object-cover rounded-full w-10 h-10 text-red-600 fa-lg"  icon={faFilePdf}/>
                     <div className="mt-0 mr-0 mb-0 flex-1 min-w-0">
-                      <p className="text-gray-800 text-small ">{file.name}</p>
+                      <p className="text-gray-800 text-small truncate">{file.name}</p>
                     </div>
                     <div className="mt-0 mr-0 mb-0 flex-2 mx-5 min-w-0">
                       <p className="text-sm text-gray-500 mx-1">{file.size}</p>
