@@ -33,7 +33,7 @@ const Files = () => {
 
     const MainContent = () => {
         return (
-          <div>
+          <div className="w-80">
             <FileUpload/>
 
             <div className="pl-0 mt-2 mr-2 mb-0 ml-2">
@@ -43,21 +43,20 @@ const Files = () => {
             <div className="bg-gray-100 rounded-lg pl-0 mt-2 mr-2 mb-0 ml-2 hover:bg-gray-300">
               <div className="sm:flex sm:items-center sm:justify-between">
                 <div className="flex items-center flex-1 min-w-0">
-                  <FontAwesomeIcon className="flex-shrink-0 object-cover rounded-full w-10 h-10"  icon={faFilePdf}/>
+                  <FontAwesomeIcon className="flex-shrink-0 object-cover rounded-full w-10 h-10 text-red-600 fa-lg"  icon={faFilePdf}/>
                   <div className="mt-0 mr-0 mb-0 flex-1 min-w-0">
-                    <p className="text-gray-600 text-md">Big.pdf</p>
+                    <p className="text-gray-800 text-small ">Smallview.pdf</p>
                   </div>
                   <div className="mt-0 mr-0 mb-0 flex-2 mx-5 min-w-0">
-                    <p className="text-gray-400 text-md">246 kb</p>
+                    <p className="text-sm text-gray-500 mx-1">246 kb</p>
                   </div>
                   
                 </div>
                 <div className="mr-0 mb-0 ml-0 pt-0 pr-0 pb-0 flex items-center sm:space-x-6 sm:pl-0 sm:justify-end
                     sm:mt-0">
-                  <a href="" className="bg-gray-800 hover:bg-red-400 m-2 px-2 text-gray-100 transition-all
-                      duration-200 hover:bg-gray-700 rounded">
-                        <FontAwesomeIcon className="text-sm" icon={faXmark}/>
-                      </a>
+                  <button type="button" className="text-gray-600 inline-flex items-center hover:text-white border border-gray-600 hover:border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 rounded-lg text-sm m-1 px-1.5 py-1 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                    <FontAwesomeIcon className='text-sm' icon={faTrashCan}/>
+                  </button>
                 </div>
               </div>
             </div>
@@ -65,31 +64,35 @@ const Files = () => {
 
 
             {
-              // 2nd for example
+              // full view example
             }
-      
-            <button className="bg-gray-100 rounded-lg pl-0 mt-2 mr-2 mb-0 ml-2 hover:bg-gray-300">
+
+            <div className="bg-gray-100 p-3 rounded-lg pl-0 mt-2 mr-2 mb-0 ml-2 hover:bg-gray-300">
               <div className="sm:flex sm:items-center sm:justify-between">
                 <div className="flex items-center flex-1 min-w-0">
-                  <FontAwesomeIcon className="flex-shrink-0 object-cover rounded-full w-10 h-10"  icon={faFilePdf}/>
+                  <FontAwesomeIcon className="flex-shrink-0 object-cover rounded-full w-10 h-10 text-red-600 fa-2xl mx-3"  icon={faFilePdf}/>
                   <div className="mt-0 mr-0 mb-0 flex-1 min-w-0">
-                    <p className="text-gray-600 text-md truncate w-32">HodneExamResults2023Awesome.pdf</p>
-                    
-                  </div>
-                  <div className="mt-0 mr-0 mb-0 flex-2 mx-5 min-w-0">
-                    <p className="text-gray-400 text-md">0.2 kb</p>
+                    <p className="text-gray-800 text-md truncate w-5/6">Fullviewwererwe.pdf</p>
+                    <div className="space-x-5">
+                    <span className="text-sm text-gray-500">246 kb</span>
+                    <span className="text-sm text-gray-500">Jan 30</span>
+                    </div>
                   </div>
                   
+
+                    
+  
+                  
                 </div>
-                <div className="mr-0 mb-0 ml-0 pt-0 pr-0 pb-0 flex items-center sm:space-x-6 sm:pl-0 sm:justify-end
+                <div className="mr-0 mb-0 ml-0 pt-0 pr-0 pb-0 flex items-top sm:space-x-6 sm:pl-0 sm:justify-end
                     sm:mt-0">
-                  <a href="" className="bg-gray-800 hover:bg-red-400 m-2 px-2 text-gray-100 transition-all
-                      duration-200 hover:bg-gray-700 rounded">
-                        <FontAwesomeIcon className="text-sm" icon={faXmark}/>
-                      </a>
+                  <button type="button" className="text-gray-600 inline-flex items-center hover:text-white border border-gray-600 hover:border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 rounded-lg text-sm m-1 px-1.5 py-1 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                    <FontAwesomeIcon className='text-sm' icon={faTrashCan}/>
+                  </button>
                 </div>
               </div>
-            </button>
+            </div>
+
           </div>
         );
       };
