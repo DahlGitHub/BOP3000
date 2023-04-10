@@ -17,6 +17,41 @@ const DetailsForm = () => {
     const [fileUrl, setFileUrl] = React.useState(null);
     const [profilePicture, setProfilePicture] = React.useState(user?.photoURL ? user.photoURL : "https://cdn-icons-png.flaticon.com/512/147/147142.png");
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        const docData = {
+        name: name,
+        picture: fileUrl,
+        bio: bio,
+        phone: phone 
+
+        }
+        if(name) {
+            updateDoc(doc(db, "users", user.uid), docData)
+        }
+
+        if(fileUrl) {
+            updateProfile(auth.currentUser, {
+                photoURL: fileUrl
+            }).then(()=>{
+                alert("Saved info")
+            }).catch((error)=>{
+                alert(error)
+            })
+            //updateDoc(doc(db, "users", userID), docData)
+        }
+
+        if(bio) {
+            updateDoc(doc(db, "users", user.uid), docData)
+        }
+
+        if(phone) {
+            updateDoc(doc(db, "users", user.uid), docData)
+        }
+    }
+
+
     const submitName =  (e) => {
         e.preventDefault();
         const docData = {
@@ -28,6 +63,8 @@ const DetailsForm = () => {
             updateDoc(doc(db, "users", user.uid), docData)
             alert("Saved info")
         }
+    
+        
     }
     const submitPicture = (e) => {
         e.preventDefault();
@@ -113,28 +150,24 @@ const DetailsForm = () => {
                                         onChange={filechanged}
                                         required
                                     />
-                                    <button onClick={submitPicture} className="appearance-none bg-gray-200 text-gray-900 px-2 py-1 shadow-sm border border-gray-400 rounded-md mr-3">save changes</button>
                                 </div>
                                 <div className='w-full md:w-full px-3 mb-6'>
                                     <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' >Name</label>
-                                    <input type="email" onChange={e => { setName(e.currentTarget.value); }} className='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500' id='grid-text-1' placeholder='Enter your name'  required/>
-                                    <button onClick={submitName} className="appearance-none bg-gray-200 text-gray-900 px-2 py-1 shadow-sm border border-gray-400 rounded-md mr-3">save changes</button>
+                                    <input type="email" onChange={e => { setName(e.currentTarget.value); }} placeholder={user.displayName} className='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500' id='grid-text-1' required/>
                                 </div>
-                                <div className='w-full md:w-full px-3 mb-6 '>
-                                    <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>password</label>
-                                    <button className="appearance-none bg-gray-200 text-gray-900 px-2 py-1 shadow-sm border border-gray-400 rounded-md ">change your password</button>
-                                </div>
+          
                                 
                                 <div className='w-full md:w-full px-3 mb-6'>
                                         <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'>Phone number</label>
-                                        <input type="number" onChange={e => { setPhone(e.currentTarget.value); }} className='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500'  required/>
-                                        <button onClick={submitPhone} className="appearance-none bg-gray-200 text-gray-900 px-2 py-1 shadow-sm border border-gray-400 rounded-md mr-3">save changes</button>
+                                        <input type="number" onChange={e => { setPhone(e.currentTarget.value); }} placeholder={name} className='appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500'  required/>
                                     </div>
                                     <div className='w-full md:w-full px-3 mb-6'>
                                         <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' >Bio</label>
-                                        <textarea onChange={e => { setBio(e.currentTarget.value); }} className='bg-gray-100 rounded-md border leading-normal resize-none w-full h-20 py-2 px-3 shadow-inner border border-gray-400 font-medium placeholder-gray-700 focus:outline-none focus:bg-white'  required></textarea>
-                                        <button onClick={submitBio} className="appearance-none bg-gray-200 text-gray-900 px-2 py-1 shadow-sm border border-gray-400 rounded-md mr-3">save changes</button>
+                                        <textarea onChange={e => { setBio(e.currentTarget.value); }} value={user.uid} className='bg-gray-100 rounded-md border leading-normal resize-none w-full h-20 py-2 px-3 shadow-inner border border-gray-400 font-medium placeholder-gray-700 focus:outline-none focus:bg-white'  required></textarea>
                                     </div>
+                                    <button onClick={handleSubmit} className="appearance-none bg-gray-200 text-gray-900 px-2 py-1 shadow-sm border border-gray-400 rounded-md mr-3">save changes</button>
+                                    <button className="appearance-none bg-gray-200 text-gray-900 px-2 py-1 shadow-sm border border-gray-400 rounded-md mr-3">Change password</button>
+
                                     
                                 
                             </div>
