@@ -1,6 +1,6 @@
 import React from 'react'
 import Dashboard from '../../components/Dashboard';
-import DashboardLayout from '../../components/DashboardLayout';
+import DashboardLayout from '../../components/Layout/Dashboard/DashboardLayout';
 import CreateVideoChat from '../../components/VideoChat/CreateVideoChat';
 
 import VideoChat from '../../components/VideoChat/VideoChat';

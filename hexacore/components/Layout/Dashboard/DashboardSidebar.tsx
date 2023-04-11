@@ -3,12 +3,14 @@ import Link from 'next/link';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGears, faLayerGroup, faMessage, faInbox, faListCheck, faHouse } from "@fortawesome/free-solid-svg-icons";
 
+
 const SidebarItems = [
   { id: 1, iconItem: <FontAwesomeIcon icon={faHouse}/>, text: "Home",link: "/dashboard" },
   { id: 2, iconItem: <FontAwesomeIcon icon={faListCheck} />, text: "Kanban",link: "/dashboard/kanban" },
   { id: 3,  iconItem: <FontAwesomeIcon icon={faInbox}/>, text: "Inbox",link: "/dashboard/inbox" },
   { id: 4, iconItem: <FontAwesomeIcon icon={faMessage}/>, text: "Contacts",link: "/dashboard/contactChat" },
   { id: 5, iconItem: <FontAwesomeIcon icon={faLayerGroup}/>, text: "Teams",link: "/dashboard/teams" },
+  { id: 6, iconItem: <FontAwesomeIcon icon={faLayerGroup}/>, text: "Video",link: "/dashboard/videoChat" },
 ];
 
 const DashboardSidebar = () => {

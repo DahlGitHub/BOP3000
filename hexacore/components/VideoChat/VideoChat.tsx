@@ -8,9 +8,10 @@ import AccCore from 'opentok-accelerator-core';
 
 
 
+
 const apiKeyTest = "47684721";
-const sessionIdTest = "2_MX40NzY4NDcyMX5-MTY3OTk5Nzg5ODI5OH5BTkd0bW5FSlNBMWVya2dMdVplVzU3dlV-fn4";
-const tokenTest = "T1==cGFydG5lcl9pZD00NzY4NDcyMSZzaWc9ZTM4YWMyZDJiZTIwYTNmZjhmMmYyZjM5ODVkNDEyZDEyMzA2NmEwMjpzZXNzaW9uX2lkPTJfTVg0ME56WTRORGN5TVg1LU1UWTNPVGs1TnpnNU9ESTVPSDVCVGtkMGJXNUZTbE5CTVdWeWEyZE1kVnBsVnpVM2RsVi1mbjQmY3JlYXRlX3RpbWU9MTY3OTk5NzkzMyZub25jZT0wLjg5MTA1NzE2Njc3MjUxNzEmcm9sZT1wdWJsaXNoZXImZXhwaXJlX3RpbWU9MTY4MjU4OTkzMSZpbml0aWFsX2xheW91dF9jbGFzc19saXN0PQ==";
+const sessionIdTest = "2_MX40NzY4NDcyMX5-MTY4MTIyMTA5MTM4Nn5keVFmWkxtLy9meWsxVThSbDZLWEpXTXB-fn4";
+const tokenTest = "T1==cGFydG5lcl9pZD00NzY4NDcyMSZzaWc9ZTZmMDc4MzBmMDNmNjc1MjcwMGRlMjEwY2JmZWU0ZjFlMjU5MWQ2NDpzZXNzaW9uX2lkPTJfTVg0ME56WTRORGN5TVg1LU1UWTRNVEl5TVRBNU1UTTRObjVrZVZGbVdreHRMeTltZVdzeFZUaFNiRFpMV0VwWFRYQi1mbjQmY3JlYXRlX3RpbWU9MTY4MTIyMTEzMCZub25jZT0wLjEyNjE1MzY1NjQ0NTIzMDM2JnJvbGU9cHVibGlzaGVyJmV4cGlyZV90aW1lPTE2ODM4MTMxMjkmaW5pdGlhbF9sYXlvdXRfY2xhc3NfbGlzdD0=";
 
 const OpenTok = require("opentok");
 
@@ -124,9 +125,9 @@ function VideoChat({audioDevices, videoDevices, apiKey,sessionId,token, roomName
   const startCall = () => {
     const otCoreOptions = {
       credentials: {
-        apiKey,
-        sessionId,
-        token,
+        apiKeyTest,
+        sessionIdTest,
+        tokenTest,
       },
       publisher: {
         audioSource: audioDevices[0].deviceId,
@@ -177,12 +178,19 @@ function VideoChat({audioDevices, videoDevices, apiKey,sessionId,token, roomName
     screenSubscriberClass,
   } = containerClasses;
 
-  const session = OT.initSession(apiKey, sessionId);
+  const session = OT.initSession(apiKeyTest, sessionIdTest);
 
   
 
-  session.disconnect
-
+  
+  session.connect(tokenTest, (error) => {
+    if (error) {
+      console.log(`There was an error connecting to the session: ${error}`);
+    } else {
+      console.log('Connected to the session.');
+    }
+  });
+  
   
   
 
@@ -190,12 +198,13 @@ function VideoChat({audioDevices, videoDevices, apiKey,sessionId,token, roomName
     <div className="ml-20 mt-20 bg-white">
       
       <div className="App-header">
-        
+      
       </div>
       <div className="App-main">
         <div className="App-video-container">
-          { !connected && OpenTok.connectingMask() }
-          { connected && !active && OpenTok.startCallMask(startCall) } {/* pass the startCall function */}
+          
+          
+          { !connected && !active && OpenTok.startCallMask(startCall) } {/* pass the startCall function */}
           <div id="cameraPublisherContainer" className={cameraPublisherClass} />
           <div id="screenPublisherContainer" className={screenPublisherClass} />
           <div id="cameraSubscriberContainer" className={cameraSubscriberClass} />
