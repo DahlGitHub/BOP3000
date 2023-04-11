@@ -11,7 +11,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-regular-svg-icons';
-import { faEyeSlash, faSave, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faAt, faEyeSlash, faSave, faUpload, faUser } from '@fortawesome/free-solid-svg-icons';
 
 const DetailsForm = () => {
     
@@ -124,29 +124,36 @@ const DetailsForm = () => {
             <form onSubmit={handleSubmit} className="bg-white rounded-lg px-8 pb-5">
               <h2 className="py-4">Account Settings</h2>
               <div className="mb-4">
-              <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Full Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  id="name"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Enter your name"
-                  value={name || ''}
-                  onChange={(e) => setName(e.target.value)}
-                />
+                <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Full Name</label>
+                <div className="relative">
+                    <span className="absolute inset-y-0 left-0 flex items-center p-2.5 bg-white border border-gray-300 rounded-l-lg pr-2">
+                        <FontAwesomeIcon icon={faUser}/>
+                    </span>
+                    <input
+                        type="text"
+                        name="name"
+                        id="name"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pl-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="Enter your name"
+                        value={name || ''}
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                </div>
               </div>
               <div className="mb-4">
               <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                <input
-                    disabled
-                  type="text"
-                  name="name"
-                  id="name"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Enter your name"
-                  value={user.email || ''}
-                  onChange={(e) => setName(e.target.value)}
-                />
+              <div className="relative">
+                    <span className="absolute inset-y-0 left-0 flex items-center p-2.5 bg-white border border-gray-300 rounded-l-lg pr-2">
+                        <FontAwesomeIcon icon={faAt}/>
+                    </span>
+                    <input
+                        type="text"
+                        name="email"
+                        id="email"
+                        className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pl-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        value={user.email}
+                    />
+                </div>
               </div>
 
               <div className="mb-4">
