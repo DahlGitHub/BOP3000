@@ -11,7 +11,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-regular-svg-icons';
-import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faEyeSlash, faSave, faUpload } from '@fortawesome/free-solid-svg-icons';
 
 const DetailsForm = () => {
     
@@ -97,7 +97,7 @@ const DetailsForm = () => {
             <div className='max-w-3xl mx-auto pt-4'>
                 <div className='bg-white rounded-lg p-3 flex'>
                 <img
-                    className="h-24 w-24 object-cover rounded-lg mr-4"
+                    className="h-24 w-24 object-cover rounded-full mr-4"
                     src={profilePicture}
                     alt="Profile Picture"
                   />
@@ -121,7 +121,7 @@ const DetailsForm = () => {
            
             </div>
             <div className="max-w-3xl mx-auto py-8">
-            <form onSubmit={handleSubmit} className="bg-white rounded-lg px-8 pb-8 mb-4">
+            <form onSubmit={handleSubmit} className="bg-white rounded-lg px-8 pb-5">
               <h2 className="py-4">Account Settings</h2>
               <div className="mb-4">
               <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Full Name</label>
@@ -194,38 +194,38 @@ const DetailsForm = () => {
                 />
               </div>
               <div className='flex justify-between items-center'>
-                <div className="mb-4">
-                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="picture">
-                    Profile Picture
-                    </label>
-                    <div className="flex items-center">
-                    <img
-                        className="h-16 w-16 object-cover rounded-full mr-4"
-                        src={profilePicture}
-                        alt="Profile Picture"
-                    />
-                    <input
-                        type="file"
-                        name="picture"
-                        id="picture"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={handleFileChange}
-                    />
-                    <label
-                        htmlFor="picture"
-                        className="cursor-pointer bg-gray-500 hover:bg-gray-600 py-2 px-4 text-white rounded-lg"
-                    >
-                        Upload Picture
-                    </label>
+                <div>
+                    <div className='flex space-x-2'>
+                        <div className='border-2 border-dashed border-gray-300 rounded-lg h-16'>
+                            <img
+                            className="h-16 w-16 object-cover rounded-full mr-5 p-2"
+                            src={profilePicture}
+                            alt="Profile Picture"
+                            />
+                        </div>
+                       <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-16 px-2 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400"><FontAwesomeIcon className="w-10 h-10 text-gray-400" icon={faUpload}/>Image (Max. 20 MB)</p>
+                        </div>
+                            
+                        <input
+                            type="file"
+                            id="dropzone-file"
+                            className="sr-only"
+                            onChange={handleFileChange}
+                            accept="image/*"
+                            max-size="20971520"
+                        />
+                        </label> 
                     </div>
                 </div>
                 <div>
-                    <button
+                <button
                     type="submit"
-                    className="bg-gray-500 hover:bg-blue-gray text-white rounded py-2 px-4 focus:outline-none focus:shadow-outline"
-                >
-                    Save Changes
+                    className="inline-flex flex-col justify-center items-center py-3 px-5 text-center text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
+                    <FontAwesomeIcon icon={faSave} className='mb-1'/>
+                    <div className='text-sm'>Save changes</div>
                     </button>
                 </div>
               </div>
