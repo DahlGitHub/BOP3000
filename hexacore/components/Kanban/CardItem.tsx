@@ -7,17 +7,19 @@ import {
   } from '@heroicons/react/24/outline'
 import { Draggable } from "react-beautiful-dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faUserFriends } from "@fortawesome/free-solid-svg-icons";
+import { faEllipsisVertical, faLayerGroup, faPenToSquare, faTrash, faUser, faUserFriends } from "@fortawesome/free-solid-svg-icons";
 import { Avatar, Dropdown } from "@nextui-org/react";
 import { arrayUnion, collection, doc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore";
 import { db } from "../../firebase";
 
 function CardItem({ data, index, members }) {
-
+  const [priorityName, setPriorityName] = useState({prio: 0, name: 'Low'})
+  const [editTaskName, setEditTaskName] = useState(false)
+  const [title, setTitle] = useState(data.title)
+  const q = query(collection(db, 'groups', 'a82bcf3fff364e71b2a8bb39903be3dd', 'kanbanid'), where('items', 'array-contains', data))
   const assignMember = async (member) => {
     //mangler å sette index på arrayet
     const type = member.toString().split(' ')
-    const q = query(collection(db, 'groups', 'a82bcf3fff364e71b2a8bb39903be3dd', 'kanbanid'), where('items', 'array-contains', data))
     const docRef = await getDocs(q)
     docRef.docs.forEach(async(docs) => {
       const items = docs.data().items.map((item) => {
@@ -42,6 +44,56 @@ function CardItem({ data, index, members }) {
       
     })
   }
+  const changeName = async (e) =>{
+    if(e.key === 'Enter'){
+      const docRef = await getDocs(q)
+      docRef.docs.forEach(async(docs) => {
+        const items = docs.data().items.map((item) => {
+          if (item.id === data.id) {
+            return {
+              ...item,
+              title: e.target.value,
+            };
+          }
+          return item;
+        });
+        await updateDoc(doc(db, '/groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', docs.data().id), {
+          items: items,
+        });
+        });
+        setEditTaskName(false)
+    }
+  
+  }
+  const editPrio = async (key) =>{
+    const docRef = await getDocs(q)
+    docRef.docs.forEach(async(docs) => {
+      const items = docs.data().items.map((item) => {
+        if (item.id === data.id) {
+          return {
+            ...item,
+            priority: parseInt(key.toString().split(' ')[0]),
+          };
+        }
+        return item;
+      });
+      await updateDoc(doc(db, '/groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', docs.data().id), {
+        items: items,
+      });
+      });
+  
+  }
+
+  const deleteTask = async () => {
+    const docRef = await getDocs(q)
+    docRef.docs.forEach(async(docs) => {
+      const items = docs.data().items.filter((item) => item.id !== data.id);
+      await updateDoc(doc(db, '/groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', docs.data().id), {
+        items: items,
+      });
+      });
+  }
+
   return (
     <Draggable index={index} draggableId={data.id.toString()}>
       {(provided) => (
@@ -51,25 +103,75 @@ function CardItem({ data, index, members }) {
           {...provided.dragHandleProps}
           className="bg-white rounded-md p-3 m-3 mt-0 last:mb-0"
         >
-          <label
-            className={`bg-gradient-to-r
-              px-2 py-1 rounded text-white text-sm
-              ${
-                data.priority === 0
-                  ? "from-blue-600 to-blue-400"
-                  : data.priority === 1
-                  ? "from-green-600 to-green-400"
-                  : "from-red-600 to-red-400"
-              }
-              `}
-          >
-            {data.priority === 0
-              ? "Low Priority"
-              : data.priority === 1
-              ? "Medium Priority"
-              : "High Priority"}
-          </label>
-          <h5 className="text-md my-3 text-lg leading-6">{data.title}</h5>
+          <div>
+            <Dropdown>
+              <Dropdown.Trigger>
+                <label
+                  className={`bg-gradient-to-r
+                    px-2 py-1 rounded text-white text-sm
+                    ${
+                      data.priority === 0
+                        ? "from-blue-600 to-blue-400"
+                        : data.priority === 1
+                        ? "from-green-600 to-green-400"
+                        : "from-red-600 to-red-400"
+                    }
+                    `}
+                >
+                    {data.priority === 0
+                      ? "Low Priority"
+                      : data.priority === 1
+                      ? "Medium Priority"
+                      : "High Priority"}
+                </label>
+              </Dropdown.Trigger>
+              <Dropdown.Menu
+                    className="text-center p-1"
+                    selectionMode="single"
+                    css={{ $$dropdownMenuMinWidth: "100px" }}
+                    onAction={(key)=>{
+                      editPrio(key)
+                    }}
+                    >
+                    <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-blue-600 to-blue-400" key='0 low'>
+                      Low Priority
+                    </Dropdown.Item>
+                    <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-green-600 to-green-400" key='1 medium'>
+                      Medium Priority
+                    </Dropdown.Item>
+                    <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-red-600 to-red-400" key='2 high'>
+                      High Priority
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+            </Dropdown>
+            
+            <Dropdown>
+              <Dropdown.Trigger><FontAwesomeIcon className='pl-3 pr-2 cursor-pointer' icon={faEllipsisVertical}/></Dropdown.Trigger>
+              <Dropdown.Menu
+                    disallowEmptySelection
+                    selectionMode="single"
+                    onAction={(key)=>{
+                      switch(key){
+                        case 'editName':
+                          setEditTaskName(!editTaskName)
+                          break;
+                        case 'editPrio':
+                          //editPrio()
+                          break;
+                        case 'delete':
+                          deleteTask()
+                          break;
+                      }
+                    }}
+                    >
+                    <Dropdown.Item color='error' icon={<FontAwesomeIcon icon={faTrash}/>} key='delete'>Delete task</Dropdown.Item>
+                  </Dropdown.Menu>
+            </Dropdown>
+          </div>
+          {!editTaskName
+            ? <h5 onClick={()=>{setEditTaskName(!editTaskName)}} className="text-md my-3 text-lg leading-6" >{title}</h5>
+            : <input type="text" autoFocus={true} className="text-md my-3 text-lg leading-6" value={title} onChange={(e)=>setTitle(e.target.value)} onKeyDown={(e) => changeName(e)}/>
+          }
           <div className="flex justify-between">
             <div className="flex space-x-2 items-center">
               <span className="flex space-x-1 items-center">

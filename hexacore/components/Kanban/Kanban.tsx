@@ -17,14 +17,15 @@ function createGuidId() {
 
 // groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid/dokumentid
 export default function Home() {
-  const [ready, setReady] = useState(false);
-  const [boardData, setBoardData] = useState ([]);
+  const [ready, setReady] = useState(false)
+  const [boardData, setBoardData] = useState ([])
   const [showForm, setShowForm] = useState(false)
-  const [selectedBoard, setSelectedBoard] = useState(0);
-  const [newList, setNewList] = useState('');
-  const [members, setMembers] = useImmer([]);
-  const [priorityName, setPriorityName] = useState({prio: 0, name: 'Low'});
+  const [selectedBoard, setSelectedBoard] = useState(0)
+  const [newBoard, setNewBoard] = useState('')
+  const [members, setMembers] = useImmer([])
+  const [priorityName, setPriorityName] = useState({prio: 0, name: 'Low'})
   const qMembers = query(collection(db, '/groups/a82bcf3fff364e71b2a8bb39903be3dd/members'))
+  const [showEditListName, setShowEditListName] = useState(false)
   
   const getMembers = async () => {
     const members = await getDocs(qMembers)
@@ -45,7 +46,6 @@ export default function Home() {
             newBoardData[change.newIndex] = newData;
             return newBoardData;
           });
-
         }
         if (change.type === 'modified') {
           setBoardData((boardData) => {
@@ -62,6 +62,7 @@ export default function Home() {
             newBoardData.splice(change.oldIndex, 1);
             return newBoardData;
           })
+          //må oppdatere order på alle boards
         }
       });
     })
@@ -126,19 +127,37 @@ export default function Home() {
       }
     }
   }
-  const addList = async () => {
-    if(newList.length === 0) return;
+  const addBoard = async () => {
+    if(newBoard.length === 0) return;
     const id = createGuidId().toString()
     await setDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', id), {
       id: id,
       order: boardData.length,
-      name: newList,
+      name: newBoard,
       items: []
     })
+  }
+  const changeBoardName = async (e) => {
+    console.log(e)
+    if(e.keyCode === 13) //Enter
+    {
+      const val = e.target.value;
+      if(val.length === 0) {
+        setShowEditListName(false)
+      }
+      else {
+        const boardId = e.target.attributes['data-id'].value;
+        await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardData[boardId].id), {
+          name: val
+        })
+        setShowEditListName(false)
+      }
+    }
   }
   const deleteBoard = async (boardID)=>{
     await deleteDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardID))
   }
+
   return (
       <div className="pt-20 pl-10 flex flex-col h-screen">
         {/* Board header */}
@@ -146,8 +165,8 @@ export default function Home() {
           <div className="flex items-center">
             <h4 className="text-4xl font-bold text-gray-600">Kanban board</h4>
           </div>
-          <Input aria-label='addList' aria-hidden='false' value={newList} onChange={e => setNewList(e.target.value)} placeholder='Add list'></Input>
-          <Button className='text-black bg-indigo-800' onPress={addList}>Add</Button>
+          <Input aria-label='addBoard' aria-hidden='false' value={newBoard} onChange={e => setNewBoard(e.target.value)} placeholder='Add list'></Input>
+          <Button className='text-black bg-indigo-800' onPress={addBoard}>Add</Button>
         </div>
 
         {/* Board columns */}
@@ -156,7 +175,6 @@ export default function Home() {
             <div className="flex gap-5 flex-none w-fit my-5 overflow-x overflow-x-auto p-5">
               {boardData.map((board, bIndex) => {
                 return (
-                  
                   <div key={board.name}>
                     <Droppable droppableId={bIndex.toString()}>
                       {(provided, snapshot) => (
@@ -173,17 +191,31 @@ export default function Home() {
                               className="w-full h-1 bg-gradient-to-r from-pink-700 to-red-200
                           absolute inset-x-0 top-0"
                             ></span>
-                            <h4 className=" p-3 flex justify-between items-center mb-2">
-                              <span className="text-2xl text-gray-600">
-                                {board.name}
-                              </span>
+                            <h4 className=" p-3 flex justify-between items-center ">
+                              {showEditListName && selectedBoard === bIndex
+                              ?
+                                (<Input data-id={bIndex} aria-label='editListName' aria-hidden='false' onKeyDown={(e)=>changeBoardName(e)} placeholder={board.name}></Input>)
+                              :
+                                (<span className="text-2xl text-gray-600">
+                                  {board.name}
+                                </span>)
+                              }
+                              
                               <Dropdown>
-                                <Dropdown.Trigger><FontAwesomeIcon className='' icon={faEllipsis}/></Dropdown.Trigger>
+                                <Dropdown.Trigger><FontAwesomeIcon className='py-2 cursor-pointer' icon={faEllipsis}/></Dropdown.Trigger>
                                 <Dropdown.Menu
                                       disallowEmptySelection
                                       selectionMode="single"
                                       onAction={(key)=>{
-                                        if(key === 'delete') deleteBoard(board.id)
+                                        switch(key){
+                                          case 'edit':
+                                            setShowEditListName(!showEditListName)
+                                            setSelectedBoard(bIndex)
+                                            break;
+                                          case 'delete':
+                                            deleteBoard(board.id)
+                                            break;
+                                        }
                                       }}
                                       >
                                       <Dropdown.Item icon={<FontAwesomeIcon icon={faPenToSquare}/>} key='edit'>Edit name</Dropdown.Item>
@@ -197,17 +229,15 @@ export default function Home() {
                             <div className="overflow-y-auto h-auto"
                             style={{maxHeight:'calc(100vh - 290px)'}}>
                               {board.items.length > 0 &&
-                                board.items.map((item, iIndex) => {
-                                  return (
+                                board.items.map((item, iIndex) => (
                                     <CardItem
                                       key={item.id}
                                       data={item}
                                       index={iIndex}
                                       members={members}
                                     />
-                                    
-                                  );
-                                })}
+                                )
+                              )}
                               {provided.placeholder}
                             </div>
                         
