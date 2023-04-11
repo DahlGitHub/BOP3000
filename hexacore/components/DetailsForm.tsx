@@ -7,14 +7,8 @@ import { useRouter } from 'next/navigation';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { useAuthState } from 'react-firebase-hooks/auth';
-
-const showToast = () => {
-    const toast = document.getElementById('toast-success');
-    toast.classList.remove('hidden');
-    setTimeout(() => {
-      toast.classList.add('hidden');
-    }, 5000);
-  }
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const DetailsForm = () => {
     
@@ -25,7 +19,7 @@ const DetailsForm = () => {
     const router = useRouter();
     const [fileUrl, setFileUrl] = useState(null);
     const [profilePicture, setProfilePicture] = useState(user?.photoURL ? user.photoURL : "https://cdn-icons-png.flaticon.com/512/147/147142.png");
-  
+    const [originalData, setOriginalData] = useState(null);
     
 
     useEffect(() => {
@@ -45,30 +39,34 @@ const DetailsForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-    
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
 
-    interface DocData {
-        name?: string;
-        bio?: string;
-        phone?: string;
-        picture?: string;
-      }
+        interface DocData {
+            name?: string;
+            bio?: string;
+            phone?: string;
+            picture?: string;
+        }
       
+      const previousData = docSnap.data();
+
       const docData: DocData = {};
-      if (name) docData.name = name;
-      if (bio) docData.bio = bio;
-      if (phone) docData.phone = phone;
+      if (name !== previousData.name) docData.name = name;
+        if (bio !== previousData.bio) docData.bio = bio;
+        if (phone !== previousData.phone) docData.phone = phone;
       if (fileUrl) {
         await updateProfile(auth.currentUser, {
           photoURL: fileUrl
         });
         docData.picture = fileUrl;
       }
-    if (Object.keys(docData).length === 0) {
-      return alert("No changes to save.");
-    }
+      if (Object.entries(docData).length === 0) {
+        toast.warning("No changes to save.");
+        return;
+      }
     await updateDoc(doc(db, "users", user.uid), docData);
-    alert("Saved info");
+    toast.success("Updated profile settings!");
   }
 
   const handleFileChange = async (e) => {
@@ -172,6 +170,7 @@ const DetailsForm = () => {
               
             </form>
           </div>
+          <ToastContainer />
         </div>
       );
    }
