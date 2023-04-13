@@ -10,14 +10,6 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import FileModal from "./FileModal";
 
-// Test data for uhh Firebase
-const files = [
-  { name: "Fullviewwererwewfwefwewefweffwefe.pdf", size: "246 kb", date: "Jan 30" },
-  { name: "SomeFile.docx", size: "500 kb", date: "Feb 14" },
-  { name: "AnotherFile.jpg", size: "1.5 mb", date: "Mar 1" },
-
-];
-
 
 
 const Files = () => {
@@ -27,27 +19,13 @@ const Files = () => {
 
     const remaningStorage = 1.4;
     const totalStorage = 15;
-    const usedStorage = totalStorage - remaningStorage;
+    const [usedStorage, setUsedStorage] = useState(0);
+
     const showStorage = `${(usedStorage / totalStorage) * 100 }%`;
 
     const [showFullView, setShowFullView] = useState(false);
     const toggleShowFullView = () => setShowFullView(prevState => !prevState);
 
-    // Find all the prefixes and items.
-    listAll(listRef)
-        .then((res) => {
-        res.prefixes.forEach((folderRef) => {
-            // All the prefixes under listRef.
-            // You may call listAll() recursively on them.
-        });
-
-        res.items.forEach((itemRef) => {
-            // All the items under listRef.
-        });
-
-        }).catch((error) => {
-        // Uh-oh, an error occurred!
-        });
 
     const MainContent = () => {
         return (
@@ -100,10 +78,17 @@ const Files = () => {
     }
 
     useEffect(() => {
-      const fetchProducts = async () => {
+      const fetchFiles = async () => {
         const querySnapshot = await getDocs(query(collection(db, "users", auth.currentUser?.uid, "files")));
         const newFiles = querySnapshot.docs.map((doc) => {
           const fileData = doc.data();
+
+          const fileDataSize = Number(fileData.file.size);
+            if (!isNaN(fileDataSize)) {
+              setUsedStorage(prevState => prevState + fileDataSize);
+            }
+
+
           return (
             <div key={fileData.id} onClick={() => handleSelect(fileData)} className="cursor-pointer border shadow-sm p-3 rounded-lg pl-0 mt-2 mr-2 mb-0 ml-2 hover:bg-gray-100">
                 <div className="sm:flex sm:items-center sm:justify-between">
@@ -130,7 +115,7 @@ const Files = () => {
         });
         setFiles(newFiles);
       };
-      fetchProducts();
+      fetchFiles();
     }, []);
 
 
