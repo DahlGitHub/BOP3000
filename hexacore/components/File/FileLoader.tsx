@@ -17,7 +17,7 @@ function highlightPattern(text, pattern) {
   return text.replace(pattern, (value) => `<mark>${value}</mark>`);
 }
 
-const FileLoader = () => {
+const FileLoader = ({file}) => {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
 
@@ -60,11 +60,14 @@ const FileLoader = () => {
           {
           // Add custom sheet styling above className Example__container__document
           }
-          <Document file={pdfFile} onLoadSuccess={onDocumentLoadSuccess} options={options}>
-            <Page pageNumber={pageNumber} 
-            customTextRenderer={textRenderer}/>
-            
-          </Document>
+          <div>
+            {file ?  <Document file={file.file} onLoadSuccess={onDocumentLoadSuccess} options={options}>
+                <Page pageNumber={pageNumber} 
+                customTextRenderer={textRenderer}/>
+                
+              </Document> : <p>Empty</p>}
+              
+          </div>
           <div className='fixed left-0 right-0 bottom-10 bg-gray-200 w-fit m-auto p-2 rounded-lg opacity-[0.9]'>
               <div className='flex items-center'>
               <button

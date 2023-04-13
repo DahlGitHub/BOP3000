@@ -13,15 +13,15 @@ const FileUpload = () => {
     const [fileSize, setFileSize] = useState("");
     const [uploadDate, setUploadDate] = useState("");
     const [fileUrl, setFileUrl] = React.useState(null)
+    const [fileName, setFileName] = React.useState(null)
 
     const now = new Date();
     const dateString = now.toLocaleDateString();
 
-    const handleFileSelect = (e) => {
+    const handleFileSelect = async (e) => {
         setSelectedFile(e.target.files[0]);
         setFileSize(formatBytes(e.target.files[0].size))
-
-        handleSubmit(e)
+        setFileName(e.target.files[0].name)
         
     };
 
@@ -29,7 +29,7 @@ const FileUpload = () => {
         e.preventDefault();
         // Add doc med Firebase
         const file = selectedFile;
-            const storageRef = ref(storage, `/Files/${file.name}`);
+            const storageRef = ref(storage, `/Files/${fileName}`);
             const uploadTask = uploadBytesResumable(storageRef, file);
       
             uploadTask.on("state_changed",
@@ -49,14 +49,15 @@ const FileUpload = () => {
 
         const docData = {
             
-            name: file.name,
+            name: fileName,
             file: fileUrl,
-            date: dateString
+            date: dateString,
+            size: fileSize
         }
         if (!fileUrl) {
             return
         } else {
-           await setDoc(doc(db, "users", auth.currentUser?.uid, "files", file.name), docData)
+           await setDoc(doc(db, "users", auth.currentUser?.uid, "files", fileName), docData)
             
             alert("File added")
         }
