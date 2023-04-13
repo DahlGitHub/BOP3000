@@ -13,7 +13,6 @@ import { arrayUnion, collection, doc, getDocs, orderBy, query, updateDoc, where 
 import { db } from "../../firebase";
 
 function CardItem({ data, index, members }) {
-  const [priorityName, setPriorityName] = useState({prio: 0, name: 'Low'})
   const [editTaskName, setEditTaskName] = useState(false)
   const [title, setTitle] = useState(data.title)
   const q = query(collection(db, 'groups', 'a82bcf3fff364e71b2a8bb39903be3dd', 'kanbanid'), where('items', 'array-contains', data))
@@ -95,7 +94,7 @@ function CardItem({ data, index, members }) {
   }
 
   return (
-    <Draggable index={index} draggableId={data.id.toString()}>
+    <Draggable index={index} draggableId={data.id.toString()} type="CARD">
       {(provided) => (
         <div
           ref={provided.innerRef}
@@ -152,12 +151,6 @@ function CardItem({ data, index, members }) {
                     selectionMode="single"
                     onAction={(key)=>{
                       switch(key){
-                        case 'editName':
-                          setEditTaskName(!editTaskName)
-                          break;
-                        case 'editPrio':
-                          //editPrio()
-                          break;
                         case 'delete':
                           deleteTask()
                           break;
@@ -170,7 +163,7 @@ function CardItem({ data, index, members }) {
           </div>
           {!editTaskName
             ? <h5 onClick={()=>{setEditTaskName(!editTaskName)}} className="text-md my-3 text-lg leading-6" >{title}</h5>
-            : <input type="text" autoFocus={true} className="text-md my-3 text-lg leading-6" value={title} onChange={(e)=>setTitle(e.target.value)} onKeyDown={(e) => changeName(e)}/>
+            : <input type="text" autoFocus={true} className="text-md my-3 text-lg leading-6 w-full" value={title} onChange={(e)=>setTitle(e.target.value)} onKeyDown={(e) => changeName(e)}/>
           }
           <div className="flex justify-between">
             <div className="flex space-x-2 items-center">
@@ -179,10 +172,8 @@ function CardItem({ data, index, members }) {
                 <span>{data.assignees.length}</span>
               </span>
             </div>
-
             <ul className="flex space-x-3">
               {data.assignees.map((ass, index) => {
-               // console.log(index)
                if(members.length > 0){
                 return (
                   <li key={ass}>
@@ -203,7 +194,6 @@ function CardItem({ data, index, members }) {
                   <Dropdown.Button auto icon={<PlusCircleIcon className="w-5 h-5 text-gray-500" />}></Dropdown.Button>
                     <Dropdown.Menu aria-label="Static Actions"
                       onAction={ (action) => {
-                        console.log(action)
                         const type = action.toString().split(' ')
                         switch(type[0]){
                           case 'add':
@@ -218,7 +208,6 @@ function CardItem({ data, index, members }) {
                       <Dropdown.Item key="new">Add people to task</Dropdown.Item>
                       <Dropdown.Item key="label" withDivider>Assigned people</Dropdown.Item>
                       {data.assignees.map((member)=>{
-                       // console.log(member)
                        if(members.length > 0){
                         return(
                           <Dropdown.Item key={'remove '+member} icon={<img
@@ -238,18 +227,20 @@ function CardItem({ data, index, members }) {
                       </Dropdown.Item>
                       {members.map((member)=>{
                        if( !data.assignees.includes(member.uid)){
-                          return(
+                        return(
                           <Dropdown.Item key={'add '+member.uid} icon={<img
-                            src={member.photo}
-                            width="36"
-                            height="36"
-                            className=" rounded-full "
-                            alt=""
-                          />}>
-                            {member.name}
+                              src={member.photo}
+                              width="36"
+                              height="36"
+                              className=" rounded-full "
+                              alt=""
+                            />}>
+                              {member.name}
                           </Dropdown.Item>
-                          )
-                        }
+                        )
+                       }
+                          
+                        
                       })}
                     </Dropdown.Menu>
                 </Dropdown>
