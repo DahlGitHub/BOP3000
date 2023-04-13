@@ -4,7 +4,6 @@ import Drawer from "../Drawer";
 import FileLoader from "./FileLoader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudArrowUp, faFile, faFilePdf, faFilter, faList, faList12, faTractor, faTrash, faTrashCan, faX, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
 import FileUpload from "./FileUpload";
 import FileFilter from "./FileFilter";
 
