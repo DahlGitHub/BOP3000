@@ -96,7 +96,7 @@ export default ({board, bIndex, members}) => {
                     {showEditListName
                     ? <Input data-id={bIndex} autoFocus={true} aria-label='editListName' aria-hidden='false' onChange={(e)=>setEditListName(e.target.value)} value={editListName} onKeyDown={(e)=>changeBoardName(e)}/>
                     :
-                      <span onClick={()=>setShowEditListName(!showEditListName)} className="text-2xl text-gray-600">
+                      <span onClick={()=>setShowEditListName(!showEditListName)} className="text-2xl text-gray-600 cursor-text">
                         {board.name}
                       </span>
                     }
@@ -138,20 +138,47 @@ export default ({board, bIndex, members}) => {
                   {
                    showForm && selectedBoard === bIndex ? (
                     <div className="p-3">
+                      
                       <Dropdown>
-                        <Dropdown.Button className='bg-white text-black w-full mb-3'>{priorityName.name}</Dropdown.Button>
+                        <Dropdown.Trigger>
+                          <label
+                            className={`bg-gradient-to-r cursor-pointer
+                              px-2 py-1 rounded text-white text-sm
+                              ${
+                                priorityName.prio === 0
+                                  ? "from-blue-600 to-blue-400"
+                                  : priorityName.prio === 1
+                                  ? "from-green-600 to-green-400"
+                                  : "from-red-600 to-red-400"
+                              }
+                              `}
+                          >
+                              {priorityName.prio === 0
+                                ? "Low Priority"
+                                : priorityName.prio === 1
+                                ? "Medium Priority"
+                                : "High Priority"}
+                          </label>
+                        </Dropdown.Trigger>
                         <Dropdown.Menu
                           disallowEmptySelection
                           selectionMode="single"
                           selectedKeys={priorityName.name}
+                          css={{ $$dropdownMenuMinWidth: "100px" }}
                           onSelectionChange={(e)=>{
                             const split = e.currentKey.split(' ')
                             setPriorityName({prio: parseInt(split[0]), name: split[1]})
                             
                             }}>
-                          <Dropdown.Item key='0 Low'>Low</Dropdown.Item>
-                          <Dropdown.Item key='1 Medium'>Medium</Dropdown.Item>
-                          <Dropdown.Item key='2 High'>High</Dropdown.Item>
+                          <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-blue-600 to-blue-400" key='0 Low'>
+                            Low Priority
+                          </Dropdown.Item>
+                          <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-green-600 to-green-400" key='1 Medium'>
+                            Medium Priority
+                          </Dropdown.Item>
+                          <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-red-600 to-red-400" key='2 High'>
+                            High Priority
+                          </Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>
                       <textarea className="addTask border-gray-300 rounded focus:ring-purple-400 w-full" 

@@ -33,19 +33,10 @@ export default function Home() {
     const q = query(collection(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid'), orderBy('order', 'asc'))
     onSnapshot(q, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
-        if (change.type === 'added') {
+        if (change.type === 'added' || change.type === 'modified') {
           setBoardData((boardData) => {
             const newData = change.doc.data();
             const newBoardData = [...boardData];
-            newBoardData[change.newIndex] = newData;
-            return newBoardData;
-          });
-        }
-        if (change.type === 'modified') {
-          setBoardData((boardData) => {
-            const newData = change.doc.data();
-            const newBoardData = [...boardData];
-            if(newBoardData[change.newIndex] === newData) return newBoardData;
             newBoardData[change.newIndex] = newData;
             return newBoardData;
           });
@@ -67,23 +58,36 @@ export default function Home() {
 
   const onDragEnd = async (re) => {
     if (!re.destination) return;
-    var dragItem = boardData[parseInt(re.source.droppableId)].items[re.source.index];
-    boardData[parseInt(re.source.droppableId)].items.splice(
-      re.source.index,
-      1
-    )
-    dragItem.boardId = boardData[parseInt(re.destination.droppableId)].id;
-    boardData[parseInt(re.destination.droppableId)].items.splice(
-      re.destination.index,
-      0,
-      dragItem
-    )
-    await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardData[parseInt(re.source.droppableId)].id), {
-      items: boardData[parseInt(re.source.droppableId)].items
-    })
-    await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardData[parseInt(re.destination.droppableId)].id), {
-      items: boardData[parseInt(re.destination.droppableId)].items
-    })
+    if (re.type === 'BOARD') {
+      const dragItem = boardData[re.source.index];
+      const newBoardData = [...boardData];
+      newBoardData.splice(re.source.index, 1);
+      newBoardData.splice(re.destination.index, 0, dragItem);
+      setBoardData(newBoardData);
+      newBoardData.forEach(async (board, index) => {
+        await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', board.id), {
+          order: index
+        })
+      })
+    }else if(re.type === 'CARD'){
+      var dragItem = boardData[parseInt(re.source.droppableId)].items[re.source.index];
+      boardData[parseInt(re.source.droppableId)].items.splice(
+        re.source.index,
+        1
+      )
+      dragItem.boardId = boardData[parseInt(re.destination.droppableId)].id;
+      boardData[parseInt(re.destination.droppableId)].items.splice(
+        re.destination.index,
+        0,
+        dragItem
+      )
+      await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardData[parseInt(re.source.droppableId)].id), {
+        items: boardData[parseInt(re.source.droppableId)].items
+      })
+      await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardData[parseInt(re.destination.droppableId)].id), {
+        items: boardData[parseInt(re.destination.droppableId)].items
+      })
+    }
   };
 
   const addBoard = async () => {
@@ -97,9 +101,8 @@ export default function Home() {
       items: []
     })
   }
-
   return (
-      <div className="pt-20 pl-10 flex flex-col h-screen">
+      <div className="pt-20 pl-10 flex flex-col w-full h-screen">
         {/* Board header */}
         <div className="flex flex-initial">
           <div className="flex items-center">
@@ -110,13 +113,36 @@ export default function Home() {
         </div>
         {ready && (
           <DragDropContext onDragEnd={onDragEnd}>
-            <div className="flex gap-5 flex-none w-fit my-5 overflow-x overflow-x-auto p-5">
+            <div className="flex w-full my-5 p-5">
+            <Droppable droppableId="droppable" type="BOARD" direction="horizontal">
+              {(provided, snapshot) => (
+              <div
+                ref={provided.innerRef}
+                className={`flex w-fit p-5 ${snapshot.isDraggingOver && "bg-green-100"}`}
+                {...provided.droppableProps}
+              >
               {boardData.map((board, bIndex) =>(
-                <Board 
-                  board={board}
-                  bIndex={bIndex}
-                  members={members}/>
+                 
+                    <Draggable type="BOARD" key={board.id} draggableId={board.id} index={bIndex} >
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className="bg-transparent rounded-md p-3 m-3 mt-0 last:mb-0"
+                        >
+                      <Board 
+                        board={board}
+                        bIndex={bIndex}
+                        members={members}/>
+                      </div>
+                      )}
+                    </Draggable>
               ))}
+              {provided.placeholder}  
+              </div>
+                  )}
+                </Droppable>
             </div>
           </DragDropContext>
         )}

@@ -106,7 +106,7 @@ function CardItem({ data, index, members }) {
             <Dropdown>
               <Dropdown.Trigger>
                 <label
-                  className={`bg-gradient-to-r
+                  className={`bg-gradient-to-r cursor-pointer
                     px-2 py-1 rounded text-white text-sm
                     ${
                       data.priority === 0
@@ -162,7 +162,7 @@ function CardItem({ data, index, members }) {
             </Dropdown>
           </div>
           {!editTaskName
-            ? <h5 onClick={()=>{setEditTaskName(!editTaskName)}} className="text-md my-3 text-lg leading-6" >{title}</h5>
+            ? <h5 onClick={()=>{setEditTaskName(!editTaskName)}} className="text-md my-3 text-lg leading-6 cursor-text" >{title}</h5>
             : <input type="text" autoFocus={true} className="text-md my-3 text-lg leading-6 w-full" value={title} onChange={(e)=>setTitle(e.target.value)} onKeyDown={(e) => changeName(e)}/>
           }
           <div className="flex justify-between">
@@ -205,8 +205,7 @@ function CardItem({ data, index, members }) {
                         }
                         
                       }}>
-                      <Dropdown.Item key="new">Add people to task</Dropdown.Item>
-                      <Dropdown.Item key="label" withDivider>Assigned people</Dropdown.Item>
+                      <Dropdown.Item key="label">Assigned people</Dropdown.Item>
                       {data.assignees.map((member)=>{
                        if(members.length > 0){
                         return(
