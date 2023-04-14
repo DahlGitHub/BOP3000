@@ -39,11 +39,18 @@ export default ({id}) =>{
                     setMessages(messages => [...messages, connect])
                 }
                 if(message.type === 'modified'){
-                    // logikk for å endre meldingen som har blitt endret
-                    setMessages(messages)
+                    setMessages(messages => {
+                        const index = messages.findIndex((message) => message.messageId === connect.messageId)
+                        messages[index] = connect
+                        return messages
+                    })
                 }
                 if(message.type === 'removed'){
-                    //logikk som fjerner meldingen
+                    setMessages(messages => {
+                        const index = messages.findIndex((message) => message.messageId === connect.messageId)
+                        messages.splice(index, 1)
+                        return messages
+                    })
                 }
             })
         })
