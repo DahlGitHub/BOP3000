@@ -2,13 +2,14 @@ import { auth, db} from '../../firebase';
 import { deleteDoc, doc, setDoc } from "firebase/firestore";
 
 
-const FileModal = ({ isOpen, onClose, name, size }) => {
+const FileModal = ({ isOpen, onClose, name, size, fetch }) => {
 
   
   const submit = async () => {
     onClose()
 
     await deleteDoc(doc(db, "users", auth.currentUser?.uid, "files", name));
+    fetch()
 
   }
 

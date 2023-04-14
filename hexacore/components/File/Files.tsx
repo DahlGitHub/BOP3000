@@ -137,7 +137,7 @@ const Files = () => {
         <div>
             <Drawer mainContent={<MainContent/>} title="Files" isOpen={isListOpen} open={handleListOpen} close={handleListClose} />
         </div>
-        <FileModal isOpen={isModalOpen} onClose={handleModalClose} name={selectedFile ? selectedFile.name : "None"} size={selectedFile ? selectedFile.size : "None"}/>
+        <FileModal isOpen={isModalOpen} onClose={handleModalClose} fetch={fetchFiles} name={selectedFile ? selectedFile.name : "None"} size={selectedFile ? selectedFile.size : "None"}/>
         {
         // Lag en metode for å vise fremvise de ulike metodene
         }

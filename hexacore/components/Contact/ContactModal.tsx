@@ -9,18 +9,13 @@ const ContactModal = ({ isOpen, onClose, picture, name, uid, email }) => {
     onClose()
 
     const addedUserDocData = {
-      email: email,
-      name: name,
-      picture: picture,
-      uid: uid,
+      
+      uid: uid
     }
 
     const thisUserDocData = {
-      email: auth.currentUser?.email,
-      name: auth.currentUser?.displayName,
-      uid: auth.currentUser?.uid,
-      picture:auth.currentUser?.photoURL
-
+      
+      uid: auth.currentUser?.uid
     }
 
     if (!name) {

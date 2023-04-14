@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import algoliasearch from "algoliasearch/lite";
 import { InstantSearch, SearchBox, connectHits } from "react-instantsearch-dom";
 import { useRouter } from 'next/navigation';
 import ContactModal from './ContactModal'
 import Link from 'next/link';
+import { auth, db } from '../../firebase';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 
 
 const searchClient = algoliasearch (
@@ -33,52 +35,88 @@ const Contacts = () => {
   
 
   const Hits = ({ hits }) => {
+    const isContact = async (uid) => {
+      const q = query(
+        collection(db, "users", auth.currentUser?.uid, "contacts"),
+        where("uid", "==", uid)
+      );
+      const snapshot = await getDocs(q);
+      return snapshot.size > 0;
+    };
+  
     const handleClick = (props) => {
       setPicture(props.picture);
       setName(props.name);
       setEmail(props.email);
-      setAddedUid(props.objectID)
-      handleModalOpen()
+      setAddedUid(props.objectID);
+      handleModalOpen();
     };
-    return (
-      <>
-        {hits.map(hit => (
-          <tr>           
-            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-              <div className="flex items-center">
-                <div className="flex-shrink-0 w-10 h-10">
-                  <img className="w-full h-full rounded-full" src={hit.picture} alt="" />
-                </div>
-                <div className="ml-3">
-                  <p className="text-gray-900 whitespace-no-wrap">
-                    {hit.name}
-                  </p>
-                </div>
-              </div>
-            </td>
-            
-            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-              <p className="text-gray-900 whitespace-no-wrap">
-                {hit.email}
-              </p>
-            </td>
-            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-              <p className="text-gray-900 text-center whitespace-no-wrap">
-                2
-              </p>
-            </td>
-            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-              <button onClick={() => handleClick(hit)}  className="bg-blue-600 font-semibold text-white p-2 w-32 rounded-full hover:bg-blue-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300 m-2">
-                Add contact
-              </button>
-            </td>
-          </tr>
-        ))}
-      </>
-    )  
-  }
-
+  
+    const [filteredResults, setFilteredResults] = useState([]);
+  
+    useEffect(() => {
+      const getResults = async () => {
+        const results = await Promise.all(
+          hits.map(async (hit) => {
+            if (hit.uid !== auth.currentUser.uid && !(await isContact(hit.uid))) {
+              return (
+                <tr key={hit.objectID}>
+                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0 w-10 h-10">
+                        <img
+                          className="w-full h-full rounded-full"
+                          src={hit.picture}
+                          alt=""
+                        />
+                      </div>
+                      <div className="ml-3">
+                        <p className="text-gray-900 whitespace-no-wrap">
+                          {hit.name}
+                        </p>
+                      </div>
+                    </div>
+                  </td>
+    
+                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                    <p className="text-gray-900 whitespace-no-wrap">{hit.email}</p>
+                  </td>
+                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                    <p className="text-gray-900 text-center whitespace-no-wrap">
+                      2
+                    </p>
+                  </td>
+                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                    <button
+                      onClick={() => handleClick(hit)}
+                      className="bg-blue-600 font-semibold text-white p-2 w-32 rounded-full hover:bg-blue-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300 m-2"
+                    >
+                      Add contact
+                    </button>
+                  </td>
+                </tr>
+              );
+            } else {
+              return null;
+            }
+          })
+        );
+    
+        const filteredResults = results.filter((result) => result !== null);
+    
+        setFilteredResults(filteredResults);
+      };
+    
+      getResults();
+    }, [hits, isContact]);
+    
+  
+    return <>{filteredResults}</>;
+  };
+  
   const CustomHits = connectHits(Hits);
+  
+  
 
   return (
   

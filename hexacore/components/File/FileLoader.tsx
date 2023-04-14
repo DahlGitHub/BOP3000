@@ -83,7 +83,7 @@ const FileLoader = ({file}) => {
                 />
             </Document>
             :
-            <p>Empty</p>
+            <p></p>
           }
           
         </div>
