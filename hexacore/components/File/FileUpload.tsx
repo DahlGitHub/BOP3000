@@ -2,29 +2,69 @@ import React, {useState} from 'react';
 import { faTrashCan, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFile } from '@fortawesome/free-regular-svg-icons';
+import { auth, db, storage } from '../../firebase';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { doc, setDoc } from 'firebase/firestore';
 
 
-const FileUpload = () => {
+const FileUpload = ({fetch}) => {
 
     const [selectedFile, setSelectedFile] = useState(null);
     const [fileSize, setFileSize] = useState("");
     const [uploadDate, setUploadDate] = useState("");
+    const [fileUrl, setFileUrl] = React.useState(null)
+    const [fileName, setFileName] = React.useState(null)
 
     const now = new Date();
     const dateString = now.toLocaleDateString();
 
-    const handleFileSelect = (e) => {
+    const handleFileSelect = async (e) => {
         setSelectedFile(e.target.files[0]);
         setFileSize(formatBytes(e.target.files[0].size))
+        setFileName(e.target.files[0].name)
         
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // Add doc med Firebase
+        const file = selectedFile;
+        const storageRef = ref(storage, `/Files/${fileName}`);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+    
+        uploadTask.on("state_changed",
+        (snapshot) => {
+            
+        },
+        (error) => {
+            alert(error);
+        },
+        () => {
+            
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                setFileUrl(downloadURL)
+                console.log("FileUrl " + downloadURL);
+            });
+        }
+            
+        );
 
+        const docData = {
+            
+            name: fileName,
+            file: fileUrl,
+            date: dateString,
+            size: fileSize
+        }
+        if (!fileUrl) {
+            return
+        } else {
+           await setDoc(doc(db, "users", auth.currentUser?.uid, "files", fileName), docData)
+           fetch()
+            
+            alert("File added")
+        }
 
-        
         // Hvis lastet opp, sett deretter filen til null ;)
         setSelectedFile(null);
         setFileSize("");
@@ -49,7 +89,7 @@ const FileUpload = () => {
         <div className="mx-2 mb-5">
             <div className="flex items-center justify-center">
 
-            <form onSubmit={handleSubmit} className="w-full">
+            <form className="w-full">
                 {selectedFile ? (
                     <div>
                     <div className="flex justify-between items-center bg-gray-100 p-2 rounded-lg mb-4">

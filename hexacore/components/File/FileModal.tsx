@@ -1,30 +1,16 @@
 import { auth, db} from '../../firebase';
-import { doc, setDoc } from "firebase/firestore";
+import { deleteDoc, doc, setDoc } from "firebase/firestore";
 
 
-const ContactModal = ({ isOpen, onClose, picture, name, uid, email }) => {
+const FileModal = ({ isOpen, onClose, name, size, fetch }) => {
 
   
-  const submit = () => {
+  const submit = async () => {
     onClose()
 
-    const addedUserDocData = {
-      
-      uid: uid
-    }
+    await deleteDoc(doc(db, "users", auth.currentUser?.uid, "files", name));
+    fetch()
 
-    const thisUserDocData = {
-      
-      uid: auth.currentUser?.uid
-    }
-
-    if (!name) {
-      console.log("contact addition failed.")
-        return
-    } else {
-      setDoc(doc(db, "users", uid, "contact-requests", auth.currentUser?.uid), thisUserDocData)
-      setDoc(doc(db, "users", auth.currentUser?.uid, "sent-requests", uid), addedUserDocData)
-    }
   }
 
   return (
@@ -59,22 +45,21 @@ const ContactModal = ({ isOpen, onClose, picture, name, uid, email }) => {
                 className="text-lg leading-6 font-medium text-gray-900"
                 id="modal-headline"
               >
-                Add Contact?
+                Delete File?
               </h3>
               <div className="mt-2">
               <div className="flex flex-col items-center pt-6 pr-6 pb-6 pl-6">
-              <img
-                  src={picture} className="flex-shrink-0 object-cover object-center btn- flex w-16 h-16 mr-auto -mb-8 ml-auto rounded-full shadow-xl"/>
+              
               <p className="mt-8 text-2xl font-semibold leading-none text-black tracking-tighter lg:text-3xl">
                  {name}</p>
                   
-              <p className="mt-3 text-base leading-relaxed text-center text-black-200">{email}</p>
+              <p className="mt-3 text-base leading-relaxed text-center text-black-200">{size}</p>
               
               <div className="w-full mt-6">
                 <a onClick={submit} className="flex text-center items-center justify-center w-full pt-4 pr-10 pb-4 pl-10 text-base
                     font-medium text-white bg-indigo-600 rounded-xl transition duration-500 ease-in-out transform
                     hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Send contact request</a>
+                    Delete file</a>
               </div>
             </div>
               </div>
@@ -95,4 +80,4 @@ const ContactModal = ({ isOpen, onClose, picture, name, uid, email }) => {
   )
 }
 
-export default ContactModal
+export default FileModal

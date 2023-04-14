@@ -1,19 +1,16 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { getStorage, ref, listAll } from 'firebase/storage';
 import Drawer from "../Drawer";
 import FileLoader from "./FileLoader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudArrowUp, faFile, faFilePdf, faFilter, faList, faList12, faTractor, faTrash, faTrashCan, faX, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
 import FileUpload from "./FileUpload";
 import FileFilter from "./FileFilter";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { auth, db } from "../../firebase";
+import FileModal from "./FileModal";
 
-// Test data for uhh Firebase
-const files = [
-  { name: "Fullviewwererwewfwefwewefweffwefe.pdf", size: "246 kb", date: "Jan 30" },
-  { name: "SomeFile.docx", size: "500 kb", date: "Feb 14" },
-  { name: "AnotherFile.jpg", size: "1.5 mb", date: "Mar 1" },
-];
+
 
 const Files = () => {
   
@@ -22,32 +19,18 @@ const Files = () => {
 
     const remaningStorage = 1.4;
     const totalStorage = 15;
-    const usedStorage = totalStorage - remaningStorage;
+    const [usedStorage, setUsedStorage] = useState(0);
+
     const showStorage = `${(usedStorage / totalStorage) * 100 }%`;
 
     const [showFullView, setShowFullView] = useState(false);
     const toggleShowFullView = () => setShowFullView(prevState => !prevState);
 
-    // Find all the prefixes and items.
-    listAll(listRef)
-        .then((res) => {
-        res.prefixes.forEach((folderRef) => {
-            // All the prefixes under listRef.
-            // You may call listAll() recursively on them.
-        });
-
-        res.items.forEach((itemRef) => {
-            // All the items under listRef.
-        });
-
-        }).catch((error) => {
-        // Uh-oh, an error occurred!
-        });
 
     const MainContent = () => {
         return (
           <div className="w-80">
-            <FileUpload/>
+            <FileUpload fetch={fetchFiles}/>
             
             <div className="pl-0 mt-2 mr-2 mb-0 ml-2">
             <FileFilter/>
@@ -69,58 +52,9 @@ const Files = () => {
               </div>
             </div>
             </div>
-            {showFullView ? (
-            <div>
-              {files.map((file, index) => (
-              <div key={index} className="border shadow-sm p-3 rounded-lg pl-0 mt-2 mr-2 mb-0 ml-2 hover:bg-gray-100">
-                <div className="sm:flex sm:items-center sm:justify-between">
-                  <div className="flex items-center flex-1 min-w-0">
-                    <FontAwesomeIcon className="flex-shrink-0 object-cover rounded-full w-10 h-10 text-red-600 fa-2xl mx-3"  icon={faFilePdf}/>
-                    <div className="mt-0 mr-0 mb-0 flex-1 min-w-0">
-                      <p className="text-gray-800 text-md truncate w-5/6">{file.name}</p>
-                      <div className="space-x-5">
-                      <span className="text-sm text-gray-500">{file.size}</span>
-                      <span className="text-sm text-gray-500">{file.date}</span>
-                      </div>
-                    </div>
-                    
-                  </div>
-                  <div className="mr-0 mb-0 ml-0 pt-0 pr-0 pb-0 flex items-top sm:space-x-6 sm:pl-0 sm:justify-end
-                      sm:mt-0">
-                    <button type="button" className="text-gray-600 inline-flex items-center hover:text-white border border-gray-600 hover:border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 rounded-lg text-sm m-1 px-1.5 py-1 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
-                      <FontAwesomeIcon className='text-sm' icon={faTrashCan}/>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              ))}
-            </div>
-            ) : (
-              <div>
-                {files.map((file, index) => (
-                <div key={index} className="border shadow-sm rounded-lg pl-0 mt-2 mr-2 mb-0 ml-2 hover:bg-gray-100">
-                <div className="sm:flex sm:items-center sm:justify-between">
-                  <div className="flex items-center flex-1 min-w-0">
-                    <FontAwesomeIcon className="flex-shrink-0 object-cover rounded-full w-10 h-10 text-red-600 fa-lg"  icon={faFilePdf}/>
-                    <div className="mt-0 mr-0 mb-0 flex-1 min-w-0">
-                      <p className="text-gray-800 text-small truncate">{file.name}</p>
-                    </div>
-                    <div className="mt-0 mr-0 mb-0 flex-2 mx-5 min-w-0">
-                      <p className="text-sm text-gray-500 mx-1">{file.size}</p>
-                    </div>
-                    
-                  </div>
-                  <div className="mr-0 mb-0 ml-0 pt-0 pr-0 pb-0 flex items-center sm:space-x-6 sm:pl-0 sm:justify-end
-                      sm:mt-0">
-                    <button type="button" className="text-gray-600 inline-flex items-center hover:text-white border border-gray-600 hover:border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 rounded-lg text-sm m-1 px-1.5 py-1 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
-                      <FontAwesomeIcon className='text-sm' icon={faTrashCan}/>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              ))}
-            </div>
-            )}
+
+            {files}
+            
           </div>
         );
       };
@@ -135,17 +69,80 @@ const Files = () => {
         setIsListOpen(false);
     }
 
+    const [files, setFiles] = useState([]);
+
+    const [selectedFile, setSelectedFile] = useState(null);
+
+    const handleSelect = (file) => {
+      setSelectedFile(file)
+    }
+
+    const fetchFiles = async () => {
+      const querySnapshot = await getDocs(query(collection(db, "users", auth.currentUser?.uid, "files")));
+      const newFiles = querySnapshot.docs.map((doc) => {
+        const fileData = doc.data();
+
+        const fileDataSize = Number(fileData.file.size);
+          if (!isNaN(fileDataSize)) {
+            setUsedStorage(prevState => prevState + fileDataSize);
+          }
+
+
+        return (
+          <div key={fileData.id} onClick={() => handleSelect(fileData)} className="cursor-pointer border shadow-sm p-3 rounded-lg pl-0 mt-2 mr-2 mb-0 ml-2 hover:bg-gray-100">
+              <div className="sm:flex sm:items-center sm:justify-between">
+                <div className="flex items-center flex-1 min-w-0">
+                  <FontAwesomeIcon className="flex-shrink-0 object-cover rounded-full w-10 h-10 text-red-600 fa-2xl mx-3"  icon={faFilePdf}/>
+                  <div className="mt-0 mr-0 mb-0 flex-1 min-w-0">
+                    <p className="text-gray-800 dark:text-white text-md truncate w-5/6">{fileData.name}</p>
+                    <div className="space-x-5">
+                    <span className="text-sm text-gray-500">{fileData.size}</span>
+                    <span className="text-sm text-gray-500">{fileData.date}</span>
+                    </div>
+                  </div>
+                  
+                </div>
+                <div className="mr-0 mb-0 ml-0 pt-0 pr-0 pb-0 flex items-top sm:space-x-6 sm:pl-0 sm:justify-end
+                    sm:mt-0">
+                  <button type="button" onClick={handleModalOpen} className="text-gray-600 inline-flex items-center hover:text-white border border-gray-600 hover:border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 rounded-lg text-sm m-1 px-1.5 py-1 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                    <FontAwesomeIcon className='text-sm' icon={faTrashCan}/>
+                  </button>
+                </div>
+              </div>
+            </div>
+        );
+      });
+      setFiles(newFiles);
+    };
+
+    useEffect(() => {
+      
+      fetchFiles();
+    }, []);
+
+
+    const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+    function handleModalOpen() {
+        setIsModalOpen(true);
+    }
+    
+    function handleModalClose() {
+        setIsModalOpen(false);
+    }
+
   return ( 
   <>
     <section className="bg-white dark:bg-gray-900 flex">
         <div>
             <Drawer mainContent={<MainContent/>} title="Files" isOpen={isListOpen} open={handleListOpen} close={handleListClose} />
         </div>
+        <FileModal isOpen={isModalOpen} onClose={handleModalClose} fetch={fetchFiles} name={selectedFile ? selectedFile.name : "None"} size={selectedFile ? selectedFile.size : "None"}/>
         {
         // Lag en metode for å vise fremvise de ulike metodene
         }
         <div className="">
-          <FileLoader/>
+          <FileLoader file={selectedFile}/>
         </div>
       </section>
   </>
