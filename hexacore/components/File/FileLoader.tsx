@@ -70,7 +70,7 @@ const FileLoader = ({file}) => {
         <div>
 
           {file ? <Document
-                file={`/api/proxy?url=${encodeURIComponent(file.file)}`}
+                file={file.file}
                 onLoadSuccess={onDocumentLoadSuccess}
                 options={options}
                 httpHeaders={{'Access-Control-Allow-Origin': '*'}}

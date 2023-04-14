@@ -30,7 +30,7 @@ const Files = () => {
     const MainContent = () => {
         return (
           <div className="w-80">
-            <FileUpload/>
+            <FileUpload fetch={fetchFiles}/>
             
             <div className="pl-0 mt-2 mr-2 mb-0 ml-2">
             <FileFilter/>
@@ -77,44 +77,46 @@ const Files = () => {
       setSelectedFile(file)
     }
 
-    useEffect(() => {
-      const fetchFiles = async () => {
-        const querySnapshot = await getDocs(query(collection(db, "users", auth.currentUser?.uid, "files")));
-        const newFiles = querySnapshot.docs.map((doc) => {
-          const fileData = doc.data();
+    const fetchFiles = async () => {
+      const querySnapshot = await getDocs(query(collection(db, "users", auth.currentUser?.uid, "files")));
+      const newFiles = querySnapshot.docs.map((doc) => {
+        const fileData = doc.data();
 
-          const fileDataSize = Number(fileData.file.size);
-            if (!isNaN(fileDataSize)) {
-              setUsedStorage(prevState => prevState + fileDataSize);
-            }
+        const fileDataSize = Number(fileData.file.size);
+          if (!isNaN(fileDataSize)) {
+            setUsedStorage(prevState => prevState + fileDataSize);
+          }
 
 
-          return (
-            <div key={fileData.id} onClick={() => handleSelect(fileData)} className="cursor-pointer border shadow-sm p-3 rounded-lg pl-0 mt-2 mr-2 mb-0 ml-2 hover:bg-gray-100">
-                <div className="sm:flex sm:items-center sm:justify-between">
-                  <div className="flex items-center flex-1 min-w-0">
-                    <FontAwesomeIcon className="flex-shrink-0 object-cover rounded-full w-10 h-10 text-red-600 fa-2xl mx-3"  icon={faFilePdf}/>
-                    <div className="mt-0 mr-0 mb-0 flex-1 min-w-0">
-                      <p className="text-gray-800 dark:text-white text-md truncate w-5/6">{fileData.name}</p>
-                      <div className="space-x-5">
-                      <span className="text-sm text-gray-500">{fileData.size}</span>
-                      <span className="text-sm text-gray-500">{fileData.date}</span>
-                      </div>
+        return (
+          <div key={fileData.id} onClick={() => handleSelect(fileData)} className="cursor-pointer border shadow-sm p-3 rounded-lg pl-0 mt-2 mr-2 mb-0 ml-2 hover:bg-gray-100">
+              <div className="sm:flex sm:items-center sm:justify-between">
+                <div className="flex items-center flex-1 min-w-0">
+                  <FontAwesomeIcon className="flex-shrink-0 object-cover rounded-full w-10 h-10 text-red-600 fa-2xl mx-3"  icon={faFilePdf}/>
+                  <div className="mt-0 mr-0 mb-0 flex-1 min-w-0">
+                    <p className="text-gray-800 dark:text-white text-md truncate w-5/6">{fileData.name}</p>
+                    <div className="space-x-5">
+                    <span className="text-sm text-gray-500">{fileData.size}</span>
+                    <span className="text-sm text-gray-500">{fileData.date}</span>
                     </div>
-                    
                   </div>
-                  <div className="mr-0 mb-0 ml-0 pt-0 pr-0 pb-0 flex items-top sm:space-x-6 sm:pl-0 sm:justify-end
-                      sm:mt-0">
-                    <button type="button" onClick={handleModalOpen} className="text-gray-600 inline-flex items-center hover:text-white border border-gray-600 hover:border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 rounded-lg text-sm m-1 px-1.5 py-1 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
-                      <FontAwesomeIcon className='text-sm' icon={faTrashCan}/>
-                    </button>
-                  </div>
+                  
+                </div>
+                <div className="mr-0 mb-0 ml-0 pt-0 pr-0 pb-0 flex items-top sm:space-x-6 sm:pl-0 sm:justify-end
+                    sm:mt-0">
+                  <button type="button" onClick={handleModalOpen} className="text-gray-600 inline-flex items-center hover:text-white border border-gray-600 hover:border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 rounded-lg text-sm m-1 px-1.5 py-1 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                    <FontAwesomeIcon className='text-sm' icon={faTrashCan}/>
+                  </button>
                 </div>
               </div>
-          );
-        });
-        setFiles(newFiles);
-      };
+            </div>
+        );
+      });
+      setFiles(newFiles);
+    };
+
+    useEffect(() => {
+      
       fetchFiles();
     }, []);
 

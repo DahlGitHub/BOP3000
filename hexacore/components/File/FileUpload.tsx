@@ -7,7 +7,7 @@ import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { doc, setDoc } from 'firebase/firestore';
 
 
-const FileUpload = () => {
+const FileUpload = ({fetch}) => {
 
     const [selectedFile, setSelectedFile] = useState(null);
     const [fileSize, setFileSize] = useState("");
@@ -29,22 +29,24 @@ const FileUpload = () => {
         e.preventDefault();
         // Add doc med Firebase
         const file = selectedFile;
-            const storageRef = ref(storage, `/Files/${fileName}`);
-            const uploadTask = uploadBytesResumable(storageRef, file);
-      
-            uploadTask.on("state_changed",
-            (snapshot) => {
-            },
-            (error) => {
-              alert(error);
-            },
-            () => {
-              
-                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    setFileUrl(downloadURL)
-                    console.log("FileUrl " + downloadURL);
-                });
-            }
+        const storageRef = ref(storage, `/Files/${fileName}`);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+    
+        uploadTask.on("state_changed",
+        (snapshot) => {
+            
+        },
+        (error) => {
+            alert(error);
+        },
+        () => {
+            
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                setFileUrl(downloadURL)
+                console.log("FileUrl " + downloadURL);
+            });
+        }
+            
         );
 
         const docData = {
@@ -58,6 +60,7 @@ const FileUpload = () => {
             return
         } else {
            await setDoc(doc(db, "users", auth.currentUser?.uid, "files", fileName), docData)
+           fetch()
             
             alert("File added")
         }
