@@ -91,11 +91,17 @@ export default ({board, bIndex, members}) => {
                   flex flex-col relative
                   ${snapshot.isDraggingOver && "bg-green-50 rounded-lg"}`}
                 >
-                  <h4 className="p-2 flex justify-between items-center ">
+                  <h4 className="p-2 flex justify-between items-center text-md font-semibold">
                     {showEditListName
-                    ? <input data-id={bIndex} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" autoFocus={true} aria-label='editListName' aria-hidden='false' onChange={(e)=>setEditListName(e.target.value)} value={editListName} onKeyDown={(e)=>changeBoardName(e)}/>
+                    ? <input 
+                        onBlur={() => {
+                          setShowEditListName(false);
+                          setEditListName(board.name);
+                        }}
+                        data-id={bIndex} 
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" autoFocus={true} aria-label='editListName' aria-hidden='false' onChange={(e)=>setEditListName(e.target.value)} value={editListName} onKeyDown={(e)=>changeBoardName(e)}/>
                     :
-                      <span onClick={()=>setShowEditListName(!showEditListName)} className="text-md mx-2 text-gray-600 cursor-text">
+                      <span onClick={()=>setShowEditListName(!showEditListName)} className="text-md mx-2 text-gray-600 cursor-text w-full whitespace-pre-wrap">
                         {board.name}
                       </span>
                     }
@@ -135,7 +141,7 @@ export default ({board, bIndex, members}) => {
                   </div>
                   {
                    showForm && selectedBoard === bIndex ? (
-                    <div className="p-3">
+                    <div className="p-3 space-y-2">
                       
                       <Dropdown>
                         <Dropdown.Trigger>
@@ -168,10 +174,10 @@ export default ({board, bIndex, members}) => {
                             setPriorityName({prio: parseInt(split[0]), name: split[1]})
                             
                             }}>
-                          <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-blue-600 to-blue-400" key='0 Low'>
+                          <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-green-600 to-green-400" key='0 Low'>
                             Low Priority
                           </Dropdown.Item>
-                          <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-green-600 to-green-400" key='1 Medium'>
+                          <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-yellow-600 to-yellow-400" key='1 Medium'>
                             Medium Priority
                           </Dropdown.Item>
                           <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-red-600 to-red-400" key='2 High'>
@@ -179,8 +185,9 @@ export default ({board, bIndex, members}) => {
                           </Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>
-                      <textarea className="addTask border-gray-300 rounded focus:ring-purple-400 w-full" 
-                      rows={3} placeholder="Task info" 
+                      <textarea className="addTask block p-2.5 resize-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                      
+                      rows={1} placeholder="Task info" 
                       data-id={bIndex}
                       onKeyDown={(e) => onTextAreaKeyPress(e)}/>
                     </div>

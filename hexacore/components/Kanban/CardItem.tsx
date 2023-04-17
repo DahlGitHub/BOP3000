@@ -46,7 +46,7 @@ function CardItem({ data, index, members }) {
   }
   
   const changeName = async (e) => {
-    if (e.key === "Enter" && e.target.value.trim()) {
+    if (e.key === "Enter" && e.target.value.trim() && !e.shiftKey) {
       const docRef = await getDocs(q);
       docRef.docs.forEach(async (docs) => {
         const items = docs.data().items.map((item) => {
@@ -113,9 +113,9 @@ function CardItem({ data, index, members }) {
                     px-2 py-1 rounded text-white text-[10px]
                     ${
                       data.priority === 0
-                        ? "from-blue-600 to-blue-400"
-                        : data.priority === 1
                         ? "from-green-600 to-green-400"
+                        : data.priority === 1
+                        ? "from-yellow-600 to-yellow-400"
                         : "from-red-600 to-red-400"
                     }
                     `}
@@ -135,10 +135,10 @@ function CardItem({ data, index, members }) {
                       editPrio(key)
                     }}
                     >
-                    <Dropdown.Item className="m-1 bg-gradient-to-r text-white text-[10px] bg-blue-500 w-32 hover:bg-blue-700" key='0 low'>
+                    <Dropdown.Item className="m-1 bg-gradient-to-r text-white text-[10px] bg-green-500 w-32 hover:bg-green-700" key='0 low'>
                       Low Priority
                     </Dropdown.Item>
-                    <Dropdown.Item className="m-1 bg-gradient-to-r text-white text-[10px] bg-green-500 hover:bg-green-700" key='1 medium'>
+                    <Dropdown.Item className="m-1 bg-gradient-to-r text-white text-[10px] bg-yellow-500 hover:bg-yellow-700" key='1 medium'>
                       Medium Priority
                     </Dropdown.Item>
                     <Dropdown.Item className="m-1 bg-gradient-to-r text-white text-[10px] bg-red-500 hover:bg-red-700" key='2 high'>
@@ -167,8 +167,15 @@ function CardItem({ data, index, members }) {
             </Dropdown>
           </div>
           {!editTaskName
-            ? <p onClick={()=>{setEditTaskName(!editTaskName)}} className="text-sm my-3 mx-1 text-lg leading-6 cursor-text" >{title}</p>
-            : <textarea autoFocus={true} className="my-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 " value={title} onChange={(e)=>setTitle(e.target.value)} onKeyDown={(e) => changeName(e)}/>
+            ? <p onClick={()=>{setEditTaskName(!editTaskName)}} className="text-sm my-3 mx-1 text-lg leading-6 cursor-text whitespace-pre-wrap" >{title}</p>
+            : <textarea 
+                onBlur={() => {
+                  setEditTaskName(false);
+                  setTitle(data.title);
+                }}
+                defaultValue={data.title}
+                autoFocus={true} 
+                className="my-2 resize-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 " value={title} onChange={(e)=>setTitle(e.target.value)} onKeyDown={(e) => changeName(e)}/>
           }
           <div className="flex justify-between">
             <div className="flex space-x-2 items-center">
