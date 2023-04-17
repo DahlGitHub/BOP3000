@@ -1,10 +1,8 @@
-import { Container } from '@nextui-org/react';
 import { useState } from 'react';
-import { Timestamp, doc, addDoc, collection } from 'firebase/firestore';
+import { Timestamp, addDoc, collection } from 'firebase/firestore';
 import { auth, db } from '../../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleChevronRight } from '@fortawesome/free-solid-svg-icons';
+
 export default ({id}) =>{
     const [message, setMessage] = useState('');
     const [row, setRow] = useState(1)
