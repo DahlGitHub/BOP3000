@@ -14,50 +14,50 @@ import FileModal from "./FileModal";
 
 const Files = () => {
   
-    const storage = getStorage();
-    const listRef = ref(storage, 'files/uid' )
+  const storage = getStorage();
+  const listRef = ref(storage, 'files/uid' )
 
-    const remaningStorage = 1.4;
-    const totalStorage = 15;
-    const [usedStorage, setUsedStorage] = useState(0);
+  const remaningStorage = 1.4;
+  const totalStorage = 15;
+  const [usedStorage, setUsedStorage] = useState(0);
 
-    const showStorage = `${(usedStorage / totalStorage) * 100 }%`;
+  const showStorage = `${(usedStorage / totalStorage) * 100 }%`;
 
-    const [showFullView, setShowFullView] = useState(false);
-    const toggleShowFullView = () => setShowFullView(prevState => !prevState);
+  const [showFullView, setShowFullView] = useState(false);
+  const toggleShowFullView = () => setShowFullView(prevState => !prevState);
 
 
-    const MainContent = () => {
-        return (
-          <div className="w-80">
-            <FileUpload fetch={fetchFiles}/>
-            
-            <div className="pl-0 mt-2 mr-2 mb-0 ml-2">
-            <FileFilter/>
-            </div>
-            <div className="flex">
-            <button className="pl-0 mb-0"
-            onClick={toggleShowFullView}>
-              <div className="bg-gray-100 p-3 rounded-lg mt-2 mr-2 mb-0 ml-2 hover:bg-gray-300">
-              {showFullView ? <FontAwesomeIcon icon={faList}/> : <FontAwesomeIcon icon={faList12}/>}
-              </div>
-            </button>
-           
-            <div className="pl-0 mb-0 w-96">
-              <div className="bg-gray-100 p-3 rounded-lg mt-2 mr-2 mb-0 ml-2 hover:bg-gray-300">
-                <FontAwesomeIcon className="text-gray-600 fa-sm" icon={faCloudArrowUp}/><span className="ml-2 text-[12px] text-gray-500">{usedStorage.toFixed(1)} / {totalStorage} GB storage used</span>
-                <div className="w-full bg-gray-200 rounded-full h-1 dark:bg-gray-700">
-                  <div className="bg-blue-600 h-1 rounded-full" style={{width: showStorage}} ></div>
-                </div>
-              </div>
-            </div>
-            </div>
-
-            {files}
-            
+  const MainContent = () => {
+    return (
+      <div className="w-80">
+        <FileUpload fetch={fetchFiles}/>
+        
+        <div className="pl-0 mt-2 mr-2 mb-0 ml-2">
+        <FileFilter/>
+        </div>
+        <div className="flex">
+        <button className="pl-0 mb-0"
+        onClick={toggleShowFullView}>
+          <div className="bg-gray-100 p-3 rounded-lg mt-2 mr-2 mb-0 ml-2 hover:bg-gray-300">
+          {showFullView ? <FontAwesomeIcon icon={faList}/> : <FontAwesomeIcon icon={faList12}/>}
           </div>
-        );
-      };
+        </button>
+        
+        <div className="pl-0 mb-0 w-96">
+          <div className="bg-gray-100 p-3 rounded-lg mt-2 mr-2 mb-0 ml-2 hover:bg-gray-300">
+            <FontAwesomeIcon className="text-gray-600 fa-sm" icon={faCloudArrowUp}/><span className="ml-2 text-[12px] text-gray-500">{usedStorage.toFixed(1)} / {totalStorage} GB storage used</span>
+            <div className="w-full bg-gray-200 rounded-full h-1 dark:bg-gray-700">
+              <div className="bg-blue-600 h-1 rounded-full" style={{width: showStorage}} ></div>
+            </div>
+          </div>
+        </div>
+        </div>
+
+        {files}
+        
+      </div>
+    );
+  };
 
     const [isListOpen, setIsListOpen] = React.useState(true);
 
@@ -82,7 +82,7 @@ const Files = () => {
       const newFiles = querySnapshot.docs.map((doc) => {
         const fileData = doc.data();
 
-        const fileDataSize = Number(fileData.file.size);
+        const fileDataSize = Number(fileData.size);
           if (!isNaN(fileDataSize)) {
             setUsedStorage(prevState => prevState + fileDataSize);
           }
