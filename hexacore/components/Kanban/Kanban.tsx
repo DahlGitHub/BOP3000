@@ -103,7 +103,7 @@ export default function Home() {
     })
   }
   return (
-      <div className="pt-20 pl-10 flex flex-col w-full h-screen">
+      <div className="pt-10 pl-5 flex flex-col w-full">
         {/* Board header */}
         <div className="flex flex-initial space-x-3">
           <div className="flex items-center mx-2">
@@ -114,7 +114,7 @@ export default function Home() {
         </div>
         {ready && (
           <DragDropContext onDragEnd={onDragEnd}>
-            <div className="flex w-full my-3">
+            <div className="flex w-full my-3 overflow-x-auto">
             <Droppable droppableId="droppable" type="BOARD" direction="horizontal">
               {(provided, snapshot) => (
               <div
