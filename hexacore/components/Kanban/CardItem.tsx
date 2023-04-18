@@ -16,6 +16,7 @@ function CardItem({ data, index, members }) {
   const [editTaskName, setEditTaskName] = useState(false)
   const [title, setTitle] = useState(data.title)
   const q = query(collection(db, 'groups', 'a82bcf3fff364e71b2a8bb39903be3dd', 'kanbanid'), where('items', 'array-contains', data))
+
   const assignMember = async (member) => {
     //mangler å sette index på arrayet
     const type = member.toString().split(' ')
@@ -43,27 +44,29 @@ function CardItem({ data, index, members }) {
       
     })
   }
-  const changeName = async (e) =>{
-    if(e.key === 'Enter'){
-      const docRef = await getDocs(q)
-      docRef.docs.forEach(async(docs) => {
+  
+  const changeName = async (e) => {
+    if (e.key === "Enter" && e.target.value.trim() && !e.shiftKey) {
+      const docRef = await getDocs(q);
+      docRef.docs.forEach(async (docs) => {
         const items = docs.data().items.map((item) => {
           if (item.id === data.id) {
             return {
               ...item,
-              title: e.target.value,
+              title: e.target.value.trim(),
             };
           }
           return item;
         });
-        await updateDoc(doc(db, '/groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', docs.data().id), {
+        await updateDoc(doc(db, "/groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid", docs.data().id), {
           items: items,
         });
-        });
-        setEditTaskName(false)
+      });
+      setEditTaskName(false);
+    } else if (e.key === "Enter" && !e.target.value.trim()) {
+      e.preventDefault();
     }
-  
-  }
+  };
   const editPrio = async (key) =>{
     const docRef = await getDocs(q)
     docRef.docs.forEach(async(docs) => {
@@ -100,19 +103,19 @@ function CardItem({ data, index, members }) {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="bg-white rounded-md p-3 m-3 mt-0 last:mb-0"
+          className="bg-white rounded-md pt-2 px-2 m-1.5 mt-0 last:mb-0 hover:bg-gray-50 border shadow-sm"
         >
-          <div>
+          <div className="flex justify-between">
             <Dropdown>
               <Dropdown.Trigger>
                 <label
                   className={`bg-gradient-to-r cursor-pointer
-                    px-2 py-1 rounded text-white text-sm
+                    px-2 py-1 rounded text-white text-[10px]
                     ${
                       data.priority === 0
-                        ? "from-blue-600 to-blue-400"
-                        : data.priority === 1
                         ? "from-green-600 to-green-400"
+                        : data.priority === 1
+                        ? "from-yellow-600 to-yellow-400"
                         : "from-red-600 to-red-400"
                     }
                     `}
@@ -125,27 +128,29 @@ function CardItem({ data, index, members }) {
                 </label>
               </Dropdown.Trigger>
               <Dropdown.Menu
-                    className="text-center p-1"
+                    className="p-1"
                     selectionMode="single"
-                    css={{ $$dropdownMenuMinWidth: "100px" }}
+                    css={{ $$dropdownMenuMinWidth: "50px" }}
                     onAction={(key)=>{
                       editPrio(key)
                     }}
                     >
-                    <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-blue-600 to-blue-400" key='0 low'>
+                    <Dropdown.Item className="m-1 bg-gradient-to-r text-white text-[10px] bg-green-500 w-32 hover:bg-green-700" key='0 low'>
                       Low Priority
                     </Dropdown.Item>
-                    <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-green-600 to-green-400" key='1 medium'>
+                    <Dropdown.Item className="m-1 bg-gradient-to-r text-white text-[10px] bg-yellow-500 hover:bg-yellow-700" key='1 medium'>
                       Medium Priority
                     </Dropdown.Item>
-                    <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-red-600 to-red-400" key='2 high'>
+                    <Dropdown.Item className="m-1 bg-gradient-to-r text-white text-[10px] bg-red-500 hover:bg-red-700" key='2 high'>
                       High Priority
                     </Dropdown.Item>
                   </Dropdown.Menu>
             </Dropdown>
             
             <Dropdown>
-              <Dropdown.Trigger><FontAwesomeIcon className='pl-3 pr-2 cursor-pointer' icon={faEllipsisVertical}/></Dropdown.Trigger>
+              <Dropdown.Trigger>
+                <FontAwesomeIcon className='px-2 py-1 cursor-pointer' icon={faEllipsisVertical}/>
+              </Dropdown.Trigger>
               <Dropdown.Menu
                     disallowEmptySelection
                     selectionMode="single"
@@ -158,40 +163,69 @@ function CardItem({ data, index, members }) {
                     }}
                     >
                     <Dropdown.Item color='error' icon={<FontAwesomeIcon icon={faTrash}/>} key='delete'>Delete task</Dropdown.Item>
-                  </Dropdown.Menu>
+                </Dropdown.Menu>
             </Dropdown>
           </div>
           {!editTaskName
-            ? <h5 onClick={()=>{setEditTaskName(!editTaskName)}} className="text-md my-3 text-lg leading-6 cursor-text" >{title}</h5>
-            : <input type="text" autoFocus={true} className="text-md my-3 text-lg leading-6 w-full" value={title} onChange={(e)=>setTitle(e.target.value)} onKeyDown={(e) => changeName(e)}/>
+            ? <p onClick={()=>{setEditTaskName(!editTaskName)}} className="text-sm my-3 mx-1 text-lg leading-6 cursor-text whitespace-pre-wrap" >{title}</p>
+            : <textarea 
+                onBlur={() => {
+                  setEditTaskName(false);
+                  setTitle(data.title);
+                }}
+                defaultValue={data.title}
+                autoFocus={true} 
+                className="my-2 resize-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 " value={title} onChange={(e)=>setTitle(e.target.value)} onKeyDown={(e) => changeName(e)}/>
           }
           <div className="flex justify-between">
             <div className="flex space-x-2 items-center">
-              <span className="flex space-x-1 items-center">
-                <FontAwesomeIcon icon={faUser} className="w-4 h-4 text-gray-500" />
-                <span>{data.assignees.length}</span>
-              </span>
+              {
+                //<span className="flex space-x-1 items-center">
+                
+                //<span>{data.assignees.length}</span>
+              //</span>
+              }
+              
             </div>
-            <ul className="flex space-x-3">
-              {data.assignees.map((ass, index) => {
-               if(members.length > 0){
+            <ul className="flex space-x-2">
+            {data.assignees.map((ass, index) => {
+            if (members.length > 0) {
+              if (index < 3) { 
                 return (
-                  <li key={ass}>
+                  <li key={ass} className=" m-0">
                     <img
                       src={members.find((m) => m.uid === ass).photo}
-                      width="36"
-                      height="36"
-                      className=" rounded-full "
+                      width="24"
+                      height="24"
+                      className="rounded-full "
                       alt=""
                     />
                   </li>
-                )
-               }
-                
-              })}
+                );
+              } else if (index === 3 && data.assignees.length > 3) {
+                const numExtraMembers = data.assignees.length - 3;
+                return (
+                  <li key={ass} className=" m-0 relative">
+                    <div className="absolute right-1 bottom-1 rounded-full text-xs font-bold bg-gray-200 text-gray-700 w-3 h-3 flex items-center justify-center">
+                      +{numExtraMembers}
+                    </div>
+
+                  </li>
+                );
+              }
+            }
+            })}
               <li>
                 <Dropdown>
-                  <Dropdown.Button auto icon={<PlusCircleIcon className="w-5 h-5 text-gray-500" />}></Dropdown.Button>
+                  <Dropdown.Button 
+                  css={{
+                    height: "auto",
+                    width: "auto"
+                }} 
+                  
+                  icon={<PlusCircleIcon className="w-5 h-5 text-gray-600" />}>
+
+                  </Dropdown.Button>
                     <Dropdown.Menu aria-label="Static Actions"
                       onAction={ (action) => {
                         const type = action.toString().split(' ')
