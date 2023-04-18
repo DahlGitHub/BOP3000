@@ -1,63 +1,24 @@
-import { app, auth, db, storage} from '../../firebase';
+import { auth, storage, db } from '../../../firebase';
 import { doc, collection, addDoc, setDoc, getFirestore } from "firebase/firestore";
-import { Input } from '@nextui-org/react';
+import { Collapse, Input } from '@nextui-org/react';
 import {useState, useEffect} from "react";
 import { v4 as uuidv4 } from 'uuid'
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFolderPlus } from '@fortawesome/free-solid-svg-icons';
 
 const CreateTeamModal = ({isOpen, onClose}) => {
-    const userStorageRef = `users/groups`//id til gruppen skal her
+    const userStorageRef = `users/teams`//id til gruppen skal her
     const [name, setName] = useState("");
     const [picture, setFileUrl] = useState(null)
 
-    const filechanged = async (e) =>{
-        var file = e.target.files[0];
-        const storageRef = ref(storage, `/teams/${auth.currentUser?.uid}`);
-        const uploadTask = uploadBytesResumable(storageRef, file);
-  
-        uploadTask.on("state_changed",
-        (snapshot) => {
-        },
-        (error) => {
-          alert(error);
-        },
-        () => {
-          
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            setFileUrl(downloadURL)
-
-        });
-        }
-    );
+    
          
-   }
     const submit = async () => {
         onClose()
         
-        const teamuid = uuidv4().replaceAll("-","");
-
-        if (!name && !picture) {
-        console.log("none test")
-            return
-        } else {
-           await setDoc(doc(db, `teams/${teamuid}`), {
-                name: name,
-                ownerId: auth.currentUser?.uid,
-                teamuid: teamuid,
-                picture: picture
-            }).then(async()=>{
-              const user = auth.currentUser
-              setDoc(doc(db,`teams/${teamuid}/members/${teamuid}`), {
-                uid: user.uid,
-                name: user.displayName,
-                photo: user.photoURL
-              })
-              setDoc(doc(db, `users/${user.uid}/teams/${teamuid}/`),{
-                teamuid: teamuid
-              })
-            })
-            }
-        }
+        
+    }
         
         
 
@@ -93,41 +54,57 @@ const CreateTeamModal = ({isOpen, onClose}) => {
                   className="text-lg leading-6 font-medium"
                   id="modal-headline"
                 >
-                  Create a team
+                  Add a tool
                 </h3>
                 <div className="mt-2">
                   <div className="flex flex-col items-center pt-6 pr-6 pb-6 pl-6">
 
-                <Input
-                  name='emailRegisterInput'
-                  id='emailRegisterInput'
+                  <Collapse.Group accordion={false} className="w-fit">
+                <Collapse title={
+                    <button>
+                        Select Tool
+                    </button>
+                }>
+                <div>
+
+                    <div className='cursor-pointer text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2'>
+                        <h1>Kanban</h1>
+                    </div>
+
+                    <div className='cursor-pointer text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2'>
+                        <h1>Team Chat</h1>
+                    </div>
+
+                    <div className='cursor-pointer text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2'>
+                        <h1>File Folder</h1>
+                    </div>
+                    
+                        
+                </div>
+                </Collapse>                
+            </Collapse.Group>
+                
+            <Input
+                  name='toolNameInput'
+                  id='toolNameInput'
                   type={"Name"}
-                  aria-label="Email input"
+                  aria-label="Tool input"
                   onChange={e => { setName(e.currentTarget.value); }}
                   clearable
                   bordered            
                   fullWidth
                   color="primary"
                   size="lg"
-                  placeholder="Team name"
+                  placeholder="Tool name"
                   className='m-4'
                     
                 />
-                <h3 className='m-4'>Team picture</h3>
-                <input
-                  type="file"
-                  className="appearance-none bg-gray-200 text-gray-900 px-2 py-1 shadow-sm border border-gray-400 rounded-md"
-                  name="img"
-                  onChange={filechanged}
-                  required
-                />
-                <p className="mt-3 text-base leading-relaxed text-center text-black-200"></p>
                 
                 <div className="w-full mt-6">
                   <a onClick={submit} className="flex text-center items-center justify-center w-full pt-4 pr-10 pb-4 pl-10 text-base
                       font-medium text-white bg-blue-600 rounded-xl transition duration-500 ease-in-out transform
                       hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                      Create team</a>
+                      Add tool</a>
                 </div>
               </div>
                 </div>
