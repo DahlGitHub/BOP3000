@@ -12,6 +12,7 @@ export default ({id}) =>{
     const sendMessage = (e) => {
       console.log(e)
       if(e.key === 'Enter' && !e.shiftKey){
+        if(message === '') return;
         addDoc(collection(db, id+'/Messages/'), {
           uid: user.uid,
           message: message,
