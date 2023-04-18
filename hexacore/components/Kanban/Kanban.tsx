@@ -18,8 +18,9 @@ export default function Home() {
   const [boardData, setBoardData] = useState ([])
   const [newBoard, setNewBoard] = useState('')
   const [members, setMembers] = useImmer([])
+  //const qMembers = query(collection(db, '/groups/a82bcf3fff364e71b2a8bb39903be3dd/members'))
 
-  const qMembers = query(collection(db, '/groups/a82bcf3fff364e71b2a8bb39903be3dd/members'))
+  const qMembers = query(collection(db, '/users'))
 
   const getMembers = async () => {
     const members = await getDocs(qMembers)
@@ -104,21 +105,21 @@ export default function Home() {
   return (
       <div className="pt-20 pl-10 flex flex-col w-full h-screen">
         {/* Board header */}
-        <div className="flex flex-initial">
-          <div className="flex items-center">
+        <div className="flex flex-initial space-x-3">
+          <div className="flex items-center mx-2">
             <h4 className="text-4xl font-bold text-gray-600">Kanban board</h4>
           </div>
-          <Input aria-label='addBoard' aria-hidden='false' value={newBoard} onChange={e => setNewBoard(e.target.value)} placeholder='Add list'></Input>
-          <Button className='text-black bg-indigo-800' onPress={addBoard}>Add</Button>
+          <Input aria-label='addBoard' aria-hidden='false' value={newBoard} onChange={e => setNewBoard(e.target.value)} placeholder='Add a new list'></Input>
+          <button className="p-2 px-3 text-sm text-center text-white rounded-xl bg-blue-700 sm:w-fit hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={addBoard}>Add</button>
         </div>
         {ready && (
           <DragDropContext onDragEnd={onDragEnd}>
-            <div className="flex w-full my-5 p-5">
+            <div className="flex w-full my-3">
             <Droppable droppableId="droppable" type="BOARD" direction="horizontal">
               {(provided, snapshot) => (
               <div
                 ref={provided.innerRef}
-                className={`flex w-fit p-5 ${snapshot.isDraggingOver && "bg-green-100"}`}
+                className={`flex w-fit ${snapshot.isDraggingOver && "bg-green-50 rounded-lg"}`}
                 {...provided.droppableProps}
               >
               {boardData.map((board, bIndex) =>(
@@ -129,7 +130,7 @@ export default function Home() {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="bg-transparent rounded-md p-3 m-3 mt-0 last:mb-0"
+                          className="bg-transparent rounded-md p-2 mt-0 last:mb-0 w-64"
                         >
                       <Board 
                         board={board}

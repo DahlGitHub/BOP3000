@@ -3,12 +3,13 @@ import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import CardItem from "./CardItem";
 import { Droppable } from "react-beautiful-dnd";
 import { useEffect, useState } from "react";
-import { Dropdown, Input } from "@nextui-org/react";
+import { Dropdown} from "@nextui-org/react";
 import { arrayUnion, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsis, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsis, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { createGuidId } from './Kanban';
+import { faPlusSquare } from '@fortawesome/free-regular-svg-icons';
 
 export default ({board, bIndex, members}) => {
     const [showEditListName, setShowEditListName] = useState(false)
@@ -19,7 +20,9 @@ export default ({board, bIndex, members}) => {
 
     useEffect(() => {
       const closeForm = (e) => {
-        if(showForm && e.target.className !== 'addTask border-gray-300 rounded focus:ring-purple-400 w-full' ){
+      const addTask = (e.target.className.split(" ")[0])  
+
+        if(showForm && addTask !== 'addTask' ){
           setShowForm(false)
         }
       }
@@ -86,23 +89,25 @@ export default ({board, bIndex, members}) => {
                 <div
                   className={`bg-gray-100 w-30 rounded-md shadow-md
                   flex flex-col relative
-                  ${snapshot.isDraggingOver && "bg-green-100"}`}
+                  ${snapshot.isDraggingOver && "bg-green-50 rounded-lg"}`}
                 >
-                  <span
-                    className="w-full h-1 bg-gradient-to-r from-pink-700 to-red-200
-                absolute inset-x-0 top-0"
-                  ></span>
-                  <h4 className=" p-3 flex justify-between items-center ">
+                  <h4 className="p-2 flex justify-between items-center text-md font-semibold">
                     {showEditListName
-                    ? <Input data-id={bIndex} autoFocus={true} aria-label='editListName' aria-hidden='false' onChange={(e)=>setEditListName(e.target.value)} value={editListName} onKeyDown={(e)=>changeBoardName(e)}/>
+                    ? <input 
+                        onBlur={() => {
+                          setShowEditListName(false);
+                          setEditListName(board.name);
+                        }}
+                        data-id={bIndex} 
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" autoFocus={true} aria-label='editListName' aria-hidden='false' onChange={(e)=>setEditListName(e.target.value)} value={editListName} onKeyDown={(e)=>changeBoardName(e)}/>
                     :
-                      <span onClick={()=>setShowEditListName(!showEditListName)} className="text-2xl text-gray-600 cursor-text">
+                      <span onClick={()=>setShowEditListName(!showEditListName)} className="text-md mx-2 text-gray-600 cursor-text w-full whitespace-pre-wrap">
                         {board.name}
                       </span>
                     }
                     
                     <Dropdown>
-                      <Dropdown.Trigger><FontAwesomeIcon className='py-2 cursor-pointer' icon={faEllipsis}/></Dropdown.Trigger>
+                      <Dropdown.Trigger><FontAwesomeIcon className='m-2 cursor-pointer' icon={faEllipsis}/></Dropdown.Trigger>
                       <Dropdown.Menu
                             disallowEmptySelection
                             selectionMode="single"
@@ -121,8 +126,7 @@ export default ({board, bIndex, members}) => {
                     </Dropdown>
                   </h4>
 
-                  <div className="overflow-y-auto h-auto"
-                  style={{maxHeight:'calc(100vh - 290px)'}}>
+                  <div className="overflow-y-auto h-auto">
                     {board.items.length > 0 &&
                       board.items.map((item, iIndex) => (
                           <CardItem
@@ -137,7 +141,7 @@ export default ({board, bIndex, members}) => {
                   </div>
                   {
                    showForm && selectedBoard === bIndex ? (
-                    <div className="p-3">
+                    <div className="p-3 space-y-2">
                       
                       <Dropdown>
                         <Dropdown.Trigger>
@@ -146,9 +150,9 @@ export default ({board, bIndex, members}) => {
                               px-2 py-1 rounded text-white text-sm
                               ${
                                 priorityName.prio === 0
-                                  ? "from-blue-600 to-blue-400"
-                                  : priorityName.prio === 1
                                   ? "from-green-600 to-green-400"
+                                  : priorityName.prio === 1
+                                  ? "from-yellow-600 to-yellow-400"
                                   : "from-red-600 to-red-400"
                               }
                               `}
@@ -170,10 +174,10 @@ export default ({board, bIndex, members}) => {
                             setPriorityName({prio: parseInt(split[0]), name: split[1]})
                             
                             }}>
-                          <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-blue-600 to-blue-400" key='0 Low'>
+                          <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-green-600 to-green-400" key='0 Low'>
                             Low Priority
                           </Dropdown.Item>
-                          <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-green-600 to-green-400" key='1 Medium'>
+                          <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-yellow-600 to-yellow-400" key='1 Medium'>
                             Medium Priority
                           </Dropdown.Item>
                           <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-red-600 to-red-400" key='2 High'>
@@ -181,18 +185,19 @@ export default ({board, bIndex, members}) => {
                           </Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>
-                      <textarea className="addTask border-gray-300 rounded focus:ring-purple-400 w-full" 
-                      rows={3} placeholder="Task info" 
+                      <textarea className="addTask block p-2.5 resize-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                      
+                      rows={1} placeholder="Task info" 
                       data-id={bIndex}
                       onKeyDown={(e) => onTextAreaKeyPress(e)}/>
                     </div>
                   ): (
                       <button
-                        className="flex justify-center items-center my-3 space-x-2 text-lg"
+                        className="flex justify-center items-center my-2 mx-2 space-x-2 text-sm hover:bg-gray-200 p-2 rounded-lg"
                         onClick={() => {setSelectedBoard(bIndex); setShowForm(true)}}
                       >
-                        <span>Add task</span>
-                        <PlusCircleIcon className="w-5 h-5 text-gray-500" />
+                        <span className='text-gray-500 text-sm'>Add task</span>
+                        <FontAwesomeIcon className='text-gray-500' icon={faPlus}/>
                       </button>
                     )
                   }

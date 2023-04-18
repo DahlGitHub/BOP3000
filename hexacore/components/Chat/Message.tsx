@@ -27,6 +27,7 @@ export default ({index, message, id}) =>{
             setCanEditMessage(!false)
           }
           else {
+            console.log(editMessageValue)
             await updateDoc(doc(db, id+'/Messages/', message.messageId), {
                 message: editMessageValue
             })
@@ -44,7 +45,7 @@ export default ({index, message, id}) =>{
             <div className="flex items-center justify-start flex-row-reverse">
                 <img key={index + ' image'} src={message.user.photo} className="object-cover w-10 h-10 rounded-full mx-2" alt=""/>
                 <div key={index + 'chat'} className="relative mr-3 text-sm group-hover:bg-indigo-200 bg-indigo-100 py-2 px-4 rounded-xl">
-                    <textarea className="bg-transparent resize-none" rows={row} onKeyDown={onTextAreaKeyPress} disabled={canEditMessage} key={index++ + 'message'} defaultValue={editMessageValue}/>
+                    <textarea className="bg-transparent resize-none" rows={row} onChange={(e)=>setEditMessageValue(e.target.value)} onKeyDown={onTextAreaKeyPress} disabled={canEditMessage} key={index++ + 'message'} defaultValue={editMessageValue}/>
                 </div>
                 <Dropdown>
                     <Dropdown.Trigger><span key={index++ + 'edit'}  className='hidden group-hover:block dark:text-white text-[12px] mr-3 rounded-xl'>Edit</span></Dropdown.Trigger>
