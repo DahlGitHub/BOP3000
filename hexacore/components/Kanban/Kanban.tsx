@@ -110,7 +110,7 @@ export default function Home() {
             <h4 className="text-4xl font-bold text-gray-600">Kanban board</h4>
           </div>
           <Input aria-label='addBoard' aria-hidden='false' value={newBoard} onChange={e => setNewBoard(e.target.value)} placeholder='Add a new list'></Input>
-          <button className='text-black bg-indigo-800' onClick={addBoard}>Add</button>
+          <button className="p-2 px-3 text-sm text-center text-white rounded-xl bg-blue-700 sm:w-fit hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={addBoard}>Add</button>
         </div>
         {ready && (
           <DragDropContext onDragEnd={onDragEnd}>

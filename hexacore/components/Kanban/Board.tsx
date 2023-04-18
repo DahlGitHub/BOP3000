@@ -150,9 +150,9 @@ export default ({board, bIndex, members}) => {
                               px-2 py-1 rounded text-white text-sm
                               ${
                                 priorityName.prio === 0
-                                  ? "from-blue-600 to-blue-400"
-                                  : priorityName.prio === 1
                                   ? "from-green-600 to-green-400"
+                                  : priorityName.prio === 1
+                                  ? "from-yellow-600 to-yellow-400"
                                   : "from-red-600 to-red-400"
                               }
                               `}
