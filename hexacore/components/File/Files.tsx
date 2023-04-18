@@ -17,14 +17,23 @@ const Files = () => {
   const storage = getStorage();
   const listRef = ref(storage, 'files/uid' )
 
-  const remaningStorage = 1.4;
-  const totalStorage = 15;
+  const totalStorage = 5;
   const [usedStorage, setUsedStorage] = useState(0);
 
-  const showStorage = `${(usedStorage / totalStorage) * 100 }%`;
+  const usedStorageInGB = usedStorage / 1073741824;
+  const showStorage = `${(usedStorageInGB / totalStorage) * 100}%`;
 
   const [showFullView, setShowFullView] = useState(false);
   const toggleShowFullView = () => setShowFullView(prevState => !prevState);
+
+  const formatBytes = (bytes, decimals = 2) => {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ["Bytes", "KB", "MB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+  };
 
 
   const MainContent = () => {
@@ -45,7 +54,7 @@ const Files = () => {
         
         <div className="pl-0 mb-0 w-96">
           <div className="bg-gray-100 p-3 rounded-lg mt-2 mr-2 mb-0 ml-2 hover:bg-gray-300">
-            <FontAwesomeIcon className="text-gray-600 fa-sm" icon={faCloudArrowUp}/><span className="ml-2 text-[12px] text-gray-500">{usedStorage.toFixed(1)} / {totalStorage} GB storage used</span>
+            <FontAwesomeIcon className="text-gray-600 fa-sm" icon={faCloudArrowUp}/><span className="ml-2 text-[12px] text-gray-500">{formatBytes(usedStorage.toFixed(1))} / {totalStorage} GB storage used</span>
             <div className="w-full bg-gray-200 rounded-full h-1 dark:bg-gray-700">
               <div className="bg-blue-600 h-1 rounded-full" style={{width: showStorage}} ></div>
             </div>
@@ -81,11 +90,7 @@ const Files = () => {
       const querySnapshot = await getDocs(query(collection(db, "users", auth.currentUser?.uid, "files")));
       const newFiles = querySnapshot.docs.map((doc) => {
         const fileData = doc.data();
-
-        const fileDataSize = Number(fileData.size);
-          if (!isNaN(fileDataSize)) {
-            setUsedStorage(prevState => prevState + fileDataSize);
-          }
+    
 
 
         return (
@@ -96,7 +101,7 @@ const Files = () => {
                   <div className="mt-0 mr-0 mb-0 flex-1 min-w-0">
                     <p className="text-gray-800 dark:text-white text-md truncate w-5/6">{fileData.name}</p>
                     <div className="space-x-5">
-                    <span className="text-sm text-gray-500">{fileData.size}</span>
+                    <span className="text-sm text-gray-500">{formatBytes(fileData.size)}</span>
                     <span className="text-sm text-gray-500">{fileData.date}</span>
                     </div>
                   </div>
@@ -112,6 +117,16 @@ const Files = () => {
             </div>
         );
       });
+      const usedStorage = querySnapshot.docs.reduce((acc, doc) => {
+        const fileData = doc.data();
+        const fileDataSize = Number(fileData.size);
+        if (!isNaN(fileDataSize)) {
+          return acc + fileDataSize;
+        }
+        return acc;
+      }, 0);
+      setUsedStorage(usedStorage);
+    
       setFiles(newFiles);
     };
 

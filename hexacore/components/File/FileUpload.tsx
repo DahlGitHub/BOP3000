@@ -20,7 +20,7 @@ const FileUpload = ({fetch}) => {
 
     const handleFileSelect = async (e) => {
         setSelectedFile(e.target.files[0]);
-        setFileSize(formatBytes(e.target.files[0].size))
+        setFileSize(e.target.files[0].size)
         setFileName(e.target.files[0].name)
         
     };
@@ -83,7 +83,7 @@ const FileUpload = ({fetch}) => {
         const sizes = ["Bytes", "KB", "MB"];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
-      };
+    };
 
     return (
         <div className="mx-2 mb-5">
