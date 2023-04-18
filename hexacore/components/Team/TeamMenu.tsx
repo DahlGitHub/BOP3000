@@ -62,9 +62,22 @@ const TeamMenu = ()  => {
   const MainContent = () => {
     return(
       <>
-        {teams.map((team) => (
-          <div>{team}</div>
-        ))}
+
+        <Collapse.Group accordion={false}>
+          <Collapse title={
+            <button className="flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
+              Velg team
+            </button>
+          }>
+            <div>
+            {teams.map((team) => (
+              <div>{team}</div>
+            ))}
+            </div>
+            </Collapse>                
+          </Collapse.Group>
+
+        
         <div className='grid place-items-center'>
           <button type="button" onClick={handleModalOpen} className="text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2">
             <FontAwesomeIcon className='pr-2' icon={faFolderPlus}/>
