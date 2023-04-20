@@ -3,6 +3,7 @@ import { db, auth } from '../../firebase'
 import { useEffect, useRef, useState } from 'react';
 import { useImmer } from 'use-immer';
 import Message from './Message';
+import Poll from './Poll';
 
 export default ({id}) =>{
     const qMessages = query(collection(db, id+'/Messages/'), orderBy('sentAt', 'asc'), limit(50))
@@ -34,7 +35,6 @@ export default ({id}) =>{
                     messageId: message.doc.id
                 }
                 if(message.type === 'added'){
-                    console.log(connect)
                     setMessages(messages => [...messages, connect])
                 }
                 if(message.type === 'modified'){
@@ -81,7 +81,9 @@ export default ({id}) =>{
                               <Message key={index++} index={index} message={message} id={id}/>
                             )
                         }  else if(message.message.type === 'poll') {
-                        
+                            return (
+                                <Poll key={index++} index={index} pollData={message} id={id}/>
+                            )
                         }
                     })}
                 </div>
