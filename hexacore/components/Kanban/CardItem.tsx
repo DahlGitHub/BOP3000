@@ -19,6 +19,7 @@ function CardItem({ data, index, members }) {
 
   const assignMember = async (member) => {
     //mangler å sette index på arrayet
+    // ENDRE GROUPS.PHOTO til GROUPS.PICTURE :: Users har .picture
     const type = member.toString().split(' ')
     const docRef = await getDocs(q)
     docRef.docs.forEach(async(docs) => {
@@ -191,15 +192,28 @@ function CardItem({ data, index, members }) {
             {data.assignees.map((ass, index) => {
             if (members.length > 0) {
               if (index < 3) { 
+                const member = members.find((m) => m.uid === ass);
                 return (
                   <li key={ass} className=" m-0">
-                    <img
-                      src={members.find((m) => m.uid === ass).photo}
-                      width="24"
-                      height="24"
-                      className="rounded-full "
-                      alt=""
-                    />
+                    {member.picture ? (
+                      <img
+                        src={member.picture}
+                        width="24"
+                        height="24"
+                        className="rounded-full"
+                        alt=""
+                      />
+                    ) : (
+                      <div className="bg-gray-200 w-6 h-6 rounded-full flex items-center justify-center">
+                        <span className="text-gray-600 font-bold text-xs">
+                          {member.name
+                            .split(' ')
+                            .map(word => word[0])
+                            .join('')
+                            .toUpperCase()}
+                        </span>
+                      </div>
+                    )}
                   </li>
                 );
               } else if (index === 3 && data.assignees.length > 3) {
@@ -209,12 +223,12 @@ function CardItem({ data, index, members }) {
                     <div className="absolute right-1 bottom-1 rounded-full text-xs font-bold bg-gray-200 text-gray-700 w-3 h-3 flex items-center justify-center">
                       +{numExtraMembers}
                     </div>
-
                   </li>
                 );
               }
             }
-            })}
+          })}
+
               <li>
                 <Dropdown>
                   <Dropdown.Button 
@@ -240,41 +254,75 @@ function CardItem({ data, index, members }) {
                         
                       }}>
                       <Dropdown.Item key="label">Assigned people</Dropdown.Item>
-                      {data.assignees.map((member)=>{
-                       if(members.length > 0){
-                        return(
-                          <Dropdown.Item key={'remove '+member} icon={<img
-                            src={members.find((m) => m.uid === member).photo}
-                            width="36"
-                            height="36"
-                            className=" rounded-full "
-                            alt=""
-                          />}>
-                                {members.find((m) => m.uid === member).name}
+                      {data.assignees.map((member) => {
+                      if (members.length > 0) {
+                        const assignee = members.find((m) => m.uid === member);
+                        return (
+                          <Dropdown.Item
+                            key={"remove " + member}
+                            icon={
+                              assignee.picture ? (
+                                <img
+                                  src={assignee.picture}
+                                  width="36"
+                                  height="36"
+                                  className="rounded-full"
+                                  alt=""
+                                />
+                              ) : (
+                                <div className="bg-gray-200 w-8 h-8 rounded-full flex items-center justify-center">
+                                  <span className="text-gray-600 font-bold text-sm">
+                                  {assignee.name.split(" ").length > 1
+                                      ? `${assignee.name.substr(0, 1)}${assignee.name
+                                          .substr(assignee.name.indexOf(" ") + 1, 1)
+                                          .toUpperCase()}`
+                                      : assignee.name.substr(0, 1).toUpperCase()}
+                                  </span>
+                                </div>
+                              )
+                            }
+                          >
+                            {assignee.name}
                           </Dropdown.Item>
-                          )
-                        }
+                        );
+                      }
                       })}
                       <Dropdown.Item key="members" withDivider color="error">
                         Members
                       </Dropdown.Item>
-                      {members.map((member)=>{
-                       if( !data.assignees.includes(member.uid)){
-                        return(
-                          <Dropdown.Item key={'add '+member.uid} icon={<img
-                              src={member.photo}
-                              width="36"
-                              height="36"
-                              className=" rounded-full "
-                              alt=""
-                            />}>
-                              {member.name}
+                      {members.map((member) => {
+                      if (!data.assignees.includes(member.uid)) {
+                        return (
+                          <Dropdown.Item
+                            key={"add " + member.uid}
+                            icon={
+                              member.picture ? (
+                                <img
+                                  src={member.picture}
+                                  width="36"
+                                  height="36"
+                                  className="rounded-full"
+                                  alt=""
+                                />
+                              ) : (
+                                <div className="bg-gray-200 w-8 h-8 rounded-full flex items-center justify-center">
+                                  <span className="text-gray-600 font-bold text-sm">
+                                    {member.name.split(" ").length > 1
+                                      ? `${member.name.substr(0, 1)}${member.name
+                                          .substr(member.name.indexOf(" ") + 1, 1)
+                                          .toUpperCase()}`
+                                      : member.name.substr(0, 1).toUpperCase()}
+                                  </span>
+                                </div>
+                              )
+                            }
+                          >
+                            {member.name}
                           </Dropdown.Item>
-                        )
-                       }
-                          
-                        
-                      })}
+                        );
+                      }
+                    })}
+
                     </Dropdown.Menu>
                 </Dropdown>
               </li>
