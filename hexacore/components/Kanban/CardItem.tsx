@@ -188,7 +188,7 @@ function CardItem({ data, index, members }) {
               }
               
             </div>
-            <ul className="flex space-x-2">
+            <ul className="flex space-x-1">
             {data.assignees.map((ass, index) => {
             if (members.length > 0) {
               if (index < 3) { 
@@ -271,7 +271,7 @@ function CardItem({ data, index, members }) {
                                 />
                               ) : (
                                 <div className="bg-gray-200 w-8 h-8 rounded-full flex items-center justify-center">
-                                  <span className="text-gray-600 font-bold text-sm">
+                                  <span className="text-gray-600 font-bold text-xs">
                                   {assignee.name.split(" ").length > 1
                                       ? `${assignee.name.substr(0, 1)}${assignee.name
                                           .substr(assignee.name.indexOf(" ") + 1, 1)
@@ -306,7 +306,7 @@ function CardItem({ data, index, members }) {
                                 />
                               ) : (
                                 <div className="bg-gray-200 w-8 h-8 rounded-full flex items-center justify-center">
-                                  <span className="text-gray-600 font-bold text-sm">
+                                  <span className="text-gray-600 font-bold text-xs">
                                     {member.name.split(" ").length > 1
                                       ? `${member.name.substr(0, 1)}${member.name
                                           .substr(member.name.indexOf(" ") + 1, 1)
