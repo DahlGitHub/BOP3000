@@ -12,7 +12,7 @@ import { auth, db } from "../../../firebase";
 import AddMembersModal from "./AddMembersModal";
 
 
-const TeamSpace = ({teamuid, name, teams, openModal, clearTeam, selectFiles, tools, fetchTools}) => {
+const TeamSpace = ({teamuid, name, teams, openModal, clearTeam, selectFiles, tools, fetchTools, isMemberModalOpen, memberModalOnClose}) => {
 
     const [isListOpen, setIsListOpen] = React.useState(true);
     
@@ -80,7 +80,7 @@ const TeamSpace = ({teamuid, name, teams, openModal, clearTeam, selectFiles, too
     
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isMemberModalOpen, setIsMemberModalOpen] = useState(false);
+    
 
     function handleModalOpen() {
         setIsModalOpen(true);
@@ -91,18 +91,12 @@ const TeamSpace = ({teamuid, name, teams, openModal, clearTeam, selectFiles, too
         fetchTools()
     }
 
-    function handleMemberModalOpen() {
-        setIsMemberModalOpen(true);
-    }
-
-    function handleMemberModalClose() {
-        setIsMemberModalOpen(false);
-    }
+    
 
     return (
         <div className='h-[calc(100vh-70px)] bg-white  dark:text-white  dark:bg-gray-800'>
             <AddToolModal isOpen={isModalOpen} onClose={handleModalClose} teamuid={teamuid}/>
-            <AddMembersModal isOpen={isMemberModalOpen} onClose={handleMemberModalClose} teamuid={teamuid}/>    
+            <AddMembersModal isOpen={isMemberModalOpen} onClose={memberModalOnClose} teamuid={teamuid}/>
             
                 <div className='w-64'>
             

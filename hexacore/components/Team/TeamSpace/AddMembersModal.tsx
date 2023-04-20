@@ -1,85 +1,92 @@
 import { auth, db } from '../../../firebase';
 import { doc, collection, addDoc, setDoc, getFirestore, query, where, getDocs, getDoc } from "firebase/firestore";
-import { Input } from '@nextui-org/react';
 import {useState, useEffect} from "react";
-import { v4 as uuidv4 } from 'uuid'
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+
 
 const AddMembersModal = ({isOpen, onClose, teamuid}) => {
     const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [picture, setPicture] = useState("");
-    const [addedUid, setAddedUid] = useState("");
-    const [users, setUsers] = useState([]);
+const [email, setEmail] = useState("");
+const [picture, setPicture] = useState("");
+const [addedUid, setAddedUid] = useState("");
+const [users, setUsers] = useState([]);
 
-    const docImport = doc;
-    
-    useEffect(() => {
-        const fetchUsers = async () => {
-            const querySnapshot = await getDocs(query(collection(db, "users")));
-            const newFiles = querySnapshot.docs
-          
-            setUsers(newFiles);
-        };
-          
-            fetchUsers();
-    }, []); // Run this effect only once on component mount
-    
-    const submit = async () => {
-        onClose()
+const [filteredResults, setFilteredResults] = useState([]);
 
-        
-        
-        const isMember = async (uid) => {
-            const q = query(
-              collection(db, "teams", teamuid, "members"),
-              where("uid", "==", uid)
-            );
-                const snapshot = await getDocs(q);
-                return snapshot.size > 0;
-            };
-        
-            const handleClick = (props) => {
-                setPicture(props.picture);
-                setName(props.name);
-                setEmail(props.email);
-                setAddedUid(props.objectID);
-            };
-            
-          const [filteredResults, setFilteredResults] = useState([]);
-        
-          useEffect(() => {
-            const getResults = async () => {
-              const results = await Promise.all(
-                users.map(async (hit) => {
-                  if (hit.uid !== auth.currentUser.uid && !(await isMember(hit.uid))) {
-                    return (
-                        <button className="flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
-                        <img className="object-cover w-8 h-8 rounded-full" src={hit.picture} alt=""/>
-                        <div className="text-left rtl:text-right">
-                          <h1 className="text-sm font-medium text-gray-700 capitalize dark:text-white">{hit.name}</h1>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">{hit.email}</p>
-                        </div>
-                      </button>
-                    );
-                  } else {
-                    return null;
-                  }
+useEffect(() => {
+  if (teamuid) {
+    const fetchUsers = async () => {
+      const querySnapshot = await getDocs(query(collection(db, "users")));
+      const newFiles = querySnapshot.docs.map((doc) => doc.data());
+      setUsers(newFiles);
+    };
+
+    fetchUsers();
+  }
+}, [teamuid]); // Run this effect only once on component mount
+
+const isMember = async (uid) => {
+  if (teamuid) {
+    const q = query(
+      collection(db, "teams", teamuid, "members"),
+      where("uid", "==", uid)
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.size > 0;
+  }
+};
+
+const handleClick = (props) => {
+  setAddedUid(props.objectID);
+};
+
+useEffect(() => {
+  const getResults = async () => {
+    const results = await Promise.all(
+      users.map(async (hit) => {
+        if (hit.uid !== auth.currentUser.uid && !(await isMember(hit.uid))) {
+          return (
+            <button
+              key={hit.uid}
+              className="flex items-center w-full px-5 py-2 hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30"
+              onClick={() =>
+                handleClick({
+                  objectID: hit.uid,
                 })
-              );
-          
-              const filteredResults = results.filter((result) => result !== null);
-          
-              setFilteredResults(filteredResults);
-            };
-          
-            getResults();
-          }, [users, isMember]);
-          
-        
-        return <>{filteredResults}</>;
-        
-    }
+              }
+            >
+              <img
+                className="object-cover w-8 h-8 rounded-full"
+                src={hit.picture}
+                alt=""
+              />
+              <div className="text-left rtl:text-right">
+                <h1 className="text-sm font-medium text-gray-700 capitalize dark:text-white">
+                  {hit.name}
+                </h1>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {hit.email}
+                </p>
+              </div>
+            </button>
+          );
+        } else {
+          return null;
+        }
+      })
+    );
+
+    const filteredResults = results.filter((result) => result !== null);
+
+    setFilteredResults(filteredResults);
+  };
+
+  if (addedUid || users.length > 0) {
+    getResults();
+  }
+}, [users, isMember, teamuid, addedUid]);
+
+
+
         
         
 
@@ -115,21 +122,21 @@ const AddMembersModal = ({isOpen, onClose, teamuid}) => {
                   className="text-lg leading-6 font-medium"
                   id="modal-headline"
                 >
-                  Invite users to the team
+                  Invite a user to the team
                 </h3>
                 <div className="mt-2">
                   <div className="flex flex-col items-center pt-6 pr-6 pb-6 pl-6">
 
                 
-                
+                {filteredResults}
                 
                 <p className="mt-3 text-base leading-relaxed text-center text-black-200"></p>
                 
                 <div className="w-full mt-6">
-                  <a onClick={submit} className="flex text-center items-center justify-center w-full pt-4 pr-10 pb-4 pl-10 text-base
+                  <a  className="flex text-center items-center justify-center w-full pt-4 pr-10 pb-4 pl-10 text-base
                       font-medium text-white bg-blue-600 rounded-xl transition duration-500 ease-in-out transform
                       hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                      Create team</a>
+                      Send Invite</a>
                 </div>
               </div>
                 </div>

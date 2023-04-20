@@ -11,6 +11,7 @@ import TeamSpace from './TeamSpace/TeamSpace';
 import TeamFiles from './TeamSpace/Tools/TeamFiles';
 import { faComments, faFolderOpen, faWindowMaximize } from '@fortawesome/free-regular-svg-icons';
 import Chat from '../Chat/Chat';
+import AddMembersModal from './TeamSpace/AddMembersModal';
 
 
 const TeamMenu = ()  => {
@@ -142,6 +143,7 @@ const TeamMenu = ()  => {
 
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMemberModalOpen, setIsMemberModalOpen] = useState(false);
 
   function handleModalOpen() {
     setIsModalOpen(true);
@@ -149,6 +151,14 @@ const TeamMenu = ()  => {
 
   function handleModalClose() {
     setIsModalOpen(false);
+  }
+
+  function handleMemberModalOpen() {
+    setIsMemberModalOpen(true);
+  }
+
+  function handleMemberModalClose() {
+      setIsMemberModalOpen(false);
   }
 
   const MainContent = () => {
@@ -184,6 +194,8 @@ const TeamMenu = ()  => {
   }
 
   
+
+  
   const [selectedTool, setSelectedTool] = React.useState(false);
   const [selectedFiles, setSelectedFiles] = React.useState(false);
   const [teamChat, setTeamChat] = React.useState(false);
@@ -214,6 +226,7 @@ const TeamMenu = ()  => {
 
   return (
     <section className="bg-white dark:bg-gray-900 flex">
+     
       <div
         className={`${
           selectedFiles ? 'hidden' : 'block'
@@ -234,7 +247,7 @@ const TeamMenu = ()  => {
               selectedTeam ? 'block' : 'hidden'
             } `}
           >
-              <TeamSpace tools={tools} fetchTools={fetchTools} selectFiles={handleFilesSelect} teamuid={selectedTeam} name={selectedTeamName} teams={teams} clearTeam={() => clearTeam()} openModal={handleModalOpen} />
+              <TeamSpace isMemberModalOpen={isMemberModalOpen} memberModalOnClose={handleMemberModalClose} tools={tools} fetchTools={fetchTools} selectFiles={handleFilesSelect} teamuid={selectedTeam} name={selectedTeamName} teams={teams} clearTeam={() => clearTeam()} openModal={handleModalOpen} />
           </div>
         </div>
       </div>
@@ -261,7 +274,7 @@ const TeamMenu = ()  => {
         </div>
         <div className="flex-1 p-4 overflow-y-auto">
           {teamMembers}
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded mt-10">
+          <button onClick={() => handleMemberModalOpen()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded mt-10">
             Add more members to the team
           </button>
         </div>
