@@ -9,6 +9,7 @@ import Files from "../../File/Files";
 import TeamFiles from "./Tools/TeamFiles";
 import { Firestore, collection, getDoc, getDocs, query } from "firebase/firestore";
 import { auth, db } from "../../../firebase";
+import AddMembersModal from "./AddMembersModal";
 
 
 const TeamSpace = ({teamuid, name, teams, openModal, clearTeam, selectFiles, tools, fetchTools}) => {
@@ -79,6 +80,7 @@ const TeamSpace = ({teamuid, name, teams, openModal, clearTeam, selectFiles, too
     
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isMemberModalOpen, setIsMemberModalOpen] = useState(false);
 
     function handleModalOpen() {
         setIsModalOpen(true);
@@ -89,9 +91,18 @@ const TeamSpace = ({teamuid, name, teams, openModal, clearTeam, selectFiles, too
         fetchTools()
     }
 
+    function handleMemberModalOpen() {
+        setIsMemberModalOpen(true);
+    }
+
+    function handleMemberModalClose() {
+        setIsMemberModalOpen(false);
+    }
+
     return (
         <div className='h-[calc(100vh-70px)] bg-white  dark:text-white  dark:bg-gray-800'>
-            <AddToolModal isOpen={isModalOpen} onClose={handleModalClose} teamuid={teamuid}/>    
+            <AddToolModal isOpen={isModalOpen} onClose={handleModalClose} teamuid={teamuid}/>
+            <AddMembersModal isOpen={isMemberModalOpen} onClose={handleMemberModalClose} teamuid={teamuid}/>    
             
                 <div className='w-64'>
             
@@ -112,7 +123,3 @@ const TeamSpace = ({teamuid, name, teams, openModal, clearTeam, selectFiles, too
 }
 
 export default TeamSpace
-
-function docImport(db: Firestore, arg1: string, teamID: any): import("@firebase/firestore-types").DocumentReference<unknown> {
-    throw new Error("Function not implemented.");
-}

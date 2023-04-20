@@ -21,14 +21,33 @@ const CreateTeamModal = ({isOpen, onClose, teamuid}) => {
       console.log("none test")
           return
       } else {
+        if(toolType === "files"){
           await setDoc(doc(db, `teams/${teamuid}/tools/${name}`), {
               name: name,
               tool: toolType,
           }).then(async()=>{
             console.log("Create structure for either kanban or chat")
           })
-      }
+        }
+
+        if(toolType === "kanban"){
+          await setDoc(doc(db, `teams/${teamuid}/tools/${name}`), {
+              name: name,
+              tool: toolType,
+          }).then(async()=>{
+            console.log("Create structure for either kanban or chat")
+          })
+        }
       
+      if(toolType === "chat"){
+        await setDoc(doc(db, `teams/${teamuid}/tools/${name}`), {
+            name: name,
+            tool: toolType,
+        }).then(async()=>{
+          
+        })
+      }
+    } 
       
   }
         
