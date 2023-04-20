@@ -1,21 +1,49 @@
 import React, { useEffect, useState } from "react";
-import {
-    ChevronDownIcon,
-    PlusIcon,
-    
-    PlusCircleIcon,
-  } from '@heroicons/react/24/outline'
+import {PlusCircleIcon,} from '@heroicons/react/24/outline'
 import { Draggable } from "react-beautiful-dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical, faLayerGroup, faPenToSquare, faTrash, faUser, faUserFriends } from "@fortawesome/free-solid-svg-icons";
 import { Avatar, Dropdown } from "@nextui-org/react";
 import { arrayUnion, collection, doc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore";
 import { db } from "../../firebase";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { faCalendarDays } from "@fortawesome/free-regular-svg-icons";
 
 function CardItem({ data, index, members }) {
   const [editTaskName, setEditTaskName] = useState(false)
   const [title, setTitle] = useState(data.title)
   const q = query(collection(db, 'groups', 'a82bcf3fff364e71b2a8bb39903be3dd', 'kanbanid'), where('items', 'array-contains', data))
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  const selectDate = async (date) => {
+    if (date) {
+      const docRef = await getDocs(q);
+      docRef.docs.forEach(async (docs) => {
+        const items = docs.data().items.map((item) => {
+          if (item.id === data.id) {
+            return {
+              ...item,
+              date: date.toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+              }),
+            };
+          }
+          return item;
+        });
+        await updateDoc(
+          doc(db, "/groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid", docs.data().id),
+          {
+            items: items,
+          }
+        );
+        if (selectedDate !== null) { // add this check
+          setSelectedDate(date);
+        }
+      });
+    }
+  };
 
   const assignMember = async (member) => {
     //mangler å sette index på arrayet
@@ -68,6 +96,8 @@ function CardItem({ data, index, members }) {
       e.preventDefault();
     }
   };
+
+
   const editPrio = async (key) =>{
     const docRef = await getDocs(q)
     docRef.docs.forEach(async(docs) => {
@@ -179,16 +209,23 @@ function CardItem({ data, index, members }) {
                 className="my-2 resize-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 " value={title} onChange={(e)=>setTitle(e.target.value)} onKeyDown={(e) => changeName(e)}/>
           }
           <div className="flex justify-between">
-            <div className="flex space-x-2 items-center">
-              {
-                //<span className="flex space-x-1 items-center">
-                
-                //<span>{data.assignees.length}</span>
-              //</span>
-              }
+
+          <div className="justify-start">
+          
+            <DatePicker
+              className="w-12 text-xs bg-gray-100 p-1 rounded text-center"
+              selected={selectedDate}
+              onChange={(date) => {
+                setSelectedDate(date);
+                selectDate(date);
+              }}
+              dateFormat="MMM d"
+              placeholderText="Date"
+            />
+        
+</div>
+            <ul className="flex space-x-1 z-auto">
               
-            </div>
-            <ul className="flex space-x-1">
             {data.assignees.map((ass, index) => {
             if (members.length > 0) {
               if (index < 3) { 
@@ -229,7 +266,7 @@ function CardItem({ data, index, members }) {
             }
           })}
 
-              <li>
+              <li className="z-0">
                 <Dropdown>
                   <Dropdown.Button 
                   css={{
