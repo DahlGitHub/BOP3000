@@ -48,14 +48,14 @@ export default ({index, pollData, id})=>{
             {poll.options.map((option, i)=>{
                 if(voted){
                     return(
-                        <div className="flex">
+                        <div key={"poll"+ i} className="flex">
                             <Progress className="" value={(option.votes.length/numberOfVotes)*100}></Progress>
                             <button>{option.votes.length}</button>
                         </div>
                     )
                 }else{
                     return(
-                        <div className="flex">
+                        <div key={"vote"+i} className="flex">
                             <button onClick={()=>vote(option)}>{option.option}</button>
                         </div>
                     )
