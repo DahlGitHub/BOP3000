@@ -1,5 +1,5 @@
 import { Dropdown } from "@nextui-org/react"
-import { collection, deleteDoc, doc, updateDoc } from "firebase/firestore"
+import { deleteDoc, doc, updateDoc } from "firebase/firestore"
 import { useEffect, useRef, useState } from "react"
 import { db } from "../../firebase"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"

@@ -81,8 +81,7 @@ const ContactList = () => {
         <div>
             <Drawer mainContent={<MainContent/>} title="Contacts" isOpen={isListOpen} open={handleListOpen} close={handleListClose} />
         </div>
-        
-        <div className="gap-16 items-center max-w-screen-xl lg:grid lg:grid-cols-2">
+        <div>
           {contacts.map((contact, index) => {
             const chatID = "Chat/"+ [auth.currentUser.uid.toLowerCase(), contact.key.toLowerCase()].sort().join('')
             if (showChat && selectedChat === index) {
