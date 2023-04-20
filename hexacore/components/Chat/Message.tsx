@@ -1,6 +1,6 @@
 import { Dropdown } from "@nextui-org/react"
 import { collection, deleteDoc, doc, updateDoc } from "firebase/firestore"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { db } from "../../firebase"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons"
@@ -9,7 +9,8 @@ import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons"
 export default ({index, message, id}) =>{   
     const [canEditMessage, setCanEditMessage] = useState(!false)
     const [editMessageValue, setEditMessageValue] = useState(message.message.message)
-    const [row, setRow] = useState(1)
+    const [rows, setRows] = useState(1)
+    const textAreaRef = useRef(null);
     
     const deleteMessage = async () => {
         console.log(message.messageId)
@@ -17,12 +18,18 @@ export default ({index, message, id}) =>{
     }
 
     useEffect(()=>{
-        setRow((editMessageValue.match(/\n/g)||[]).length+1)
-    },[])
+        if(textAreaRef.current.scrollHeight > textAreaRef.current.clientHeight){
+            const rowsNeeded = Math.ceil(textAreaRef.current.scrollHeight / 20)
+            setRows(rowsNeeded);
+        } else{
+            setRows((editMessageValue.match(/\n/g)||[]).length+1)
+        }
+        
+    },[editMessageValue])
 
     const onTextAreaKeyPress = async (e) => {
-        if(e.keyCode === 13) //Enter
-        {
+        if(e.keyCode === 13 && !e.shiftKey){
+            e.preventDefault()
           if(editMessageValue.length === 0) {
             setCanEditMessage(!false)
           }
@@ -36,6 +43,8 @@ export default ({index, message, id}) =>{
         }
       }
 
+
+
     return(
         <div key={index + 'div'} className="col-start-6 col-end-13 p-3 rounded-lg group">
             <div className='text-end'>
@@ -45,7 +54,17 @@ export default ({index, message, id}) =>{
             <div className="flex items-center justify-start flex-row-reverse">
                 <img key={index + ' image'} src={message.user.photo} className="object-cover w-10 h-10 rounded-full mx-2" alt=""/>
                 <div key={index + 'chat'} className="relative mr-3 text-sm group-hover:bg-indigo-200 bg-indigo-100 py-2 px-4 rounded-xl">
-                    <textarea className="bg-transparent resize-none" rows={row} onChange={(e)=>setEditMessageValue(e.target.value)} onKeyDown={onTextAreaKeyPress} disabled={canEditMessage} key={index++ + 'message'} defaultValue={editMessageValue}/>
+                <textarea 
+                    ref={textAreaRef} 
+                    className="bg-transparent resize-none break-all" 
+                    rows={rows} 
+                    style={{ minHeight: '40px', maxHeight: '200px' }} 
+                    onChange={(e) => setEditMessageValue(e.target.value)} 
+                    onKeyDown={onTextAreaKeyPress} 
+                    disabled={canEditMessage} 
+                    key={index++ + 'message'} 
+                    value={editMessageValue}
+                />
                 </div>
                 <Dropdown>
                     <Dropdown.Trigger><span key={index++ + 'edit'}  className='hidden group-hover:block dark:text-white text-[12px] mr-3 rounded-xl'>Edit</span></Dropdown.Trigger>
