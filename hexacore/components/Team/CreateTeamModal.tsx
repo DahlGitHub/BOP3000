@@ -56,8 +56,8 @@ const CreateTeamModal = ({isOpen, onClose}) => {
                 teamuid: teamuid
               })
             })
-            }
         }
+    }
         
         
 

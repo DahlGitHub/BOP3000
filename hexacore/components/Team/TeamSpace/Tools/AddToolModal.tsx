@@ -1,4 +1,4 @@
-import { auth, storage, db } from '../../../firebase';
+import { auth, storage, db } from '../../../../firebase';
 import { doc, collection, addDoc, setDoc, getFirestore } from "firebase/firestore";
 import { Collapse, Input } from '@nextui-org/react';
 import {useState, useEffect} from "react";
@@ -7,18 +7,30 @@ import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolderPlus } from '@fortawesome/free-solid-svg-icons';
 
-const CreateTeamModal = ({isOpen, onClose}) => {
-    const userStorageRef = `users/teams`//id til gruppen skal her
-    const [name, setName] = useState("");
-    const [picture, setFileUrl] = useState(null)
+const CreateTeamModal = ({isOpen, onClose, teamuid}) => {
+  const userStorageRef = `users/teams`//id til gruppen skal her
+  const [name, setName] = useState("");
+  const [toolType, setToolType] = useState(null)
 
-    
-         
-    const submit = async () => {
-        onClose()
+  
         
-        
-    }
+  const submit = async () => {
+    onClose()
+
+    if (!name && !toolType) {
+      console.log("none test")
+          return
+      } else {
+          await setDoc(doc(db, `teams/${teamuid}/tools/${name}`), {
+              name: name,
+              tool: toolType,
+          }).then(async()=>{
+            console.log("Create structure for either kanban or chat")
+          })
+      }
+      
+      
+  }
         
         
 
@@ -58,45 +70,37 @@ const CreateTeamModal = ({isOpen, onClose}) => {
                 </h3>
                 <div className="mt-2">
                   <div className="flex flex-col items-center pt-6 pr-6 pb-6 pl-6">
-
-                  <Collapse.Group accordion={false} className="w-fit">
-                <Collapse title={
-                    <button>
-                        Select Tool
-                    </button>
-                }>
+                
+                  
                 <div>
 
-                    <div className='cursor-pointer text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2'>
-                        <h1>Kanban</h1>
-                    </div>
+                <div onClick={() => setToolType("kanban")} className={`cursor-pointer text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2 ${toolType === "kanban" ? "ring-2 ring-[#38BDF8]" : ""}`}>
+                    <h1>Kanban</h1>
+                </div>
 
-                    <div className='cursor-pointer text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2'>
-                        <h1>Team Chat</h1>
-                    </div>
+                <div onClick={() => setToolType("chat")} className={`cursor-pointer text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2 ${toolType === "chat" ? "ring-2 ring-[#38BDF8]" : ""}`}>
+                    <h1>Team Chat</h1>
+                </div>
 
-                    <div className='cursor-pointer text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2'>
-                        <h1>File Folder</h1>
-                    </div>
+                <div onClick={() => setToolType("files")} className={`cursor-pointer text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2 ${toolType === "files" ? "ring-2 ring-[#38BDF8]" : ""}`}>
+                    <h1>File Folder</h1>
+                </div>
+
                     
                         
                 </div>
-                </Collapse>                
-            </Collapse.Group>
+          
                 
-            <Input
+                <input
                   name='toolNameInput'
                   id='toolNameInput'
-                  type={"Name"}
+                  type="text"
                   aria-label="Tool input"
                   onChange={e => { setName(e.currentTarget.value); }}
-                  clearable
-                  bordered            
-                  fullWidth
-                  color="primary"
-                  size="lg"
+                  
+                  color='primary'
                   placeholder="Tool name"
-                  className='m-4'
+                  className='m-4 text-white dark:text-white dark:bg-gray-800 border-solid border-gray-300 border-2 rounded-xl w-full h-12 pl-4 pr-4 pt-2 pb-2'
                     
                 />
                 
