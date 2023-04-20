@@ -55,34 +55,33 @@ export default ({id}) =>{
         })
 
     }, [])
-    let index = 0;
     return(
         <div className="flex flex-col h-full overflow-x-auto">
             <div className="flex flex-col h-full">
                 <div className="grid grid-cols-12 gap-y-2">
-                    {messages.map((message) => {
+                    {messages.map((message, index) => {
                         if(message.user.uid != auth.currentUser?.uid && message.message.type === 'message') {
                             return (
-                            <div key={index + 'div'} className="col-start-1 col-end-8 p-3 rounded-lg">
-                                <div>
-                                <span className='text-gray-800 dark:text-white p-3'>{message.user.name}</span>
-                                <small className='text-gray-500 p-3'>21/03 17:15</small>
-                                </div>
-                                <div className="flex flex-row items-center">
-                                    <img key={index + ' image'} src={message.user.photo} className="object-cover w-10 h-10 rounded-full mx-2" alt=""/>
-                                    <div key={index + 'chat'} className="relative ml-3 text-sm bg-white py-2 px-4 rounded-xl">
-                                        <div key={index++ + 'message'}>{message.message.message}</div>
+                                <div key={index} className="col-start-1 col-end-8 p-3 rounded-lg">
+                                    <div>
+                                    <span className='text-gray-800 dark:text-white p-3'>{message.user.name}</span>
+                                    <small className='text-gray-500 p-3'>21/03 17:15</small>
                                     </div>
-                                </div>
-                            </div> 
-                        ) 
+                                    <div className="flex flex-row items-center">
+                                        <img src={message.user.photo} className="object-cover w-10 h-10 rounded-full mx-2" alt=""/>
+                                        <div className="relative ml-3 text-sm bg-white py-2 px-4 rounded-xl">
+                                            <div>{message.message.message}</div>
+                                        </div>
+                                    </div>
+                                </div> 
+                            ) 
                         } else if(message.message.type === 'message') {
                             return (
-                              <Message key={index++} index={index} message={message} id={id}/>
+                                <Message key={index} index={index} message={message} id={id}/>
                             )
                         }  else if(message.message.type === 'poll') {
                             return (
-                                <Poll key={index++} index={index} pollData={message} id={id}/>
+                                <Poll key={index} index={index} pollData={message} id={id}/>
                             )
                         }
                     })}
