@@ -14,7 +14,7 @@ const ContactList = () => {
 
 
   useEffect(() => {
-    async function fetchRequests() {
+    async function fetchContacts() {
       const querySnapshot = await getDocs(collection(db, "users", auth.currentUser?.uid, "contacts"));
     
       const promises = querySnapshot.docs.map(async (doc, index) => {
@@ -39,7 +39,7 @@ const ContactList = () => {
       setContacts(results);
     }
     
-      fetchRequests();
+      fetchContacts();
     }, []); // Run this effect only once on component mount
 
   const MainContent = () => {
@@ -65,37 +65,37 @@ const ContactList = () => {
       
       // Render MainContent inside the Drawer component
 
-    const [isListOpen, setIsListOpen] = React.useState(true);
+  const [isListOpen, setIsListOpen] = React.useState(true);
 
-    function handleListOpen() {
-      setIsListOpen(true);
-    }
-    
-    function handleListClose() {
-      setIsListOpen(false);
-    }
+  function handleListOpen() {
+    setIsListOpen(true);
+  }
+  
+  function handleListClose() {
+    setIsListOpen(false);
+  }
       
   
 
-    return (
-        <section className="bg-white dark:bg-gray-900 flex">
-        <div>
-            <Drawer mainContent={<MainContent/>} title="Contacts" isOpen={isListOpen} open={handleListOpen} close={handleListClose} />
-        </div>
-        
-        <div className="gap-16 items-center max-w-screen-xl lg:grid lg:grid-cols-2">
-          {contacts.map((contact, index) => {
-            const chatID = [auth.currentUser.uid.toLowerCase(), contact.key.toLowerCase()].sort().join('')
-            console.log(index)
-            if (showChat && selectedChat === index) {
-              return (
-                <Chat chatID={chatID}/>
-              )
-            }
-          })}
-        </div>
-      </section>
-    )
+  return (
+      <section className="bg-white dark:bg-gray-900 flex">
+      <div>
+          <Drawer mainContent={<MainContent/>} title="Contacts" isOpen={isListOpen} open={handleListOpen} close={handleListClose} />
+      </div>
+      
+      <div className="gap-16 items-center max-w-screen-xl lg:grid lg:grid-cols-2">
+        {contacts.map((contact, index) => {
+          const chatID = [auth.currentUser.uid.toLowerCase(), contact.key.toLowerCase()].sort().join('')
+          console.log(index)
+          if (showChat && selectedChat === index) {
+            return (
+              <Chat chatID={chatID}/>
+            )
+          }
+        })}
+      </div>
+    </section>
+  )
 }
 
 export default ContactList
