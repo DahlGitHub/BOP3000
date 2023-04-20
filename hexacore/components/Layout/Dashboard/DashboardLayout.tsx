@@ -17,7 +17,7 @@ const DashboardLayout = ({ children }) => {
       <div className="flex">
         <DashboardSidebar />
       {loading
-      ? <Progress
+      ? <Progress key={1}
       indeterminated
       value={50}
       color="secondary"
