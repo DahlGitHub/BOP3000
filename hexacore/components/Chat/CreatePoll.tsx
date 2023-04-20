@@ -8,18 +8,21 @@ import { UserContext } from "../../context/UserContext"
 
 
 export default ({id}) => {
-    const [optionsCount, setOptionsCount] = useState(2)
     const [question, setQuestion] = useState('')
-    const [options, setOptions] = useState(Array(optionsCount).fill(''))
+    const [options, setOptions] = useState(Array(2).fill({option: "", votes: []}))
     const {user} = useContext(UserContext)
 
     const removeOption = (index) => {
-        setOptionsCount(optionsCount-1)
-        setOptions(options.filter((_, i) => i !== index))
+        setOptions(options.filter((option, i) => i !== index))
     }
 
     const updateOption = (index, value) => {
-        setOptions(options.slice(0, index).concat(value).concat(options.slice(index + 1)))
+        setOptions(options.map((option, i) => {
+            if(i === index) {
+                return {option: value, votes: option.votes}
+            }
+            return option
+        }))
     }
 
     const createPoll = () => {
@@ -37,20 +40,18 @@ export default ({id}) => {
                 <span>Question:</span>
                 <Input aria-label="question" value={question} onChange={(e)=>setQuestion(e.target.value)} clearable></Input>
             </div>
-            {[...Array(optionsCount)].map((e, i) => {
+            {options.map((option, i)=>{
                 return(
-                    <div className="group">
-                        <span className="hidden group-hover:inline">
-                            <FontAwesomeIcon  icon={faXmark} onClick={()=>removeOption(i)}/>
-                        </span>
+                    <div className="flex">
                         <span>Option {i+1}:</span>
-                        <Input aria-label="inputOption" value={options[i]} onChange={(e)=>updateOption(i, e.target.value)} clearable></Input>
+                        <Input aria-label="option" value={option.option} onChange={(e)=>updateOption(i, e.target.value)} clearable></Input>
+                        <Button onPress={()=>removeOption(i)} icon={<FontAwesomeIcon icon={faXmark}/>}/>
                     </div>
                 )
-            })}
+            })
+            }
             <Button onPress={()=>{
-                setOptionsCount(optionsCount+1)
-                setOptions(options.concat(''))
+                setOptions(options.concat({option: "", votes: 0}))
             }} icon={<FontAwesomeIcon icon={faSquarePlus}/>}/>
             <Button onPress={createPoll} className="bg-sky-500">Create</Button>
         </div>
