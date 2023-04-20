@@ -10,11 +10,11 @@ export default ({id}) =>{
     const [user, loading] = useAuthState(auth)
     
     const sendMessage = (e) => {
-      console.log(e)
       if(e.key === 'Enter' && !e.shiftKey){
         if(message === '') return;
         addDoc(collection(db, id+'/Messages/'), {
           uid: user.uid,
+          type: 'message',
           message: message,
           sentAt: Timestamp.now()
         })

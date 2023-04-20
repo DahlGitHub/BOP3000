@@ -8,8 +8,6 @@ export default ({id}) =>{
     const qMessages = query(collection(db, id+'/Messages/'), orderBy('sentAt', 'asc'), limit(50))
     const qChatters = query(collection(db, id+'/Members/'))
     const [messages, setMessages] = useImmer([])
-    const [editMessage, setEditMessage] = useState(false)
-    
     let chatters = useRef(new Map())
       
     useEffect(()=>{
@@ -36,6 +34,7 @@ export default ({id}) =>{
                     messageId: message.doc.id
                 }
                 if(message.type === 'added'){
+                    console.log(connect)
                     setMessages(messages => [...messages, connect])
                 }
                 if(message.type === 'modified'){
@@ -58,11 +57,11 @@ export default ({id}) =>{
     }, [])
     let index = 0;
     return(
-        <div className="flex flex-col h-full overflow-x-auto mb-4">
+        <div className="flex flex-col h-full overflow-x-auto">
             <div className="flex flex-col h-full">
                 <div className="grid grid-cols-12 gap-y-2">
                     {messages.map((message) => {
-                        if(message.user.uid != auth.currentUser?.uid) {
+                        if(message.user.uid != auth.currentUser?.uid && message.message.type === 'message') {
                             return (
                             <div key={index + 'div'} className="col-start-1 col-end-8 p-3 rounded-lg">
                                 <div>
@@ -77,11 +76,13 @@ export default ({id}) =>{
                                 </div>
                             </div> 
                         ) 
-                        } else {
+                        } else if(message.message.type === 'message') {
                             return (
                               <Message key={index++} index={index} message={message} id={id}/>
                             )
-                        } 
+                        }  else if(message.message.type === 'poll') {
+                        
+                        }
                     })}
                 </div>
             </div>
