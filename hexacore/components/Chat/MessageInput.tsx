@@ -28,14 +28,13 @@ export default ({id}) =>{
 
     const type = (e) => {
       if(isShiftEnter){
-      setMessage(e.target.value)
-      if(e.nativeEvent.inputType === 'insertLineBreak'){
-        setRow(row+1)
-      } else if(e.nativeEvent.inputType === 'deleteContentBackward'){
-        setRow((e.target.value.match(/\n/g)||[]).length+1)
-        //setRow(e.target.value.split('\n').length)
-      } else setRow((e.target.value.match(/\n/g)||[]).length+1);
-      
+        setMessage(e.target.value)
+        if(e.nativeEvent.inputType === 'insertLineBreak'){
+          setRow(row+1)
+        } else if(e.nativeEvent.inputType === 'deleteContentBackward'){
+          setRow((e.target.value.match(/\n/g)||[]).length+1)
+          //setRow(e.target.value.split('\n').length)
+        } else setRow((e.target.value.match(/\n/g)||[]).length+1);
       }
     }
   // trenger å sette inn ny row på wordbreak. trenger å sette max row på hvor mange linjer som kommer.
