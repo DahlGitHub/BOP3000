@@ -13,7 +13,6 @@ export default ({index, message, id}) =>{
     const textAreaRef = useRef(null);
     
     const deleteMessage = async () => {
-        console.log(message.messageId)
         await deleteDoc(doc(db, id+'/Messages/', message.messageId))
     }
 
@@ -34,7 +33,6 @@ export default ({index, message, id}) =>{
             setCanEditMessage(!false)
           }
           else {
-            console.log(editMessageValue)
             await updateDoc(doc(db, id+'/Messages/', message.messageId), {
                 message: editMessageValue
             })
@@ -58,7 +56,7 @@ export default ({index, message, id}) =>{
                     ref={textAreaRef} 
                     className="bg-transparent resize-none break-all" 
                     rows={rows} 
-                    style={{ minHeight: '40px', maxHeight: '200px' }} 
+                    style={{ maxHeight: '200px' }} 
                     onChange={(e) => setEditMessageValue(e.target.value)} 
                     onKeyDown={onTextAreaKeyPress} 
                     disabled={canEditMessage} 
