@@ -68,11 +68,11 @@ const ContactList = () => {
     const [isListOpen, setIsListOpen] = React.useState(true);
 
     function handleListOpen() {
-        setIsListOpen(true);
+      setIsListOpen(true);
     }
     
     function handleListClose() {
-        setIsListOpen(false);
+      setIsListOpen(false);
     }
       
   
