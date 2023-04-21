@@ -201,7 +201,7 @@ const TeamMenu = ()  => {
   }
 
   const [isInvitesOpen, setInvitesOpen] = React.useState(false);
-  const [invites, setInvites] = useState([]);
+  const [inviteCount, setInviteCount] = useState(null);
 
   function handleInvitesOpen() {
     setInvitesOpen(true);
@@ -211,35 +211,7 @@ const TeamMenu = ()  => {
     setInvitesOpen(false);
   }
 
-  useEffect(() => {
-    async function fetchInvites() {
-      const querySnapshot = await getDocs(collection(db, "users", auth.currentUser?.uid, "team-requests"));
-    
-      const promises = querySnapshot.docs.map(async (doc, index) => {
-        const teamID = doc.data().uid;
-        const inviter = doc.data().inviter;
-        const inviterName = doc.data().inviterName;
-        const teamDoc = await getDoc(docImport(db, "teams", teamID));
-        const teamData = teamDoc.data();
-        const element = (
-          <button key={doc.id} className="flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
-            <div className="text-left rtl:text-right">
-                <h1 className="text-sm font-medium text-gray-700 capitalize dark:text-white">You have been invited to join {teamData.name}</h1>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Invite sent by {inviterName}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Email: {inviter}</p>
-            </div>
-          </button>
-        );
-    
-        return element;
-      });
-    
-      const results = await Promise.all(promises);
-      setInvites(results);
-    }
-    
-      fetchInvites();
-    }, []); // Run this effect only once on component mount
+  
 
   
 
@@ -283,7 +255,7 @@ const TeamMenu = ()  => {
         <div className='w-64'>
 
           <CreateTeam isOpen={isModalOpen} onClose={handleModalClose} />
-          <TeamInvitesModal isOpen={isInvitesOpen} onClose={handleInvitesClose} invites={invites}/>
+          <TeamInvitesModal isOpen={isInvitesOpen} onClose={handleInvitesClose} fetchTeams={fetchTeams} setInviteCount={setInviteCount}/>
           <div
             className={`${
               selectedTeam ? 'hidden' : 'block'
@@ -344,7 +316,7 @@ const TeamMenu = ()  => {
           
           </div>
             <div className="flex-1 p-4 overflow-y-auto">
-              <h1 className='text-black dark:text-white'>Pending team invites: {invites.length}</h1>
+              <h1 className='text-black dark:text-white'>Pending team invites: {inviteCount}</h1>
               <button onClick={() => handleInvitesOpen()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded mt-10">
                 Go to team invites
               </button>

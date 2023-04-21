@@ -1,5 +1,5 @@
 import { auth,db } from '../../firebase';
-import { doc, collection, addDoc, setDoc, getFirestore, getDocs, query, getDoc } from "firebase/firestore";
+import { doc, collection, addDoc, setDoc, getFirestore, getDocs, query, getDoc, deleteDoc } from "firebase/firestore";
 import { Collapse, Input } from '@nextui-org/react';
 import {useState, useEffect} from "react";
 import { v4 as uuidv4 } from 'uuid'
@@ -7,14 +7,76 @@ import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolderPlus } from '@fortawesome/free-solid-svg-icons';
 
-const TeamInvitesModal = ({isOpen, onClose, invites}) => {
+const TeamInvitesModal = ({isOpen, onClose, setInviteCount, fetchTeams}) => {
   
   const docImport = doc;
 
-    const submit = async () => {
-        onClose()
-        
+  const [invites, setInvites] = useState([]);
+  const [addedUid, setAddedUid] = useState(null);
+
+  useEffect(() => {
+    async function fetchInvites() {
+      const querySnapshot = await getDocs(collection(db, "users", auth.currentUser?.uid, "team-requests"));
+    
+      const promises = querySnapshot.docs.map(async (doc, index) => {
+        const teamID = doc.data().uid;
+        const inviter = doc.data().inviter;
+        const inviterName = doc.data().inviterName;
+        const teamDoc = await getDoc(docImport(db, "teams", teamID));
+        const teamData = teamDoc.data();
+        const element = (
+          <div key={doc.id}  className="flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
+            <div className="text-left rtl:text-right">
+                <h1 className="text-sm font-medium text-gray-700 capitalize dark:text-white">You have been invited to join {teamData.name}</h1>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Invite sent by {inviterName}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Email: {inviter}</p>
+            </div>
+            <button onClick={() => submit(teamID)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded ml-2">Accept</button>
+            <button onClick={() => decline(teamID)} className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded ml-2">Decline</button>
+          </div>
+        );
+    
+        return element;
+      });
+    
+      const results = await Promise.all(promises);
+      setInvites(results);
+      await setInviteCount(results.length);
     }
+    
+      fetchInvites();
+    }, []); // Run this effect only once on component mount
+
+
+
+    const submit = async (teamuid) => {
+        onClose()
+
+        if (teamuid) {
+            const docRef = doc(db, "teams", teamuid, "members", auth.currentUser?.uid);
+            await setDoc(docRef, {
+              uid: auth.currentUser?.uid,
+            });
+
+            const userRef = doc(db, "users", auth.currentUser?.uid, "teams", teamuid);
+            await setDoc(userRef, {
+                uid: teamuid,
+            });
+
+            deleteDoc(doc(db, "users", auth.currentUser?.uid, "team-requests", teamuid));
+            onClose();
+            fetchTeams();
+        }
+    }
+
+    const decline = async (teamuid) => {
+        onClose()
+        if (addedUid) {
+            deleteDoc(doc(db, "users", auth.currentUser?.uid, "team-requests", teamuid));
+            onClose();
+        }
+    }
+
 
     return (
       <div
