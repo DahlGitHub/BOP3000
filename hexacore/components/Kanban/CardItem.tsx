@@ -9,6 +9,7 @@ import { db } from "../../firebase";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { faCalendarDays } from "@fortawesome/free-regular-svg-icons";
+import { format, isValid } from 'date-fns';
 
 function CardItem({ data, index, members }) {
   const [editTaskName, setEditTaskName] = useState(false)
@@ -16,31 +17,34 @@ function CardItem({ data, index, members }) {
   const q = query(collection(db, 'groups', 'a82bcf3fff364e71b2a8bb39903be3dd', 'kanbanid'), where('items', 'array-contains', data))
   const [selectedDate, setSelectedDate] = useState(null);
 
+  useEffect(() => {
+    const fetchDate = async () => {
+      const docRef = await getDocs(q);
+      docRef.docs.forEach((doc) => {
+        const item = doc.data().items.find((item) => item.id === data.id);
+        if (item.date) {
+          setSelectedDate(new Date(item.date));
+        }
+      });
+    };
+    fetchDate();
+  }, [q, data.id]);
+
   const selectDate = async (date) => {
     if (date) {
       const docRef = await getDocs(q);
-      docRef.docs.forEach(async (docs) => {
-        const items = docs.data().items.map((item) => {
+      docRef.docs.forEach(async (doc) => {
+        const items = doc.data().items.map((item) => {
           if (item.id === data.id) {
             return {
               ...item,
-              date: date.toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-              }),
+              date: date.toISOString().substr(0, 10), // format date as YYYY-MM-DD
             };
           }
           return item;
         });
-        await updateDoc(
-          doc(db, "/groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid", docs.data().id),
-          {
-            items: items,
-          }
-        );
-        if (selectedDate !== null) { // add this check
-          setSelectedDate(date);
-        }
+        await updateDoc(docRef.docs[0].ref, { items: items });
+        setSelectedDate(date);
       });
     }
   };
@@ -216,7 +220,7 @@ function CardItem({ data, index, members }) {
               className="w-12 text-xs bg-gray-100 p-1 rounded text-center"
               selected={selectedDate}
               onChange={(date) => {
-                setSelectedDate(date);
+               
                 selectDate(date);
               }}
               dateFormat="MMM d"
