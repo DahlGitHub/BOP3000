@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Timestamp, addDoc, collection } from 'firebase/firestore';
 import { auth, db } from '../../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -6,13 +6,19 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 export default ({id}) =>{
     const [message, setMessage] = useState('');
     const [row, setRow] = useState(1)
+    const [chatID, setChatID] = useState(id)
     const [isShiftEnter, setIsShiftEnter] = useState(false)
     const [user, loading] = useAuthState(auth)
-    
+  
+    //cahnge
+    useEffect(()=>{
+      setChatID(id)
+    }, [id])
+
     const sendMessage = (e) => {
       if(e.key === 'Enter' && !e.shiftKey){
         if(message === '') return;
-        addDoc(collection(db, id+'/Messages/'), {
+        addDoc(collection(db, chatID+'/Messages/'), {
           uid: user.uid,
           type: 'message',
           message: message,

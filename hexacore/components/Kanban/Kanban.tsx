@@ -57,6 +57,7 @@ export default function Home() {
     }
   }, []);
 
+  
   const onDragEnd = async (re) => {
     if (!re.destination) return;
     if (re.type === 'BOARD') {
