@@ -213,7 +213,7 @@ const TeamMenu = ()  => {
 
   useEffect(() => {
     async function fetchInvites() {
-      const querySnapshot = await getDocs(collection(db, "users", auth.currentUser?.uid, "team-invites"));
+      const querySnapshot = await getDocs(collection(db, "users", auth.currentUser?.uid, "team-requests"));
     
       const promises = querySnapshot.docs.map(async (doc, index) => {
         const teamID = doc.data().uid;
