@@ -79,15 +79,18 @@ const ContactList = () => {
 
   return (
     <section className="bg-white dark:bg-gray-900 flex">
-    <div>
-        <Drawer mainContent={<MainContent/>} title="Contacts" isOpen={isListOpen} open={handleListOpen} close={handleListClose} />
-    </div>
-    <div>
-        <Chat chatID={chatID}/>
-    </div>
+        <div>
+            <Drawer mainContent={<MainContent/>} title="Contacts" isOpen={isListOpen} open={handleListOpen} close={handleListClose} />
+        </div>
+        <div>
+          {chatID.length > 0
+            ? <Chat chatID={chatID}/>
+            : null
+          }
+        </div>
   </section>
   )
-/*
+/* gammel kode med at den lager en chat for hver av kontaktene
     return (
         <section className="bg-white dark:bg-gray-900 flex">
         <div>
