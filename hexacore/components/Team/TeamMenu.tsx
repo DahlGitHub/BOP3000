@@ -13,33 +13,25 @@ import { faComments, faFolderOpen, faWindowMaximize } from '@fortawesome/free-re
 import Chat from '../Chat/Chat';
 import AddMembersModal from './TeamSpace/AddMembersModal';
 import TeamInvitesModal from './TeamInvitesModal';
+import fetchTeams from './fetchTeams';
+import fetchTools from './TeamSpace/Tools/fetchTools';
+import fetchTeamMembers from './fetchTeamMembers';
 
 
 const TeamMenu = ()  => {
 
   const [teams, setTeams] = React.useState([]);
 
+
+  // Team
   const [selectedTeam, setSelectedTeam] = React.useState(null);
   const [selectedTeamName, setSelectedTeamName] = React.useState(null);
-  const [tools, setTools] = React.useState([]);
-
-  const [toolName, setToolName] = React.useState(null);
-  
-
-
-  const docImport = doc;
-
+  const [teamMembers, setTeamMembers] = React.useState([]);
 
   const selectTeam = (teamuid, teamName) => {
     setSelectedTeam(teamuid);
     setSelectedTeamName(teamName);
   }
-
-  const useIsomorphicEffect = () => {
-    return typeof window !== 'undefined' ? useLayoutEffect : useEffect
-  }
-
-  
 
   const clearTeam = () => {
     setSelectedTeam(null);
@@ -48,114 +40,65 @@ const TeamMenu = ()  => {
   }
 
   useEffect(() => {
-    if (selectedTeam) {
-      fetchTools();
-    }
-  }, [selectedTeam]);
-
-  async function fetchTeams() {
-    const querySnapshot = await getDocs(collection(db, "users", auth.currentUser?.uid, "teams"));
-      const elements = [];
-      
-      if(querySnapshot.empty){
-        setTeams(null)
-      } else {
-        const promises = querySnapshot.docs.map(async (doc) => {
-          
-          const teamID = doc.data().teamuid;
-          const teamDoc = await getDoc(docImport(db, "teams", teamID));
-          const teamData = teamDoc.data();
-          const element = (
-            <Link onClick={() => selectTeam(teamData.teamuid, teamData.name)} className="text-white text-center flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
-              {teamData.name}
-            </Link>
-          );
-        elements.push(element);
-      });
-
-      await Promise.all(promises);
-      setTeams(elements); // set the elements array instead of results
-
-    }
-  }
-
-  useEffect(() => {
     
-    fetchTeams()
+    fetchTeams(setTeams, selectTeam);
   }, []);
 
-  const fetchTools = async () => {
-    const querySnapshot = await getDocs(query(collection(db, "teams", selectedTeam, "tools")));
-    const newFiles = querySnapshot.docs.map((doc) => {
-      const fileData = doc.data();
-  
-      if (fileData.tool === "kanban") {
-        return (
-          <div className='cursor-pointer m-3'>
-            <h3><FontAwesomeIcon className='pr-2' icon={faWindowMaximize}/>{fileData.name}</h3>
-          </div>
-        );
-      } else if (fileData.tool === "chat") {
-        return (
-          <div className='cursor-pointer m-3' onClick={() => handleChatSelect(fileData.name)}>
-            <h3><FontAwesomeIcon className='pr-2' icon={faComments}/>{fileData.name}</h3>
-          </div>
-        );
-      } else if (fileData.tool === "files") {
-        return (
-          <div className='cursor-pointer m-3' onClick={() => handleFilesSelect(fileData.name)}>
-            <h3><FontAwesomeIcon className='pr-2' icon={faFolderOpen}/>{fileData.name}</h3>
-          </div>
-        );
-      } else {
-        // Handle other tool types here
-        return null;
-      }
-    });
-  
-    setTools(newFiles);
-  };
-
-  const [teamMembers, setTeamMembers] = React.useState([]);
-
-  async function fetchTeamMembers() {
-    const querySnapshot = await getDocs(collection(db, "teams", selectedTeam, "members"));
-  
-    const promises = querySnapshot.docs.map(async (doc, index) => {
-      const userId = doc.data().uid;
-      const userDoc = await getDoc(docImport(db, "users", userId));
-      const userData = userDoc.data();
-      const element = (
-        <button className="flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
-          <img className="object-cover w-8 h-8 rounded-full" src={userData.picture} alt=""/>
-          <div className="text-left rtl:text-right">
-            <h1 className="text-sm font-medium text-gray-700 capitalize dark:text-white">{userData.name}</h1>
-            <p className="text-xs text-gray-500 dark:text-gray-400">{userData.email}</p>
-          </div>
-        </button>
-      );
-  
-      return element;
-    });
-  
-    const results = await Promise.all(promises);
-    setTeamMembers(results);
-  }
-
   useEffect(() => {
     if (selectedTeam) {
-      fetchTeamMembers();
+      fetchTeamMembers(selectedTeam, setTeamMembers);
     }
   }, [selectedTeam]);
 
-  
-  
 
+  // Tools
+  const [tools, setTools] = React.useState([]);
+  const [toolName, setToolName] = React.useState(null);
+  const [selectedTool, setSelectedTool] = React.useState(false);
 
+  function handleToolDeselect() {
+    setSelectedTool(false);
+    setSelectedFiles(false);
+    setSelectedChat(null);
+  }
 
+  // View controllers
+  const [selectedFiles, setSelectedFiles] = React.useState(false);
+  const [selectedChat, setSelectedChat] = useState(null);
 
+  function handleFilesSelect(toolName) {
+    setSelectedFiles(true);
+    setSelectedTool(true);
+    setToolName(toolName);
+    setTeamChat(false);
+    setSelectedChat(null);
+  }
+
+  function handleChatSelect(chatName) {
+    setTeamChat(true);
+    setSelectedTool(true);
+    setSelectedChat(chatName);
+  }
+
+  // Invites
+  const [isInvitesOpen, setInvitesOpen] = React.useState(false);
+  const [inviteCount, setInviteCount] = useState(null);
+
+  function handleInvitesOpen() {
+    setInvitesOpen(true);
+  }
+
+  function handleInvitesClose() {
+    setInvitesOpen(false);
+  }
+
+  // Chat
+  const [teamChat, setTeamChat] = React.useState(false);
+
+  // Modals
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMemberModalOpen, setIsMemberModalOpen] = useState(false);
+  const [isListOpen, setIsListOpen] = React.useState(true);
 
   function handleModalOpen() {
     setIsModalOpen(true);
@@ -171,6 +114,15 @@ const TeamMenu = ()  => {
 
   function handleMemberModalClose() {
       setIsMemberModalOpen(false);
+  }
+
+  // Drawer
+  function handleListOpen() {
+    setIsListOpen(true);
+  }
+
+  function handleListClose() {
+    setIsListOpen(false);
   }
 
   const MainContent = () => {
@@ -194,60 +146,8 @@ const TeamMenu = ()  => {
       </>
     )
   }
-
-  const [isListOpen, setIsListOpen] = React.useState(true);
-
-  function handleListOpen() {
-    setIsListOpen(true);
-  }
-
-  function handleListClose() {
-    setIsListOpen(false);
-  }
-
-  const [isInvitesOpen, setInvitesOpen] = React.useState(false);
-  const [inviteCount, setInviteCount] = useState(null);
-
-  function handleInvitesOpen() {
-    setInvitesOpen(true);
-  }
-
-  function handleInvitesClose() {
-    setInvitesOpen(false);
-  }
-
   
-
-  
-
-  
-  const [selectedTool, setSelectedTool] = React.useState(false);
-  const [selectedFiles, setSelectedFiles] = React.useState(false);
-  const [teamChat, setTeamChat] = React.useState(false);
-
-  function handleToolDeselect() {
-    setSelectedTool(false);
-    setSelectedFiles(false);
-  }
-
-  function handleFilesSelect(toolName) {
-    setSelectedFiles(true);
-    setSelectedTool(true);
-    setToolName(toolName);
-    setTeamChat(false);
-    setSelectedChat(null);
-  }
-
-  function handleChatSelect(chatName) {
-    setTeamChat(true);
-    setSelectedTool(true);
-    setSelectedChat(chatName);
-  }
-
-  const [selectedChat, setSelectedChat] = useState(0)
-  const [showChat, setShowChat] = useState(false)
-
-  const chatID = `teams/${selectedTeam}/tools/${selectedTool}`
+  const chatID = `teams/${selectedTeam}/tools/${selectedChat}`
 
   return (
     <section className="bg-white dark:bg-gray-900 flex">
