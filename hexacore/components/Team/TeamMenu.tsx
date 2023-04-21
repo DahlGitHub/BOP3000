@@ -1,17 +1,11 @@
-import {v4 as uuid} from 'uuid';
 import React, { useState, useEffect, useLayoutEffect} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolderPlus, faSitemap, faUserCircle } from '@fortawesome/free-solid-svg-icons';
-import {Collapse, Input, Link, Spacer, Text } from "@nextui-org/react";
-import { collection, getDocs, getDoc, addDoc, doc, query, where } from 'firebase/firestore';
-import { auth, db } from '../../firebase';
 import CreateTeam from './CreateTeamModal';
 import Drawer from '../Drawer';
 import TeamSpace from './TeamSpace/TeamSpace';
 import TeamFiles from './TeamSpace/Tools/TeamFiles';
-import { faComments, faFolderOpen, faWindowMaximize } from '@fortawesome/free-regular-svg-icons';
 import Chat from '../Chat/Chat';
-import AddMembersModal from './TeamSpace/AddMembersModal';
 import TeamInvitesModal from './TeamInvitesModal';
 import fetchTeams from './fetchTeams';
 import fetchTools from './TeamSpace/Tools/fetchTools';
@@ -20,13 +14,11 @@ import fetchTeamMembers from './fetchTeamMembers';
 
 const TeamMenu = ()  => {
 
-  const [teams, setTeams] = React.useState([]);
-
-
   // Team
   const [selectedTeam, setSelectedTeam] = React.useState(null);
   const [selectedTeamName, setSelectedTeamName] = React.useState(null);
   const [teamMembers, setTeamMembers] = React.useState([]);
+  const [teams, setTeams] = React.useState([]);
 
   const selectTeam = (teamuid, teamName) => {
     setSelectedTeam(teamuid);
@@ -62,9 +54,18 @@ const TeamMenu = ()  => {
     setSelectedChat(null);
   }
 
-  // View controllers
+  useEffect(() => {
+    const getTools = async () => {
+      const newFiles = await fetchTools({selectedTeam, handleChatSelect, handleFilesSelect});
+      setTools(newFiles);
+    };
+    
+    getTools();
+  }, [selectedTeam, handleChatSelect, handleFilesSelect]);
+
+  // Files
   const [selectedFiles, setSelectedFiles] = React.useState(false);
-  const [selectedChat, setSelectedChat] = useState(null);
+  
 
   function handleFilesSelect(toolName) {
     setSelectedFiles(true);
@@ -72,12 +73,6 @@ const TeamMenu = ()  => {
     setToolName(toolName);
     setTeamChat(false);
     setSelectedChat(null);
-  }
-
-  function handleChatSelect(chatName) {
-    setTeamChat(true);
-    setSelectedTool(true);
-    setSelectedChat(chatName);
   }
 
   // Invites
@@ -94,6 +89,13 @@ const TeamMenu = ()  => {
 
   // Chat
   const [teamChat, setTeamChat] = React.useState(false);
+  const [selectedChat, setSelectedChat] = useState(null);
+
+  function handleChatSelect(chatName) {
+    setTeamChat(true);
+    setSelectedTool(true);
+    setSelectedChat(chatName);
+  }
 
   // Modals
   const [isModalOpen, setIsModalOpen] = useState(false);

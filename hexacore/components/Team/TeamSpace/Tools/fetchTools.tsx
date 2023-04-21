@@ -3,11 +3,16 @@ import { db } from "../../../../firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComments, faFolderOpen, faWindowMaximize } from "@fortawesome/free-regular-svg-icons";
 
-const fetchTools = async (selectedTeam, handleChatSelect, handleFilesSelect, setTools) => {
+const fetchTools = async ({selectedTeam, handleChatSelect, handleFilesSelect}) => {
+  
+
+  if(!selectedTeam){
+    return null;
+  } else {
     const querySnapshot = await getDocs(query(collection(db, "teams", selectedTeam, "tools")));
     const newFiles = querySnapshot.docs.map((doc) => {
       const fileData = doc.data();
-  
+
       if (fileData.tool === "kanban") {
         return (
           <div className='cursor-pointer m-3'>
@@ -30,9 +35,12 @@ const fetchTools = async (selectedTeam, handleChatSelect, handleFilesSelect, set
         // Handle other tool types here
         return null;
       }
-    });
+    }
   
-    setTools(newFiles);
-  };
+  );
+  return newFiles;
+  }
+  
+};
 
-  export default fetchTools;
+export default fetchTools;
