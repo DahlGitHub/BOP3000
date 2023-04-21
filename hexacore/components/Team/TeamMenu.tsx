@@ -223,7 +223,7 @@ const TeamMenu = ()  => {
         } `}
       >
         <div className="gap-16 items-center max-w-screen-xl lg:grid lg:grid-cols-2 bk-white">    
-          
+          <Chat chatID={chatID} />
         </div>
       </div>
       <div className="fixed top-15 right-0 h-screen w-1/4 bg-gray-800 text-white flex flex-col">
