@@ -1,24 +1,57 @@
 import React, { useEffect, useState } from "react";
-import {
-    ChevronDownIcon,
-    PlusIcon,
-    
-    PlusCircleIcon,
-  } from '@heroicons/react/24/outline'
+import {PlusCircleIcon,} from '@heroicons/react/24/outline'
 import { Draggable } from "react-beautiful-dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical, faLayerGroup, faPenToSquare, faTrash, faUser, faUserFriends } from "@fortawesome/free-solid-svg-icons";
 import { Avatar, Dropdown } from "@nextui-org/react";
 import { arrayUnion, collection, doc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore";
 import { db } from "../../firebase";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { faCalendarDays } from "@fortawesome/free-regular-svg-icons";
+import { format, isValid } from 'date-fns';
 
 function CardItem({ data, index, members }) {
   const [editTaskName, setEditTaskName] = useState(false)
   const [title, setTitle] = useState(data.title)
   const q = query(collection(db, 'groups', 'a82bcf3fff364e71b2a8bb39903be3dd', 'kanbanid'), where('items', 'array-contains', data))
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  useEffect(() => {
+    const fetchDate = async () => {
+      const docRef = await getDocs(q);
+      docRef.docs.forEach((doc) => {
+        const item = doc.data().items.find((item) => item.id === data.id);
+        if (item.date) {
+          setSelectedDate(new Date(item.date));
+        }
+      });
+    };
+    fetchDate();
+  }, [q, data.id]);
+
+  const selectDate = async (date) => {
+    if (date) {
+      const docRef = await getDocs(q);
+      docRef.docs.forEach(async (doc) => {
+        const items = doc.data().items.map((item) => {
+          if (item.id === data.id) {
+            return {
+              ...item,
+              date: date.toISOString().substr(0, 10), // format date as YYYY-MM-DD
+            };
+          }
+          return item;
+        });
+        await updateDoc(docRef.docs[0].ref, { items: items });
+        setSelectedDate(date);
+      });
+    }
+  };
 
   const assignMember = async (member) => {
     //mangler å sette index på arrayet
+    // ENDRE GROUPS.PHOTO til GROUPS.PICTURE :: Users har .picture
     const type = member.toString().split(' ')
     const docRef = await getDocs(q)
     docRef.docs.forEach(async(docs) => {
@@ -67,6 +100,8 @@ function CardItem({ data, index, members }) {
       e.preventDefault();
     }
   };
+
+
   const editPrio = async (key) =>{
     const docRef = await getDocs(q)
     docRef.docs.forEach(async(docs) => {
@@ -178,28 +213,48 @@ function CardItem({ data, index, members }) {
                 className="my-2 resize-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 " value={title} onChange={(e)=>setTitle(e.target.value)} onKeyDown={(e) => changeName(e)}/>
           }
           <div className="flex justify-between">
-            <div className="flex space-x-2 items-center">
-              {
-                //<span className="flex space-x-1 items-center">
-                
-                //<span>{data.assignees.length}</span>
-              //</span>
-              }
+
+          <div className="justify-start">
+          
+            <DatePicker
+              className="w-12 text-xs bg-gray-100 p-1 rounded text-center"
+              selected={selectedDate}
+              onChange={(date) => {
+               
+                selectDate(date);
+              }}
+              dateFormat="MMM d"
+              placeholderText="Date"
+            />
+        
+</div>
+            <ul className="flex space-x-1 z-auto">
               
-            </div>
-            <ul className="flex space-x-2">
             {data.assignees.map((ass, index) => {
             if (members.length > 0) {
               if (index < 3) { 
+                const member = members.find((m) => m.uid === ass);
                 return (
                   <li key={ass} className=" m-0">
-                    <img
-                      src={members.find((m) => m.uid === ass).photo}
-                      width="24"
-                      height="24"
-                      className="rounded-full "
-                      alt=""
-                    />
+                    {member.picture ? (
+                      <img
+                        src={member.picture}
+                        width="24"
+                        height="24"
+                        className="rounded-full"
+                        alt=""
+                      />
+                    ) : (
+                      <div className="bg-gray-200 w-6 h-6 rounded-full flex items-center justify-center">
+                        <span className="text-gray-600 font-bold text-xs">
+                          {member.name
+                            .split(' ')
+                            .map(word => word[0])
+                            .join('')
+                            .toUpperCase()}
+                        </span>
+                      </div>
+                    )}
                   </li>
                 );
               } else if (index === 3 && data.assignees.length > 3) {
@@ -209,13 +264,13 @@ function CardItem({ data, index, members }) {
                     <div className="absolute right-1 bottom-1 rounded-full text-xs font-bold bg-gray-200 text-gray-700 w-3 h-3 flex items-center justify-center">
                       +{numExtraMembers}
                     </div>
-
                   </li>
                 );
               }
             }
-            })}
-              <li>
+          })}
+
+              <li className="z-0">
                 <Dropdown>
                   <Dropdown.Button 
                   css={{
@@ -240,41 +295,75 @@ function CardItem({ data, index, members }) {
                         
                       }}>
                       <Dropdown.Item key="label">Assigned people</Dropdown.Item>
-                      {data.assignees.map((member)=>{
-                       if(members.length > 0){
-                        return(
-                          <Dropdown.Item key={'remove '+member} icon={<img
-                            src={members.find((m) => m.uid === member).photo}
-                            width="36"
-                            height="36"
-                            className=" rounded-full "
-                            alt=""
-                          />}>
-                                {members.find((m) => m.uid === member).name}
+                      {data.assignees.map((member) => {
+                      if (members.length > 0) {
+                        const assignee = members.find((m) => m.uid === member);
+                        return (
+                          <Dropdown.Item
+                            key={"remove " + member}
+                            icon={
+                              assignee.picture ? (
+                                <img
+                                  src={assignee.picture}
+                                  width="36"
+                                  height="36"
+                                  className="rounded-full"
+                                  alt=""
+                                />
+                              ) : (
+                                <div className="bg-gray-200 w-8 h-8 rounded-full flex items-center justify-center">
+                                  <span className="text-gray-600 font-bold text-xs">
+                                  {assignee.name.split(" ").length > 1
+                                      ? `${assignee.name.substr(0, 1)}${assignee.name
+                                          .substr(assignee.name.indexOf(" ") + 1, 1)
+                                          .toUpperCase()}`
+                                      : assignee.name.substr(0, 1).toUpperCase()}
+                                  </span>
+                                </div>
+                              )
+                            }
+                          >
+                            {assignee.name}
                           </Dropdown.Item>
-                          )
-                        }
+                        );
+                      }
                       })}
                       <Dropdown.Item key="members" withDivider color="error">
                         Members
                       </Dropdown.Item>
-                      {members.map((member)=>{
-                       if( !data.assignees.includes(member.uid)){
-                        return(
-                          <Dropdown.Item key={'add '+member.uid} icon={<img
-                              src={member.photo}
-                              width="36"
-                              height="36"
-                              className=" rounded-full "
-                              alt=""
-                            />}>
-                              {member.name}
+                      {members.map((member) => {
+                      if (!data.assignees.includes(member.uid)) {
+                        return (
+                          <Dropdown.Item
+                            key={"add " + member.uid}
+                            icon={
+                              member.picture ? (
+                                <img
+                                  src={member.picture}
+                                  width="36"
+                                  height="36"
+                                  className="rounded-full"
+                                  alt=""
+                                />
+                              ) : (
+                                <div className="bg-gray-200 w-8 h-8 rounded-full flex items-center justify-center">
+                                  <span className="text-gray-600 font-bold text-xs">
+                                    {member.name.split(" ").length > 1
+                                      ? `${member.name.substr(0, 1)}${member.name
+                                          .substr(member.name.indexOf(" ") + 1, 1)
+                                          .toUpperCase()}`
+                                      : member.name.substr(0, 1).toUpperCase()}
+                                  </span>
+                                </div>
+                              )
+                            }
+                          >
+                            {member.name}
                           </Dropdown.Item>
-                        )
-                       }
-                          
-                        
-                      })}
+                        );
+                      }
+                    })}
+
                     </Dropdown.Menu>
                 </Dropdown>
               </li>
