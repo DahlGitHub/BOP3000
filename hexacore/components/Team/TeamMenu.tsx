@@ -200,7 +200,7 @@ const TeamMenu = ()  => {
     setIsListOpen(false);
   }
 
-  const [isInvitesOpen, setInvitesOpen] = React.useState(true);
+  const [isInvitesOpen, setInvitesOpen] = React.useState(false);
   const [invites, setInvites] = useState([]);
 
   function handleInvitesOpen() {
@@ -345,7 +345,7 @@ const TeamMenu = ()  => {
           </div>
             <div className="flex-1 p-4 overflow-y-auto">
               <h1 className='text-black dark:text-white'>Pending team invites: {invites.length}</h1>
-              <button onClick={() => handleMemberModalOpen()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded mt-10">
+              <button onClick={() => handleInvitesOpen()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded mt-10">
                 Go to team invites
               </button>
             </div>  
