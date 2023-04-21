@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolderPlus, faSitemap, faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { faComments, faFolderOpen, faFolderPlus, faSitemap, faUserCircle, faWindowMaximize } from '@fortawesome/free-solid-svg-icons';
 import CreateTeam from './CreateTeamModal';
 import Drawer from '../Drawer';
 import TeamSpace from './TeamSpace/TeamSpace';
@@ -8,8 +8,9 @@ import TeamFiles from './TeamSpace/Tools/TeamFiles';
 import Chat from '../Chat/Chat';
 import TeamInvitesModal from './TeamInvitesModal';
 import fetchTeams from './fetchTeams';
-import fetchTools from './TeamSpace/Tools/fetchTools';
 import fetchTeamMembers from './fetchTeamMembers';
+import { collection, getDocs, query } from 'firebase/firestore';
+import { db } from '../../firebase';
 
 
 const TeamMenu = ()  => {
@@ -55,13 +56,43 @@ const TeamMenu = ()  => {
   }
 
   useEffect(() => {
-    const getTools = async () => {
-      const newFiles = await fetchTools({selectedTeam, handleChatSelect, handleFilesSelect});
-      setTools(newFiles);
-    };
-    
-    getTools();
-  }, [selectedTeam, handleChatSelect, handleFilesSelect]);
+    if (selectedTeam) {
+    fetchTools()
+    }
+  }, [selectedTeam]);
+
+  const fetchTools = async () => {
+    const querySnapshot = await getDocs(query(collection(db, "teams", selectedTeam, "tools")));
+      const newFiles = querySnapshot.docs.map((doc) => {
+        const fileData = doc.data();
+
+        if (fileData.tool === "kanban") {
+          return (
+            <div key={doc.id} className='cursor-pointer m-3'>
+              <h3><FontAwesomeIcon className='pr-2' icon={faWindowMaximize}/>{fileData.name}</h3>
+            </div>
+          );
+        } else if (fileData.tool === "chat") {
+          return (
+            <div key={doc.id} className='cursor-pointer m-3' onClick={() => handleChatSelect(fileData.name)}>
+              <h3><FontAwesomeIcon className='pr-2' icon={faComments}/>{fileData.name}</h3>
+            </div>
+          );
+        } else if (fileData.tool === "files") {
+          return (
+            <div key={doc.id} className='cursor-pointer m-3' onClick={() => handleFilesSelect(fileData.name)}>
+              <h3><FontAwesomeIcon className='pr-2' icon={faFolderOpen}/>{fileData.name}</h3>
+            </div>
+          );
+        } else {
+          // Handle other tool types here
+          return null;
+        }
+        
+      })
+    setTools(newFiles)
+    console.log(newFiles)
+  }
 
   // Files
   const [selectedFiles, setSelectedFiles] = React.useState(false);
@@ -192,7 +223,7 @@ const TeamMenu = ()  => {
         } `}
       >
         <div className="gap-16 items-center max-w-screen-xl lg:grid lg:grid-cols-2 bk-white">    
-          <Chat chatID={chatID}/>
+          
         </div>
       </div>
       <div className="fixed top-15 right-0 h-screen w-1/4 bg-gray-800 text-white flex flex-col">
