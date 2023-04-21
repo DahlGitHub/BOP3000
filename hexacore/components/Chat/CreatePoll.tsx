@@ -9,7 +9,7 @@ import { UserContext } from "../../context/UserContext"
 
 export default ({id}) => {
     const [question, setQuestion] = useState('')
-    const [options, setOptions] = useState(Array(2).fill({option: "", votes: []}))
+    const [options, setOptions] = useState(Array(2).fill(""))
     const {user} = useContext(UserContext)
 
     const removeOption = (index) => {
@@ -19,7 +19,7 @@ export default ({id}) => {
     const updateOption = (index, value) => {
         setOptions(options.map((option, i) => {
             if(i === index) {
-                return {option: value, votes: option.votes}
+                return value
             }
             return option
         }))
@@ -31,6 +31,7 @@ export default ({id}) => {
                 type: 'poll',
                 question: question,
                 options: options,
+                votes: [],
                 sentAt: Timestamp.now()
         })
     }
