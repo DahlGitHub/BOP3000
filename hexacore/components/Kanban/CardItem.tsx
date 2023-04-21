@@ -17,7 +17,9 @@ function CardItem({ data, index, members }) {
   const q = query(collection(db, 'groups', 'a82bcf3fff364e71b2a8bb39903be3dd', 'kanbanid'), where('items', 'array-contains', data))
   const [selectedDate, setSelectedDate] = useState(null);
 
-  useEffect(() => {
+  {
+    /* Gammel infinity loop metode for date
+    useEffect(() => {
     const fetchDate = async () => {
       const docRef = await getDocs(q);
       docRef.docs.forEach((doc) => {
@@ -29,6 +31,10 @@ function CardItem({ data, index, members }) {
     };
     fetchDate();
   }, [q, data.id]);
+    */
+
+  }
+  
 
   const selectDate = async (date) => {
     if (date) {
