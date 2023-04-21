@@ -11,6 +11,8 @@ const [addedUid, setAddedUid] = useState("");
 const [users, setUsers] = useState([]);
 
 const [filteredResults, setFilteredResults] = useState([]);
+const [searchQuery, setSearchQuery] = useState("");
+
 
 useEffect(() => {
   if (teamuid) {
@@ -24,26 +26,47 @@ useEffect(() => {
   }
 }, [teamuid]); // Run this effect only once on component mount
 
-const isMember = async (uid) => {
-  if (teamuid) {
-    const q = query(
-      collection(db, "teams", teamuid, "members"),
-      where("uid", "==", uid)
-    );
-    const snapshot = await getDocs(q);
-    return snapshot.size > 0;
-  }
-};
+
 
 const handleClick = (props) => {
   setAddedUid(props.objectID);
 };
 
+const submit = async () => {
+  if (addedUid) {
+    const docRef = doc(db, "users", addedUid, "team-requests", teamuid);
+    await setDoc(docRef, {
+      uid: teamuid,
+      inviter: auth.currentUser?.email,
+      inviterName: auth.currentUser?.displayName,
+    });
+    onClose();
+  } else {
+    alert("Please select a user");
+  }
+}
+
 useEffect(() => {
   const getResults = async () => {
+    const isMember = async (uid) => {
+      if (teamuid) {
+        const q = query(
+          collection(db, "teams", teamuid, "members"),
+          where("uid", "==", uid)
+        );
+        const snapshot = await getDocs(q);
+        return snapshot.size > 0;
+      }
+    };
+
     const results = await Promise.all(
       users.map(async (hit) => {
-        if (hit.uid !== auth.currentUser.uid && !(await isMember(hit.uid))) {
+        if (
+          hit.uid !== auth.currentUser.uid &&
+          !(await isMember(hit.uid)) &&
+          (hit.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            hit.email.toLowerCase().includes(searchQuery.toLowerCase())) // Filter by search query
+        ) {
           return (
             <button
               key={hit.uid}
@@ -83,10 +106,12 @@ useEffect(() => {
   if (addedUid || users.length > 0) {
     getResults();
   }
-}, [users, isMember, teamuid, addedUid]);
+}, [users, teamuid, addedUid]);
 
 
-
+const handleSearch = (event) => {
+  setSearchQuery(event.target.value);
+};
         
         
 
@@ -128,12 +153,15 @@ useEffect(() => {
                   <div className="flex flex-col items-center pt-6 pr-6 pb-6 pl-6">
 
                 
-                {filteredResults}
+                  <div>
+                    <input className='text-white dark:text-black rounded w-60 h-10' type="text" onChange={handleSearch} />
+                    {filteredResults}
+                  </div>
                 
                 <p className="mt-3 text-base leading-relaxed text-center text-black-200"></p>
                 
                 <div className="w-full mt-6">
-                  <a  className="flex text-center items-center justify-center w-full pt-4 pr-10 pb-4 pl-10 text-base
+                  <a onClick={() => submit()} className="flex text-center items-center justify-center w-full pt-4 pr-10 pb-4 pl-10 text-base
                       font-medium text-white bg-blue-600 rounded-xl transition duration-500 ease-in-out transform
                       hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                       Send Invite</a>

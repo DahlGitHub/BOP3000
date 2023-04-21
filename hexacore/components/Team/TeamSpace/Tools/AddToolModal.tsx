@@ -40,7 +40,7 @@ const CreateTeamModal = ({isOpen, onClose, teamuid}) => {
         }
       
       if(toolType === "chat"){
-        await setDoc(doc(db, `teams/${teamuid}/tools/${name}`), {
+        await setDoc(doc(db, `teams/${teamuid}/tools/chat/${name}`), {
             name: name,
             tool: toolType,
         }).then(async()=>{

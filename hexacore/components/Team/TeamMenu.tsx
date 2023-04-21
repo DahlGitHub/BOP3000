@@ -1,5 +1,5 @@
 import {v4 as uuid} from 'uuid';
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, useLayoutEffect} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolderPlus, faSitemap, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import {Collapse, Input, Link, Spacer, Text } from "@nextui-org/react";
@@ -12,6 +12,7 @@ import TeamFiles from './TeamSpace/Tools/TeamFiles';
 import { faComments, faFolderOpen, faWindowMaximize } from '@fortawesome/free-regular-svg-icons';
 import Chat from '../Chat/Chat';
 import AddMembersModal from './TeamSpace/AddMembersModal';
+import TeamInvitesModal from './TeamInvitesModal';
 
 
 const TeamMenu = ()  => {
@@ -33,6 +34,12 @@ const TeamMenu = ()  => {
     setSelectedTeam(teamuid);
     setSelectedTeamName(teamName);
   }
+
+  const useIsomorphicEffect = () => {
+    return typeof window !== 'undefined' ? useLayoutEffect : useEffect
+  }
+
+  
 
   const clearTeam = () => {
     setSelectedTeam(null);
@@ -193,6 +200,47 @@ const TeamMenu = ()  => {
     setIsListOpen(false);
   }
 
+  const [isInvitesOpen, setInvitesOpen] = React.useState(true);
+  const [invites, setInvites] = useState([]);
+
+  function handleInvitesOpen() {
+    setInvitesOpen(true);
+  }
+
+  function handleInvitesClose() {
+    setInvitesOpen(false);
+  }
+
+  useEffect(() => {
+    async function fetchInvites() {
+      const querySnapshot = await getDocs(collection(db, "users", auth.currentUser?.uid, "team-invites"));
+    
+      const promises = querySnapshot.docs.map(async (doc, index) => {
+        const teamID = doc.data().uid;
+        const inviter = doc.data().inviter;
+        const inviterName = doc.data().inviterName;
+        const teamDoc = await getDoc(docImport(db, "teams", teamID));
+        const teamData = teamDoc.data();
+        const element = (
+          <button key={doc.id} className="flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
+            <div className="text-left rtl:text-right">
+                <h1 className="text-sm font-medium text-gray-700 capitalize dark:text-white">You have been invited to join {teamData.name}</h1>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Invite sent by {inviterName}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Email: {inviter}</p>
+            </div>
+          </button>
+        );
+    
+        return element;
+      });
+    
+      const results = await Promise.all(promises);
+      setInvites(results);
+    }
+    
+      fetchInvites();
+    }, []); // Run this effect only once on component mount
+
   
 
   
@@ -214,15 +262,15 @@ const TeamMenu = ()  => {
   }
 
   function handleChatSelect(chatName) {
-      setTeamChat(true);
-      setSelectedTool(true);
-      setSelectedChat(chatName);
+    setTeamChat(true);
+    setSelectedTool(true);
+    setSelectedChat(chatName);
   }
 
   const [selectedChat, setSelectedChat] = useState(0)
   const [showChat, setShowChat] = useState(false)
 
-  const chatID = `teams/${selectedTeam}/tools/${selectedChat}`
+  const chatID = `teams/${selectedTeam}/tools/${selectedTool}`
 
   return (
     <section className="bg-white dark:bg-gray-900 flex">
@@ -235,6 +283,7 @@ const TeamMenu = ()  => {
         <div className='w-64'>
 
           <CreateTeam isOpen={isModalOpen} onClose={handleModalClose} />
+          <TeamInvitesModal isOpen={isInvitesOpen} onClose={handleInvitesClose} invites={invites}/>
           <div
             className={`${
               selectedTeam ? 'hidden' : 'block'
@@ -247,7 +296,7 @@ const TeamMenu = ()  => {
               selectedTeam ? 'block' : 'hidden'
             } `}
           >
-              <TeamSpace isMemberModalOpen={isMemberModalOpen} memberModalOnClose={handleMemberModalClose} tools={tools} fetchTools={fetchTools} selectFiles={handleFilesSelect} teamuid={selectedTeam} name={selectedTeamName} teams={teams} clearTeam={() => clearTeam()} openModal={handleModalOpen} />
+            <TeamSpace fetchTeamMembers={fetchTeamMembers} isMemberModalOpen={isMemberModalOpen} memberModalOnClose={handleMemberModalClose} tools={tools} fetchTools={fetchTools} selectFiles={handleFilesSelect} teamuid={selectedTeam} name={selectedTeamName} teams={teams} clearTeam={clearTeam} openModal={handleModalOpen} />
           </div>
         </div>
       </div>
@@ -268,17 +317,40 @@ const TeamMenu = ()  => {
         </div>
       </div>
       <div className="fixed top-15 right-0 h-screen w-1/4 bg-gray-800 text-white flex flex-col">
-        <div className="p-4">
-          <h1 className='text-xl'>Team members</h1>
-          
-        </div>
-        <div className="flex-1 p-4 overflow-y-auto">
-          {teamMembers}
-          <button onClick={() => handleMemberModalOpen()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded mt-10">
-            Add more members to the team
-          </button>
-        </div>
         
+        <div
+            className={`${
+              selectedTeam ? 'block' : 'hidden'
+            } ml-4`}
+          >
+          <div className="p-4">
+            <h1 className='text-xl'>Team members</h1>
+          
+          </div>
+          <div className="flex-1 p-4 overflow-y-auto">
+            {teamMembers}
+            <button onClick={() => handleMemberModalOpen()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded mt-10">
+              Add more members to the team
+            </button>
+          </div>
+        </div>
+        <div
+            className={`${
+              selectedTeam ? 'hidden' : 'block'
+            } ml-4`}
+          >
+          <div className="p-4">
+            <h1 className='text-xl'>Team Invites</h1>
+          
+          </div>
+            <div className="flex-1 p-4 overflow-y-auto">
+              <h1 className='text-black dark:text-white'>Pending team invites: {invites.length}</h1>
+              <button onClick={() => handleMemberModalOpen()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded mt-10">
+                Go to team invites
+              </button>
+            </div>  
+        </div>
+      
       </div>
     </section>
   )

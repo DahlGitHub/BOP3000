@@ -4,15 +4,11 @@ import { Collapse } from "@nextui-org/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFolderPlus, faCogs, faBackward } from "@fortawesome/free-solid-svg-icons";
 import AddToolModal from "./Tools/AddToolModal";
-import Link from "next/link";
-import Files from "../../File/Files";
-import TeamFiles from "./Tools/TeamFiles";
-import { Firestore, collection, getDoc, getDocs, query } from "firebase/firestore";
-import { auth, db } from "../../../firebase";
 import AddMembersModal from "./AddMembersModal";
+import { useRouter } from "next/router";
 
 
-const TeamSpace = ({teamuid, name, teams, openModal, clearTeam, selectFiles, tools, fetchTools, isMemberModalOpen, memberModalOnClose}) => {
+const TeamSpace = ({teamuid, name, teams, fetchTeamMembers, openModal, clearTeam, selectFiles, tools, fetchTools, isMemberModalOpen, memberModalOnClose}) => {
 
     const [isListOpen, setIsListOpen] = React.useState(true);
     
@@ -91,6 +87,11 @@ const TeamSpace = ({teamuid, name, teams, openModal, clearTeam, selectFiles, too
         fetchTools()
     }
 
+    const router = useRouter()
+    const push = async() => {
+        router.push("/dashboard/teams")
+        await clearTeam()
+    }
     
 
     return (
@@ -103,9 +104,9 @@ const TeamSpace = ({teamuid, name, teams, openModal, clearTeam, selectFiles, too
                     
                     <Drawer mainContent={<MainContent/>} 
                         title={
-                            <h1 className="cursor-pointer" onClick={clearTeam}>
+                            <div className="cursor-pointer" onClick={() => push()}>
                                 Back to Teams <FontAwesomeIcon className='pr-2' icon={faBackward}/>
-                            </h1>
+                            </div>
                         } 
                         isOpen={isListOpen} open={handleListOpen} close={handleListClose} 
                     />
