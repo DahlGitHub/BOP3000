@@ -56,22 +56,27 @@ const TeamMenu = ()  => {
   async function fetchTeams() {
     const querySnapshot = await getDocs(collection(db, "users", auth.currentUser?.uid, "teams"));
       const elements = [];
-    
-      const promises = querySnapshot.docs.map(async (doc) => {
-        
-        const teamID = doc.data().teamuid;
-        const teamDoc = await getDoc(docImport(db, "teams", teamID));
-        const teamData = teamDoc.data();
-        const element = (
-          <Link onClick={() => selectTeam(teamData.teamuid, teamData.name)} className="text-white text-center flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
-            {teamData.name}
-          </Link>
-        );
-      elements.push(element);
-    });
+      
+      if(querySnapshot.empty){
+        return
+      } else {
+        const promises = querySnapshot.docs.map(async (doc) => {
+          
+          const teamID = doc.data().teamuid;
+          const teamDoc = await getDoc(docImport(db, "teams", teamID));
+          const teamData = teamDoc.data();
+          const element = (
+            <Link onClick={() => selectTeam(teamData.teamuid, teamData.name)} className="text-white text-center flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
+              {teamData.name}
+            </Link>
+          );
+        elements.push(element);
+      });
 
-    await Promise.all(promises);
-    setTeams(elements); // set the elements array instead of results
+      await Promise.all(promises);
+      setTeams(elements); // set the elements array instead of results
+
+    }
   }
 
   useEffect(() => {
