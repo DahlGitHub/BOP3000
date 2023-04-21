@@ -12,7 +12,6 @@ export default ({index, pollData, id})=>{
     const [voted, setVoted] = useState(false)
     const [poll, setPoll] = useState(pollData.message)
     const [votes, setVotes] = useImmer(() => {
-        console.log(poll.votes)
         let votes = []
         poll.options.forEach((option, i)=>{
             votes[i] = 0
@@ -24,7 +23,6 @@ export default ({index, pollData, id})=>{
     })
 
     useEffect(() => {
-        console.log(poll.votes)
         if(poll.votes.find(votes => votes.user.includes(user.uid))){
             setVoted(true)
         }
@@ -43,7 +41,6 @@ export default ({index, pollData, id})=>{
         await deleteDoc(doc(db, id+'/Messages/', pollData.messageId))
     }
     const vote = (option) => {
-        console.log(poll.votes)
         const vote = {
             user: user.uid,
             option: option
