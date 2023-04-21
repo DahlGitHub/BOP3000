@@ -25,7 +25,6 @@ useEffect(()=>{
         name: user.displayName,
         photo: user.photoURL
       })
-      //console.log(chatID)
       setChatId(chatID)
     }
     }, [chatID])

@@ -12,9 +12,7 @@ export default ({id}) =>{
   
     //cahnge
     useEffect(()=>{
-      console.log(chatID)
       setChatID(id)
-      console.log(chatID)
     }, [id])
 
     const sendMessage = (e) => {
