@@ -21,10 +21,6 @@ const TeamSpace = ({teamuid, name, teams, fetchTeamMembers, openModal, clearTeam
     function handleListClose() {
         setIsListOpen(false);
     }
-
-    
-
-    
     
     const teamDropdown = () => {
         return(
@@ -89,9 +85,7 @@ const TeamSpace = ({teamuid, name, teams, fetchTeamMembers, openModal, clearTeam
         fetchTools()
     }
 
-    const router = useRouter()
     const push = async() => {
-        router.push("/dashboard/teams")
         await clearTeam()
     }
     

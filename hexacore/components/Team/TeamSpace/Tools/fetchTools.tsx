@@ -15,19 +15,19 @@ const fetchTools = async ({selectedTeam, handleChatSelect, handleFilesSelect}) =
 
       if (fileData.tool === "kanban") {
         return (
-          <div className='cursor-pointer m-3'>
+          <div key={doc.id} className='cursor-pointer m-3'>
             <h3><FontAwesomeIcon className='pr-2' icon={faWindowMaximize}/>{fileData.name}</h3>
           </div>
         );
       } else if (fileData.tool === "chat") {
         return (
-          <div className='cursor-pointer m-3' onClick={() => handleChatSelect(fileData.name)}>
+          <div key={doc.id} className='cursor-pointer m-3' onClick={() => handleChatSelect(fileData.name)}>
             <h3><FontAwesomeIcon className='pr-2' icon={faComments}/>{fileData.name}</h3>
           </div>
         );
       } else if (fileData.tool === "files") {
         return (
-          <div className='cursor-pointer m-3' onClick={() => handleFilesSelect(fileData.name)}>
+          <div key={doc.id} className='cursor-pointer m-3' onClick={() => handleFilesSelect(fileData.name)}>
             <h3><FontAwesomeIcon className='pr-2' icon={faFolderOpen}/>{fileData.name}</h3>
           </div>
         );
