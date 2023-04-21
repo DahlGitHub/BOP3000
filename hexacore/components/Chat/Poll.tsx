@@ -10,8 +10,9 @@ import { useImmer } from "use-immer"
 export default ({index, pollData, id})=>{
     const {user} = useContext(UserContext)
     const [voted, setVoted] = useState(false)
-    const [poll, setPoll] = useImmer(pollData.message)
+    const [poll, setPoll] = useState(pollData.message)
     const [votes, setVotes] = useImmer(() => {
+        console.log(poll.votes)
         let votes = []
         poll.options.forEach((option, i)=>{
             votes[i] = 0
@@ -23,15 +24,26 @@ export default ({index, pollData, id})=>{
     })
 
     useEffect(() => {
+        console.log(poll.votes)
         if(poll.votes.find(votes => votes.user.includes(user.uid))){
             setVoted(true)
         }
-    }, [])
+    }, [votes])
+
+    useEffect(() => {
+        setPoll(pollData.message)
+        setVotes(draft => {
+            draft.forEach((vote, i) => {
+                draft[i] = pollData.message.votes.filter(vote => vote.option === pollData.message.options[i]).length;
+            })
+        })
+    }, [pollData])
 
     const deletePoll = async () => {
         await deleteDoc(doc(db, id+'/Messages/', pollData.messageId))
     }
     const vote = (option) => {
+        console.log(poll.votes)
         const vote = {
             user: user.uid,
             option: option
@@ -40,9 +52,11 @@ export default ({index, pollData, id})=>{
             votes: arrayUnion(vote)
         }).then(() => {
             setVoted(true)
-            setVotes(draft => {
-                draft[poll.options.indexOf(option)]++
-            })
+        })
+        updateDoc(doc(db, id+'/Messages/', pollData.messageId), {
+            votes: arrayUnion(vote)
+        }).then(() => {
+            setVoted(true)
         })
     }
 
