@@ -5,6 +5,7 @@ import Link from "next/link";
 async function fetchTeams(setTeams, selectTeam) {
 
     const docImport = doc;
+    console.log("fetching teams")
 
     const querySnapshot = await getDocs(collection(db, "users", auth.currentUser?.uid, "teams"));
       const elements = [];

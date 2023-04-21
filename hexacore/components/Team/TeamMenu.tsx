@@ -62,6 +62,7 @@ const TeamMenu = ()  => {
   }, [selectedTeam]);
 
   const fetchTools = async () => {
+    console.log("fetching tools")
     const querySnapshot = await getDocs(query(collection(db, "teams", selectedTeam, "tools")));
       const newFiles = querySnapshot.docs.map((doc) => {
         const fileData = doc.data();
@@ -91,7 +92,6 @@ const TeamMenu = ()  => {
         
       })
     setTools(newFiles)
-    console.log(newFiles)
   }
 
   // Files

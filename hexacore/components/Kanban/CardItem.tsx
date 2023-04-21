@@ -27,7 +27,7 @@ function CardItem({ data, index, members }) {
         }
       });
     };
-    fetchDate();
+    
   }, [q, data.id]);
 
   const selectDate = async (date) => {
