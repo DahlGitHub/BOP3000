@@ -1,23 +1,17 @@
 import React, { useCallback, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
-import pdfFile from '../../public/pdf/tekst.pdf';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight, faSearchMinus, faSearchPlus } from '@fortawesome/free-solid-svg-icons';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
-import { createProxyMiddleware } from 'http-proxy-middleware';
+
 
 const options = {
   cMapUrl: 'cmaps/',
   cMapPacked: true,
   standardFontDataUrl: 'standard_fonts/'
 };
-
-const corsProxyMiddleware = createProxyMiddleware({
-  target: 'https://firebasestorage.googleapis.com/v0/b/hexacore-1c84b.appspot.com',
-  changeOrigin: true,
-});
 
 function highlightPattern(text, pattern) {
   return text.replace(pattern, (value) => `<mark>${value}</mark>`);
@@ -26,6 +20,8 @@ function highlightPattern(text, pattern) {
 const FileLoader = ({file}) => {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
+  const [scale, setScale] = useState(1);
+  const [fullscreen, setFullscreen] = useState(false);
 
   function changePage(offset) {
     setPageNumber(prevPageNumber => prevPageNumber + offset);
@@ -59,7 +55,8 @@ const FileLoader = ({file}) => {
     setPageNumber(itemPageNumber);
   }
 
-  
+  const handleZoomIn = () => setScale(scale + 0.2);
+  const handleZoomOut = () => setScale(scale - 0.2);
 
   return (
     <div className="">
@@ -75,11 +72,11 @@ const FileLoader = ({file}) => {
                 options={options}
                 httpHeaders={{'Access-Control-Allow-Origin': '*'}}
                 proxyUrl="/api/proxy"
-                proxyHeaders={corsProxyMiddleware}
               >
                 <Page
                   pageNumber={pageNumber}
                   customTextRenderer={textRenderer}
+                  scale={scale}
                 />
             </Document>
             :
@@ -109,6 +106,22 @@ const FileLoader = ({file}) => {
             >
               <FontAwesomeIcon icon={faChevronRight} />
             </button>
+
+            <button
+            type="button"
+            onClick={handleZoomIn}
+            className={`p-2 rounded-lg `}
+          >
+            <FontAwesomeIcon icon={faSearchPlus} />
+          </button>
+          <button
+            type="button"
+            onClick={handleZoomOut}
+            className={`p-2 rounded-lg `}
+          >
+            <FontAwesomeIcon icon={faSearchMinus} />
+          </button>
+
           </div>
         </div>
       </div>
