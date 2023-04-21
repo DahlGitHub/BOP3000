@@ -58,7 +58,7 @@ const TeamMenu = ()  => {
       const elements = [];
       
       if(querySnapshot.empty){
-        return
+        setTeams(null)
       } else {
         const promises = querySnapshot.docs.map(async (doc) => {
           
