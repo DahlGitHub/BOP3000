@@ -44,7 +44,7 @@ const TeamInvitesModal = ({isOpen, onClose, setInviteCount, fetchTeams}) => {
       await setInviteCount(results.length);
     }
     
-      fetchInvites();
+     fetchInvites();
     }, []); // Run this effect only once on component mount
 
 
@@ -65,7 +65,7 @@ const TeamInvitesModal = ({isOpen, onClose, setInviteCount, fetchTeams}) => {
 
             deleteDoc(doc(db, "users", auth.currentUser?.uid, "team-requests", teamuid));
             onClose();
-            fetchTeams();
+            await fetchTeams();
         }
     }
 
