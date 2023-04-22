@@ -6,8 +6,6 @@ import { db } from "../../firebase"
 import { useImmer } from "use-immer"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCheck, faX, faXmark } from "@fortawesome/free-solid-svg-icons"
-import { faCircle } from "@fortawesome/free-regular-svg-icons"
-
 
 
 export default ({index, pollData, id})=>{
@@ -24,6 +22,8 @@ export default ({index, pollData, id})=>{
         })
         return votes
     })
+
+    const [userVoteIndex, setUserVoteIndex] = useState(null)
 
     useEffect(() => {
         if(poll.votes.find(votes => votes.user.includes(user.uid))){
@@ -52,18 +52,20 @@ export default ({index, pollData, id})=>{
             votes: arrayUnion(vote)
         }).then(() => {
             setVoted(true)
+            setUserVoteIndex(index)
         })
         updateDoc(doc(db, id+'/Messages/', pollData.messageId), {
             votes: arrayUnion(vote)
         }).then(() => {
             setVoted(true)
+            setUserVoteIndex(index)
         })
     }
 
     return(
         <div key={index} className="rounded border-1 border-black border-solid bg-white p-2 m-1">
             <div className="flex justify-between items-center mb-2 pb-1 rounded-t border-b  dark:border-gray-300">
-                <span className="text-xs font-semibold text-gray-600 dark:text-gray-800">
+                <span className="text-sm font-semibold text-gray-600 dark:text-gray-800">
                     {poll.question}
                 </span>
                 <button onClick={deletePoll} type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded text-xs p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-300 dark:hover:text-white" data-modal-toggle="defaultModal">
@@ -74,19 +76,21 @@ export default ({index, pollData, id})=>{
                 if(voted){
                     return(
                         <div key={"poll"+ i} className="flex my-2">
-                
-                            <Progress status="primary" className="text-xs text-gray-800 p-0.5 leading-none h-5" value={(votes[i]/poll.votes.length)*100}>
-                                <div className="w-fullpx-1 flex justify-beteween">
-                                    <div className="mx-2 w-full text-start font-semibold">
-                                        {option}
+    
+                            <div className="bg-gray-100 p-2 rounded-lg w-full">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-gray-800 text-sm">{option}</span>
+                                    <div>
+                                    <span className="px-2 py-1 bg-blue-100 rounded-lg text-xs text-blue-600 font-medium min-w-[46px] text-center">{(votes[i]/poll.votes.length)*100}%</span>
+                                    <span className="px-2 py-1 rounded-lg text-xs text-gray-600 font-medium min-w-[46px] text-center">{(votes[i])} / {poll.votes.length}</span>
                                     </div>
-                                    <div className="w-16 text-end font-bold ">
-                                        {(votes[i]/poll.votes.length)*100}%
-                                    </div>
-                                               
                                 </div>
-                            </Progress>
-            
+                                <div className="w-full bg-gray-300 h-1 mt-2">
+                                    <div className="bg-blue-400 h-1 rounded" style={{ width: `${(votes[i] / poll.votes.length) * 100}%`}}></div>
+                                </div>
+                            </div>
+
+
                         </div>
                     )
                 }else{
