@@ -46,9 +46,9 @@ useEffect(()=>{
     }
     }, [chatID])
     return (
-      <div className="flex flex-col h-[calc(100vh-70px)] antialiased w-full">
+      <div className="flex h-[calc(100vh-70px)] antialiased w-full">
         <div className="flex flex-row h-full overflow-x-hidden">
-          <div className="flex flex-col flex-auto h-full p-2">
+          <div className="flex flex-col flex-auto h-full p-2 w-[calc(100vh)]">
             <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl divide-y-2 bg-gray-100 dark:bg-gray-800 h-full p-4">
               <MessageList id={chatId}/>
               <div className="flex-none pt-1">
