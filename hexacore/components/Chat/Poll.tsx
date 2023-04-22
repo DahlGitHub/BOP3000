@@ -79,7 +79,7 @@ export default ({index, pollData, id})=>{
                         <div className="flex items-center justify-between">
                           <span className="text-gray-800 text-sm">
                             {userVotedOption === option ? (
-                              <FontAwesomeIcon className="w-5 text-gray-800" icon={faCheckCircle} />
+                              <FontAwesomeIcon className="w-5 text-gray-800 mx-1" icon={faCheckCircle} />
                             ) : (
                               <FontAwesomeIcon className="w-5 text-gray-800 mx-1 text-xs" icon={faCircle} />
                             )}
