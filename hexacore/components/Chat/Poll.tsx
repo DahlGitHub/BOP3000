@@ -4,6 +4,9 @@ import { useContext, useEffect, useState } from "react"
 import { arrayUnion, deleteDoc, doc, updateDoc } from "firebase/firestore"
 import { db } from "../../firebase"
 import { useImmer } from "use-immer"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faCheck, faX, faXmark } from "@fortawesome/free-solid-svg-icons"
+import { faCircle } from "@fortawesome/free-regular-svg-icons"
 
 
 
@@ -58,21 +61,31 @@ export default ({index, pollData, id})=>{
     }
 
     return(
-        <div key={index} className="col-start-6 col-end-8 rounded border-2 border-black border-solid">
-            <span>{poll.question}</span>
-            <button onClick={deletePoll}>Delete</button>
+        <div key={index} className="col-start-6 col-end-8 rounded border-1 border-black border-solid bg-white p-2 m-1">
+            <div className="flex justify-between items-center mb-2 pb-1 rounded-t border-b  dark:border-gray-300">
+                <span className="text-xs font-semibold text-gray-600 dark:text-gray-800">
+                    {poll.question}
+                </span>
+                <button onClick={deletePoll} type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded text-xs p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-300 dark:hover:text-white" data-modal-toggle="defaultModal">
+                    <FontAwesomeIcon icon={faXmark}/>
+                </button>
+            </div>
             {poll.options.map((option, i)=>{
                 if(voted){
                     return(
                         <div key={"poll"+ i} className="flex">
-                            <Progress className="" value={(votes[i]/poll.votes.length)*100}/>
+                            <Progress className="text-xs text-gray-800 text-left p-0.5 leading-none" value={(votes[i]/poll.votes.length)*100}><span className="">{option}</span></Progress>
                             <button>{votes[i]}</button>
+                            
                         </div>
                     )
                 }else{
                     return(
-                        <div key={"vote"+i} className="flex">
-                            <button onClick={()=>vote(option)}>{option}</button>
+                        <div>
+                        
+                        <div key={"vote"+i} className="flex hover:text-blue-600 mt-2">
+                            <button className="flex justify-center items-center space-x-2 text-sm bg-gray-100 hover:bg-gray-200 p-2 rounded-lg" onClick={()=>vote(option)}><FontAwesomeIcon className="w-5" icon={faCheck}/><span className="text-xs">{option}</span></button>
+                        </div>
                         </div>
                     )
                 }
