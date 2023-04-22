@@ -127,17 +127,13 @@ export default ({id}) =>{
                         if (connect.user.uid !== auth.currentUser?.uid && connect.message.type === 'message') {
                             return (
                                 <div key={key} className="p-3 rounded-lg">
-                                    <div>
-                                        <span className="text-gray-800 dark:text-white p-3">{connect.user.name}</span>
-                                        <small className="text-gray-500 p-3">21/03 17:15</small>
-                                    </div>
-                                    <div className="flex flex-row items-center">
-                                        <img
-                                            src={connect.user.photo}
-                                            className="object-cover w-10 h-10 rounded-full mx-2"
-                                            alt=""
-                                        />
-                                        <div className="relative ml-3 text-sm bg-white py-2 px-4 rounded-xl">
+                                    <div className="flex items-center justify-start flex-row group-hover:bg-gray-200 rounded-lg">
+                                        <img src={connect.user.photo} className="object-cover w-10 h-10 rounded-full mx-2" alt=""/>
+                                        <div className="flex-1 overflow-hidden">
+                                            <div>
+                                            <span className="text-gray-800">{connect.user.name}</span>
+                                            <span className="text-gray-400 text-xs mx-3">Their date</span>
+                                            </div>
                                             <div>{connect.message.message}</div>
                                         </div>
                                     </div>

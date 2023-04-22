@@ -48,7 +48,7 @@ export default ({index, message, id}) =>{
           <img src={message.user.photo} className="object-cover w-10 h-10 rounded-full mx-2" alt=""/>
           <div className="flex-1 overflow-hidden">
             <div>
-              <span className="text-gray-800 cursor-pointer">{message.user.name}</span>
+              <span className="text-gray-800">{message.user.name}</span>
               <span className="text-gray-400 text-xs mx-3">{date.getDate() + "/" + (date.getMonth()+1) + " " +date.getHours()+ ":" + date.getMinutes()}</span>
             </div>
             <input 
