@@ -6,13 +6,14 @@ import { db } from "../../firebase"
 import { useImmer } from "use-immer"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCheck, faX, faXmark } from "@fortawesome/free-solid-svg-icons"
-import { faCheckCircle, faCircle } from "@fortawesome/free-regular-svg-icons"
+import { faCheckCircle, faCircle, faDotCircle } from "@fortawesome/free-regular-svg-icons"
 
 
 export default ({index, pollData, id})=>{
     const {user} = useContext(UserContext)
     const [voted, setVoted] = useState(false)
     const [poll, setPoll] = useState(pollData.message)
+    const [hoveredIndex, setHoveredIndex] = useState(null);
     const [votes, setVotes] = useImmer(() => {
         let votes = []
         poll.options.forEach((option, i)=>{
@@ -102,11 +103,17 @@ export default ({index, pollData, id})=>{
                   );
                 } else {
                   return (
-                    <div key={"vote" + i} className="flex hover:text-blue-600 mt-2">
-                      <button className="flex justify-center items-center space-x-2 text-sm bg-gray-100 hover:bg-gray-200 p-2 rounded-lg" onClick={() => { vote(option); setUserVoteIndex(i) }}>
-                        <span className="text-xs">{option}</span>
-                      </button>
+                    <div key={"vote" + i} className="flex mt-2">
+                        <button 
+                            onMouseEnter={() => setHoveredIndex(i)}
+                            onMouseLeave={() => setHoveredIndex(null)}
+                            className="flex justify-center items-center space-x-2 text-sm bg-gray-100 hover:bg-gray-200 p-2 rounded-lg hover:text-blue-700" onClick={() => { vote(option); setUserVoteIndex(i) }}
+                        >
+                            <FontAwesomeIcon icon={hoveredIndex === i ? faDotCircle : faCircle}/>
+                            <span className="text-xs">{option}</span>                      
+                        </button>
                     </div>
+
                   );
             }
           })}
