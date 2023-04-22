@@ -34,13 +34,22 @@ export default function Home() {
     const q = query(collection(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid'), orderBy('order', 'asc'))
     onSnapshot(q, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
-        if (change.type === 'added' || change.type === 'modified') {
+        if (change.type === 'added') {
           setBoardData((boardData) => {
             const newData = change.doc.data();
             const newBoardData = [...boardData];
             newBoardData[change.newIndex] = newData;
             return newBoardData;
           });
+        }
+        if(change.type === 'modified'){
+          // change the order of the board and set the new index
+          setBoardData((boardData) => {
+            const newData = change.doc.data();
+            const newBoardData = [...boardData];
+            newBoardData[newData.order] = newData;
+            return newBoardData;
+          })
         }
         if (change.type === 'removed') {
           setBoardData((boardData) => {
@@ -50,6 +59,7 @@ export default function Home() {
           })
           //må oppdatere order på alle boards
         }
+        
       });
     })
     if (process) {
@@ -65,12 +75,12 @@ export default function Home() {
       const newBoardData = [...boardData];
       newBoardData.splice(re.source.index, 1);
       newBoardData.splice(re.destination.index, 0, dragItem);
-      setBoardData(newBoardData);
       newBoardData.forEach(async (board, index) => {
         await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', board.id), {
           order: index
         })
       })
+      setBoardData(newBoardData);
     }else if(re.type === 'CARD'){
       var dragItem = boardData[parseInt(re.source.droppableId)].items[re.source.index];
       boardData[parseInt(re.source.droppableId)].items.splice(
