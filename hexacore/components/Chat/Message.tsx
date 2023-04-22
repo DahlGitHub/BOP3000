@@ -42,7 +42,7 @@ export default ({index, message, id}) =>{
         }
       }
     return(
-        <div key={index} className="col-start-6 col-end-13 p-3 rounded-lg group">
+        <div key={index} className="p-3 rounded-lg group">
             <div className='text-end'>
                 <small className='text-gray-500 small p-3'>{date.getDate() + "/" + (date.getMonth()+1) + " " +date.getHours()+ ":" + date.getMinutes()}</small>
                 <span  className='text-gray-800 dark:text-white p-3'>{message.user.name}</span>

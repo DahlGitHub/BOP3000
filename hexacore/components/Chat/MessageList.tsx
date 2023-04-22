@@ -121,12 +121,12 @@ export default ({id}) =>{
                     </p>
                 }
                 >
-                <div className="grid grid-cols-12 gap-y-2">
+                <div className="flex-inline">
                     {messages.slice(0).reverse().map((connect) => {
                         const key = connect.message.type === 'message' ? connect.messageId : connect.messageId
                         if (connect.user.uid !== auth.currentUser?.uid && connect.message.type === 'message') {
                             return (
-                                <div key={key} className="col-start-1 col-end-8 p-3 rounded-lg">
+                                <div key={key} className="p-3 rounded-lg">
                                     <div>
                                         <span className="text-gray-800 dark:text-white p-3">{connect.user.name}</span>
                                         <small className="text-gray-500 p-3">21/03 17:15</small>
