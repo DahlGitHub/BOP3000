@@ -3,7 +3,7 @@ import { deleteDoc, doc, updateDoc } from "firebase/firestore"
 import { useEffect, useRef, useState } from "react"
 import { db } from "../../firebase"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons"
+import { faEllipsisH, faEllipsisV, faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons"
 
 
 export default ({index, message, id}) =>{   
@@ -42,44 +42,54 @@ export default ({index, message, id}) =>{
         }
       }
     return(
-        <div key={index} className="col-start-6 col-end-13 p-3 rounded-lg group">
-            <div className='text-end'>
-                <small className='text-gray-500 small p-3'>{date.getDate() + "/" + (date.getMonth()+1) + " " +date.getHours()+ ":" + date.getMinutes()}</small>
-                <span  className='text-gray-800 dark:text-white p-3'>{message.user.name}</span>
+        
+        <div key={index} className="p-3 rounded-lg group relative">
+        <div className="flex items-center justify-start flex-row group-hover:bg-gray-200 rounded-lg">
+          <img src={message.user.photo} className="object-cover w-10 h-10 rounded-full mx-2" alt=""/>
+          <div className="flex-1 overflow-hidden">
+            <div>
+              <span className="text-gray-800">{message.user.name}</span>
+              <span className="text-gray-400 text-xs mx-3">{date.getDate() + "/" + (date.getMonth()+1) + " " +date.getHours()+ ":" + date.getMinutes()}</span>
             </div>
-            <div className="flex items-center justify-start flex-row-reverse">
-                <img src={message.user.photo} className="object-cover w-10 h-10 rounded-full mx-2" alt=""/>
-                <div className="relative mr-3 text-sm group-hover:bg-indigo-200 bg-indigo-100 py-2 px-4 rounded-xl">
-                <textarea 
-                    ref={textAreaRef} 
-                    className="bg-transparent resize-none break-all" 
-                    rows={rows} 
-                    style={{ maxHeight: '200px' }} 
-                    onChange={(e) => setEditMessageValue(e.target.value)} 
-                    onKeyDown={onTextAreaKeyPress} 
-                    disabled={canEditMessage} 
-                    value={editMessageValue}
-                />
-                </div>
-                <Dropdown>
-                    <Dropdown.Trigger><span className='hidden group-hover:block dark:text-white text-[12px] mr-3 rounded-xl'>Edit</span></Dropdown.Trigger>
-                    <Dropdown.Menu
-                        className="text-center p-1"
-                        selectionMode="single"
-                        css={{ $$dropdownMenuMinWidth: "100px" }}
-                        onAction={(key)=>{
-                            if(key == 'edit'){
-                                setCanEditMessage(!canEditMessage)
-                            }
-                            if(key == 'delete'){
-                                deleteMessage()
-                            }
-                        }}>
-                        <Dropdown.Item icon={<FontAwesomeIcon icon={faPenToSquare}/>} key="edit">Edit</Dropdown.Item>
-                        <Dropdown.Item color='error' icon={<FontAwesomeIcon icon={faTrash}/>} key='delete'>Delete</Dropdown.Item>
-                    </Dropdown.Menu>
-                </Dropdown>
-            </div>
+            <input 
+              ref={textAreaRef} 
+              className="bg-transparent resize-none break-all" 
+              style={{ maxHeight: '200px' }} 
+              onChange={(e) => setEditMessageValue(e.target.value)} 
+              onKeyDown={onTextAreaKeyPress} 
+              disabled={canEditMessage} 
+              value={editMessageValue}
+            />
+          </div>
+          <div className="absolute right-2.5 top-0">
+            
+            <Dropdown>
+                <Dropdown.Trigger>
+                    <div className="tooltip" data-tip="More">
+                    <button type="button" className='hidden group-hover:block dark:text-white text-[12px] mr-3 rounded bg-gray-300 p-1 border border-gray-400 shadow-lg'><FontAwesomeIcon className="fa-lg" icon={faEllipsisH}/>
+                    </button>
+           
+                    </div>
+                </Dropdown.Trigger>
+                <Dropdown.Menu
+                className="text-center p-1"
+                selectionMode="single"
+                css={{ $$dropdownMenuMinWidth: "100px" }}
+                onAction={(key)=>{
+                    if(key == 'edit'){
+                    setCanEditMessage(!canEditMessage)
+                    }
+                    if(key == 'delete'){
+                    deleteMessage()
+                    }
+                }}>
+                <Dropdown.Item icon={<FontAwesomeIcon icon={faPenToSquare}/>} key="edit">Edit</Dropdown.Item>
+                <Dropdown.Item color='error' icon={<FontAwesomeIcon icon={faTrash}/>} key='delete'>Delete</Dropdown.Item>
+                </Dropdown.Menu>
+            </Dropdown>
         </div>
+    </div>
+    </div>
+      
     )
 }
