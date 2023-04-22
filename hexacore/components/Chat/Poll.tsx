@@ -61,7 +61,7 @@ export default ({index, pollData, id})=>{
     }
 
     return(
-        <div key={index} className="col-start-6 col-end-8 rounded border-1 border-black border-solid bg-white p-2 m-1">
+        <div key={index} className="rounded border-1 border-black border-solid bg-white p-2 m-1">
             <div className="flex justify-between items-center mb-2 pb-1 rounded-t border-b  dark:border-gray-300">
                 <span className="text-xs font-semibold text-gray-600 dark:text-gray-800">
                     {poll.question}
@@ -73,10 +73,20 @@ export default ({index, pollData, id})=>{
             {poll.options.map((option, i)=>{
                 if(voted){
                     return(
-                        <div key={"poll"+ i} className="flex">
-                            <Progress className="text-xs text-gray-800 text-left p-0.5 leading-none" value={(votes[i]/poll.votes.length)*100}><span className="">{option}</span></Progress>
-                            <button>{votes[i]}</button>
-                            
+                        <div key={"poll"+ i} className="flex my-2">
+                
+                            <Progress status="primary" className="text-xs text-gray-800 p-0.5 leading-none h-5" value={(votes[i]/poll.votes.length)*100}>
+                                <div className="w-fullpx-1 flex justify-beteween">
+                                    <div className="mx-2 w-full text-start font-semibold">
+                                        {option}
+                                    </div>
+                                    <div className="w-16 text-end font-bold ">
+                                        {(votes[i]/poll.votes.length)*100}%
+                                    </div>
+                                               
+                                </div>
+                            </Progress>
+            
                         </div>
                     )
                 }else{
