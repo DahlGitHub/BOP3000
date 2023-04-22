@@ -6,7 +6,7 @@ import { db } from "../../firebase"
 import { useImmer } from "use-immer"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCheck, faX, faXmark } from "@fortawesome/free-solid-svg-icons"
-import { faCheckCircle } from "@fortawesome/free-regular-svg-icons"
+import { faCheckCircle, faCircle } from "@fortawesome/free-regular-svg-icons"
 
 
 export default ({index, pollData, id})=>{
@@ -71,8 +71,6 @@ export default ({index, pollData, id})=>{
           {poll.options.map((option, i) => {
             if (voted) {
                 const userVote = poll.votes.find(vote => vote.user === user.uid && vote.option === option);
-                const userIndexVote = userVote ? poll.votes.indexOf(userVote) : -1;
-                const isSelected = userIndexVote === i;
                 const userVotedOption = userVote ? userVote.option : null;
               
                 return (
@@ -83,7 +81,7 @@ export default ({index, pollData, id})=>{
                             {userVotedOption === option ? (
                               <FontAwesomeIcon className="w-5 text-gray-800" icon={faCheckCircle} />
                             ) : (
-                              <FontAwesomeIcon className="w-5 text-gray-800 mx-1 text-xs" icon={faCheck} />
+                              <FontAwesomeIcon className="w-5 text-gray-800 mx-1 text-xs" icon={faCircle} />
                             )}
                             {option}
                           </span>
