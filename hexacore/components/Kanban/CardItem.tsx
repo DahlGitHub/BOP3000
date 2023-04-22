@@ -1,40 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {PlusCircleIcon,} from '@heroicons/react/24/outline'
 import { Draggable } from "react-beautiful-dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisVertical, faLayerGroup, faPenToSquare, faTrash, faUser, faUserFriends } from "@fortawesome/free-solid-svg-icons";
-import { Avatar, Dropdown } from "@nextui-org/react";
-import { arrayUnion, collection, doc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore";
+import { faEllipsisVertical, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { Dropdown } from "@nextui-org/react";
+import { collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { db } from "../../firebase";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { faCalendarDays } from "@fortawesome/free-regular-svg-icons";
-import { format, isValid } from 'date-fns';
+
 
 function CardItem({ data, index, members }) {
   const [editTaskName, setEditTaskName] = useState(false)
   const [title, setTitle] = useState(data.title)
   const q = query(collection(db, 'groups', 'a82bcf3fff364e71b2a8bb39903be3dd', 'kanbanid'), where('items', 'array-contains', data))
-  const [selectedDate, setSelectedDate] = useState(null);
-
-  {
-    /* Gammel infinity loop metode for date
-    useEffect(() => {
-    const fetchDate = async () => {
-      const docRef = await getDocs(q);
-      docRef.docs.forEach((doc) => {
-        const item = doc.data().items.find((item) => item.id === data.id);
-        if (item.date) {
-          setSelectedDate(new Date(item.date));
-        }
-      });
-    };
-    fetchDate();
-  }, [q, data.id]);
-    */
-
-  }
-  
+  const [selectedDate, setSelectedDate] = useState(data.date ? data.date.toDate() : null);
 
   const selectDate = async (date) => {
     if (date) {
@@ -44,7 +24,7 @@ function CardItem({ data, index, members }) {
           if (item.id === data.id) {
             return {
               ...item,
-              date: date.toISOString().substr(0, 10), // format date as YYYY-MM-DD
+              date: new Date(date) // format date as YYYY-MM-DD
             };
           }
           return item;

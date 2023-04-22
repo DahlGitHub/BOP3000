@@ -185,7 +185,7 @@ export default ({board, bIndex, members}) => {
                           </Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>
-                      <textarea className="addTask block p-2.5 resize-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                      <textarea className="addTask p-2.5 resize-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                       
                       rows={1} placeholder="Task info" 
                       data-id={bIndex}
