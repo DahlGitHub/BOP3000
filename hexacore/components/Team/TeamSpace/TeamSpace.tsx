@@ -60,7 +60,7 @@ const TeamSpace = ({teamuid, name, teams, fetchTeamMembers, openModal, clearTeam
                     <h1 className="text-xl">Tools:</h1>
                     {tools}
                 </div>
-                <button type="button" onClick={() => handleModalOpen()} className="text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2">
+                <button type="button" onClick={() => handleModalOpen()} className="m-5 text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2">
                         <FontAwesomeIcon className='pr-2' icon={faCogs}/>
                         
                         Add tool
@@ -100,8 +100,8 @@ const TeamSpace = ({teamuid, name, teams, fetchTeamMembers, openModal, clearTeam
                     
                     <Drawer mainContent={<MainContent/>} 
                         title={
-                            <div className="cursor-pointer" onClick={() => push()}>
-                                Back to Teams <FontAwesomeIcon className='pr-2' icon={faBackward}/>
+                            <div className="cursor-pointer text-xs bg-blue-500 hover:bg-blue-700 text-white w-fit font-bold py-2 px-2 ml-20 rounded" onClick={() => push()}>
+                                Back to Teams <FontAwesomeIcon className='' icon={faBackward}/>
                             </div>
                         } 
                         isOpen={isListOpen} open={handleListOpen} close={handleListClose} 

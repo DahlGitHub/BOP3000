@@ -19,7 +19,7 @@ async function fetchTeams(setTeams, selectTeam) {
           const teamDoc = await getDoc(docImport(db, "teams", teamID));
           const teamData = teamDoc.data();
           const element = (
-            <h1 key={teamData.teamuid} onClick={() => selectTeam(teamData.teamuid, teamData.name)} className="cursor-pointer text-black dark:text-white text-xl text-center flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
+            <h1 key={teamData.teamuid} onClick={() => selectTeam(teamData.teamuid, teamData.name)} className="cursor-pointer text-black font-bold dark:text-white text-xl text-center flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
               {teamData.name}
             </h1>
           );
