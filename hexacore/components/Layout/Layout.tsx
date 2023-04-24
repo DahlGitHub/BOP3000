@@ -16,7 +16,6 @@ const Layout = ({ children, title = 'Hexacore' }: Props) => (
       <NavBar/>
     </header>
     {children}
-    <Footer/>
   </div>
 )
 

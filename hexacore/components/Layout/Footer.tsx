@@ -7,7 +7,7 @@ return (
 
 <Container className='sticky top-[100vh]'>
 
-    <footer className="p-4 bg-white rounded-lg shadow md:px-6 md:py-8 dark:bg-gray-900">
+    <footer className="p-4 bg-white rounded-lg shadow md:px-6 md:py-8 dark:bg-gray-800">
         <div className="sm:flex sm:items-center sm:justify-between">
             <a href="/" className="flex items-center mb-4 sm:mb-0">
                 <img src="https://cdn.discordapp.com/attachments/1062428707639275650/1072126654366887986/Component_5.png"

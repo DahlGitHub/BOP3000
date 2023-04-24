@@ -36,7 +36,7 @@ const FrontpageCard = () => {
                     <p className="w-full pb-8 text-sm tracking-wide leading-tight dark:text-white m-5">The card layouts can vary to support the types of content they contain.</p>
                     </div>
                         <div className="w-auto h- p-5">
-                            <img className="flex-1 h-full rounded-lg" src="https://via.placeholder.com/400x400" />
+                            <img className="flex-1 h-full rounded-lg" src="https://via.placeholder.com/400x400" alt=""/>
                         </div>
                 </div>
             </div>

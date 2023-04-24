@@ -1,9 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {Container, Image, Row, Col, Grid, Card, Text } from "@nextui-org/react";
-import {useMediaQuery} from './useMediaQuery.js'
-import Hero from "./FrontPageComps/Hero";
-import FrontpageCard from "./FrontPageComps/FrontpageCard";
-import FrontpagePoints from "./FrontPageComps/FrontpagePoints";
+import {useMediaQuery} from '../useMediaQuery.js'
+import Hero from "./Hero";
+import FrontpageCard from "./FrontpageCard";
+import FrontpagePoints from "./FrontpagePoints";
+import Footer from "../Layout/Footer";
 
 
 
@@ -17,6 +18,7 @@ const FrontPage = () => {
         <Hero/>
         <FrontpagePoints/>
         <FrontpageCard/>
+        <Footer/>
     </div>
   );
 }
