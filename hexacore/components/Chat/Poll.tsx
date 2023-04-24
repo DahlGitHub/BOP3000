@@ -5,7 +5,7 @@ import { arrayUnion, deleteDoc, doc, updateDoc } from "firebase/firestore"
 import { db } from "../../firebase"
 import { useImmer } from "use-immer"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCheck, faX, faXmark } from "@fortawesome/free-solid-svg-icons"
+import { faCheck, faQuestion, faSquarePollVertical, faX, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { faCheckCircle, faCircle, faDotCircle } from "@fortawesome/free-regular-svg-icons"
 
 
@@ -60,10 +60,10 @@ export default ({index, pollData, id})=>{
     }
 
     return (
-        <div key={index} className="rounded border-1 border-black border-solid bg-white p-2 m-1">
-          <div className="flex justify-between items-center mb-2 pb-1 rounded-t border-b  dark:border-gray-300">
-            <span className="text-sm font-semibold text-gray-600 dark:text-gray-800">
-              {poll.question}
+        <div key={index} className="rounded border-1 border-black border-solid bg-white dark:bg-gray-700 p-2 m-1 my-5">
+          <div className="flex justify-between items-center mb-2 pb-1 rounded-t border-b  dark:border-gray-600">
+            <span className="text-sm font-semibold text-gray-600 dark:text-gray-100">
+            <FontAwesomeIcon className="w-5 mx-1" icon={faSquarePollVertical} />{poll.question}
             </span>
             <button onClick={deletePoll} type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded text-xs p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-300 dark:hover:text-white" data-modal-toggle="defaultModal">
               <FontAwesomeIcon icon={faXmark} />
@@ -76,13 +76,13 @@ export default ({index, pollData, id})=>{
               
                 return (
                     <div key={"poll" + i} className="flex my-2">
-                      <div className="bg-gray-100 p-2 rounded-lg w-full">
+                      <div className="bg-gray-100 dark:bg-gray-800 p-2 rounded-lg w-full">
                         <div className="flex items-center justify-between">
-                          <span className="text-gray-800 text-sm">
+                          <span className="text-gray-800 dark:text-gray-100 text-sm">
                             {userVotedOption === option ? (
-                              <FontAwesomeIcon className="w-5 text-gray-800 mx-1" icon={faCheckCircle} />
+                              <FontAwesomeIcon className="w-5 mx-1" icon={faCheckCircle} />
                             ) : (
-                              <FontAwesomeIcon className="w-5 text-gray-800 mx-1 text-xs" icon={faCircle} />
+                              <FontAwesomeIcon className="w-5 mx-1 text-xs" icon={faCircle} />
                             )}
                             {option}
                           </span>
