@@ -17,12 +17,24 @@ export default ({index, message, id}) =>{
     const date = message.message.sentAt.toDate()
     const [isEditing, setIsEditing] = useState(false);
     const {user} = useContext(UserContext)
+    const [reactions, setReactions] = useState(message.message.reactions.length > 0 ? message.message.reactions : [])
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-
     const deleteMessage = async () => {
         await deleteDoc(doc(db, id+'/Messages/', message.messageId))
     }
-    
+    const react =async (reaction) =>{
+      let newReactions = reactions
+ 
+      if(newReactions.find(reactions => reactions.reaction === reaction)){
+        newReactions = newReactions.filter(reactions => reactions.reaction !== reaction)
+      } else {
+        newReactions.push({reaction: reaction, user: user.uid})
+      } 
+        await updateDoc(doc(db, id+'/Messages/', message.messageId), {
+            reactions: newReactions
+        });
+
+    }
     useEffect(()=>{
         if(textAreaRef.current.scrollHeight > textAreaRef.current.clientHeight){
             const rowsNeeded = Math.ceil(textAreaRef.current.scrollHeight / 20)
@@ -30,7 +42,6 @@ export default ({index, message, id}) =>{
         } else{
             setRows((editMessageValue.match(/\n/g)||[]).length+1)
         }
-        
     },[editMessageValue])
 
     const onTextAreaKeyPress = async (e) => {
@@ -133,13 +144,15 @@ export default ({index, message, id}) =>{
     </Dropdown.Trigger>
     <Dropdown.Menu
     aria-label="Static Actions"
-    css={{ display: "flex", flexDirection: "row" }}>
-    <Dropdown.Item key="new"><FontAwesomeIcon icon={faSmile}/></Dropdown.Item>
-    <Dropdown.Item key="copy"><FontAwesomeIcon icon={faHeart}/></Dropdown.Item>
-    <Dropdown.Item key="edit"><FontAwesomeIcon icon={faThumbsUp}/></Dropdown.Item>
-    <Dropdown.Item key="delete"><FontAwesomeIcon icon={faThumbsDown}/></Dropdown.Item>
-    <Dropdown.Item key="cool"><FontAwesomeIcon icon={faAngry}/></Dropdown.Item>
-    <Dropdown.Item key="test"><FontAwesomeIcon icon={faSadCry}/></Dropdown.Item>
+    css={{ display: "flex", flexDirection: "row" }}
+    onAction={react}
+    >
+    <Dropdown.Item key="faSmile"><FontAwesomeIcon icon={faSmile}/></Dropdown.Item>
+    <Dropdown.Item key="faHeart"><FontAwesomeIcon icon={faHeart}/></Dropdown.Item>
+    <Dropdown.Item key="faThumpsUp"><FontAwesomeIcon icon={faThumbsUp}/></Dropdown.Item>
+    <Dropdown.Item key="faThumbsDown"><FontAwesomeIcon icon={faThumbsDown}/></Dropdown.Item>
+    <Dropdown.Item key="faAngry"><FontAwesomeIcon icon={faAngry}/></Dropdown.Item>
+    <Dropdown.Item key="faSadCry"><FontAwesomeIcon icon={faSadCry}/></Dropdown.Item>
   </Dropdown.Menu>
   </Dropdown>
        
