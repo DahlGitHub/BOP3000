@@ -31,6 +31,8 @@ const TeamMenu = ()  => {
     setSelectedTeam(null);
     setSelectedTeamName(null);
     setTools([]);
+    setSelectedKanban(null);
+    setTeamKanban(false)
   }
 
   useEffect(() => {
@@ -251,7 +253,8 @@ const TeamMenu = ()  => {
           <Kanban id={kanbanID} membersId={kanbanMembers} />
         </div>
       </div>
-      <div className="fixed top-15 right-0 h-screen w-1/4 bg-gray-800 text-white flex flex-col">
+      <div className="fixed top-15 right-0 h-screen max-w-40
+       bg-gray-800 text-white flex flex-col">
         
         <div
             className={`${
