@@ -5,7 +5,6 @@ import AvatarPicture from "../AvatarPicture";
 async function fetchTeamMembers(selectedTeam, setTeamMembers) {
 
     const docImport = doc;
-    console.log("fetching team members")
     const querySnapshot = await getDocs(collection(db, "teams", selectedTeam, "members"));
   
     const promises = querySnapshot.docs.map(async (doc, index) => {

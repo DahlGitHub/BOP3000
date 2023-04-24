@@ -11,7 +11,7 @@ import { faEllipsis, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { createGuidId } from './Kanban';
 import { faPlusSquare } from '@fortawesome/free-regular-svg-icons';
 
-export default ({board, bIndex, members}) => {
+export default ({board, bIndex, members, kanbanID}) => {
     const [showEditListName, setShowEditListName] = useState(false)
     const [editListName, setEditListName] = useState(board.name)
     const [selectedBoard, setSelectedBoard] = useState(0)
@@ -49,7 +49,7 @@ export default ({board, bIndex, members}) => {
               boardId: board.id, 
               assignees: []
             }
-            await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', board.id), {
+            await updateDoc(doc(db, kanbanID, board.id), {
               items: arrayUnion(item)
             })
             e.target.value = '';
@@ -59,7 +59,6 @@ export default ({board, bIndex, members}) => {
       }
 
     const changeBoardName = async (e) => {
-        console.log(e)
         if(e.keyCode === 13) //Enter
         {
           const val = e.target.value;
@@ -68,7 +67,7 @@ export default ({board, bIndex, members}) => {
           }
           else {
             const boardId = e.target.attributes['data-id'].value;
-            await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', board.id), {
+            await updateDoc(doc(db, kanbanID, board.id), {
               name: val
             })
             setShowEditListName(false)
@@ -76,7 +75,7 @@ export default ({board, bIndex, members}) => {
         }
       }
       const deleteBoard = async (boardID)=>{
-        await deleteDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardID))
+        await deleteDoc(doc(db, kanbanID, boardID))
       }
     return (
         <div key={board.name}>
@@ -134,6 +133,7 @@ export default ({board, bIndex, members}) => {
                             data={item}
                             index={iIndex}
                             members={members}
+                            kanbanID={kanbanID}
                           />
                       )
                     )}

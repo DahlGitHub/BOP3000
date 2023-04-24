@@ -9,8 +9,8 @@ import { useEffect, useState } from 'react';
 import CreatePoll from './CreatePoll';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMessage } from '@fortawesome/free-regular-svg-icons';
-import { faDashboard, faPoll, faPollH, faSms, faSquarePollVertical, faVoteYea } from '@fortawesome/free-solid-svg-icons';
-import { faFacebookMessenger } from '@fortawesome/free-brands-svg-icons';
+import { faPoll } from '@fortawesome/free-solid-svg-icons';
+
    
 
 export default ({chatID}) => {
