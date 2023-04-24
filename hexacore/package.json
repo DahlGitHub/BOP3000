@@ -21,6 +21,7 @@
     "@react-aria/ssr": "^3.4.1",
     "algoliasearch": "^4.15.0",
     "firebase": "^9.17.2",
+    "firebase-functions": "^3.23.0",
     "font-awesome": "^4.7.0",
     "github-actions-node-versions": "^1.0.3",
     "http-proxy-middleware": "^2.0.6",
