@@ -1,5 +1,3 @@
-
-
 const AvatarPicture = ({ picture, name, containerWidth, containerHeight }) => {
 
     return(
@@ -16,11 +14,11 @@ const AvatarPicture = ({ picture, name, containerWidth, containerHeight }) => {
           ) : (
             <div className={`bg-gray-200 rounded-full flex items-center justify-center w-${containerWidth} h-${containerHeight}`}>
               <span className="text-gray-600 font-bold text-xs">
-              {name.split(" ").length > 1
+              {name && name.split(" ").length > 1
                   ? `${name.substr(0, 1)}${name
                       .substr(name.indexOf(" ") + 1, 1)
                       .toUpperCase()}`
-                  : name.substr(0, 1).toUpperCase()}
+                  : name && name.substr(0, 1).toUpperCase()}
               </span>
             </div>
           )

@@ -65,7 +65,7 @@ const Contacts = () => {
                   <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 w-10 h-10">
-                        <AvatarPicture picture={hit.picture} name={hit.name} />
+                        <AvatarPicture picture={hit.picture} name={hit.name} containerWidth={"10"} containerHeight={"10"}/>
                       </div>
                       <div className="ml-3">
                         <p className="text-gray-900 whitespace-no-wrap">
