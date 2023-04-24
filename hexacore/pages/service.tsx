@@ -39,35 +39,38 @@ const handleSubmit = async (e) => {
   docData.subject = Subject;
   docData.feedback = Feedback;
 
-  await setDoc(doc(db, "service", user.uid), docData);
-  toast.success("Feedback sent");
+  await setDoc(doc(db, "service", Subject + user.uid), docData);
+ // toast.success("Feedback sent");
 }
 
 if(user){
   return(
     <Layout title="Home | Next.js + TypeScript Example">
+      <div className="bg-white dark:bg-gray-900 p-10">
         <Container lg>
-          <form onSubmit={handleSubmit} className="bg-white rounded-lg px-8 pb-5">
-            <div className="flex justify-between mb-2">
+
+          <form onSubmit={handleSubmit} className="rounded-lg px-8 pb-5 ">
+            <div className="flex justify-between mb-2 my-5">
                 <div>
-                <h1>Hello {user.displayName}</h1>
-                <p>if you have an issue be sure to give us some feedback</p>
+                <h1 className="text-xl font-bold text-gray-900 dark:text-white">Hello {user.displayName}</h1>
+                <p className="text-gray-900 dark:text-white">if you have an issue be sure to give us some feedback</p>
                 </div>
                 
             </div>
-              <label htmlFor="Subject" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Subject (use a few words to descbribe the issue)</label>
+            <div className="my-5">
+              <label htmlFor="Subject" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white font-bold">Subject (use a few words to descbribe the issue)</label>
               <input
                   type="text"
                   name="Subject"
                   id="Subject"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
                   placeholder='Subject'
-                  value={"test"}
+                  value={Subject || ''}
                   onChange={(e) => setSubject(e.target.value)}
                 />
+            </div>
 
-            
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="Feedback">
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white font-bold" htmlFor="Feedback">
                   Feedback
                 </label>
                 <textarea
@@ -80,13 +83,15 @@ if(user){
                 />
                 <button
                     type="submit"
-                    className="inline-flex flex-col justify-center items-center py-3 px-5 text-center text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
+                    className="inline-flex flex-col justify-center items-center py-3 my-3 px-5 text-center text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
                     <FontAwesomeIcon icon={faSave} className='mb-1'/>
                     <div className='text-sm'>Submit Feedback</div>
                     </button>
           </form>
+          
+          
         </Container>
-
+        </div>
     </Layout>
   )
   }
