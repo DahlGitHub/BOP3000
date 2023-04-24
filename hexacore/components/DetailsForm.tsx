@@ -68,7 +68,7 @@ const DetailsForm = () => {
         toast.warning("No changes to save.");
         return;
       }
-    await updateDoc(doc(db, "users", user.uid), docData);
+    //await updateDoc(doc(db, "users", auth.currentUser?.uid), docData);
     toast.success("Updated profile settings!");
   }
 
