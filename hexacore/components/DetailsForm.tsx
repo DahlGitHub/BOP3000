@@ -93,9 +93,9 @@ const DetailsForm = () => {
    
    if(user){
     return (
-        <div className="bg-gray-100 min-h-screen">
+        <div className="bg-gray-100 min-h-screen dark:bg-gray-900">
             <div className='max-w-3xl mx-auto pt-4'>
-                <div className='bg-white rounded-lg p-3 flex'>
+                <div className='bg-white dark:bg-gray-800 rounded-lg p-3 flex'>
                 <img
                     className="h-24 w-24 object-cover rounded-full mr-4"
                     src={profilePicture}
@@ -121,12 +121,12 @@ const DetailsForm = () => {
            
             </div>
             <div className="max-w-3xl mx-auto py-8">
-            <form onSubmit={handleSubmit} className="bg-white rounded-lg px-8 pb-5">
-              <h2 className="py-4">Account Settings</h2>
+            <form onSubmit={handleSubmit} className="bg-white rounded-lg px-8 pb-5 dark:bg-gray-800">
+              <h2 className="py-4 dark:text-gray-100">Account Settings</h2>
               <div className="mb-4">
                 <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Full Name</label>
                 <div className="relative">
-                    <span className="absolute inset-y-0 left-0 flex items-center p-2.5 bg-white border border-gray-300 rounded-l-lg pr-2">
+                    <span className="absolute inset-y-0 left-0 flex items-center p-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 dark:text-gray-100  rounded-l-lg pr-2">
                         <FontAwesomeIcon icon={faUser}/>
                     </span>
                     <input
@@ -143,7 +143,7 @@ const DetailsForm = () => {
               <div className="mb-4">
               <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
               <div className="relative">
-                    <span className="absolute inset-y-0 left-0 flex items-center p-2.5 bg-white border border-gray-300 rounded-l-lg pr-2">
+                    <span className="absolute inset-y-0 left-0 flex items-center p-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 dark:text-gray-100 rounded-l-lg pr-2">
                         <FontAwesomeIcon icon={faAt}/>
                     </span>
                     <input
@@ -174,15 +174,15 @@ const DetailsForm = () => {
               <div className="flex justify-between mb-2">
                 <div>
                 <label htmlFor="address" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Address / Street</label>
-                <input type="text" name="address" id="address" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="" placeholder="" />
+                <input disabled type="text" name="address" id="address" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="" placeholder="Disabled" />
                 </div>
                 <div>
                 <label htmlFor="city" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">City</label>
-                <input type="text" name="city" id="city" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="" placeholder="" />
+                <input disabled type="text" name="city" id="city" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="" placeholder="Disabled" />
                 </div>
                 <div>
                 <label htmlFor="country" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Country</label>
-                <input type="text" name="country" id="country" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="" placeholder="" />
+                <input disabled type="text" name="country" id="country" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="" placeholder="Disabled" />
                 </div>
               </div>
 

@@ -116,7 +116,7 @@ export default ({id}) =>{
                 loader={<Loading size='lg' className='m-4'/>}
                 scrollableTarget="scrollableDiv"
                 endMessage={
-                    <p style={{ textAlign: 'center' }}>
+                    <p style={{ textAlign: 'center' }} className='dark:text-gray-100'>
                     <b>Yay! You have seen it all</b>
                     </p>
                 }
@@ -131,10 +131,10 @@ export default ({id}) =>{
                                         <img src={connect.user.photo} className="object-cover w-10 h-10 rounded-full mx-2" alt=""/>
                                         <div className="flex-1 overflow-hidden">
                                             <div>
-                                            <span className="text-gray-800">{connect.user.name}</span>
+                                            <span className="text-gray-800 dark:text-gray-100">{connect.user.name}</span>
                                             <span className="text-gray-400 text-xs mx-3">Their date</span>
                                             </div>
-                                            <div>{connect.message.message}</div>
+                                            <div className='dark:text-gray-200'>{connect.message.message}</div>
                                         </div>
                                     </div>
                                 </div>
