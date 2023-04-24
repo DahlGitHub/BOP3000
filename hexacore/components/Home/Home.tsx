@@ -61,6 +61,7 @@ const Home = () => {
           const promises = querySnapshot.docs.map(async (doc) => {
             
             const teamID = doc.data().uid;
+            if(teamID) {
             const teamDoc = await getDoc(docImport(db, "teams", teamID));
             const teamData = teamDoc.data();
             const element = (
@@ -71,7 +72,9 @@ const Home = () => {
                     <p>10 members</p>
                 </div>
             );
+            
           elements.push(element);
+        }
         });
   
         await Promise.all(promises);
