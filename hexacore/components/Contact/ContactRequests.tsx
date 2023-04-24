@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import { db, auth } from '../../firebase';
 import { collection, query, where, getDocs, getDoc, doc } from "firebase/firestore";
 import RequestModal from './RequestModal'
+import AvatarPicture from '../AvatarPicture';
 
 
 const ContactRequests = () => {
@@ -65,7 +66,7 @@ const ContactRequests = () => {
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <div className="flex items-center">
                     <div className="flex-shrink-0 w-10 h-10">
-                      <img className="w-full h-full rounded-full" src={userData.picture} alt="" />
+                      <AvatarPicture picture={userData.picture} name={userData.name}/>
                     </div>
                     <div className="ml-3">
                       <p className="text-gray-900 whitespace-no-wrap">

@@ -8,6 +8,7 @@ import { collection, doc, getDocs, query, updateDoc, where } from "firebase/fire
 import { db } from "../../firebase";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import AvatarPicture from "../AvatarPicture";
 
 
 function CardItem({ data, index, members }) {
@@ -222,25 +223,7 @@ function CardItem({ data, index, members }) {
                 const member = members.find((m) => m.uid === ass);
                 return (
                   <li key={ass} className=" m-0">
-                    {member.picture ? (
-                      <img
-                        src={member.picture}
-                        width="24"
-                        height="24"
-                        className="rounded-full"
-                        alt=""
-                      />
-                    ) : (
-                      <div className="bg-gray-200 w-6 h-6 rounded-full flex items-center justify-center">
-                        <span className="text-gray-600 font-bold text-xs">
-                          {member.name
-                            .split(' ')
-                            .map(word => word[0])
-                            .join('')
-                            .toUpperCase()}
-                        </span>
-                      </div>
-                    )}
+                    {<AvatarPicture picture={member.picture} name={member.name}/>}
                   </li>
                 );
               } else if (index === 3 && data.assignees.length > 3) {
@@ -288,25 +271,7 @@ function CardItem({ data, index, members }) {
                           <Dropdown.Item
                             key={"remove " + member}
                             icon={
-                              assignee.picture ? (
-                                <img
-                                  src={assignee.picture}
-                                  width="36"
-                                  height="36"
-                                  className="rounded-full"
-                                  alt=""
-                                />
-                              ) : (
-                                <div className="bg-gray-200 w-8 h-8 rounded-full flex items-center justify-center">
-                                  <span className="text-gray-600 font-bold text-xs">
-                                  {assignee.name.split(" ").length > 1
-                                      ? `${assignee.name.substr(0, 1)}${assignee.name
-                                          .substr(assignee.name.indexOf(" ") + 1, 1)
-                                          .toUpperCase()}`
-                                      : assignee.name.substr(0, 1).toUpperCase()}
-                                  </span>
-                                </div>
-                              )
+                              <AvatarPicture picture={assignee.picture} name={assignee.name} />
                             }
                           >
                             {assignee.name}
@@ -323,25 +288,7 @@ function CardItem({ data, index, members }) {
                           <Dropdown.Item
                             key={"add " + member.uid}
                             icon={
-                              member.picture ? (
-                                <img
-                                  src={member.picture}
-                                  width="36"
-                                  height="36"
-                                  className="rounded-full"
-                                  alt=""
-                                />
-                              ) : (
-                                <div className="bg-gray-200 w-8 h-8 rounded-full flex items-center justify-center">
-                                  <span className="text-gray-600 font-bold text-xs">
-                                    {member.name.split(" ").length > 1
-                                      ? `${member.name.substr(0, 1)}${member.name
-                                          .substr(member.name.indexOf(" ") + 1, 1)
-                                          .toUpperCase()}`
-                                      : member.name.substr(0, 1).toUpperCase()}
-                                  </span>
-                                </div>
-                              )
+                              <AvatarPicture picture={member.picture} name={member.name} />
                             }
                           >
                             {member.name}
