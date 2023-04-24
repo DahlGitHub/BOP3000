@@ -2,6 +2,7 @@ import React from "react";
 import Link from 'next/link';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGears, faLayerGroup, faMessage, faInbox, faListCheck, faHouse, faFile, faFileLines } from "@fortawesome/free-solid-svg-icons";
+import { faQuestionCircle } from "@fortawesome/free-regular-svg-icons";
 
 const SidebarItems = [
   { id: 1, iconItem: <FontAwesomeIcon icon={faHouse}/>, text: "Home",link: "/dashboard" },
@@ -38,6 +39,13 @@ const DashboardSidebar = () => {
               <FontAwesomeIcon icon={faGears} />
               <span className="block text-[10px] ">Settings</span>
             </Link>
+            
+         </li>
+         <li className="flex text-center">
+          <Link href="/dashboard/service" className="flex-inline w-full p-2.5 rounded-md  text-gray-700 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-600">
+                <FontAwesomeIcon icon={faQuestionCircle} />
+                <span className="block text-[10px] ">Help</span>
+              </Link>
          </li>
          
       </ul>
