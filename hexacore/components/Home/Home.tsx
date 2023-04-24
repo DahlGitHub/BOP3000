@@ -4,12 +4,18 @@ import { auth, db } from "../../firebase";
 import fetchTeams from "../Team/fetchTeams";
 import { useRouter } from "next/router";
 import AvatarPicture from "../AvatarPicture";
+import WelcomeMessage from "./WelcomeMessage";
+import { useAuthState } from "react-firebase-hooks/auth";
+import Profile from "./Profile";
 
 const Home = () => {
 
     const [contacts, setContacts] = useState([]);
     const [teams, setTeams] = useState([]);
     const docImport = doc;
+
+    const [user] = useAuthState(auth);
+    const username = user.displayName.substring(0, user.displayName.indexOf(' '))
 
     useEffect(() => {
         async function fetchContacts() {
@@ -79,7 +85,7 @@ const Home = () => {
     return(
         <div className="bg-white dark:bg-gray-900 text-black dark:text-white h-full">
             <div className="p-10">
-                <h1 className="text-xl ">Welcome to your dashboard</h1>
+                <WelcomeMessage name={username}/>
             </div>
             <div className="m-10 border-solid border-2 border-sky-500 rounded">
                 <h1 className="text-xl p-5">Get started</h1>
@@ -107,7 +113,8 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-            <div className={ 'flex'}>
+            <div className='flex'>
+                <Profile name={username}/>
                 <div className={`${teams ? 'block' : 'hidden'} m-10 border-solid border-2 border-sky-500 rounded`} >
                     <h1 className="text-xl p-5">Your teams:</h1>
                     {teams}
