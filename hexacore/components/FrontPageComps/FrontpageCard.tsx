@@ -11,7 +11,7 @@ const FrontpageCard = () => {
                     <p className="w-full pb-8 text-sm tracking-wide leading-tight dark:text-white m-5">With our clear and easy to understand layout, you can easily make a team with the team-members you want. Its easy to share documents and communicate with other members</p>
                     </div>
                         <div className="w-auto h- p-5">
-                            <img className="flex-1 h-full rounded-lg " src="https://via.placeholder.com/400x400" />
+                            <img className="flex-1 h-full rounded-lg " src="https://firebasestorage.googleapis.com/v0/b/hexacore-1c84b.appspot.com/o/Image%2Fteam.png?alt=media&token=01bf49ca-ee33-405b-81f7-06eae5b3863c" />
                         </div>
                 </div>
             </div>
@@ -33,10 +33,10 @@ const FrontpageCard = () => {
                 <div className="flex flex-row space-y-2 items-center justify-center h-full py-4 dark:bg-gray-800 bg-gray-200 rounded-xl space-x-10">
                     <div className="w-2/3">
                     <p className="w-full text-2xl font-semibold dark:text-white m-5">Chat with co-workers and friends</p>
-                    <p className="w-full pb-8 text-sm tracking-wide leading-tight dark:text-white m-5">Our chat gives you the option to dicsuss various topics with the people you want. If you want people opinion on something, its possile to create polls in the chat</p>
+                    <p className="w-full pb-8 text-sm tracking-wide leading-tight dark:text-white m-5">Our chat gives you the option to communicate. If you want to vote on a subject, its possile to create a poll in the chat</p>
                     </div>
                         <div className="w-auto h- p-5">
-                            <img className="flex-1 h-full rounded-lg" src="https://via.placeholder.com/400x400" alt=""/>
+                            <img className="flex-1 h-full rounded-lg" src="https://firebasestorage.googleapis.com/v0/b/hexacore-1c84b.appspot.com/o/Image%2Fchat.png?alt=media&token=3a9255ca-7a99-43e4-be9e-c9f0dc06c16d" alt=""/>
                         </div>
                 </div>
             </div>
