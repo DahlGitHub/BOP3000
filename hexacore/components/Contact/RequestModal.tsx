@@ -1,6 +1,7 @@
 import { auth, db} from '../../firebase';
 import { doc, setDoc, deleteDoc } from "firebase/firestore";
 import { Spacer } from '@nextui-org/react';
+import AvatarPicture from '../AvatarPicture';
 
 
 const RequestModal = ({ isOpen, onClose, uid, picture, email,name }) => {
@@ -77,8 +78,7 @@ const RequestModal = ({ isOpen, onClose, uid, picture, email,name }) => {
               </h3>
               <div className="mt-2">
               <div className="flex flex-col items-center pt-6 pr-6 pb-6 pl-6">
-              <img
-                  src={picture} className="flex-shrink-0 object-cover object-center btn- flex w-16 h-16 mr-auto -mb-8 ml-auto rounded-full shadow-xl"/>
+              <AvatarPicture picture={picture} name={name} />
               <p className="mt-8 text-2xl font-semibold leading-none text-black tracking-tighter lg:text-3xl">
                  {name}</p>
                   
