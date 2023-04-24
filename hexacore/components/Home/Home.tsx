@@ -13,6 +13,7 @@ const Home = () => {
 
     useEffect(() => {
         async function fetchContacts() {
+            if(!auth.currentUser) return;
           const querySnapshot = await getDocs(collection(db, "users", auth.currentUser?.uid, "contacts"));
             if(querySnapshot.empty){
                 setContacts(null)
@@ -44,7 +45,7 @@ const Home = () => {
     }, []); // Run this effect only once on component mount
 
     async function fetchTeams() {
-
+        if(!auth.currentUser) return;
         const querySnapshot = await getDocs(collection(db, "users", auth.currentUser?.uid, "teams"));
         const elements = [];
         
