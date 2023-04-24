@@ -14,8 +14,8 @@ const Home = () => {
     const [teams, setTeams] = useState([]);
     const docImport = doc;
 
-    const [user] = useAuthState(auth);
-    const username = user.displayName?.substring(0, user.displayName.indexOf(' '))
+    
+    const username = auth.currentUser?.email
 
     useEffect(() => {
         async function fetchContacts() {

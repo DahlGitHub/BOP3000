@@ -72,7 +72,7 @@ export default () => {
     } else{
         return(
             <Navbar.Content>
-                <Link href='/login'>
+                <Link href='../login'>
                     <FontAwesomeIcon icon={faSignIn}/>
                 </Link>
             </Navbar.Content>

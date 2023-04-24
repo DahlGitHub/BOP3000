@@ -179,9 +179,7 @@ const TeamMenu = ()  => {
       <>
 
         <div>
-          {teams.map((team) => (
-            <div>{team}</div>
-          ))}
+          {teams}
         </div>
 
         

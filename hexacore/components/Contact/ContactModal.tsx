@@ -64,7 +64,7 @@ const ContactModal = ({ isOpen, onClose, picture, name, uid, email }) => {
               </h3>
               <div className="mt-2">
               <div className="flex flex-col items-center pt-6 pr-6 pb-6 pl-6">
-              <AvatarPicture picture={picture} name={name}  containerWidth={"10"} containerHeight={"10"}/>
+              <AvatarPicture picture={picture} name={name}  containerWidth={10} containerHeight={10}/>
               <p className="mt-8 text-2xl font-semibold leading-none text-black tracking-tighter lg:text-3xl">
                  {name}</p>
                   
