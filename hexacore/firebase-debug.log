@@ -1,0 +1,479 @@
+[debug] [2023-04-24T17:16:36.773Z] ----------------------------------------------------------------------
+[debug] [2023-04-24T17:16:36.774Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2023-04-24T17:16:36.774Z] CLI Version:   11.28.0
+[debug] [2023-04-24T17:16:36.775Z] Platform:      win32
+[debug] [2023-04-24T17:16:36.775Z] Node Version:  v16.14.2
+[debug] [2023-04-24T17:16:36.776Z] Time:          Mon Apr 24 2023 19:16:36 GMT+0200 (sentraleuropeisk sommertid)
+[debug] [2023-04-24T17:16:36.776Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-24T17:16:36.830Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-24T17:16:36.831Z] > authorizing via signed-in user (martinhodnemail@gmail.com)
+[debug] [2023-04-24T17:16:36.831Z] [iam] checking project hexacore-1c84b for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2023-04-24T17:16:36.832Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions [none]
+[debug] [2023-04-24T17:16:36.833Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions x-goog-quota-user=projects/hexacore-1c84b
+[debug] [2023-04-24T17:16:36.833Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-24T17:16:37.626Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions 200
+[debug] [2023-04-24T17:16:37.626Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-24T17:16:37.626Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2023-04-24T17:16:37.626Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-04-24T17:16:38.336Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2023-04-24T17:16:38.336Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-04-24T17:16:38.337Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b [none]
+[debug] [2023-04-24T17:16:38.826Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b 200
+[debug] [2023-04-24T17:16:38.826Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b {"projectId":"hexacore-1c84b","projectNumber":"1090430226645","displayName":"Hexacore","name":"projects/hexacore-1c84b","resources":{"hostingSite":"hexacore-1c84b","realtimeDatabaseInstance":"hexacore-1c84b-default-rtdb","storageBucket":"hexacore-1c84b.appspot.com","locationId":"europe-west"},"state":"ACTIVE","etag":"1_0f143a27-d87d-4e52-aa02-78910a675d96"}
+[debug] [2023-04-24T17:16:43.443Z] defaultcredentials: writing to file C:\Users\marti\AppData\Roaming\firebase\martinhodnemail_gmail_com_application_default_credentials.json
+[debug] [2023-04-24T17:16:43.445Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites pageToken=&pageSize=10
+[debug] [2023-04-24T17:16:44.634Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites 200
+[debug] [2023-04-24T17:16:44.634Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites {"sites":[{"name":"projects/hexacore-1c84b/sites/hexacore-1c84b","defaultUrl":"https://hexacore-1c84b.web.app","appId":"1:1090430226645:web:b14a47eaf66fc1e9fc525c","type":"DEFAULT_SITE"}]}
+[debug] [2023-04-24T17:16:44.634Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config [none]
+[debug] [2023-04-24T17:16:45.649Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config 200
+[debug] [2023-04-24T17:16:45.649Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config {"projectId":"hexacore-1c84b","appId":"1:1090430226645:web:b14a47eaf66fc1e9fc525c","databaseURL":"https://hexacore-1c84b-default-rtdb.europe-west1.firebasedatabase.app","storageBucket":"hexacore-1c84b.appspot.com","locationId":"europe-west","apiKey":"AIzaSyCq3uvuimLnuVrF-f3f1VaN3VD5qip2ChQ","authDomain":"hexacore-1c84b.firebaseapp.com","messagingSenderId":"1090430226645"}
+[debug] [2023-04-24T17:17:32.317Z] Error: Command failed: npm i --omit dev --no-audit
+    at checkExecSyncError (node:child_process:828:11)
+    at execSync (node:child_process:902:15)
+    at prepareFrameworks (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\index.js:392:42)
+    at async deploy (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\index.js:53:13)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2023-04-24T17:22:15.924Z] ----------------------------------------------------------------------
+[debug] [2023-04-24T17:22:15.925Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting
+[debug] [2023-04-24T17:22:15.925Z] CLI Version:   11.28.0
+[debug] [2023-04-24T17:22:15.925Z] Platform:      win32
+[debug] [2023-04-24T17:22:15.926Z] Node Version:  v16.14.2
+[debug] [2023-04-24T17:22:15.926Z] Time:          Mon Apr 24 2023 19:22:15 GMT+0200 (sentraleuropeisk sommertid)
+[debug] [2023-04-24T17:22:15.926Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-24T17:22:15.982Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-24T17:22:15.982Z] > authorizing via signed-in user (martinhodnemail@gmail.com)
+[debug] [2023-04-24T17:22:15.982Z] [iam] checking project hexacore-1c84b for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2023-04-24T17:22:15.984Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions [none]
+[debug] [2023-04-24T17:22:15.984Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions x-goog-quota-user=projects/hexacore-1c84b
+[debug] [2023-04-24T17:22:15.984Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-24T17:22:16.809Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions 200
+[debug] [2023-04-24T17:22:16.809Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-24T17:22:16.810Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b [none]
+[debug] [2023-04-24T17:22:17.177Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b 200
+[debug] [2023-04-24T17:22:17.177Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b {"projectId":"hexacore-1c84b","projectNumber":"1090430226645","displayName":"Hexacore","name":"projects/hexacore-1c84b","resources":{"hostingSite":"hexacore-1c84b","realtimeDatabaseInstance":"hexacore-1c84b-default-rtdb","storageBucket":"hexacore-1c84b.appspot.com","locationId":"europe-west"},"state":"ACTIVE","etag":"1_b8cdc460-8bf9-48a0-a122-dc2508e96d02"}
+[debug] [2023-04-24T17:22:21.653Z] defaultcredentials: writing to file C:\Users\marti\AppData\Roaming\firebase\martinhodnemail_gmail_com_application_default_credentials.json
+[debug] [2023-04-24T17:22:21.655Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites pageToken=&pageSize=10
+[debug] [2023-04-24T17:22:22.701Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites 200
+[debug] [2023-04-24T17:22:22.701Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites {"sites":[{"name":"projects/hexacore-1c84b/sites/hexacore-1c84b","defaultUrl":"https://hexacore-1c84b.web.app","appId":"1:1090430226645:web:b14a47eaf66fc1e9fc525c","type":"DEFAULT_SITE"}]}
+[debug] [2023-04-24T17:22:22.701Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config [none]
+[debug] [2023-04-24T17:22:23.701Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config 200
+[debug] [2023-04-24T17:22:23.701Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config {"projectId":"hexacore-1c84b","appId":"1:1090430226645:web:b14a47eaf66fc1e9fc525c","databaseURL":"https://hexacore-1c84b-default-rtdb.europe-west1.firebasedatabase.app","storageBucket":"hexacore-1c84b.appspot.com","locationId":"europe-west","apiKey":"AIzaSyCq3uvuimLnuVrF-f3f1VaN3VD5qip2ChQ","authDomain":"hexacore-1c84b.firebaseapp.com","messagingSenderId":"1090430226645"}
+[debug] [2023-04-24T17:23:03.544Z] Error: Command failed: npm i --omit dev --no-audit
+    at checkExecSyncError (node:child_process:828:11)
+    at execSync (node:child_process:902:15)
+    at prepareFrameworks (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\index.js:392:42)
+    at async deploy (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\index.js:53:13)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2023-04-24T17:28:01.940Z] ----------------------------------------------------------------------
+[debug] [2023-04-24T17:28:01.942Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2023-04-24T17:28:01.942Z] CLI Version:   11.28.0
+[debug] [2023-04-24T17:28:01.942Z] Platform:      win32
+[debug] [2023-04-24T17:28:01.942Z] Node Version:  v16.14.2
+[debug] [2023-04-24T17:28:01.943Z] Time:          Mon Apr 24 2023 19:28:01 GMT+0200 (sentraleuropeisk sommertid)
+[debug] [2023-04-24T17:28:01.943Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-24T17:28:02.001Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-24T17:28:02.001Z] > authorizing via signed-in user (martinhodnemail@gmail.com)
+[debug] [2023-04-24T17:28:02.001Z] [iam] checking project hexacore-1c84b for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2023-04-24T17:28:02.003Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions [none]
+[debug] [2023-04-24T17:28:02.003Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions x-goog-quota-user=projects/hexacore-1c84b
+[debug] [2023-04-24T17:28:02.003Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-24T17:28:02.312Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions 200
+[debug] [2023-04-24T17:28:02.312Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-24T17:28:02.313Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2023-04-24T17:28:02.313Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-04-24T17:28:03.075Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2023-04-24T17:28:03.075Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-04-24T17:28:03.076Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b [none]
+[debug] [2023-04-24T17:28:03.446Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b 200
+[debug] [2023-04-24T17:28:03.446Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b {"projectId":"hexacore-1c84b","projectNumber":"1090430226645","displayName":"Hexacore","name":"projects/hexacore-1c84b","resources":{"hostingSite":"hexacore-1c84b","realtimeDatabaseInstance":"hexacore-1c84b-default-rtdb","storageBucket":"hexacore-1c84b.appspot.com","locationId":"europe-west"},"state":"ACTIVE","etag":"1_b8cdc460-8bf9-48a0-a122-dc2508e96d02"}
+[debug] [2023-04-24T17:28:08.019Z] defaultcredentials: writing to file C:\Users\marti\AppData\Roaming\firebase\martinhodnemail_gmail_com_application_default_credentials.json
+[debug] [2023-04-24T17:28:08.021Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites pageToken=&pageSize=10
+[debug] [2023-04-24T17:28:09.067Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites 200
+[debug] [2023-04-24T17:28:09.067Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites {"sites":[{"name":"projects/hexacore-1c84b/sites/hexacore-1c84b","defaultUrl":"https://hexacore-1c84b.web.app","appId":"1:1090430226645:web:b14a47eaf66fc1e9fc525c","type":"DEFAULT_SITE"}]}
+[debug] [2023-04-24T17:28:09.067Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config [none]
+[debug] [2023-04-24T17:28:10.211Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config 200
+[debug] [2023-04-24T17:28:10.211Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config {"projectId":"hexacore-1c84b","appId":"1:1090430226645:web:b14a47eaf66fc1e9fc525c","databaseURL":"https://hexacore-1c84b-default-rtdb.europe-west1.firebasedatabase.app","storageBucket":"hexacore-1c84b.appspot.com","locationId":"europe-west","apiKey":"AIzaSyCq3uvuimLnuVrF-f3f1VaN3VD5qip2ChQ","authDomain":"hexacore-1c84b.firebaseapp.com","messagingSenderId":"1090430226645"}
+[debug] [2023-04-24T17:28:51.765Z] Error: Command failed: npm i --omit dev --no-audit
+    at checkExecSyncError (node:child_process:828:11)
+    at execSync (node:child_process:902:15)
+    at prepareFrameworks (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\index.js:392:42)
+    at async deploy (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\index.js:53:13)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2023-04-24T17:35:14.797Z] ----------------------------------------------------------------------
+[debug] [2023-04-24T17:35:14.799Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2023-04-24T17:35:14.799Z] CLI Version:   11.28.0
+[debug] [2023-04-24T17:35:14.799Z] Platform:      win32
+[debug] [2023-04-24T17:35:14.799Z] Node Version:  v16.14.2
+[debug] [2023-04-24T17:35:14.800Z] Time:          Mon Apr 24 2023 19:35:14 GMT+0200 (sentraleuropeisk sommertid)
+[debug] [2023-04-24T17:35:14.800Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-24T17:35:14.857Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-24T17:35:14.857Z] > authorizing via signed-in user (martinhodnemail@gmail.com)
+[debug] [2023-04-24T17:35:14.857Z] [iam] checking project hexacore-1c84b for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2023-04-24T17:35:14.859Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions [none]
+[debug] [2023-04-24T17:35:14.859Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions x-goog-quota-user=projects/hexacore-1c84b
+[debug] [2023-04-24T17:35:14.859Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-24T17:35:15.693Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions 200
+[debug] [2023-04-24T17:35:15.694Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-24T17:35:15.695Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2023-04-24T17:35:15.695Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-04-24T17:35:15.987Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2023-04-24T17:35:15.987Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-04-24T17:35:15.988Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b [none]
+[debug] [2023-04-24T17:35:16.438Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b 200
+[debug] [2023-04-24T17:35:16.438Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b {"projectId":"hexacore-1c84b","projectNumber":"1090430226645","displayName":"Hexacore","name":"projects/hexacore-1c84b","resources":{"hostingSite":"hexacore-1c84b","realtimeDatabaseInstance":"hexacore-1c84b-default-rtdb","storageBucket":"hexacore-1c84b.appspot.com","locationId":"europe-west"},"state":"ACTIVE","etag":"1_b8cdc460-8bf9-48a0-a122-dc2508e96d02"}
+[debug] [2023-04-24T17:35:20.284Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites pageToken=&pageSize=10
+[debug] [2023-04-24T17:35:21.354Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites 200
+[debug] [2023-04-24T17:35:21.354Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites {"sites":[{"name":"projects/hexacore-1c84b/sites/hexacore-1c84b","defaultUrl":"https://hexacore-1c84b.web.app","appId":"1:1090430226645:web:b14a47eaf66fc1e9fc525c","type":"DEFAULT_SITE"}]}
+[debug] [2023-04-24T17:35:21.354Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config [none]
+[debug] [2023-04-24T17:35:22.408Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config 200
+[debug] [2023-04-24T17:35:22.408Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config {"projectId":"hexacore-1c84b","appId":"1:1090430226645:web:b14a47eaf66fc1e9fc525c","databaseURL":"https://hexacore-1c84b-default-rtdb.europe-west1.firebasedatabase.app","storageBucket":"hexacore-1c84b.appspot.com","locationId":"europe-west","apiKey":"AIzaSyCq3uvuimLnuVrF-f3f1VaN3VD5qip2ChQ","authDomain":"hexacore-1c84b.firebaseapp.com","messagingSenderId":"1090430226645"}
+[debug] [2023-04-24T17:35:46.928Z] Error: Build failed because of webpack errors
+    at webpackBuildImpl (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\webpack-build.js:245:21)
+    at async Object.webpackBuild (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\webpack-build.js:373:16)
+    at async C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\index.js:488:77
+    at async Span.traceAsyncFn (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\trace\trace.js:79:20)
+    at async build (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\index.js:73:29)
+    at async build (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\next\index.js:55:5)
+    at async prepareFrameworks (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\index.js:279:108)
+    at async deploy (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\index.js:53:13)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2023-04-24T17:36:47.591Z] ----------------------------------------------------------------------
+[debug] [2023-04-24T17:36:47.593Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2023-04-24T17:36:47.593Z] CLI Version:   11.28.0
+[debug] [2023-04-24T17:36:47.593Z] Platform:      win32
+[debug] [2023-04-24T17:36:47.593Z] Node Version:  v16.14.2
+[debug] [2023-04-24T17:36:47.594Z] Time:          Mon Apr 24 2023 19:36:47 GMT+0200 (sentraleuropeisk sommertid)
+[debug] [2023-04-24T17:36:47.594Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-24T17:36:47.654Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-24T17:36:47.655Z] > authorizing via signed-in user (martinhodnemail@gmail.com)
+[debug] [2023-04-24T17:36:47.655Z] [iam] checking project hexacore-1c84b for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2023-04-24T17:36:47.657Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions [none]
+[debug] [2023-04-24T17:36:47.657Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions x-goog-quota-user=projects/hexacore-1c84b
+[debug] [2023-04-24T17:36:47.657Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-24T17:36:48.445Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions 200
+[debug] [2023-04-24T17:36:48.445Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-24T17:36:48.445Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2023-04-24T17:36:48.445Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-04-24T17:36:49.150Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2023-04-24T17:36:49.150Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-04-24T17:36:49.151Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b [none]
+[debug] [2023-04-24T17:36:49.479Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b 200
+[debug] [2023-04-24T17:36:49.479Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b {"projectId":"hexacore-1c84b","projectNumber":"1090430226645","displayName":"Hexacore","name":"projects/hexacore-1c84b","resources":{"hostingSite":"hexacore-1c84b","realtimeDatabaseInstance":"hexacore-1c84b-default-rtdb","storageBucket":"hexacore-1c84b.appspot.com","locationId":"europe-west"},"state":"ACTIVE","etag":"1_b8cdc460-8bf9-48a0-a122-dc2508e96d02"}
+[debug] [2023-04-24T17:36:53.296Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites pageToken=&pageSize=10
+[debug] [2023-04-24T17:36:54.292Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites 200
+[debug] [2023-04-24T17:36:54.292Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites {"sites":[{"name":"projects/hexacore-1c84b/sites/hexacore-1c84b","defaultUrl":"https://hexacore-1c84b.web.app","appId":"1:1090430226645:web:b14a47eaf66fc1e9fc525c","type":"DEFAULT_SITE"}]}
+[debug] [2023-04-24T17:36:54.293Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config [none]
+[debug] [2023-04-24T17:36:55.280Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config 200
+[debug] [2023-04-24T17:36:55.280Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config {"projectId":"hexacore-1c84b","appId":"1:1090430226645:web:b14a47eaf66fc1e9fc525c","databaseURL":"https://hexacore-1c84b-default-rtdb.europe-west1.firebasedatabase.app","storageBucket":"hexacore-1c84b.appspot.com","locationId":"europe-west","apiKey":"AIzaSyCq3uvuimLnuVrF-f3f1VaN3VD5qip2ChQ","authDomain":"hexacore-1c84b.firebaseapp.com","messagingSenderId":"1090430226645"}
+[debug] [2023-04-24T17:37:16.495Z] Error: Build failed because of webpack errors
+    at webpackBuildImpl (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\webpack-build.js:245:21)
+    at async Object.webpackBuild (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\webpack-build.js:373:16)
+    at async C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\index.js:488:77
+    at async Span.traceAsyncFn (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\trace\trace.js:79:20)
+    at async build (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\index.js:73:29)
+    at async build (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\next\index.js:55:5)
+    at async prepareFrameworks (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\index.js:279:108)
+    at async deploy (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\index.js:53:13)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2023-04-24T17:44:48.355Z] ----------------------------------------------------------------------
+[debug] [2023-04-24T17:44:48.356Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2023-04-24T17:44:48.356Z] CLI Version:   11.28.0
+[debug] [2023-04-24T17:44:48.356Z] Platform:      win32
+[debug] [2023-04-24T17:44:48.356Z] Node Version:  v16.14.2
+[debug] [2023-04-24T17:44:48.357Z] Time:          Mon Apr 24 2023 19:44:48 GMT+0200 (sentraleuropeisk sommertid)
+[debug] [2023-04-24T17:44:48.357Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-24T17:44:48.409Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-24T17:44:48.409Z] > authorizing via signed-in user (martinhodnemail@gmail.com)
+[debug] [2023-04-24T17:44:48.409Z] [iam] checking project hexacore-1c84b for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2023-04-24T17:44:48.411Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions [none]
+[debug] [2023-04-24T17:44:48.411Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions x-goog-quota-user=projects/hexacore-1c84b
+[debug] [2023-04-24T17:44:48.411Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-24T17:44:49.240Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions 200
+[debug] [2023-04-24T17:44:49.241Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-24T17:44:49.241Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2023-04-24T17:44:49.241Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-04-24T17:44:49.994Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2023-04-24T17:44:49.994Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-04-24T17:44:49.995Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b [none]
+[debug] [2023-04-24T17:44:50.356Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b 200
+[debug] [2023-04-24T17:44:50.356Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b {"projectId":"hexacore-1c84b","projectNumber":"1090430226645","displayName":"Hexacore","name":"projects/hexacore-1c84b","resources":{"hostingSite":"hexacore-1c84b","realtimeDatabaseInstance":"hexacore-1c84b-default-rtdb","storageBucket":"hexacore-1c84b.appspot.com","locationId":"europe-west"},"state":"ACTIVE","etag":"1_b8cdc460-8bf9-48a0-a122-dc2508e96d02"}
+[debug] [2023-04-24T17:44:54.897Z] defaultcredentials: writing to file C:\Users\marti\AppData\Roaming\firebase\martinhodnemail_gmail_com_application_default_credentials.json
+[debug] [2023-04-24T17:44:54.899Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites pageToken=&pageSize=10
+[debug] [2023-04-24T17:44:55.945Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites 200
+[debug] [2023-04-24T17:44:55.945Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites {"sites":[{"name":"projects/hexacore-1c84b/sites/hexacore-1c84b","defaultUrl":"https://hexacore-1c84b.web.app","appId":"1:1090430226645:web:b14a47eaf66fc1e9fc525c","type":"DEFAULT_SITE"}]}
+[debug] [2023-04-24T17:44:55.946Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config [none]
+[debug] [2023-04-24T17:44:56.927Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config 200
+[debug] [2023-04-24T17:44:56.927Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config {"projectId":"hexacore-1c84b","appId":"1:1090430226645:web:b14a47eaf66fc1e9fc525c","databaseURL":"https://hexacore-1c84b-default-rtdb.europe-west1.firebasedatabase.app","storageBucket":"hexacore-1c84b.appspot.com","locationId":"europe-west","apiKey":"AIzaSyCq3uvuimLnuVrF-f3f1VaN3VD5qip2ChQ","authDomain":"hexacore-1c84b.firebaseapp.com","messagingSenderId":"1090430226645"}
+[debug] [2023-04-24T17:45:28.075Z] Error: Build failed because of webpack errors
+    at webpackBuildImpl (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\webpack-build\impl.js:258:21)
+    at async webpackBuild (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\webpack-build\index.js:137:16)
+    at async C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\index.js:531:119
+    at async Span.traceAsyncFn (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\trace\trace.js:97:20)
+    at async build (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\index.js:143:29)
+    at async build (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\next\index.js:55:5)
+    at async prepareFrameworks (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\index.js:279:108)
+    at async deploy (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\index.js:53:13)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2023-04-24T17:46:29.877Z] ----------------------------------------------------------------------
+[debug] [2023-04-24T17:46:29.878Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2023-04-24T17:46:29.879Z] CLI Version:   11.28.0
+[debug] [2023-04-24T17:46:29.879Z] Platform:      win32
+[debug] [2023-04-24T17:46:29.879Z] Node Version:  v16.14.2
+[debug] [2023-04-24T17:46:29.879Z] Time:          Mon Apr 24 2023 19:46:29 GMT+0200 (sentraleuropeisk sommertid)
+[debug] [2023-04-24T17:46:29.880Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-24T17:46:29.932Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-24T17:46:29.932Z] > authorizing via signed-in user (martinhodnemail@gmail.com)
+[debug] [2023-04-24T17:46:29.932Z] [iam] checking project hexacore-1c84b for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2023-04-24T17:46:29.934Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions [none]
+[debug] [2023-04-24T17:46:29.934Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions x-goog-quota-user=projects/hexacore-1c84b
+[debug] [2023-04-24T17:46:29.934Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-24T17:46:30.312Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions 200
+[debug] [2023-04-24T17:46:30.312Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-24T17:46:30.313Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2023-04-24T17:46:30.313Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-04-24T17:46:31.025Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2023-04-24T17:46:31.025Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-04-24T17:46:31.026Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b [none]
+[debug] [2023-04-24T17:46:31.359Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b 200
+[debug] [2023-04-24T17:46:31.359Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b {"projectId":"hexacore-1c84b","projectNumber":"1090430226645","displayName":"Hexacore","name":"projects/hexacore-1c84b","resources":{"hostingSite":"hexacore-1c84b","realtimeDatabaseInstance":"hexacore-1c84b-default-rtdb","storageBucket":"hexacore-1c84b.appspot.com","locationId":"europe-west"},"state":"ACTIVE","etag":"1_b8cdc460-8bf9-48a0-a122-dc2508e96d02"}
+[debug] [2023-04-24T17:46:35.739Z] defaultcredentials: writing to file C:\Users\marti\AppData\Roaming\firebase\martinhodnemail_gmail_com_application_default_credentials.json
+[debug] [2023-04-24T17:46:35.740Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites pageToken=&pageSize=10
+[debug] [2023-04-24T17:46:36.782Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites 200
+[debug] [2023-04-24T17:46:36.782Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites {"sites":[{"name":"projects/hexacore-1c84b/sites/hexacore-1c84b","defaultUrl":"https://hexacore-1c84b.web.app","appId":"1:1090430226645:web:b14a47eaf66fc1e9fc525c","type":"DEFAULT_SITE"}]}
+[debug] [2023-04-24T17:46:36.783Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config [none]
+[debug] [2023-04-24T17:46:37.752Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config 200
+[debug] [2023-04-24T17:46:37.753Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config {"projectId":"hexacore-1c84b","appId":"1:1090430226645:web:b14a47eaf66fc1e9fc525c","databaseURL":"https://hexacore-1c84b-default-rtdb.europe-west1.firebasedatabase.app","storageBucket":"hexacore-1c84b.appspot.com","locationId":"europe-west","apiKey":"AIzaSyCq3uvuimLnuVrF-f3f1VaN3VD5qip2ChQ","authDomain":"hexacore-1c84b.firebaseapp.com","messagingSenderId":"1090430226645"}
+[debug] [2023-04-24T17:47:00.898Z] Error: Build failed because of webpack errors
+    at webpackBuildImpl (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\webpack-build\impl.js:258:21)
+    at async webpackBuild (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\webpack-build\index.js:137:16)
+    at async C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\index.js:531:119
+    at async Span.traceAsyncFn (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\trace\trace.js:97:20)
+    at async build (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\index.js:143:29)
+    at async build (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\next\index.js:55:5)
+    at async prepareFrameworks (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\index.js:279:108)
+    at async deploy (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\index.js:53:13)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2023-04-24T17:53:05.205Z] ----------------------------------------------------------------------
+[debug] [2023-04-24T17:53:05.207Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2023-04-24T17:53:05.207Z] CLI Version:   11.28.0
+[debug] [2023-04-24T17:53:05.207Z] Platform:      win32
+[debug] [2023-04-24T17:53:05.207Z] Node Version:  v16.14.2
+[debug] [2023-04-24T17:53:05.208Z] Time:          Mon Apr 24 2023 19:53:05 GMT+0200 (sentraleuropeisk sommertid)
+[debug] [2023-04-24T17:53:05.208Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-24T17:53:05.267Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-24T17:53:05.268Z] > authorizing via signed-in user (martinhodnemail@gmail.com)
+[debug] [2023-04-24T17:53:05.268Z] [iam] checking project hexacore-1c84b for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2023-04-24T17:53:05.269Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions [none]
+[debug] [2023-04-24T17:53:05.270Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions x-goog-quota-user=projects/hexacore-1c84b
+[debug] [2023-04-24T17:53:05.270Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-24T17:53:06.111Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions 200
+[debug] [2023-04-24T17:53:06.111Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-24T17:53:06.111Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2023-04-24T17:53:06.111Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-04-24T17:53:06.874Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2023-04-24T17:53:06.874Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-04-24T17:53:06.875Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b [none]
+[debug] [2023-04-24T17:53:07.269Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b 200
+[debug] [2023-04-24T17:53:07.269Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b {"projectId":"hexacore-1c84b","projectNumber":"1090430226645","displayName":"Hexacore","name":"projects/hexacore-1c84b","resources":{"hostingSite":"hexacore-1c84b","realtimeDatabaseInstance":"hexacore-1c84b-default-rtdb","storageBucket":"hexacore-1c84b.appspot.com","locationId":"europe-west"},"state":"ACTIVE","etag":"1_b8cdc460-8bf9-48a0-a122-dc2508e96d02"}
+[debug] [2023-04-24T17:53:11.659Z] defaultcredentials: writing to file C:\Users\marti\AppData\Roaming\firebase\martinhodnemail_gmail_com_application_default_credentials.json
+[debug] [2023-04-24T17:53:11.661Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites pageToken=&pageSize=10
+[debug] [2023-04-24T17:53:12.719Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites 200
+[debug] [2023-04-24T17:53:12.719Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites {"sites":[{"name":"projects/hexacore-1c84b/sites/hexacore-1c84b","defaultUrl":"https://hexacore-1c84b.web.app","appId":"1:1090430226645:web:b14a47eaf66fc1e9fc525c","type":"DEFAULT_SITE"}]}
+[debug] [2023-04-24T17:53:12.720Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config [none]
+[debug] [2023-04-24T17:53:13.725Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config 200
+[debug] [2023-04-24T17:53:13.725Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config {"projectId":"hexacore-1c84b","appId":"1:1090430226645:web:b14a47eaf66fc1e9fc525c","databaseURL":"https://hexacore-1c84b-default-rtdb.europe-west1.firebasedatabase.app","storageBucket":"hexacore-1c84b.appspot.com","locationId":"europe-west","apiKey":"AIzaSyCq3uvuimLnuVrF-f3f1VaN3VD5qip2ChQ","authDomain":"hexacore-1c84b.firebaseapp.com","messagingSenderId":"1090430226645"}
+[debug] [2023-04-24T17:53:35.511Z] Error: Build failed because of webpack errors
+    at webpackBuildImpl (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\webpack-build\impl.js:258:21)
+    at async webpackBuild (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\webpack-build\index.js:137:16)
+    at async C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\index.js:531:119
+    at async Span.traceAsyncFn (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\trace\trace.js:97:20)
+    at async build (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\index.js:143:29)
+    at async build (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\next\index.js:55:5)
+    at async prepareFrameworks (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\index.js:279:108)
+    at async deploy (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\index.js:53:13)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2023-04-24T17:55:14.857Z] ----------------------------------------------------------------------
+[debug] [2023-04-24T17:55:14.859Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2023-04-24T17:55:14.859Z] CLI Version:   11.28.0
+[debug] [2023-04-24T17:55:14.859Z] Platform:      win32
+[debug] [2023-04-24T17:55:14.859Z] Node Version:  v16.14.2
+[debug] [2023-04-24T17:55:14.860Z] Time:          Mon Apr 24 2023 19:55:14 GMT+0200 (sentraleuropeisk sommertid)
+[debug] [2023-04-24T17:55:14.860Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-24T17:55:14.912Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-24T17:55:14.913Z] > authorizing via signed-in user (martinhodnemail@gmail.com)
+[debug] [2023-04-24T17:55:14.913Z] [iam] checking project hexacore-1c84b for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2023-04-24T17:55:14.915Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions [none]
+[debug] [2023-04-24T17:55:14.915Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions x-goog-quota-user=projects/hexacore-1c84b
+[debug] [2023-04-24T17:55:14.915Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-24T17:55:15.707Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions 200
+[debug] [2023-04-24T17:55:15.707Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-24T17:55:15.708Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2023-04-24T17:55:15.708Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-04-24T17:55:16.419Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2023-04-24T17:55:16.419Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-04-24T17:55:16.420Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b [none]
+[debug] [2023-04-24T17:55:16.818Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b 200
+[debug] [2023-04-24T17:55:16.818Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b {"projectId":"hexacore-1c84b","projectNumber":"1090430226645","displayName":"Hexacore","name":"projects/hexacore-1c84b","resources":{"hostingSite":"hexacore-1c84b","realtimeDatabaseInstance":"hexacore-1c84b-default-rtdb","storageBucket":"hexacore-1c84b.appspot.com","locationId":"europe-west"},"state":"ACTIVE","etag":"1_b8cdc460-8bf9-48a0-a122-dc2508e96d02"}
+[debug] [2023-04-24T17:55:21.207Z] defaultcredentials: writing to file C:\Users\marti\AppData\Roaming\firebase\martinhodnemail_gmail_com_application_default_credentials.json
+[debug] [2023-04-24T17:55:21.209Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites pageToken=&pageSize=10
+[debug] [2023-04-24T17:55:22.211Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites 200
+[debug] [2023-04-24T17:55:22.211Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites {"sites":[{"name":"projects/hexacore-1c84b/sites/hexacore-1c84b","defaultUrl":"https://hexacore-1c84b.web.app","appId":"1:1090430226645:web:b14a47eaf66fc1e9fc525c","type":"DEFAULT_SITE"}]}
+[debug] [2023-04-24T17:55:22.211Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config [none]
+[debug] [2023-04-24T17:55:23.197Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config 200
+[debug] [2023-04-24T17:55:23.197Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config {"projectId":"hexacore-1c84b","appId":"1:1090430226645:web:b14a47eaf66fc1e9fc525c","databaseURL":"https://hexacore-1c84b-default-rtdb.europe-west1.firebasedatabase.app","storageBucket":"hexacore-1c84b.appspot.com","locationId":"europe-west","apiKey":"AIzaSyCq3uvuimLnuVrF-f3f1VaN3VD5qip2ChQ","authDomain":"hexacore-1c84b.firebaseapp.com","messagingSenderId":"1090430226645"}
+[debug] [2023-04-24T17:55:45.753Z] Error: Build failed because of webpack errors
+    at webpackBuildImpl (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\webpack-build\impl.js:258:21)
+    at async webpackBuild (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\webpack-build\index.js:137:16)
+    at async C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\index.js:531:119
+    at async Span.traceAsyncFn (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\trace\trace.js:97:20)
+    at async build (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\index.js:143:29)
+    at async build (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\next\index.js:55:5)
+    at async prepareFrameworks (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\index.js:279:108)
+    at async deploy (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\index.js:53:13)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2023-04-24T17:57:11.767Z] ----------------------------------------------------------------------
+[debug] [2023-04-24T17:57:11.768Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2023-04-24T17:57:11.769Z] CLI Version:   11.28.0
+[debug] [2023-04-24T17:57:11.769Z] Platform:      win32
+[debug] [2023-04-24T17:57:11.769Z] Node Version:  v16.14.2
+[debug] [2023-04-24T17:57:11.769Z] Time:          Mon Apr 24 2023 19:57:11 GMT+0200 (sentraleuropeisk sommertid)
+[debug] [2023-04-24T17:57:11.770Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-24T17:57:11.825Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-24T17:57:11.826Z] > authorizing via signed-in user (martinhodnemail@gmail.com)
+[debug] [2023-04-24T17:57:11.826Z] [iam] checking project hexacore-1c84b for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2023-04-24T17:57:11.828Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions [none]
+[debug] [2023-04-24T17:57:11.828Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions x-goog-quota-user=projects/hexacore-1c84b
+[debug] [2023-04-24T17:57:11.828Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-24T17:57:12.432Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions 200
+[debug] [2023-04-24T17:57:12.432Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-24T17:57:12.432Z] > refreshing access token with scopes: []
+[debug] [2023-04-24T17:57:12.433Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2023-04-24T17:57:12.433Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-04-24T17:57:12.642Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2023-04-24T17:57:12.642Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-04-24T17:57:12.648Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2023-04-24T17:57:12.648Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-04-24T17:57:13.367Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2023-04-24T17:57:13.367Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-04-24T17:57:13.368Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b [none]
+[debug] [2023-04-24T17:57:13.705Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b 200
+[debug] [2023-04-24T17:57:13.705Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b {"projectId":"hexacore-1c84b","projectNumber":"1090430226645","displayName":"Hexacore","name":"projects/hexacore-1c84b","resources":{"hostingSite":"hexacore-1c84b","realtimeDatabaseInstance":"hexacore-1c84b-default-rtdb","storageBucket":"hexacore-1c84b.appspot.com","locationId":"europe-west"},"state":"ACTIVE","etag":"1_b8cdc460-8bf9-48a0-a122-dc2508e96d02"}
+[debug] [2023-04-24T17:57:18.215Z] defaultcredentials: writing to file C:\Users\marti\AppData\Roaming\firebase\martinhodnemail_gmail_com_application_default_credentials.json
+[debug] [2023-04-24T17:57:18.218Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites pageToken=&pageSize=10
+[debug] [2023-04-24T17:57:19.265Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites 200
+[debug] [2023-04-24T17:57:19.265Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites {"sites":[{"name":"projects/hexacore-1c84b/sites/hexacore-1c84b","defaultUrl":"https://hexacore-1c84b.web.app","appId":"1:1090430226645:web:b14a47eaf66fc1e9fc525c","type":"DEFAULT_SITE"}]}
+[debug] [2023-04-24T17:57:19.266Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config [none]
+[debug] [2023-04-24T17:57:20.289Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config 200
+[debug] [2023-04-24T17:57:20.289Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config {"projectId":"hexacore-1c84b","appId":"1:1090430226645:web:b14a47eaf66fc1e9fc525c","databaseURL":"https://hexacore-1c84b-default-rtdb.europe-west1.firebasedatabase.app","storageBucket":"hexacore-1c84b.appspot.com","locationId":"europe-west","apiKey":"AIzaSyCq3uvuimLnuVrF-f3f1VaN3VD5qip2ChQ","authDomain":"hexacore-1c84b.firebaseapp.com","messagingSenderId":"1090430226645"}
+[debug] [2023-04-24T17:57:43.747Z] Error: Build failed because of webpack errors
+    at webpackBuildImpl (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\webpack-build\impl.js:258:21)
+    at async webpackBuild (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\webpack-build\index.js:137:16)
+    at async C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\index.js:531:119
+    at async Span.traceAsyncFn (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\trace\trace.js:97:20)
+    at async build (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\index.js:143:29)
+    at async build (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\next\index.js:55:5)
+    at async prepareFrameworks (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\index.js:279:108)
+    at async deploy (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\index.js:53:13)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2023-04-24T18:02:40.088Z] ----------------------------------------------------------------------
+[debug] [2023-04-24T18:02:40.089Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2023-04-24T18:02:40.090Z] CLI Version:   11.28.0
+[debug] [2023-04-24T18:02:40.090Z] Platform:      win32
+[debug] [2023-04-24T18:02:40.090Z] Node Version:  v16.14.2
+[debug] [2023-04-24T18:02:40.091Z] Time:          Mon Apr 24 2023 20:02:40 GMT+0200 (sentraleuropeisk sommertid)
+[debug] [2023-04-24T18:02:40.091Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-24T18:02:40.145Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-24T18:02:40.146Z] > authorizing via signed-in user (martinhodnemail@gmail.com)
+[debug] [2023-04-24T18:02:40.146Z] [iam] checking project hexacore-1c84b for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2023-04-24T18:02:40.147Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions [none]
+[debug] [2023-04-24T18:02:40.148Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions x-goog-quota-user=projects/hexacore-1c84b
+[debug] [2023-04-24T18:02:40.148Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-24T18:02:40.979Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions 200
+[debug] [2023-04-24T18:02:40.979Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-24T18:02:40.979Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2023-04-24T18:02:40.979Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-04-24T18:02:41.757Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2023-04-24T18:02:41.757Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-04-24T18:02:41.758Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b [none]
+[debug] [2023-04-24T18:02:42.095Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b 200
+[debug] [2023-04-24T18:02:42.095Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b {"projectId":"hexacore-1c84b","projectNumber":"1090430226645","displayName":"Hexacore","name":"projects/hexacore-1c84b","resources":{"hostingSite":"hexacore-1c84b","realtimeDatabaseInstance":"hexacore-1c84b-default-rtdb","storageBucket":"hexacore-1c84b.appspot.com","locationId":"europe-west"},"state":"ACTIVE","etag":"1_b8cdc460-8bf9-48a0-a122-dc2508e96d02"}
+[debug] [2023-04-24T18:02:46.962Z] defaultcredentials: writing to file C:\Users\marti\AppData\Roaming\firebase\martinhodnemail_gmail_com_application_default_credentials.json
+[debug] [2023-04-24T18:02:46.963Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites pageToken=&pageSize=10
+[debug] [2023-04-24T18:02:48.023Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites 200
+[debug] [2023-04-24T18:02:48.023Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites {"sites":[{"name":"projects/hexacore-1c84b/sites/hexacore-1c84b","defaultUrl":"https://hexacore-1c84b.web.app","appId":"1:1090430226645:web:b14a47eaf66fc1e9fc525c","type":"DEFAULT_SITE"}]}
+[debug] [2023-04-24T18:02:48.023Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config [none]
+[debug] [2023-04-24T18:02:49.046Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config 200
+[debug] [2023-04-24T18:02:49.046Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config {"projectId":"hexacore-1c84b","appId":"1:1090430226645:web:b14a47eaf66fc1e9fc525c","databaseURL":"https://hexacore-1c84b-default-rtdb.europe-west1.firebasedatabase.app","storageBucket":"hexacore-1c84b.appspot.com","locationId":"europe-west","apiKey":"AIzaSyCq3uvuimLnuVrF-f3f1VaN3VD5qip2ChQ","authDomain":"hexacore-1c84b.firebaseapp.com","messagingSenderId":"1090430226645"}
+[debug] [2023-04-24T18:03:13.214Z] Error: Build failed because of webpack errors
+    at webpackBuildImpl (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\webpack-build\impl.js:258:21)
+    at async webpackBuild (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\webpack-build\index.js:137:16)
+    at async C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\index.js:531:119
+    at async Span.traceAsyncFn (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\trace\trace.js:97:20)
+    at async build (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\index.js:143:29)
+    at async build (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\next\index.js:55:5)
+    at async prepareFrameworks (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\index.js:279:108)
+    at async deploy (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\index.js:53:13)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2023-04-24T18:06:53.426Z] ----------------------------------------------------------------------
+[debug] [2023-04-24T18:06:53.428Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2023-04-24T18:06:53.428Z] CLI Version:   11.28.0
+[debug] [2023-04-24T18:06:53.428Z] Platform:      win32
+[debug] [2023-04-24T18:06:53.428Z] Node Version:  v16.14.2
+[debug] [2023-04-24T18:06:53.429Z] Time:          Mon Apr 24 2023 20:06:53 GMT+0200 (sentraleuropeisk sommertid)
+[debug] [2023-04-24T18:06:53.429Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-24T18:06:53.481Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-24T18:06:53.482Z] > authorizing via signed-in user (martinhodnemail@gmail.com)
+[debug] [2023-04-24T18:06:53.482Z] [iam] checking project hexacore-1c84b for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2023-04-24T18:06:53.483Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions [none]
+[debug] [2023-04-24T18:06:53.484Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions x-goog-quota-user=projects/hexacore-1c84b
+[debug] [2023-04-24T18:06:53.484Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-24T18:06:54.283Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions 200
+[debug] [2023-04-24T18:06:54.283Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hexacore-1c84b:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-24T18:06:54.283Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2023-04-24T18:06:54.284Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-04-24T18:06:55.001Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2023-04-24T18:06:55.001Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/hexacore-1c84b/serviceAccounts/hexacore-1c84b@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-04-24T18:06:55.002Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b [none]
+[debug] [2023-04-24T18:06:55.370Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b 200
+[debug] [2023-04-24T18:06:55.370Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hexacore-1c84b {"projectId":"hexacore-1c84b","projectNumber":"1090430226645","displayName":"Hexacore","name":"projects/hexacore-1c84b","resources":{"hostingSite":"hexacore-1c84b","realtimeDatabaseInstance":"hexacore-1c84b-default-rtdb","storageBucket":"hexacore-1c84b.appspot.com","locationId":"europe-west"},"state":"ACTIVE","etag":"1_b8cdc460-8bf9-48a0-a122-dc2508e96d02"}
+[debug] [2023-04-24T18:07:00.278Z] defaultcredentials: writing to file C:\Users\marti\AppData\Roaming\firebase\martinhodnemail_gmail_com_application_default_credentials.json
+[debug] [2023-04-24T18:07:00.279Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites pageToken=&pageSize=10
+[debug] [2023-04-24T18:07:00.714Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites 200
+[debug] [2023-04-24T18:07:00.714Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/hexacore-1c84b/sites {"sites":[{"name":"projects/hexacore-1c84b/sites/hexacore-1c84b","defaultUrl":"https://hexacore-1c84b.web.app","appId":"1:1090430226645:web:b14a47eaf66fc1e9fc525c","type":"DEFAULT_SITE"}]}
+[debug] [2023-04-24T18:07:00.714Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config [none]
+[debug] [2023-04-24T18:07:01.828Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config 200
+[debug] [2023-04-24T18:07:01.828Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:1090430226645:web:b14a47eaf66fc1e9fc525c/config {"projectId":"hexacore-1c84b","appId":"1:1090430226645:web:b14a47eaf66fc1e9fc525c","databaseURL":"https://hexacore-1c84b-default-rtdb.europe-west1.firebasedatabase.app","storageBucket":"hexacore-1c84b.appspot.com","locationId":"europe-west","apiKey":"AIzaSyCq3uvuimLnuVrF-f3f1VaN3VD5qip2ChQ","authDomain":"hexacore-1c84b.firebaseapp.com","messagingSenderId":"1090430226645"}
+[debug] [2023-04-24T18:07:26.113Z] Error: Build failed because of webpack errors
+    at webpackBuildImpl (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\webpack-build\impl.js:258:21)
+    at async webpackBuild (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\webpack-build\index.js:137:16)
+    at async C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\index.js:531:119
+    at async Span.traceAsyncFn (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\trace\trace.js:97:20)
+    at async build (C:\VS code projects\hexacore\hexacore\node_modules\next\dist\build\index.js:143:29)
+    at async build (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\next\index.js:55:5)
+    at async prepareFrameworks (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\index.js:279:108)
+    at async deploy (C:\Users\marti\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\index.js:53:13)
+[error] 
+[error] Error: An unexpected error has occurred.
