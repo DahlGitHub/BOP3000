@@ -7,6 +7,7 @@ import { faBookDead, faEllipsisH, faEllipsisV, faPenToSquare, faTrash } from "@f
 import { UserContext } from "../../context/UserContext"
 import { faAngry, faHeart, faNewspaper, faSadCry, faSmile, faThumbsDown, faThumbsUp } from "@fortawesome/free-regular-svg-icons"
 import EmojiPicker from "emoji-picker-react"
+import { useImmer } from "use-immer"
 
 
 export default ({index, message, id}) =>{   
@@ -17,23 +18,23 @@ export default ({index, message, id}) =>{
     const date = message.message.sentAt.toDate()
     const [isEditing, setIsEditing] = useState(false);
     const {user} = useContext(UserContext)
-    const [reactions, setReactions] = useState(message.message.reactions.length > 0 ? message.message.reactions : [])
+    const [reactions, setReactions] = useImmer(message.message.reactions.length > 0 ? message.message.reactions : [])
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const deleteMessage = async () => {
         await deleteDoc(doc(db, id+'/Messages/', message.messageId))
     }
     const react =async (reaction) =>{
-      let newReactions = reactions
- 
-      if(newReactions.find(reactions => reactions.reaction === reaction)){
-        newReactions = newReactions.filter(reactions => reactions.reaction !== reaction)
-      } else {
-        newReactions.push({reaction: reaction, user: user.uid})
-      } 
+      if(reactions.some(r => r.reaction === reaction)){
         await updateDoc(doc(db, id+'/Messages/', message.messageId), {
-            reactions: newReactions
+          reactions: reactions.filter(r => r.reaction !== reaction)
         });
-
+        setReactions(draft => draft.filter(r => r.reaction !== reaction))
+      } else{
+        await updateDoc(doc(db, id+'/Messages/', message.messageId), {
+          reactions: [...reactions, {reaction: reaction, users: [user.uid]}]
+        });
+        setReactions(draft => draft.push({reaction: reaction, users: [user.uid]}))
+      }
     }
     useEffect(()=>{
         if(textAreaRef.current.scrollHeight > textAreaRef.current.clientHeight){
