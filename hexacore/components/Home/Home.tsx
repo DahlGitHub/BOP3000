@@ -60,7 +60,7 @@ const Home = () => {
         } else {
           const promises = querySnapshot.docs.map(async (doc) => {
             
-            const teamID = doc.data().uid;
+            const teamID = doc.id;
             const teamDoc = await getDoc(docImport(db, "teams", teamID));
             const teamData = teamDoc.data();
             const element = (
