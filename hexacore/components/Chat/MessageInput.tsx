@@ -21,6 +21,7 @@ export default ({id}) =>{
         addDoc(collection(db, chatID+'/Messages/'), {
           uid: user.uid,
           type: 'message',
+          reactions: [],
           message: message,
           sentAt: Timestamp.now()
         })
