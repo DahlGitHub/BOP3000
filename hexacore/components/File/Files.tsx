@@ -47,14 +47,14 @@ const Files = (location) => {
         <div className="flex">
         <button className="pl-0 mb-0"
         onClick={toggleShowFullView}>
-          <div className="bg-gray-100 p-3 rounded-lg mt-2 mr-2 mb-0 ml-2 hover:bg-gray-300">
+          <div className="bg-gray-100 dark:bg-gray-600 p-3 rounded-lg mt-2 mr-2 mb-0 ml-2 hover:bg-gray-300 dark:hover:bg-gray-500 dark:text-gray-200">
           {showFullView ? <FontAwesomeIcon icon={faList}/> : <FontAwesomeIcon icon={faList12}/>}
           </div>
         </button>
         
         <div className="pl-0 mb-0 w-96">
-          <div className="bg-gray-100 p-3 rounded-lg mt-2 mr-2 mb-0 ml-2 hover:bg-gray-300">
-            <FontAwesomeIcon className="text-gray-600 fa-sm" icon={faCloudArrowUp}/><span className="ml-2 text-[12px] text-gray-500">{formatBytes(usedStorage.toFixed(1))} / {totalStorage} GB storage used</span>
+          <div className="bg-gray-100 p-3 rounded-lg mt-2 mr-2 mb-0 ml-2 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500">
+            <FontAwesomeIcon className="text-gray-600 fa-sm dark:text-gray-100" icon={faCloudArrowUp}/><span className="ml-2 text-[12px] text-gray-500 dark:text-gray-200">{formatBytes(usedStorage.toFixed(1))} / {totalStorage} GB storage used</span>
             <div className="w-full bg-gray-200 rounded-full h-1 dark:bg-gray-700">
               <div className="bg-blue-600 h-1 rounded-full" style={{width: showStorage}} ></div>
             </div>
@@ -94,7 +94,7 @@ const Files = (location) => {
 
 
         return (
-          <div key={fileData.id} onClick={() => handleSelect(fileData)} className="cursor-pointer border shadow-sm p-3 rounded-lg pl-0 mt-2 mr-2 mb-0 ml-2 hover:bg-gray-100">
+          <div key={fileData.id} onClick={() => handleSelect(fileData)} className="cursor-pointer border shadow-sm p-3 rounded-lg pl-0 mt-2 mr-2 mb-0 ml-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-600">
               <div className="sm:flex sm:items-center sm:justify-between">
                 <div className="flex items-center flex-1 min-w-0">
                   <FontAwesomeIcon className="flex-shrink-0 object-cover rounded-full w-10 h-10 text-red-600 fa-2xl mx-3"  icon={faFilePdf}/>
