@@ -8,9 +8,9 @@ import { db } from '../../firebase'
 import { useEffect, useState } from 'react';
 import CreatePoll from './CreatePoll';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMessage } from '@fortawesome/free-regular-svg-icons';
-import { faDashboard, faPoll, faPollH, faSms, faSquarePollVertical, faVoteYea } from '@fortawesome/free-solid-svg-icons';
-import { faFacebookMessenger } from '@fortawesome/free-brands-svg-icons';
+import { faMessage } from '@fortawesome/free-solid-svg-icons';
+import { faPoll } from '@fortawesome/free-solid-svg-icons';
+
    
 
 export default ({chatID}) => {
@@ -22,12 +22,12 @@ export default ({chatID}) => {
 //const referenceCollection = collection(db, 'chat/'+chatID)
 
 function getButtonClassName(buttonName, selectedButton) {
-  let classNames = 'inline-block p-1 rounded-t-lg border-t border-l border-r';
+  let classNames = 'inline-block p-1 rounded-lg';
 
   if (selectedButton === buttonName) {
-    classNames += ' rounded-t-lg border-gray-400 bg-gray-100 px-2 border-b-none';
+    classNames += ' rounded-t-lg border-gray-400 bg-white dark:bg-gray-700 text-blue-600';
   } else {
-    classNames += ' border-transparent hover:text-blue-600 dark:hover:text-gray-300 text-gray-500';
+    classNames += ' border-transparent hover:text-blue-600 dark:hover:text-blue-600 text-gray-500';
   }
 
   return classNames;
@@ -52,18 +52,18 @@ useEffect(()=>{
             <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl divide-y-2 bg-gray-100 dark:bg-gray-800 h-full p-4">
               <MessageList id={chatId}/>
               <div className="flex-none pt-1">
-                <div className="text-black space-x-1 divider-x bg-white rounded-lg">
+                <div className="text-black space-x-5 divider-x bg-gray-100 dark:bg-gray-800 rounded-lg">
                 <button
                   className={getButtonClassName('Message', selectedButton)}
                   onClick={() => setSelectedButton('Message')}
                 >
-                  <FontAwesomeIcon className='w-5 fa-xs' icon={faMessage}/> Message
+                <span className='text-[12px] pr-2'><FontAwesomeIcon className='w-5 fa-xs mx-1' icon={faMessage}/>Message</span>
                 </button>
                 <button
                   className={getButtonClassName('Poll', selectedButton)}
                   onClick={() => setSelectedButton('Poll')}
                 >
-                  <FontAwesomeIcon className='w-5 fa-sm' icon={faPoll}/>Poll
+                  <span className='text-[12px] pr-2'><FontAwesomeIcon className='w-5 fa-sm mx-1' icon={faPoll}/>Poll</span>
                 </button>
                 </div>
                 {selectedButton === 'Message' ? <MessageInput id={chatId}/> : <CreatePoll id={chatId}/>}
