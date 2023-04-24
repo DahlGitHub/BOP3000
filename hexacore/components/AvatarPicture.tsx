@@ -1,9 +1,10 @@
 
 
-const AvatarPicture = ({ picture, name }) => {
+const AvatarPicture = ({ picture, name, containerWidth, containerHeight }) => {
 
     return(
         picture ? (
+          <div className={`w-${containerWidth} h-${containerHeight}`}>
             <img
               src={picture}
               width="36"
@@ -11,8 +12,9 @@ const AvatarPicture = ({ picture, name }) => {
               className="rounded-full"
               alt=""
             />
+          </div>
           ) : (
-            <div className="bg-gray-200 w-8 h-8 rounded-full flex items-center justify-center">
+            <div className={`bg-gray-200 rounded-full flex items-center justify-center w-${containerWidth} h-${containerHeight}`}>
               <span className="text-gray-600 font-bold text-xs">
               {name.split(" ").length > 1
                   ? `${name.substr(0, 1)}${name

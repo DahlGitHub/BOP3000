@@ -222,14 +222,18 @@ function CardItem({ data, index, members, kanbanID }) {
               if (index < 3) { 
                 const member = members.find((m) => m.uid === ass);
                 return (
-                  <li key={ass} className=" m-0">
-                    {<AvatarPicture picture={member.picture} name={member.name}/>}
+                  <li key={ass} className="m-0 w-6 h-6">
+                    {<AvatarPicture 
+                    picture={member.picture} 
+                    name={member.name}
+                    containerWidth="6"
+                    containerHeight="6"/>}
                   </li>
                 );
               } else if (index === 3 && data.assignees.length > 3) {
                 const numExtraMembers = data.assignees.length - 3;
                 return (
-                  <li key={ass} className=" m-0 relative">
+                  <li key={ass} className="m-0 relative">
                     <div className="absolute right-1 bottom-1 rounded-full text-xs font-bold bg-gray-200 text-gray-700 w-3 h-3 flex items-center justify-center">
                       +{numExtraMembers}
                     </div>
@@ -271,7 +275,11 @@ function CardItem({ data, index, members, kanbanID }) {
                           <Dropdown.Item
                             key={"remove " + member}
                             icon={
-                              <AvatarPicture picture={assignee.picture} name={assignee.name} />
+                              <AvatarPicture 
+                              picture={assignee.picture} 
+                              name={assignee.name} 
+                              containerWidth="8"
+                              containerHeight="8"/>
                             }
                           >
                             {assignee.name}
@@ -288,7 +296,11 @@ function CardItem({ data, index, members, kanbanID }) {
                           <Dropdown.Item
                             key={"add " + member.uid}
                             icon={
-                              <AvatarPicture picture={member.picture} name={member.name} />
+                              <AvatarPicture 
+                              picture={member.picture} 
+                              name={member.name}
+                              containerWidth="8"
+                              containerHeight="8" />
                             }
                           >
                             {member.name}
