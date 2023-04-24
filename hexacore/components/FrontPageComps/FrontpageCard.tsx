@@ -22,8 +22,8 @@ const FrontpageCard = () => {
                             <img className="flex-1 h-full rounded-lg" src="https://via.placeholder.com/400x400" />
                         </div>
                     <div className="w-2/3 p-5">
-                    <p className="w-full text-2xl font-semibold dark:text-white ">Keep track with the Kanban board</p>
-                    <p className="w-full pb-8 text-sm tracking-wide leading-tight dark:text-white ">The card layouts can vary to support the types of content they contain.</p>
+                    <p className="w-full text-2xl font-semibold dark:text-white">Keep track with the Kanban board</p>
+                    <p className="w-full pb-8 text-sm tracking-wide leading-tight dark:text-white my-5">Create new tasks using our kanban cards to easily keep track of current tasks and whats done. you can also select priorities on cards and allocate team members to a task. </p>
                     </div>
                         
                 </div>
@@ -33,7 +33,7 @@ const FrontpageCard = () => {
                 <div className="flex flex-row space-y-2 items-center justify-center h-full py-4 dark:bg-gray-800 bg-gray-200 rounded-xl space-x-10">
                     <div className="w-2/3">
                     <p className="w-full text-2xl font-semibold dark:text-white m-5">Chat with co-workers and friends</p>
-                    <p className="w-full pb-8 text-sm tracking-wide leading-tight dark:text-white m-5">The card layouts can vary to support the types of content they contain.</p>
+                    <p className="w-full pb-8 text-sm tracking-wide leading-tight dark:text-white m-5">Our chat gives you the option to dicsuss various topics with the people you want. If you want people opinion on something, its possile to create polls in the chat</p>
                     </div>
                         <div className="w-auto h- p-5">
                             <img className="flex-1 h-full rounded-lg" src="https://via.placeholder.com/400x400" />
