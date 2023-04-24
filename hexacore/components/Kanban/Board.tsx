@@ -20,7 +20,6 @@ export default ({board, bIndex, members, kanbanID}) => {
 
     useEffect(() => {
       const closeForm = (e) => {
-      console.log(typeof e.target.className)
       const addTask = (e.target.className ? e.target.className.toString().split(" ")[0] : '')  
         if(showForm && addTask !== 'addTask' ){
           setShowForm(false)
