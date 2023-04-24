@@ -60,7 +60,7 @@ export default () => {
                             </Text>
                         </Dropdown.Item>
                         <Dropdown.Item key="Dashbord" withDivider>
-                            <Link href='/dashboard'className='w-full h-full block' >Dashboard</Link>
+                            <Link href='/login'className='w-full h-full block' >Dashboard</Link>
                         </Dropdown.Item>
                         <Dropdown.Item key="logout" withDivider color="error">
                             <Link href='./' onClick={logout} className='w-full h-full block' >{setLogMessage()}</Link>
