@@ -5,7 +5,7 @@ import Home from '../../components/Home/Home';
 const index = () => {
   return (
     <DashboardLayout>
-        <Home/>
+      <Home/>
     </DashboardLayout>
   )
 }

@@ -83,9 +83,9 @@ const Home = () => {
     const router = useRouter();
 
     return(
-        <div className="bg-white dark:bg-gray-900 text-black dark:text-white h-full">
-            <div className="p-10">
-                <WelcomeMessage name={username}/>
+        <div className="bg-white dark:bg-gray-900 text-black dark:text-white h-[calc(100vh-70px)] ">
+            <div className="pl-10 pt-3">
+            <h2 className="mb-4 text-4xl tracking-tight font-bold text-gray-900 dark:text-white">Hi, {username}</h2>
             </div>
             <div className="m-10 border-solid border-2 border-sky-500 rounded">
                 <h1 className="text-xl p-5">Get started</h1>
