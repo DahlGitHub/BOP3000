@@ -12,16 +12,12 @@ export function createGuidId() {
   return randomNumber;
 }
 
-// groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid/dokumentid
-export default function Home() {
+export default function Home({id, membersId}) {
   const [ready, setReady] = useState(false)
   const [boardData, setBoardData] = useState ([])
   const [newBoard, setNewBoard] = useState('')
   const [members, setMembers] = useImmer([])
-  //const qMembers = query(collection(db, '/groups/a82bcf3fff364e71b2a8bb39903be3dd/members'))
-
-  const qMembers = query(collection(db, '/users'))
-
+  const qMembers = query(collection(db, membersId))
   const getMembers = async () => {
     const members = await getDocs(qMembers)
     const membersData = members.docs.map((doc) => {
@@ -29,9 +25,10 @@ export default function Home() {
     })
     setMembers(membersData)
   }
+
   useEffect(() => {
     getMembers()
-    const q = query(collection(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid'), orderBy('order', 'asc'))
+    const q = query(collection(db, id), orderBy('order', 'asc'))
     onSnapshot(q, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
         if (change.type === 'added') {
@@ -65,7 +62,7 @@ export default function Home() {
     if (process) {
       setReady(true);
     }
-  }, []);
+  }, [id]);
 
   
   const onDragEnd = async (re) => {
@@ -76,7 +73,7 @@ export default function Home() {
       newBoardData.splice(re.source.index, 1);
       newBoardData.splice(re.destination.index, 0, dragItem);
       newBoardData.forEach(async (board, index) => {
-        await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', board.id), {
+        await updateDoc(doc(db, id, board.id), {
           order: index
         })
       })
@@ -93,10 +90,10 @@ export default function Home() {
         0,
         dragItem
       )
-      await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardData[parseInt(re.source.droppableId)].id), {
+      await updateDoc(doc(db, id, boardData[parseInt(re.source.droppableId)].id), {
         items: boardData[parseInt(re.source.droppableId)].items
       })
-      await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardData[parseInt(re.destination.droppableId)].id), {
+      await updateDoc(doc(db, id, boardData[parseInt(re.destination.droppableId)].id), {
         items: boardData[parseInt(re.destination.droppableId)].items
       })
     }
@@ -104,10 +101,10 @@ export default function Home() {
 
   const addBoard = async () => {
     if(newBoard.length === 0) return;
-    const id = createGuidId().toString()
+    const boardId = createGuidId().toString()
     const setOrder = boardData.length === 0 ? 0 : boardData[boardData.length-1].order+1
-    await setDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', id), {
-      id: id,
+    await setDoc(doc(db, id, boardId), {
+      id: boardId,
       order: setOrder,
       name: newBoard,
       items: []
@@ -146,7 +143,8 @@ export default function Home() {
                       <Board 
                         board={board}
                         bIndex={bIndex}
-                        members={members}/>
+                        members={members}
+                        kanbanID={id}/>
                       </div>
                       )}
                     </Draggable>

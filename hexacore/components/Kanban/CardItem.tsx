@@ -11,10 +11,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import AvatarPicture from "../AvatarPicture";
 
 
-function CardItem({ data, index, members }) {
+function CardItem({ data, index, members, kanbanID }) {
   const [editTaskName, setEditTaskName] = useState(false)
   const [title, setTitle] = useState(data.title)
-  const q = query(collection(db, 'groups', 'a82bcf3fff364e71b2a8bb39903be3dd', 'kanbanid'), where('items', 'array-contains', data))
+  const q = query(collection(db, kanbanID), where('items', 'array-contains', data))
   const [selectedDate, setSelectedDate] = useState(data.date ? data.date.toDate() : null);
 
   const selectDate = async (date) => {
@@ -58,7 +58,7 @@ function CardItem({ data, index, members }) {
         }
         return item;
       });
-      await updateDoc(doc(db, '/groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', docs.data().id), {
+      await updateDoc(doc(db, kanbanID, docs.data().id), {
         items: items,
       });
       
@@ -78,7 +78,7 @@ function CardItem({ data, index, members }) {
           }
           return item;
         });
-        await updateDoc(doc(db, "/groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid", docs.data().id), {
+        await updateDoc(doc(db, kanbanID, docs.data().id), {
           items: items,
         });
       });
@@ -101,18 +101,18 @@ function CardItem({ data, index, members }) {
         }
         return item;
       });
-      await updateDoc(doc(db, '/groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', docs.data().id), {
+      await updateDoc(doc(db, kanbanID, docs.data().id), {
         items: items,
       });
       });
   
   }
-
+  //'/groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid'
   const deleteTask = async () => {
     const docRef = await getDocs(q)
     docRef.docs.forEach(async(docs) => {
       const items = docs.data().items.filter((item) => item.id !== data.id);
-      await updateDoc(doc(db, '/groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', docs.data().id), {
+      await updateDoc(doc(db, kanbanID, docs.data().id), {
         items: items,
       });
       });

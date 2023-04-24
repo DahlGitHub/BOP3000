@@ -37,7 +37,6 @@ const CreateTeamModal = ({isOpen, onClose}) => {
         const teamuid = uuidv4().replaceAll("-","");
 
         if (!name && !picture) {
-        console.log("none test")
             return
         } else {
            await setDoc(doc(db, `teams/${teamuid}`), {
