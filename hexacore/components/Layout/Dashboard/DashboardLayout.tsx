@@ -12,12 +12,12 @@ const DashboardLayout = ({ children }) => {
   const [user, loading, error] = useAuthState(auth)
   return (
     <UserContext.Provider value={{user, loading, error}}>
-      <div className="min-h-screen w-full">
+      <div className="min-h-screen">
       <DashboardHead />
       <div className="flex">
         <DashboardSidebar />
       {loading
-      ? <Progress
+      ? <Progress key={1}
       indeterminated
       value={50}
       color="secondary"
@@ -25,7 +25,7 @@ const DashboardLayout = ({ children }) => {
 
       :
       
-      <div className="w-full">
+      <div className="w-full w-[calc(100vw-100px)]">
         { children }
       </div>
       

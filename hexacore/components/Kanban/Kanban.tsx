@@ -1,208 +1,163 @@
 import React from 'react'
-
-import Image from "next/dist/client/image";
-import {
-  ChevronDownIcon,
-  PlusIcon,
-  
-  PlusCircleIcon,
-} from '@heroicons/react/24/outline'
-import CardItem from "./CardItem";
-import BoardData from "./board-data.json";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faUserFriends } from "@fortawesome/free-solid-svg-icons";
+import { Button, Dropdown, Input } from "@nextui-org/react";
+import { collection, doc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc } from 'firebase/firestore';
+import { db } from '../../firebase';
+import { useImmer } from 'use-immer';
+import Board from './Board';
 
-function createGuidId() {
+export function createGuidId() {
   const randomNumber = Math.floor(Math.random() * 1000000000000);
   return randomNumber;
 }
 
+// groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid/dokumentid
 export default function Home() {
-  const [ready, setReady] = useState(false);
-  const [boardData, setBoardData] = useState(BoardData);
-  const [showForm, setShowForm] = useState(false);
-  const [selectedBoard, setSelectedBoard] = useState(0);
+  const [ready, setReady] = useState(false)
+  const [boardData, setBoardData] = useState ([])
+  const [newBoard, setNewBoard] = useState('')
+  const [members, setMembers] = useImmer([])
+  //const qMembers = query(collection(db, '/groups/a82bcf3fff364e71b2a8bb39903be3dd/members'))
 
+  const qMembers = query(collection(db, '/users'))
+
+  const getMembers = async () => {
+    const members = await getDocs(qMembers)
+    const membersData = members.docs.map((doc) => {
+      return doc.data()
+    })
+    setMembers(membersData)
+  }
   useEffect(() => {
-    if (process.browser) {
+    getMembers()
+    const q = query(collection(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid'), orderBy('order', 'asc'))
+    onSnapshot(q, (snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === 'added') {
+          setBoardData((boardData) => {
+            const newData = change.doc.data();
+            const newBoardData = [...boardData];
+            newBoardData[change.newIndex] = newData;
+            return newBoardData;
+          });
+        }
+        if(change.type === 'modified'){
+          // change the order of the board and set the new index
+          setBoardData((boardData) => {
+            const newData = change.doc.data();
+            const newBoardData = [...boardData];
+            newBoardData[newData.order] = newData;
+            return newBoardData;
+          })
+        }
+        if (change.type === 'removed') {
+          setBoardData((boardData) => {
+            const newBoardData = [...boardData];
+            newBoardData.splice(change.oldIndex, 1);
+            return newBoardData;
+          })
+          //må oppdatere order på alle boards
+        }
+        
+      });
+    })
+    if (process) {
       setReady(true);
     }
   }, []);
 
-  const onDragEnd = (re) => {
+  
+  const onDragEnd = async (re) => {
     if (!re.destination) return;
-    let newBoardData = boardData;
-    var dragItem =
-      newBoardData[parseInt(re.source.droppableId)].items[re.source.index];
-    newBoardData[parseInt(re.source.droppableId)].items.splice(
-      re.source.index,
-      1
-    );
-    newBoardData[parseInt(re.destination.droppableId)].items.splice(
-      re.destination.index,
-      0,
-      dragItem
-    );
-    setBoardData(newBoardData);
+    if (re.type === 'BOARD') {
+      const dragItem = boardData[re.source.index];
+      const newBoardData = [...boardData];
+      newBoardData.splice(re.source.index, 1);
+      newBoardData.splice(re.destination.index, 0, dragItem);
+      newBoardData.forEach(async (board, index) => {
+        await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', board.id), {
+          order: index
+        })
+      })
+      setBoardData(newBoardData);
+    }else if(re.type === 'CARD'){
+      var dragItem = boardData[parseInt(re.source.droppableId)].items[re.source.index];
+      boardData[parseInt(re.source.droppableId)].items.splice(
+        re.source.index,
+        1
+      )
+      dragItem.boardId = boardData[parseInt(re.destination.droppableId)].id;
+      boardData[parseInt(re.destination.droppableId)].items.splice(
+        re.destination.index,
+        0,
+        dragItem
+      )
+      await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardData[parseInt(re.source.droppableId)].id), {
+        items: boardData[parseInt(re.source.droppableId)].items
+      })
+      await updateDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', boardData[parseInt(re.destination.droppableId)].id), {
+        items: boardData[parseInt(re.destination.droppableId)].items
+      })
+    }
   };
 
-  const onTextAreaKeyPress = (e) => {
-    if(e.keyCode === 13) //Enter
-    {
-      const val = e.target.value;
-      if(val.length === 0) {
-        setShowForm(false);
-      }
-      else {
-        const boardId = e.target.attributes['data-id'].value;
-        const item = {
-          id: createGuidId(),
-          title: val,
-          priority: 0,
-          chat:0,
-          attachment: 0,
-          assignees: []
-        }
-        let newBoardData = boardData;
-        newBoardData[boardId].items.push(item);
-        setBoardData(newBoardData);
-        setShowForm(false);
-        e.target.value = '';
-      }
-    }
+  const addBoard = async () => {
+    if(newBoard.length === 0) return;
+    const id = createGuidId().toString()
+    const setOrder = boardData.length === 0 ? 0 : boardData[boardData.length-1].order+1
+    await setDoc(doc(db, 'groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid', id), {
+      id: id,
+      order: setOrder,
+      name: newBoard,
+      items: []
+    })
   }
-
   return (
-    
-      <div className="pt-20 pl-10 flex flex-col h-screen">
+      <div className="pt-10 pl-5 flex flex-col w-full">
         {/* Board header */}
-        <div className="flex flex-initial">
-          <div className="flex items-center">
+        <div className="flex flex-initial space-x-3">
+          <div className="flex items-center mx-2">
             <h4 className="text-4xl font-bold text-gray-600">Kanban board</h4>
-            <FontAwesomeIcon icon={faUser}
-              className="w-9 h-9 text-gray-500 rounded-full
-            p-1 bg-white ml-5 shadow-xl"
-            />
           </div>
-
-          <ul className="flex space-x-3 ml-10">
-            <li>
-              <img
-                src="https://firebasestorage.googleapis.com/v0/b/hexacore-1c84b.appspot.com/o/Image%2F6y2HiDmxeueYcT3Hp87MyzE25lk2?alt=media&token=0bfbfdbb-2bbd-41a1-b760-5456c5a7c200"
-                width="36"
-                height="36"
-                
-                className=" rounded-full "
-                alt=''
-              />
-            </li>
-            <li>
-              <img
-                src="https://firebasestorage.googleapis.com/v0/b/hexacore-1c84b.appspot.com/o/Image%2F6y2HiDmxeueYcT3Hp87MyzE25lk2?alt=media&token=0bfbfdbb-2bbd-41a1-b760-5456c5a7c200"
-                width="36"
-                height="36"
-                
-                className=" rounded-full "
-                alt=''
-              />
-            </li>
-            <li>
-              <img
-                src="https://firebasestorage.googleapis.com/v0/b/hexacore-1c84b.appspot.com/o/Image%2F6y2HiDmxeueYcT3Hp87MyzE25lk2?alt=media&token=0bfbfdbb-2bbd-41a1-b760-5456c5a7c200"
-                width="36"
-                height="36"
-                
-                className=" rounded-full "
-                alt=''
-              />
-            </li>
-            <li>
-              <button
-                className="border border-dashed flex items-center w-9 h-9 border-gray-500 justify-center
-                rounded-full"
-              >
-                <PlusIcon className="w-5 h-5 text-gray-500" />
-              </button>
-            </li>
-          </ul>
+          <Input aria-label='addBoard' aria-hidden='false' value={newBoard} onChange={e => setNewBoard(e.target.value)} placeholder='Add a new list'></Input>
+          <button className="p-2 px-3 text-sm text-center text-white rounded-xl bg-blue-700 sm:w-fit hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={addBoard}>Add</button>
         </div>
-
-        {/* Board columns */}
         {ready && (
           <DragDropContext onDragEnd={onDragEnd}>
-            <div className="flex gap-5 flex-none w-fit my-5 overflow-x p-5">
-              {boardData.map((board, bIndex) => {
-                return (
-                  <div key={board.name}>
-                    <Droppable droppableId={bIndex.toString()}>
+            <div className="flex w-full my-3 overflow-x-auto">
+            <Droppable droppableId="droppable" type="BOARD" direction="horizontal">
+              {(provided, snapshot) => (
+              <div
+                ref={provided.innerRef}
+                className={`flex w-fit ${snapshot.isDraggingOver && "bg-green-50 rounded-lg"}`}
+                {...provided.droppableProps}
+              >
+              {boardData.map((board, bIndex) =>(
+                 
+                    <Draggable type="BOARD" key={board.id} draggableId={board.id} index={bIndex} >
                       {(provided, snapshot) => (
                         <div
-                          {...provided.droppableProps}
                           ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className="bg-transparent rounded-md p-2 mt-0 last:mb-0 w-64"
                         >
-                          <div
-                            className={`bg-gray-100 w-30 rounded-md shadow-md
-                            flex flex-col relative
-                            ${snapshot.isDraggingOver && "bg-green-100"}`}
-                          >
-                            <span
-                              className="w-full h-1 bg-gradient-to-r from-pink-700 to-red-200
-                          absolute inset-x-0 top-0"
-                            ></span>
-                            <h4 className=" p-3 flex justify-between items-center mb-2">
-                              <span className="text-2xl text-gray-600">
-                                {board.name}
-                              </span>
-                              
-                            </h4>
-
-                            <div className="overflow-y-auto h-auto"
-                            style={{maxHeight:'calc(100vh - 290px)'}}>
-                              {board.items.length > 0 &&
-                                board.items.map((item, iIndex) => {
-                                  return (
-                                    <CardItem
-                                      key={item.id}
-                                      data={item}
-                                      index={iIndex}
-                                      
-                                    />
-                                  );
-                                })}
-                              {provided.placeholder}
-                            </div>
-                            
-                            {
-                              showForm && selectedBoard === bIndex ? (
-                                <div className="p-3">
-                                  <textarea className="border-gray-300 rounded focus:ring-purple-400 w-full" 
-                                  rows={3} placeholder="Task info" 
-                                  data-id={bIndex}
-                                  onKeyDown={(e) => onTextAreaKeyPress(e)}/>
-                                </div>
-                              ): (
-                                <button
-                                  className="flex justify-center items-center my-3 space-x-2 text-lg"
-                                  onClick={() => {setSelectedBoard(bIndex); setShowForm(true);}}
-                                >
-                                  <span>Add task</span>
-                                  <PlusCircleIcon className="w-5 h-5 text-gray-500" />
-                                </button>
-                              )
-                            }
-                          </div>
-                        </div>
+                      <Board 
+                        board={board}
+                        bIndex={bIndex}
+                        members={members}/>
+                      </div>
                       )}
-                    </Droppable>
-                  </div>
-                );
-              })}
+                    </Draggable>
+              ))}
+              {provided.placeholder}  
+              </div>
+                  )}
+                </Droppable>
             </div>
           </DragDropContext>
         )}
       </div>
-    
   );
 }

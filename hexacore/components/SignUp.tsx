@@ -17,6 +17,7 @@ import {auth, registerWithEmailAndPassword, app} from "../firebase";
 import { useRouter } from 'next/navigation';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { getAuth} from 'firebase/auth';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default function SignUp() {
 
@@ -64,7 +65,7 @@ export default function SignUp() {
                         color="primary"
                         size="lg"
                         placeholder="Name"
-                        contentLeft={<LoginMail fill="currentColor" size={undefined} height={undefined} width={undefined} />}
+                        contentLeft={<FontAwesomeIcon icon="user" />}
                     />
                     <Spacer y={1} />
                     <Input
@@ -79,7 +80,7 @@ export default function SignUp() {
                         color="primary"
                         size="lg"
                         placeholder="Email"
-                        contentLeft={<LoginMail fill="currentColor" size={undefined} height={undefined} width={undefined} />}
+                        contentLeft={<FontAwesomeIcon className='pr-2' icon="envelope" />}
                     />
                     <Spacer y={1} />
                     <Input
@@ -94,7 +95,7 @@ export default function SignUp() {
                         color="primary"
                         size="lg"
                         placeholder="Password"
-                        contentLeft={<LoginPassword fill="currentColor" size={undefined} height={undefined} width={undefined} />}
+                        contentLeft={<FontAwesomeIcon className='pr-2' icon="key" />}
                         css={{ mb: '6px' }}
                     />
                     <Row justify="space-between">

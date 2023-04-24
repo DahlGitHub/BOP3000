@@ -1,21 +1,22 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { getStorage, ref, listAll } from 'firebase/storage';
-import Drawer from "../Drawer";
-import FileLoader from "./FileLoader";
+import Drawer from "../../../Drawer";
+import FileLoader from "../../../File/FileLoader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCloudArrowUp, faFile, faFilePdf, faFilter, faList, faList12, faTractor, faTrash, faTrashCan, faX, faXmark } from "@fortawesome/free-solid-svg-icons";
-import FileUpload from "./FileUpload";
-import FileFilter from "./FileFilter";
+import { faBackward, faCloudArrowUp, faFile, faFilePdf, faFilter, faList, faList12, faTractor, faTrash, faTrashCan, faX, faXmark } from "@fortawesome/free-solid-svg-icons";
+import FileUpload from "../../../File/FileUpload";
+import FileFilter from "../../../File/FileFilter";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { auth, db } from "../../firebase";
-import FileModal from "./FileModal";
+import { auth, db } from "../../../../firebase";
+import FileModal from "../../../File/FileModal";
+import TeamFileUpload from "./TeamFileUpload";
 
 
 
-const Files = (location) => {
+const TeamFiles = ({clearTool, teamuid, folderName}) => {
   
   const storage = getStorage();
-  const listRef = ref(storage, 'files/uid' )
+  const listRef = ref(storage, `files/${teamuid}`)
 
   const totalStorage = 5;
   const [usedStorage, setUsedStorage] = useState(0);
@@ -39,7 +40,7 @@ const Files = (location) => {
   const MainContent = () => {
     return (
       <div className="w-80">
-        <FileUpload fetch={fetchFiles}/>
+        <TeamFileUpload teamuid={teamuid} folderName={folderName} fetch={fetchFiles}/>
         
         <div className="pl-0 mt-2 mr-2 mb-0 ml-2">
         <FileFilter/>
@@ -87,7 +88,7 @@ const Files = (location) => {
     }
 
     const fetchFiles = async () => {
-      const querySnapshot = await getDocs(query(collection(db, "users", auth.currentUser?.uid, "files")));
+      const querySnapshot = await getDocs(query(collection(db, "teams", teamuid, "tools", folderName, "files")));
       const newFiles = querySnapshot.docs.map((doc) => {
         const fileData = doc.data();
     
@@ -131,9 +132,10 @@ const Files = (location) => {
     };
 
     useEffect(() => {
-      
-      fetchFiles();
-    }, []);
+        if (teamuid && folderName) {
+          fetchFiles();
+        }
+    }, [teamuid, folderName]);
 
 
     const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -150,7 +152,15 @@ const Files = (location) => {
   <>
     <section className="bg-white dark:bg-gray-900 flex">
         <div>
-            <Drawer mainContent={<MainContent/>} title="Files" isOpen={isListOpen} open={handleListOpen} close={handleListClose} />
+            <Drawer mainContent={<MainContent/>} 
+                title={
+                    <h1 className="cursor-pointer text-xs bg-blue-500 hover:bg-blue-700 text-white w-fit font-bold py-2 px-2 ml-20 rounded" 
+                        onClick={() => clearTool()}>
+                            Back to Team 
+                            <FontAwesomeIcon className='pr-2' icon={faBackward}/>
+                    </h1>
+                } 
+                isOpen={isListOpen} open={handleListOpen} close={handleListClose} />
         </div>
         <FileModal isOpen={isModalOpen} onClose={handleModalClose} fetch={fetchFiles} name={selectedFile ? selectedFile.name : "None"} size={selectedFile ? selectedFile.size : "None"}/>
         {
@@ -163,4 +173,4 @@ const Files = (location) => {
   </>
 )}
 
-export default Files
+export default TeamFiles

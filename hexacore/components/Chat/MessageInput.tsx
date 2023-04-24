@@ -1,21 +1,26 @@
-import { Container } from '@nextui-org/react';
-import { useState } from 'react';
-import { Timestamp, doc, addDoc, collection } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
+import { Timestamp, addDoc, collection } from 'firebase/firestore';
 import { auth, db } from '../../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleChevronRight } from '@fortawesome/free-solid-svg-icons';
+
 export default ({id}) =>{
     const [message, setMessage] = useState('');
     const [row, setRow] = useState(1)
+    const [chatID, setChatID] = useState(id)
     const [isShiftEnter, setIsShiftEnter] = useState(false)
     const [user, loading] = useAuthState(auth)
-    
+  
+    //cahnge
+    useEffect(()=>{
+      setChatID(id)
+    }, [id])
+
     const sendMessage = (e) => {
-      console.log(e)
       if(e.key === 'Enter' && !e.shiftKey){
-        addDoc(collection(db, id+'/Messages/'), {
+        if(message === '') return;
+        addDoc(collection(db, chatID+'/Messages/'), {
           uid: user.uid,
+          type: 'message',
           message: message,
           sentAt: Timestamp.now()
         })
@@ -29,14 +34,13 @@ export default ({id}) =>{
 
     const type = (e) => {
       if(isShiftEnter){
-      setMessage(e.target.value)
-      if(e.nativeEvent.inputType === 'insertLineBreak'){
-        setRow(row+1)
-      } else if(e.nativeEvent.inputType === 'deleteContentBackward'){
-        setRow((e.target.value.match(/\n/g)||[]).length+1)
-        //setRow(e.target.value.split('\n').length)
-      } else setRow((e.target.value.match(/\n/g)||[]).length+1);
-      
+        setMessage(e.target.value)
+        if(e.nativeEvent.inputType === 'insertLineBreak'){
+          setRow(row+1)
+        } else if(e.nativeEvent.inputType === 'deleteContentBackward'){
+          setRow((e.target.value.match(/\n/g)||[]).length+1)
+          //setRow(e.target.value.split('\n').length)
+        } else setRow((e.target.value.match(/\n/g)||[]).length+1);
       }
     }
   // trenger å sette inn ny row på wordbreak. trenger å sette max row på hvor mange linjer som kommer.

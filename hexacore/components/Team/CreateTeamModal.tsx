@@ -12,7 +12,7 @@ const CreateTeamModal = ({isOpen, onClose}) => {
 
     const filechanged = async (e) =>{
         var file = e.target.files[0];
-        const storageRef = ref(storage, `/groups/${auth.currentUser?.uid}`);
+        const storageRef = ref(storage, `/teams/${auth.currentUser?.uid}`);
         const uploadTask = uploadBytesResumable(storageRef, file);
   
         uploadTask.on("state_changed",
@@ -40,24 +40,24 @@ const CreateTeamModal = ({isOpen, onClose}) => {
         console.log("none test")
             return
         } else {
-           await setDoc(doc(db, `groups/${teamuid}`), {
+           await setDoc(doc(db, `teams/${teamuid}`), {
                 name: name,
                 ownerId: auth.currentUser?.uid,
                 teamuid: teamuid,
                 picture: picture
             }).then(async()=>{
               const user = auth.currentUser
-              setDoc(doc(db,`groups/${teamuid}/members/${teamuid}`), {
+              setDoc(doc(db,`teams/${teamuid}/members/${teamuid}`), {
                 uid: user.uid,
                 name: user.displayName,
                 photo: user.photoURL
               })
-              setDoc(doc(db, `users/${user.uid}/groups/${teamuid}/`),{
+              setDoc(doc(db, `users/${user.uid}/teams/${teamuid}/`),{
                 teamuid: teamuid
               })
             })
-            }
         }
+    }
         
         
 

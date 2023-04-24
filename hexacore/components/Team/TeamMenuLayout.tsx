@@ -7,7 +7,7 @@ const TeamMenuLayout = ({ children }) => {
     <div>
       <TeamMenu />
       <div className="sm:ml-64 w-full pt-3">
-          {children}
+        {children}
       </div>
     </div>
   );

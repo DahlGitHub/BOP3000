@@ -2,12 +2,12 @@ import React, {useState} from 'react';
 import { faTrashCan, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFile } from '@fortawesome/free-regular-svg-icons';
-import { auth, db, storage } from '../../firebase';
+import { auth,db, storage } from '../../../../firebase';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { doc, setDoc } from 'firebase/firestore';
 
 
-const FileUpload = ({fetch}) => {
+const TeamFileUpload = ({fetch, teamuid, folderName}) => {
 
     const [selectedFile, setSelectedFile] = useState(null);
     const [fileSize, setFileSize] = useState("");
@@ -29,7 +29,7 @@ const FileUpload = ({fetch}) => {
         e.preventDefault();
         // Add doc med Firebase
         const file = selectedFile;
-        const storageRef = ref(storage, `/Files/${fileName}`);
+        const storageRef = ref(storage, `/Files/${teamuid}/${folderName}/${fileName}`);
         const uploadTask = uploadBytesResumable(storageRef, file);
     
         uploadTask.on("state_changed",
@@ -59,7 +59,7 @@ const FileUpload = ({fetch}) => {
         if (!fileUrl) {
             return
         } else {
-           await setDoc(doc(db, "users", auth.currentUser?.uid, "files", fileName), docData)
+           await setDoc(doc(db, "teams", teamuid, "tools", folderName, "files", fileName), docData)
            fetch()
             
             alert("File added")
@@ -132,4 +132,4 @@ const FileUpload = ({fetch}) => {
     );
   };
 
-  export default FileUpload
+  export default TeamFileUpload
