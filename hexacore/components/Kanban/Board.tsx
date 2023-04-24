@@ -18,6 +18,8 @@ export default ({board, bIndex, members, kanbanID}) => {
     const [priorityName, setPriorityName] = useState({prio: 0, name: 'Low'})
     const [showForm, setShowForm] = useState(false)
 
+
+
     useEffect(() => {
       const closeForm = (e) => {
       const addTask = (e.target.className ? e.target.className.toString().split(" ")[0] : '')  
@@ -168,18 +170,20 @@ export default ({board, bIndex, members, kanbanID}) => {
                           selectionMode="single"
                           selectedKeys={priorityName.name}
                           css={{ $$dropdownMenuMinWidth: "100px" }}
-                          onSelectionChange={(e)=>{
-                            const split = e.currentKey.split(' ')
-                            setPriorityName({prio: parseInt(split[0]), name: split[1]})
-                            
-                            }}>
-                          <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-green-600 to-green-400" key='0 Low'>
+                          onAction={(key) => {
+                            setPriorityName({
+                              prio: parseInt(key.toString()),
+                              name: key === 0 ? "Low Priority" : key === 1 ? "Medium Priority" : "High Priority",
+                            });
+                          }}
+                        >
+                          <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-green-600 to-green-400" key='0'>
                             Low Priority
                           </Dropdown.Item>
-                          <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-yellow-600 to-yellow-400" key='1 Medium'>
+                          <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-yellow-600 to-yellow-400" key='1'>
                             Medium Priority
                           </Dropdown.Item>
-                          <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-red-600 to-red-400" key='2 High'>
+                          <Dropdown.Item className="my-3 bg-gradient-to-r text-white text-sm from-red-600 to-red-400" key='2'>
                             High Priority
                           </Dropdown.Item>
                         </Dropdown.Menu>
