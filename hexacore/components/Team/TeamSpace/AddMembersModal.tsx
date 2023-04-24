@@ -1,6 +1,7 @@
 import { auth, db } from '../../../firebase';
 import { doc, collection, addDoc, setDoc, getFirestore, query, where, getDocs, getDoc } from "firebase/firestore";
 import {useState, useEffect} from "react";
+import AvatarPicture from '../../AvatarPicture';
 
 
 const AddMembersModal = ({isOpen, onClose, teamuid}) => {
@@ -77,11 +78,7 @@ useEffect(() => {
                 })
               }
             >
-              <img
-                className="object-cover w-8 h-8 rounded-full"
-                src={hit.picture}
-                alt=""
-              />
+              <AvatarPicture picture={hit.picture} name={hit.name} containerWidth={10} containerHeight={10}/>
               <div className="text-left rtl:text-right">
                 <h1 className="text-sm font-medium text-gray-700 capitalize dark:text-white">
                   {hit.name}
