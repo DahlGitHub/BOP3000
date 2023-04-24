@@ -7,9 +7,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../../firebase'
 import { useEffect, useState } from 'react';
 import CreatePoll from './CreatePoll';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMessage } from '@fortawesome/free-solid-svg-icons';
-import { faPoll } from '@fortawesome/free-solid-svg-icons';
 
    
 

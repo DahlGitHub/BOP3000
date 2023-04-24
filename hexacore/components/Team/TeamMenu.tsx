@@ -11,6 +11,7 @@ import fetchTeams from './fetchTeams';
 import fetchTeamMembers from './fetchTeamMembers';
 import { collection, getDocs, query } from 'firebase/firestore';
 import { db } from '../../firebase';
+import Kanban from '../Kanban/Kanban';
 
 
 const TeamMenu = ()  => {
@@ -62,14 +63,13 @@ const TeamMenu = ()  => {
   }, [selectedTeam]);
 
   const fetchTools = async () => {
-    console.log("fetching tools")
     const querySnapshot = await getDocs(query(collection(db, "teams", selectedTeam, "tools")));
       const newFiles = querySnapshot.docs.map((doc) => {
         const fileData = doc.data();
 
         if (fileData.tool === "kanban") {
           return (
-            <div key={doc.id} className='cursor-pointer m-3'>
+            <div key={doc.id} className='cursor-pointer m-3' onClick={()=>handleKanbanSelect(fileData.name)}>
               <h3><FontAwesomeIcon className='pr-2' icon={faWindowMaximize}/>{fileData.name}</h3>
             </div>
           );
@@ -102,6 +102,7 @@ const TeamMenu = ()  => {
     setSelectedFiles(true);
     setSelectedTool(true);
     setToolName(toolName);
+    setTeamKanban(false);
     setTeamChat(false);
     setSelectedChat(null);
   }
@@ -124,9 +125,22 @@ const TeamMenu = ()  => {
 
   function handleChatSelect(chatName) {
     setTeamChat(true);
+    setTeamKanban(false);
     setSelectedTool(true);
     setSelectedChat(chatName);
   }
+
+  // Kanban
+  const [teamKanban, setTeamKanban] = useState(false);
+  const [selectedKanban, setSelectedKanban] = useState(null);
+
+  function handleKanbanSelect(kanbanName) {
+    setTeamKanban(true);
+    setTeamChat(false);
+    setSelectedTool(true);
+    setSelectedKanban(kanbanName);
+  }
+
 
   // Modals
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -181,6 +195,8 @@ const TeamMenu = ()  => {
   }
   
   const chatID = `teams/${selectedTeam}/tools/${selectedChat}`
+  const kanbanID = `teams/${selectedTeam}/tools/${selectedKanban}/kanban`
+  const kanbanMembers = `teams/${selectedTeam}/members`
 
   return (
     <section className="bg-white dark:bg-gray-900 flex">
@@ -224,6 +240,15 @@ const TeamMenu = ()  => {
       >
         <div className="gap-16 items-center max-w-screen-xl lg:grid lg:grid-cols-2 bk-white">    
           <Chat chatID={chatID} />
+        </div>
+      </div>
+      <div
+        className={`${
+          teamKanban ? 'block' : 'hidden'
+        } `}
+      >
+        <div className="gap-16 items-center max-w-screen-xl bk-white">    
+          <Kanban id={kanbanID} membersId={kanbanMembers} />
         </div>
       </div>
       <div className="fixed top-15 right-0 h-screen w-1/4 bg-gray-800 text-white flex flex-col">
