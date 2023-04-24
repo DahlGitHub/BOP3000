@@ -3,8 +3,10 @@ import { deleteDoc, doc, updateDoc } from "firebase/firestore"
 import { useContext, useEffect, useRef, useState } from "react"
 import { db } from "../../firebase"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faEllipsisH, faEllipsisV, faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons"
+import { faBookDead, faEllipsisH, faEllipsisV, faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { UserContext } from "../../context/UserContext"
+import { faAngry, faHeart, faNewspaper, faSadCry, faSmile, faThumbsDown, faThumbsUp } from "@fortawesome/free-regular-svg-icons"
+import EmojiPicker from "emoji-picker-react"
 
 
 export default ({index, message, id}) =>{   
@@ -15,6 +17,7 @@ export default ({index, message, id}) =>{
     const date = message.message.sentAt.toDate()
     const [isEditing, setIsEditing] = useState(false);
     const {user} = useContext(UserContext)
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
     const deleteMessage = async () => {
         await deleteDoc(doc(db, id+'/Messages/', message.messageId))
@@ -94,13 +97,13 @@ export default ({index, message, id}) =>{
         )}
       </div>
     </div>
-    <div className="absolute right-2.5 top-0">
+    <div className="absolute flex space-x-2 right-2.5 mr-3 hidden group-hover:flex -top-2.5 rounded bg-gray-300 dark:bg-gray-800 p-1 border border-gray-400 shadow-lg">
 
     {user.uid === message.user.uid && canEditMessage ?
       <Dropdown>
         <Dropdown.Trigger>
           <div className="tooltip" data-tip="More">
-            <button type="button" className='hidden group-hover:block dark:text-white text-[12px] mr-3 rounded bg-gray-300 dark:bg-gray-800 p-1 border border-gray-400 shadow-lg'><FontAwesomeIcon className="fa-lg" icon={faEllipsisH}/></button>
+            <button type="button" className='dark:text-white text-[12px]'><FontAwesomeIcon className="fa-lg" icon={faEllipsisH}/></button>
           </div>
         </Dropdown.Trigger>
         <Dropdown.Menu
@@ -120,6 +123,26 @@ export default ({index, message, id}) =>{
         </Dropdown.Menu>
       </Dropdown>
       :null}
+
+    
+          <Dropdown>
+    <Dropdown.Trigger>
+      <div className="tooltip" data-tip="More">
+        <button type="button" className='dark:text-white text-[12px]'><FontAwesomeIcon className="fa-lg" icon={faSmile}/></button>
+      </div>
+    </Dropdown.Trigger>
+    <Dropdown.Menu
+    aria-label="Static Actions"
+    css={{ display: "flex", flexDirection: "row" }}>
+    <Dropdown.Item key="new"><FontAwesomeIcon icon={faSmile}/></Dropdown.Item>
+    <Dropdown.Item key="copy"><FontAwesomeIcon icon={faHeart}/></Dropdown.Item>
+    <Dropdown.Item key="edit"><FontAwesomeIcon icon={faThumbsUp}/></Dropdown.Item>
+    <Dropdown.Item key="delete"><FontAwesomeIcon icon={faThumbsDown}/></Dropdown.Item>
+    <Dropdown.Item key="cool"><FontAwesomeIcon icon={faAngry}/></Dropdown.Item>
+    <Dropdown.Item key="test"><FontAwesomeIcon icon={faSadCry}/></Dropdown.Item>
+  </Dropdown.Menu>
+  </Dropdown>
+       
     </div>
   </div>
 </div>
@@ -128,3 +151,26 @@ export default ({index, message, id}) =>{
       
     )
 }
+
+{
+  /*
+  Eventuelt en måte, med 6 ved siden av hverandre
+  <Dropdown>
+    <Dropdown.Trigger>
+      <div className="tooltip" data-tip="More">
+        <button type="button" className='dark:text-white text-[12px]'><FontAwesomeIcon className="fa-lg" icon={faSmile}/></button>
+      </div>
+    </Dropdown.Trigger>
+    <Dropdown.Menu
+    aria-label="Static Actions"
+    css={{ display: "flex", flexDirection: "row" }}>
+    <Dropdown.Item key="new"><FontAwesomeIcon icon={faSmile}/></Dropdown.Item>
+    <Dropdown.Item key="copy"><FontAwesomeIcon icon={faHeart}/></Dropdown.Item>
+    <Dropdown.Item key="edit"><FontAwesomeIcon icon={faThumbsUp}/></Dropdown.Item>
+    <Dropdown.Item key="delete"><FontAwesomeIcon icon={faThumbsDown}/></Dropdown.Item>
+    <Dropdown.Item key="cool"><FontAwesomeIcon icon={faNewspaper}/></Dropdown.Item>
+    <Dropdown.Item key="test"><FontAwesomeIcon icon={faBookDead}/></Dropdown.Item>
+  </Dropdown.Menu>
+  </Dropdown>
+  */
+  }
