@@ -1,5 +1,5 @@
 import { Dropdown } from "@nextui-org/react"
-import { deleteDoc, doc, updateDoc } from "firebase/firestore"
+import { arrayUnion, deleteDoc, doc, updateDoc } from "firebase/firestore"
 import { useContext, useEffect, useRef, useState } from "react"
 import { db } from "../../firebase"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -18,23 +18,17 @@ export default ({index, message, id}) =>{
     const date = message.message.sentAt.toDate()
     const [isEditing, setIsEditing] = useState(false);
     const {user} = useContext(UserContext)
-    const [reactions, setReactions] = useImmer(message.message.reactions.length > 0 ? message.message.reactions : [])
+    const [reactions, setReactions] = useImmer(message.message.reactions ? message.message.reactions : [])
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const deleteMessage = async () => {
         await deleteDoc(doc(db, id+'/Messages/', message.messageId))
     }
-    const react =async (reaction) =>{
-      if(reactions.some(r => r.reaction === reaction)){
-        await updateDoc(doc(db, id+'/Messages/', message.messageId), {
-          reactions: reactions.filter(r => r.reaction !== reaction)
-        });
-        setReactions(draft => draft.filter(r => r.reaction !== reaction))
-      } else{
-        await updateDoc(doc(db, id+'/Messages/', message.messageId), {
-          reactions: [...reactions, {reaction: reaction, users: [user.uid]}]
-        });
-        setReactions(draft => draft.push({reaction: reaction, users: [user.uid]}))
-      }
+    
+    const react = async (reaction) => {
+      // add reaction
+      await updateDoc(doc(db, id+'/Messages/', message.messageId), {
+        reactions: arrayUnion({reaction, user: [user.uid]})
+      });
     }
     useEffect(()=>{
         if(textAreaRef.current.scrollHeight > textAreaRef.current.clientHeight){
