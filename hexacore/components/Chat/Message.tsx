@@ -1,9 +1,10 @@
 import { Dropdown } from "@nextui-org/react"
 import { deleteDoc, doc, updateDoc } from "firebase/firestore"
-import { useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { db } from "../../firebase"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEllipsisH, faEllipsisV, faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons"
+import { UserContext } from "../../context/UserContext"
 
 
 export default ({index, message, id}) =>{   
@@ -13,11 +14,12 @@ export default ({index, message, id}) =>{
     const textAreaRef = useRef(null);
     const date = message.message.sentAt.toDate()
     const [isEditing, setIsEditing] = useState(false);
+    const {user} = useContext(UserContext)
 
     const deleteMessage = async () => {
         await deleteDoc(doc(db, id+'/Messages/', message.messageId))
     }
-
+    
     useEffect(()=>{
         if(textAreaRef.current.scrollHeight > textAreaRef.current.clientHeight){
             const rowsNeeded = Math.ceil(textAreaRef.current.scrollHeight / 20)
@@ -47,6 +49,10 @@ export default ({index, message, id}) =>{
 
     const textAreaClass = canEditMessage ? "bg-transparent" : "bg-gray-50 rounded-lg px-1 mr-2 pr-2 dark:bg-gray-600";
     const messageClass = canEditMessage ? "group-hover:bg-gray-200 dark:group-hover:bg-gray-700" : " bg-gray-200 dark:bg-gray-700";
+    const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate()
+    const month = date.getMonth() < 10 ? "0" + (date.getMonth()+1) : date.getMonth()+1
+    const hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours()
+    const minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()
 
     return(
         
@@ -58,7 +64,7 @@ export default ({index, message, id}) =>{
     <div className="flex-1 overflow-hidden">
       <div className="mt-4 flex items-center">
         <span className="text-gray-800 dark:text-gray-100">{message.user.name}</span>
-        <span className="text-gray-400 text-xs mx-3">{date.getDate() + "/" + (date.getMonth()+1) + " " +date.getHours()+ ":" + date.getMinutes()}</span>
+        <span className="text-gray-400 text-xs mx-3">{day + "/" + month + " " +hour+ ":" + minutes}</span>
       </div>
       <div className="mr-2">
         <textarea 
@@ -89,6 +95,8 @@ export default ({index, message, id}) =>{
       </div>
     </div>
     <div className="absolute right-2.5 top-0">
+
+    {user.uid === message.user.uid && canEditMessage ?
       <Dropdown>
         <Dropdown.Trigger>
           <div className="tooltip" data-tip="More">
@@ -111,6 +119,7 @@ export default ({index, message, id}) =>{
           <Dropdown.Item color='error' icon={<FontAwesomeIcon icon={faTrash}/>} key='delete'>Delete</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
+      :null}
     </div>
   </div>
 </div>
