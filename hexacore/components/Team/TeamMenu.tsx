@@ -201,59 +201,48 @@ const TeamMenu = ()  => {
   return (
     <section className="bg-white dark:bg-gray-900 flex">
      
-      <div
-        className={`${
-          selectedFiles ? 'hidden' : 'block'
-        } `}
-      >
-        <div className='w-64'>
+     {!selectedFiles ?
+     (<div>
+      <div className='w-64'>
+        <CreateTeam isOpen={isModalOpen} onClose={handleModalClose} />
+        <TeamInvitesModal isOpen={isInvitesOpen} onClose={handleInvitesClose} fetchTeams={fetchTeams} setInviteCount={setInviteCount}/>
+        {!selectedTeam ?
+        (<div>
+          <Drawer mainContent={<MainContent/>} title={<h1>Teams</h1>} isOpen={isListOpen} open={handleListOpen} close={handleListClose} />
+        </div>)
+        : ((<div>
+          <TeamSpace fetchTeamMembers={fetchTeamMembers} isMemberModalOpen={isMemberModalOpen} memberModalOnClose={handleMemberModalClose} tools={tools} fetchTools={fetchTools} selectFiles={handleFilesSelect} teamuid={selectedTeam} name={selectedTeamName} teams={teams} clearTeam={clearTeam} openModal={handleModalOpen} />
+        </div>))
+        }
+      </div>
+    </div>):
+    (<div
+      className={`${
+        selectedFiles ? 'block' : 'hidden'
+      } `}
+    >
+      <TeamFiles clearTool={handleToolDeselect} teamuid={selectedTeam} folderName={toolName}/>
+    </div>)}
+      
+      {teamChat ?
+      (
+      <div>
+      <div className="gap-16 items-center max-w-screen-xl lg:grid lg:grid-cols-2 bk-white">    
+        <Chat chatID={chatID} />
+      </div>
+    </div>)
+    : null
+    }
+    {teamKanban ?
+    (<div>
+      <div className="gap-16 items-center max-w-screen-xl bk-white">    
+        <Kanban id={kanbanID} membersId={kanbanMembers} />
+      </div>
+    </div>)
+    : null}
 
-          <CreateTeam isOpen={isModalOpen} onClose={handleModalClose} />
-          <TeamInvitesModal isOpen={isInvitesOpen} onClose={handleInvitesClose} fetchTeams={fetchTeams} setInviteCount={setInviteCount}/>
-          <div
-            className={`${
-              selectedTeam ? 'hidden' : 'block'
-            } `}
-          >
-            <Drawer mainContent={<MainContent/>} title={<h1>Teams</h1>} isOpen={isListOpen} open={handleListOpen} close={handleListClose} />
-          </div>
-          <div
-            className={`${
-              selectedTeam ? 'block' : 'hidden'
-            } `}
-          >
-            <TeamSpace fetchTeamMembers={fetchTeamMembers} isMemberModalOpen={isMemberModalOpen} memberModalOnClose={handleMemberModalClose} tools={tools} fetchTools={fetchTools} selectFiles={handleFilesSelect} teamuid={selectedTeam} name={selectedTeamName} teams={teams} clearTeam={clearTeam} openModal={handleModalOpen} />
-          </div>
-        </div>
-      </div>
-      <div
-        className={`${
-          selectedFiles ? 'block' : 'hidden'
-        } `}
-      >
-        <TeamFiles clearTool={handleToolDeselect} teamuid={selectedTeam} folderName={toolName}/>
-      </div>
-      <div
-        className={`${
-          teamChat ? 'block' : 'hidden'
-        } `}
-      >
-        <div className="gap-16 items-center max-w-screen-xl lg:grid lg:grid-cols-2 bk-white">    
-          <Chat chatID={chatID} />
-        </div>
-      </div>
-      <div
-        className={`${
-          teamKanban ? 'block' : 'hidden'
-        } `}
-      >
-        <div className="gap-16 items-center max-w-screen-xl bk-white">    
-          <Kanban id={kanbanID} membersId={kanbanMembers} />
-        </div>
-      </div>
       <div className="fixed top-15 right-0 h-screen max-w-40
        bg-gray-800 text-white flex flex-col">
-        
         <div
             className={`${
               selectedTeam ? 'block' : 'hidden'
