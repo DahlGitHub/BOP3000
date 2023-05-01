@@ -233,13 +233,13 @@ const TeamMenu = ()  => {
     </div>)
     : null
     }
-    {teamKanban ?
+    {teamKanban &&
     (<div>
       <div className="gap-16 items-center max-w-screen-xl bk-white">    
         <Kanban id={kanbanID} membersId={kanbanMembers} />
       </div>
     </div>)
-    : null}
+    }
 
       <div className="fixed top-15 right-0 h-screen max-w-40
        bg-gray-800 text-white flex flex-col">
