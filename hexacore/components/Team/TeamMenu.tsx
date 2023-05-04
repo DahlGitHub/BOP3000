@@ -208,9 +208,10 @@ const handleToolSelect = (toolName, type) => {
       <TeamFiles clearTool={handleToolDeselect} teamuid={selectedTeam} folderName={toolName}/>
     </div>)
     }
+  
     {selectedTool && !selectedFiles ?
       (
-        <div className="w-full bk-white overflow-auto">
+        <div className="grow flex bk-white overflow-auto">
           {showTool()}
         </div>
       ):
@@ -218,8 +219,9 @@ const handleToolSelect = (toolName, type) => {
         <div className='grow'></div>
       )
     }
-      <div className="grow-0 top-15 h-[calc(100vh-70px)]
-       bg-gray-800 text-white flex flex-col">
+
+      <div className="grow-0 top-15 right-0 h-[calc(100vh-70px)] max-w-40
+       bg-gray-800 text-white flex">
         <div
             className={`${
               selectedTeam ? 'block' : 'hidden'
