@@ -11,25 +11,20 @@ const CreateTeamModal = ({isOpen, onClose, teamuid, tools}) => {
   const userStorageRef = `users/teams`//id til gruppen skal her
   const [name, setName] = useState("");
   const [toolType, setToolType] = useState(null)
-
+  
   const submit = async () => {
     onClose()
-
+    
     if (!name && !toolType) {
       console.log("none test")
           return
-      } else {
+      } else if(!tools.find(tool => tool.key === name)){
         await setDoc(doc(db, `teams/${teamuid}/tools/${name}`), {
             name: name,
             tool: toolType,
-        }).then(async()=>{
-          console.log("Create structure for either kanban or chat")
         })
     } 
-      
-  }
-        
-        
+  }  
 
     return (
       <div

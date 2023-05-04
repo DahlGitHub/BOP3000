@@ -85,7 +85,6 @@ const handleToolSelect = (toolName, type) => {
             </div>
           );
         }else {
-          // Handle other tool types here
           return null;
         }
         
@@ -98,7 +97,6 @@ const handleToolSelect = (toolName, type) => {
   
   function handleFilesSelect(toolName) {
     setSelectedFiles(true);
-    setSelectedTool(true);
     setToolName(toolName);
   }
 
@@ -169,7 +167,6 @@ const handleToolSelect = (toolName, type) => {
   const kanbanMembers = `teams/${selectedTeam}/members`
 
   const showTool = () => {
-    console.log(toolType)
     switch (toolType) {
       case "chat":
         return(   
@@ -180,7 +177,7 @@ const handleToolSelect = (toolName, type) => {
           <Kanban id={kanbanID} membersId={kanbanMembers} />
         )
       case "files":
-        setSelectedFiles(true);
+        handleFilesSelect(toolName)
     }
   }
       
@@ -211,8 +208,7 @@ const handleToolSelect = (toolName, type) => {
       <TeamFiles clearTool={handleToolDeselect} teamuid={selectedTeam} folderName={toolName}/>
     </div>)
     }
-
-    {selectedTool &&
+    {selectedTool && !selectedFiles &&
     (
       <div>
         <div className="gap-16 items-center max-w-screen-xl lg:grid lg:grid-cols-2 bk-white">
@@ -221,7 +217,6 @@ const handleToolSelect = (toolName, type) => {
       </div>
     )
     }
-
       <div className="fixed top-15 right-0 h-screen max-w-40
        bg-gray-800 text-white flex flex-col">
         <div
