@@ -169,28 +169,16 @@ const handleToolSelect = (toolName) => {
   const showTool = () => {
     switch (toolName) {
       case "chat":
-        return(
-          <div>
-            <div className="gap-16 items-center max-w-screen-xl lg:grid lg:grid-cols-2 bk-white">    
-              <Chat chatID={chatID} />
-            </div>
-          </div>
+        return(   
+          <Chat chatID={chatID} />  
         )
       case "kanban":
         return(
-          <div>
-            <div className="gap-16 items-center max-w-screen-xl lg:grid lg:grid-cols-2 bk-white">
-              <Kanban id={kanbanID} membersId={kanbanMembers} />
-            </div>
-          </div>
+          <Kanban id={kanbanID} membersId={kanbanMembers} />
         )
       case "files":
         return(
-          <div>
-            <div className="gap-16 items-center max-w-screen-xl lg:grid lg:grid-cols-2 bk-white">
-              <TeamFiles clearTool={handleToolDeselect} teamuid={selectedTeam} folderName={toolName}/>
-            </div>
-          </div>
+          <TeamFiles clearTool={handleToolDeselect} teamuid={selectedTeam} folderName={toolName}/>
         )
     }
   }
@@ -217,7 +205,13 @@ const handleToolSelect = (toolName) => {
     }
 
     {selectedTool &&
-     showTool()
+    (
+      <div>
+        <div className="gap-16 items-center max-w-screen-xl lg:grid lg:grid-cols-2 bk-white">
+          {showTool()}
+        </div>
+      </div>
+    )
     }
 
       <div className="fixed top-15 right-0 h-screen max-w-40
