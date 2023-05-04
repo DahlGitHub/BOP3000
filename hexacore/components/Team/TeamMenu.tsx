@@ -31,8 +31,6 @@ const TeamMenu = ()  => {
     setSelectedTeam(null);
     setSelectedTeamName(null);
     setTools([]);
-    setSelectedKanban(null);
-    setTeamKanban(false)
   }
 
   useEffect(() => {
@@ -51,11 +49,12 @@ const TeamMenu = ()  => {
   const [tools, setTools] = React.useState([]);
   const [toolName, setToolName] = React.useState(null);
   const [selectedTool, setSelectedTool] = React.useState(false);
+  const [toolType , setToolType] = React.useState(null);
+
 
   function handleToolDeselect() {
     setSelectedTool(false);
     setSelectedFiles(false);
-    setSelectedChat(null);
   }
 
   useEffect(() => {
@@ -63,32 +62,29 @@ const TeamMenu = ()  => {
     fetchTools()
     }
   }, [selectedTeam]);
+const toolsi = [
+  {tool: "kanban", icon: faWindowMaximize},
+  {tool: "chat", icon: faComments},
+  {tool: "files", icon: faFolderOpen}
+]
+const handleToolSelect = (toolName, type) => {
+  setSelectedTool(true);
+  setToolName(toolName);
+  setToolType(type);
+}
 
   const fetchTools = async () => {
     const querySnapshot = await getDocs(query(collection(db, "teams", selectedTeam, "tools")));
       const newFiles = querySnapshot.docs.map((doc) => {
         const fileData = doc.data();
-
-        if (fileData.tool === "kanban") {
+        
+        if (toolsi.find((e)=> e.tool == fileData.tool)) {
           return (
-            <div key={doc.id} className='cursor-pointer m-3' onClick={()=>handleKanbanSelect(fileData.name)}>
-              <h3><FontAwesomeIcon className='pr-2' icon={faWindowMaximize}/>{fileData.name}</h3>
+            <div key={doc.id} className='cursor-pointer m-3' onClick={()=>handleToolSelect(fileData.name, fileData.tool)}>
+              <h3><FontAwesomeIcon className='pr-2' icon={toolsi.find((e)=> e.tool == fileData.tool).icon}/>{fileData.name}</h3>
             </div>
           );
-        } else if (fileData.tool === "chat") {
-          return (
-            <div key={doc.id} className='cursor-pointer m-3' onClick={() => handleChatSelect(fileData.name)}>
-              <h3><FontAwesomeIcon className='pr-2' icon={faComments}/>{fileData.name}</h3>
-            </div>
-          );
-        } else if (fileData.tool === "files") {
-          return (
-            <div key={doc.id} className='cursor-pointer m-3' onClick={() => handleFilesSelect(fileData.name)}>
-              <h3><FontAwesomeIcon className='pr-2' icon={faFolderOpen}/>{fileData.name}</h3>
-            </div>
-          );
-        } else {
-          // Handle other tool types here
+        }else {
           return null;
         }
         
@@ -99,14 +95,9 @@ const TeamMenu = ()  => {
   // Files
   const [selectedFiles, setSelectedFiles] = React.useState(false);
   
-
   function handleFilesSelect(toolName) {
     setSelectedFiles(true);
-    setSelectedTool(true);
     setToolName(toolName);
-    setTeamKanban(false);
-    setTeamChat(false);
-    setSelectedChat(null);
   }
 
   // Invites
@@ -120,29 +111,6 @@ const TeamMenu = ()  => {
   function handleInvitesClose() {
     setInvitesOpen(false);
   }
-
-  // Chat
-  const [teamChat, setTeamChat] = React.useState(false);
-  const [selectedChat, setSelectedChat] = useState(null);
-
-  function handleChatSelect(chatName) {
-    setTeamChat(true);
-    setTeamKanban(false);
-    setSelectedTool(true);
-    setSelectedChat(chatName);
-  }
-
-  // Kanban
-  const [teamKanban, setTeamKanban] = useState(false);
-  const [selectedKanban, setSelectedKanban] = useState(null);
-
-  function handleKanbanSelect(kanbanName) {
-    setTeamKanban(true);
-    setTeamChat(false);
-    setSelectedTool(true);
-    setSelectedKanban(kanbanName);
-  }
-
 
   // Modals
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -194,9 +162,25 @@ const TeamMenu = ()  => {
     )
   }
   
-  const chatID = `teams/${selectedTeam}/tools/${selectedChat}`
-  const kanbanID = `teams/${selectedTeam}/tools/${selectedKanban}/kanban`
+  const chatID = `teams/${selectedTeam}/tools/${toolName}`
+  const kanbanID = `teams/${selectedTeam}/tools/${toolName}/kanban`
   const kanbanMembers = `teams/${selectedTeam}/members`
+
+  const showTool = () => {
+    switch (toolType) {
+      case "chat":
+        return(   
+          <Chat chatID={chatID} />  
+        )
+      case "kanban":
+        return(
+          <Kanban id={kanbanID} membersId={kanbanMembers} />
+        )
+      case "files":
+        handleFilesSelect(toolName)
+    }
+  }
+      
 
   return (
     <section className="bg-white dark:bg-gray-900 flex">
@@ -222,25 +206,17 @@ const TeamMenu = ()  => {
       } `}
     >
       <TeamFiles clearTool={handleToolDeselect} teamuid={selectedTeam} folderName={toolName}/>
-    </div>)}
-      
-      {teamChat ?
-      (
-      <div>
-      <div className="gap-16 items-center max-w-screen-xl lg:grid lg:grid-cols-2 bk-white">    
-        <Chat chatID={chatID} />
-      </div>
     </div>)
-    : null
     }
-    {teamKanban ?
-    (<div>
-      <div className="gap-16 items-center max-w-screen-xl bk-white">    
-        <Kanban id={kanbanID} membersId={kanbanMembers} />
+    {selectedTool && !selectedFiles &&
+    (
+      <div>
+        <div className="gap-16 items-center max-w-screen-xl lg:grid lg:grid-cols-2 bk-white">
+          {showTool()}
+        </div>
       </div>
-    </div>)
-    : null}
-
+    )
+    }
       <div className="fixed top-15 right-0 h-screen max-w-40
        bg-gray-800 text-white flex flex-col">
         <div

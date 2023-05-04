@@ -7,51 +7,24 @@ import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolderPlus } from '@fortawesome/free-solid-svg-icons';
 
-const CreateTeamModal = ({isOpen, onClose, teamuid}) => {
+const CreateTeamModal = ({isOpen, onClose, teamuid, tools}) => {
   const userStorageRef = `users/teams`//id til gruppen skal her
   const [name, setName] = useState("");
   const [toolType, setToolType] = useState(null)
-
   
-        
   const submit = async () => {
     onClose()
-
+    
     if (!name && !toolType) {
       console.log("none test")
           return
-      } else {
-        if(toolType === "files"){
-          await setDoc(doc(db, `teams/${teamuid}/tools/${name}`), {
-              name: name,
-              tool: toolType,
-          }).then(async()=>{
-            console.log("Create structure for either kanban or chat")
-          })
-        }
-
-        if(toolType === "kanban"){
-          await setDoc(doc(db, `teams/${teamuid}/tools/${name}`), {
-              name: name,
-              tool: toolType,
-          }).then(async()=>{
-            console.log("Create structure for either kanban or chat")
-          })
-        }
-      
-      if(toolType === "chat"){
+      } else if(!tools.find(tool => tool.key === name)){
         await setDoc(doc(db, `teams/${teamuid}/tools/${name}`), {
             name: name,
             tool: toolType,
-        }).then(async()=>{
-          
         })
-      }
     } 
-      
-  }
-        
-        
+  }  
 
     return (
       <div
