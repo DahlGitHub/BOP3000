@@ -208,16 +208,17 @@ const handleToolSelect = (toolName, type) => {
       <TeamFiles clearTool={handleToolDeselect} teamuid={selectedTeam} folderName={toolName}/>
     </div>)
     }
-    {selectedTool && !selectedFiles &&
-    (
-      <div>
-        <div className="gap-16 items-center max-w-screen-xl lg:grid lg:grid-cols-2 bk-white">
+    {selectedTool && !selectedFiles ?
+      (
+        <div className="w-full bk-white overflow-auto">
           {showTool()}
         </div>
-      </div>
-    )
+      ):
+      (
+        <div className='grow'></div>
+      )
     }
-      <div className="fixed top-15 right-0 h-screen max-w-40
+      <div className="grow-0 top-15 h-[calc(100vh-70px)]
        bg-gray-800 text-white flex flex-col">
         <div
             className={`${
