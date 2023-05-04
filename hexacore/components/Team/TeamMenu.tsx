@@ -49,6 +49,8 @@ const TeamMenu = ()  => {
   const [tools, setTools] = React.useState([]);
   const [toolName, setToolName] = React.useState(null);
   const [selectedTool, setSelectedTool] = React.useState(false);
+  const [toolType , setToolType] = React.useState(null);
+
 
   function handleToolDeselect() {
     setSelectedTool(false);
@@ -65,9 +67,10 @@ const toolsi = [
   {tool: "chat", icon: faComments},
   {tool: "files", icon: faFolderOpen}
 ]
-const handleToolSelect = (toolName) => {
+const handleToolSelect = (toolName, type) => {
   setSelectedTool(true);
   setToolName(toolName);
+  setToolType(type);
 }
 
   const fetchTools = async () => {
@@ -77,7 +80,7 @@ const handleToolSelect = (toolName) => {
         
         if (toolsi.find((e)=> e.tool == fileData.tool)) {
           return (
-            <div key={doc.id} className='cursor-pointer m-3' onClick={()=>handleToolSelect(fileData.name)}>
+            <div key={doc.id} className='cursor-pointer m-3' onClick={()=>handleToolSelect(fileData.name, fileData.tool)}>
               <h3><FontAwesomeIcon className='pr-2' icon={toolsi.find((e)=> e.tool == fileData.tool).icon}/>{fileData.name}</h3>
             </div>
           );
@@ -93,7 +96,6 @@ const handleToolSelect = (toolName) => {
   // Files
   const [selectedFiles, setSelectedFiles] = React.useState(false);
   
-
   function handleFilesSelect(toolName) {
     setSelectedFiles(true);
     setSelectedTool(true);
@@ -167,7 +169,8 @@ const handleToolSelect = (toolName) => {
   const kanbanMembers = `teams/${selectedTeam}/members`
 
   const showTool = () => {
-    switch (toolName) {
+    console.log(toolType)
+    switch (toolType) {
       case "chat":
         return(   
           <Chat chatID={chatID} />  
@@ -177,9 +180,7 @@ const handleToolSelect = (toolName) => {
           <Kanban id={kanbanID} membersId={kanbanMembers} />
         )
       case "files":
-        return(
-          <TeamFiles clearTool={handleToolDeselect} teamuid={selectedTeam} folderName={toolName}/>
-        )
+        setSelectedFiles(true);
     }
   }
       
@@ -187,7 +188,7 @@ const handleToolSelect = (toolName) => {
   return (
     <section className="bg-white dark:bg-gray-900 flex">
      
-     {!selectedFiles &&
+     {!selectedFiles ?
      (<div>
       <div className='w-64'>
         <CreateTeam isOpen={isModalOpen} onClose={handleModalClose} />
@@ -201,6 +202,13 @@ const handleToolSelect = (toolName) => {
         </div>))
         }
       </div>
+    </div>):
+    (<div
+      className={`${
+        selectedFiles ? 'block' : 'hidden'
+      } `}
+    >
+      <TeamFiles clearTool={handleToolDeselect} teamuid={selectedTeam} folderName={toolName}/>
     </div>)
     }
 
