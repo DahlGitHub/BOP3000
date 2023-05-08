@@ -26,7 +26,15 @@ export default function Home({id, membersId}) {
     setMembers(membersData)
   }
 
+  // useeffect to reset boarddata when id and membersid changes
   useEffect(() => {
+    console.log('reset')
+    setBoardData([])
+  }, [id, membersId])
+
+
+  useEffect(() => {
+    console.log('useeffect')
     getMembers()
     const q = query(collection(db, id), orderBy('order', 'asc'))
     onSnapshot(q, (snapshot) => {
@@ -56,13 +64,12 @@ export default function Home({id, membersId}) {
           })
           //må oppdatere order på alle boards
         }
-        
       });
     })
     if (process) {
       setReady(true);
     }
-  }, [id]);
+  }, []);
 
   
   const onDragEnd = async (re) => {
