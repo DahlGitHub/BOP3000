@@ -31,6 +31,7 @@ const TeamMenu = ()  => {
     setSelectedTeam(null);
     setSelectedTeamName(null);
     setTools([]);
+    setSelectedTool(false);
   }
 
   useEffect(() => {
@@ -195,7 +196,7 @@ const handleToolSelect = (toolName, type) => {
           <Drawer mainContent={<MainContent/>} title={<h1>Teams</h1>} isOpen={isListOpen} open={handleListOpen} close={handleListClose} />
         </div>)
         : ((<div>
-          <TeamSpace fetchTeamMembers={fetchTeamMembers} isMemberModalOpen={isMemberModalOpen} memberModalOnClose={handleMemberModalClose} tools={tools} fetchTools={fetchTools} setSelectedTool={setSelectedTool} teamuid={selectedTeam} name={selectedTeamName} teams={teams} clearTeam={clearTeam} openModal={handleModalOpen} />
+          <TeamSpace fetchTeamMembers={fetchTeamMembers} isMemberModalOpen={isMemberModalOpen} memberModalOnClose={handleMemberModalClose} tools={tools} fetchTools={fetchTools} selectFiles={handleFilesSelect} teamuid={selectedTeam} name={selectedTeamName} teams={teams} clearTeam={clearTeam} openModal={handleModalOpen} />
         </div>))
         }
       </div>
