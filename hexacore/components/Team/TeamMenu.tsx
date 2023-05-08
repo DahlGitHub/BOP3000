@@ -31,6 +31,7 @@ const TeamMenu = ()  => {
     setSelectedTeam(null);
     setSelectedTeamName(null);
     setTools([]);
+    setSelectedTool(false);
   }
 
   useEffect(() => {

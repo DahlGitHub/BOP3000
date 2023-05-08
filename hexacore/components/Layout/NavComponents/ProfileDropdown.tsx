@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Navbar, Dropdown, Text, Avatar } from "@nextui-org/react";
+import { Navbar, Dropdown, Text, Avatar, Button } from "@nextui-org/react";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, logout, db, storage } from '../../../firebase';
 import { doc, setDoc, addDoc, getDoc } from "firebase/firestore";
@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link'
 import { faSignIn } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import AvatarPicture from "../../AvatarPicture";
 
 export default () => {
     
@@ -31,7 +32,6 @@ export default () => {
                             <Avatar
                                 bordered
                                 as="button"
-                                color="secondary"
                                 size="md"
                                 src={user.photoURL}
                                 />
@@ -43,7 +43,7 @@ export default () => {
                     onAction={ (action) => {
                         switch(action){
                             case 'profile': {
-                                router.push('dashboard/settings')
+                                router.push('../dashboard/settings')
                             }
                         }
                     }}
@@ -63,7 +63,7 @@ export default () => {
                             <Link href='/login'className='w-full h-full block' >Dashboard</Link>
                         </Dropdown.Item>
                         <Dropdown.Item key="logout" withDivider color="error">
-                            <Link href='./' onClick={logout} className='w-full h-full block' >{setLogMessage()}</Link>
+                            <Link href='../' onClick={logout} className='w-full h-full block' >{setLogMessage()}</Link>
                         </Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
@@ -72,8 +72,12 @@ export default () => {
     } else{
         return(
             <Navbar.Content>
-                <Link href='../login'>
-                    <FontAwesomeIcon icon={faSignIn}/>
+                <Link href='../login' className="bg-blue-600 text-white p-2">
+                    <span>Sign in</span>
+                    {/*<FontAwesomeIcon icon={faSignIn}/>*/}
+                </Link>
+                <Link href='../register' className="bg-blue-600 text-white p-2">
+                    <span>Sign up</span>
                 </Link>
             </Navbar.Content>
         )

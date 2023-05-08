@@ -26,7 +26,12 @@ export default function Home({id, membersId}) {
     setMembers(membersData)
   }
 
+
+
+
   useEffect(() => {
+    setBoardData([])
+    console.log('useeffect')
     getMembers()
     const q = query(collection(db, id), orderBy('order', 'asc'))
     onSnapshot(q, (snapshot) => {
@@ -56,7 +61,6 @@ export default function Home({id, membersId}) {
           })
           //må oppdatere order på alle boards
         }
-        
       });
     })
     if (process) {
