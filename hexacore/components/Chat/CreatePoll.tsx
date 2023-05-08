@@ -27,12 +27,11 @@ export default ({id}) => {
     }
     const createPoll = () => {
         let filledOptions = options.filter((option) => option !== '')
-
-        if(question === '') {
-            setOutput('Please enter a question')
-            return
+        let outputStack = "";
+        if(question.length === 0) {
+            outputStack = "Please enter a question"
         }
-        if(options.length > 1) {
+        if(filledOptions.length > 1 && question !== '') {
         addDoc(collection(db, id+'/Messages/'), {
                 uid: user.uid,
                 type: 'poll',
@@ -41,8 +40,10 @@ export default ({id}) => {
                 votes: [],
                 sentAt: Timestamp.now()
         })
+        setOptions(Array(2).fill(""))
+        setQuestion('')
         } else {
-            setOutput('Please enter at least 2 options')
+            setOutput(outputStack.length > 0 ? outputStack +  " and 2 options." : "Please enter at least 2 options.")
         }
     }
     return(
