@@ -92,7 +92,7 @@ const TeamSpace = ({teamuid, name, teams, fetchTeamMembers, openModal, clearTeam
 
     return (
         <div className='h-[calc(100vh-70px)] bg-white  dark:text-white  dark:bg-gray-800'>
-            <AddToolModal isOpen={isModalOpen} onClose={handleModalClose} teamuid={teamuid}/>
+            <AddToolModal tools={tools} isOpen={isModalOpen} onClose={handleModalClose} teamuid={teamuid}/>
             <AddMembersModal isOpen={isMemberModalOpen} onClose={memberModalOnClose} teamuid={teamuid}/>
             
                 <div className='w-64'>

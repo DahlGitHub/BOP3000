@@ -14,28 +14,33 @@ export default ({id}) =>{
     const [hasMore, setHasMore] = useState(true);
 
     const getNextMessages = async () => {
-        const lastMessage = messages[messages.length - 1];
-        const nextMessages = query(
-            collection(db, chatID + "/Messages/"),
-            orderBy("sentAt", "desc"),
-            limit(25),
-            startAfter(lastMessage.message.sentAt)
-        );
-
-        const querySnapshot = await getDocs(nextMessages);
-
-        if (querySnapshot.docs.length === 0) {
-            setHasMore(false);
+        if(messages.length >= 25){
+            const lastMessage = messages[messages.length - 1];
+            const nextMessages = query(
+                collection(db, chatID + "/Messages/"),
+                orderBy("sentAt", "desc"),
+                limit(25),
+                startAfter(lastMessage.message.sentAt)
+            );
+            const querySnapshot = await getDocs(nextMessages);
+            if (querySnapshot.docs.length === 0) {
+                setHasMore(false);
+            }
+            
+            querySnapshot.forEach((message) => {
+                const connect = {
+                user: chatters.current.get(message.data().uid),
+                message: message.data(),
+                messageId: message.id,
+                };
+                setMessages((messages) => [...messages, connect]);
+            });
         }
         
-        querySnapshot.forEach((message) => {
-            const connect = {
-            user: chatters.current.get(message.data().uid),
-            message: message.data(),
-            messageId: message.id,
-            };
-            setMessages((messages) => [...messages, connect]);
-        });
+
+        
+
+        
     };
 
     useEffect(() => {

@@ -7,51 +7,28 @@ import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolderPlus } from '@fortawesome/free-solid-svg-icons';
 
-const CreateTeamModal = ({isOpen, onClose, teamuid}) => {
+const CreateTeamModal = ({isOpen, onClose, teamuid, tools}) => {
   const userStorageRef = `users/teams`//id til gruppen skal her
   const [name, setName] = useState("");
   const [toolType, setToolType] = useState(null)
-
   
-        
   const submit = async () => {
+    const nameInp = name;
+    const toolTypeInp = toolType;
+    setName("");
+    setToolType(null);
     onClose()
-
-    if (!name && !toolType) {
+    if (!nameInp && !toolTypeInp) {
       console.log("none test")
           return
-      } else {
-        if(toolType === "files"){
-          await setDoc(doc(db, `teams/${teamuid}/tools/${name}`), {
-              name: name,
-              tool: toolType,
-          }).then(async()=>{
-            console.log("Create structure for either kanban or chat")
-          })
-        }
-
-        if(toolType === "kanban"){
-          await setDoc(doc(db, `teams/${teamuid}/tools/${name}`), {
-              name: name,
-              tool: toolType,
-          }).then(async()=>{
-            console.log("Create structure for either kanban or chat")
-          })
-        }
-      
-      if(toolType === "chat"){
+      } else if(!tools.find(tool => tool.key === name)){
         await setDoc(doc(db, `teams/${teamuid}/tools/${name}`), {
             name: name,
             tool: toolType,
-        }).then(async()=>{
-          
         })
-      }
     } 
-      
-  }
-        
-        
+   
+  }  
 
     return (
       <div
@@ -63,7 +40,11 @@ const CreateTeamModal = ({isOpen, onClose, teamuid}) => {
           <div
             className="fixed inset-0 transition-opacity"
             aria-hidden="true"
-            onClick={onClose}
+            onClick={(e)=>{
+              setName("");
+              setToolType(null);
+              onClose(e);
+            }}
           >
             <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
           </div>
@@ -115,11 +96,12 @@ const CreateTeamModal = ({isOpen, onClose, teamuid}) => {
                   id='toolNameInput'
                   type="text"
                   aria-label="Tool input"
+                  value={name}
                   onChange={e => { setName(e.currentTarget.value); }}
                   
                   color='primary'
                   placeholder="Tool name"
-                  className='m-4 text-white dark:text-white dark:bg-gray-800 border-solid border-gray-300 border-2 rounded-xl w-full h-12 pl-4 pr-4 pt-2 pb-2'
+                  className='m-4 text-black dark:text-white dark:bg-gray-800 border-solid border-gray-300 border-2 rounded-xl w-full h-12 pl-4 pr-4 pt-2 pb-2'
                     
                 />
                 
@@ -134,7 +116,11 @@ const CreateTeamModal = ({isOpen, onClose, teamuid}) => {
               </div>
             </div>
             <div className="mt-5 sm:mt-6">
-              <button onClick={onClose}
+              <button onClick={(e)=>{
+                setName("");
+                setToolType(null);
+                onClose(e);
+              }}
                 type="button"
                 className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
                 

@@ -26,7 +26,12 @@ export default function Home({id, membersId}) {
     setMembers(membersData)
   }
 
+
+
+
   useEffect(() => {
+    setBoardData([])
+    console.log('useeffect')
     getMembers()
     const q = query(collection(db, id), orderBy('order', 'asc'))
     onSnapshot(q, (snapshot) => {
@@ -56,7 +61,6 @@ export default function Home({id, membersId}) {
           })
           //må oppdatere order på alle boards
         }
-        
       });
     })
     if (process) {
@@ -111,7 +115,7 @@ export default function Home({id, membersId}) {
     })
   }
   return (
-      <div className="pt-10 pl-5 flex flex-col w-full">
+      <div className="pt-10 pl-5 flex flex-col h-[calc(100vh-70px)] grow">
         {/* Board header */}
         <div className="flex flex-initial space-x-3">
           <div className="flex items-center mx-2">
@@ -122,7 +126,7 @@ export default function Home({id, membersId}) {
         </div>
         {ready && (
           <DragDropContext onDragEnd={onDragEnd}>
-            <div className="flex w-full my-3 overflow-x-auto">
+            <div className="grow w-full my-3 overflow-x-auto h-full">
             <Droppable droppableId="droppable" type="BOARD" direction="horizontal">
               {(provided, snapshot) => (
               <div
