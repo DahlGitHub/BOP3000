@@ -8,7 +8,7 @@ import AddMembersModal from "./AddMembersModal";
 import { useRouter } from "next/router";
 
 
-const TeamSpace = ({teamuid, name, teams, fetchTeamMembers, openModal, clearTeam, selectFiles, tools, fetchTools, isMemberModalOpen, memberModalOnClose}) => {
+const TeamSpace = ({teamuid, name, clearTeam, tools, fetchTools, isMemberModalOpen, memberModalOnClose}) => {
 
     const [isListOpen, setIsListOpen] = React.useState(true);
     

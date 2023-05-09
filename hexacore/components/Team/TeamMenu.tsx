@@ -7,11 +7,12 @@ import TeamSpace from './TeamSpace/TeamSpace';
 import TeamFiles from './TeamSpace/Tools/TeamFiles';
 import Chat from '../Chat/Chat';
 import TeamInvitesModal from './TeamInvitesModal';
-import fetchTeams from './fetchTeams';
 import fetchTeamMembers from './fetchTeamMembers';
-import { collection, getDocs, query } from 'firebase/firestore';
-import { db } from '../../firebase';
+import { collection, doc, getDoc, getDocs, query } from 'firebase/firestore';
+import { auth, db } from '../../firebase';
 import Kanban from '../Kanban/Kanban';
+import FavTeamModal from './favTeamModal';
+import { faStar } from '@fortawesome/free-regular-svg-icons';
 
 
 const TeamMenu = ()  => {
@@ -33,10 +34,46 @@ const TeamMenu = ()  => {
     setTools([]);
     setSelectedTool(false);
   }
+  
+  async function fetchTeams() {
+    const docImport = doc;
+  
+    const favTeamDoc = await getDocs(collection(db, "users", auth.currentUser?.uid, "favTeam"));
+    const favTeamDataID = favTeamDoc.docs.map((doc) => doc.id);
+  
+    const querySnapshot = await getDocs(collection(db, "users", auth.currentUser?.uid, "teams"));
+    const elements = [];
+  
+    if (querySnapshot.empty) {
+      setTeams(null);
+    } else {
+      const promises = querySnapshot.docs.map(async (doc) => {
+        const teamID = doc.id;
+        const teamDoc = await getDoc(docImport(db, "teams", teamID));
+        const teamData = teamDoc.data();
+        const favTeamCheck = favTeamDataID.includes(teamDoc.data().teamuid);
+        const element = (
+          <div className="flex border-solid border-2 border-sky-500 w-fit h-fit rounded m-5">
+            <button key={teamData.teamuid} onClick={() => selectTeam(teamData.teamuid, teamData.name)} className="text-black dark:text-white text-lg font-bold rounded-l flex items-center w-fit px-5 py-2 transition-colors duration-200 dark:hover:bg-blue-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
+              {teamData.name}
+            </button>
+            <button onClick={() => handleFavTeamSelect(teamData.name, teamData.teamuid)} className="text-black dark:text-white text-lg font-bold rounded-r flex items-center w-fit py-2 px-2 transition-colors duration-200 dark:hover:bg-blue-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
+              {favTeamCheck ? <FontAwesomeIcon icon={["fas", "star"]} /> : <FontAwesomeIcon icon={faStar} />}
+            </button>
+          </div>
+        );
+        elements.push(element);
+      });
+  
+      await Promise.all(promises);
+      setTeams(elements); // set the elements array instead of results
+    }
+  }
+  
 
   useEffect(() => {
     
-    fetchTeams(setTeams, selectTeam);
+    fetchTeams();
   }, []);
 
   useEffect(() => {
@@ -117,6 +154,7 @@ const handleToolSelect = (toolName, type) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMemberModalOpen, setIsMemberModalOpen] = useState(false);
   const [isListOpen, setIsListOpen] = React.useState(true);
+  const [isFavTeamModalOpen, setIsFavModalOpen] = React.useState(false);
 
   function handleModalOpen() {
     setIsModalOpen(true);
@@ -133,6 +171,25 @@ const handleToolSelect = (toolName, type) => {
   function handleMemberModalClose() {
       setIsMemberModalOpen(false);
   }
+
+  // Fav Team
+  const [favTeamName, setFavTeamName] = React.useState(null);
+  const [favTeamID, setFavTeamID] = React.useState(null);
+
+  function handleOpenFavTeam() {
+    setIsFavModalOpen(true);
+  }
+
+  function handleCloseFavTeam() {
+    setIsFavModalOpen(false);
+  }
+
+  function handleFavTeamSelect(teamName, teamID) {
+    setFavTeamName(teamName);
+    setFavTeamID(teamID);
+    handleOpenFavTeam();
+  }
+
 
   // Drawer
   function handleListOpen() {
@@ -190,13 +247,14 @@ const handleToolSelect = (toolName, type) => {
      (<div>
       <div className='w-64'>
         <CreateTeam isOpen={isModalOpen} onClose={handleModalClose} />
+        <FavTeamModal isOpen={isFavTeamModalOpen} onClose={handleCloseFavTeam} teamName={favTeamName} teamID={favTeamID} fetchTeams={fetchTeams}/>
         <TeamInvitesModal isOpen={isInvitesOpen} onClose={handleInvitesClose} fetchTeams={fetchTeams} setInviteCount={setInviteCount}/>
         {!selectedTeam ?
         (<div>
           <Drawer mainContent={<MainContent/>} title={<h1>Teams</h1>} isOpen={isListOpen} open={handleListOpen} close={handleListClose} />
         </div>)
         : ((<div>
-          <TeamSpace fetchTeamMembers={fetchTeamMembers} isMemberModalOpen={isMemberModalOpen} memberModalOnClose={handleMemberModalClose} tools={tools} fetchTools={fetchTools} selectFiles={handleFilesSelect} teamuid={selectedTeam} name={selectedTeamName} teams={teams} clearTeam={clearTeam} openModal={handleModalOpen} />
+          <TeamSpace isMemberModalOpen={isMemberModalOpen} memberModalOnClose={handleMemberModalClose} tools={tools} fetchTools={fetchTools} teamuid={selectedTeam} name={selectedTeamName} clearTeam={clearTeam} />
         </div>))
         }
       </div>

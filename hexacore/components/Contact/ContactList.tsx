@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import Chat from '../Chat/Chat';
 import Drawer from '../Drawer';
 import AvatarPicture from '../AvatarPicture';
+import { set } from 'firebase/database';
 
 const ContactList = () => {
   const router = useRouter()
@@ -13,40 +14,51 @@ const ContactList = () => {
   const [selectedChat, setSelectedChat] = useState(0)
   const [showChat, setShowChat] = useState(false)
   const [chatID, setChatID] = useState('')
+  const [requests, setRequests] = useState(0)
 
+  async function fetchContacts() {
+    const querySnapshot = await getDocs(collection(db, "users", auth.currentUser?.uid, "contacts"));
+  
+    const promises = querySnapshot.docs.map(async (doc, index) => {
+      const userId = doc.data().uid;
+      const userDoc = await getDoc(docImport(db, "users", userId));
+      const userData = userDoc.data();
+      const chatID = "Chat/"+ [auth.currentUser.uid.toLowerCase(), userId.toLowerCase()].sort().join('')
+      const element = (
+        <button key={doc.id} onClick={()=> { setChatID(chatID); setSelectedChat(index); setShowChat(!showChat)}} className="flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
+          <AvatarPicture picture={userData.picture} name={userData.name} containerWidth={"10"} containerHeight={"10"}/>
+          <div className="text-left rtl:text-right">
+            <h1 className="text-sm font-medium text-gray-700 capitalize dark:text-white">{userData.name}</h1>
+            <p className="text-xs text-gray-500 dark:text-gray-400">{userData.email}</p>
+          </div>
+        </button>
+      );
+  
+      return element;
+    });
+  
+    const results = await Promise.all(promises);
+    setContacts(results);
+  }
+
+  async function fetchRequests() {
+    const querySnapshot = await getDocs(
+      collection(db, "users", auth.currentUser?.uid, "contact-requests")
+    );
+    
+    const count = querySnapshot.size;
+    setRequests(count);
+  }
 
   useEffect(() => {
-    async function fetchContacts() {
-      const querySnapshot = await getDocs(collection(db, "users", auth.currentUser?.uid, "contacts"));
     
-      const promises = querySnapshot.docs.map(async (doc, index) => {
-        const userId = doc.data().uid;
-        const userDoc = await getDoc(docImport(db, "users", userId));
-        const userData = userDoc.data();
-        const chatID = "Chat/"+ [auth.currentUser.uid.toLowerCase(), userId.toLowerCase()].sort().join('')
-        const element = (
-          <button key={doc.id} onClick={()=> { setChatID(chatID); setSelectedChat(index); setShowChat(!showChat)}} className="flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
-            <AvatarPicture picture={userData.picture} name={userData.name} containerWidth={"10"} containerHeight={"10"}/>
-            <div className="text-left rtl:text-right">
-              <h1 className="text-sm font-medium text-gray-700 capitalize dark:text-white">{userData.name}</h1>
-              <p className="text-xs text-gray-500 dark:text-gray-400">{userData.email}</p>
-            </div>
-          </button>
-        );
-    
-        return element;
-      });
-    
-      const results = await Promise.all(promises);
-      setContacts(results);
-    }
-    
+    fetchRequests();
       fetchContacts();
     }, []); // Run this effect only once on component mount
 
   const MainContent = () => {
     return (
-      <>
+      <div>
         {contacts.length ? (
           <>
             {contacts.map((contact) => (
@@ -57,11 +69,16 @@ const ContactList = () => {
           <p className="text-center py-4 px-4 text-sm font-medium text-gray-700 capitalize dark:text-white">No contacts found.</p>
         )}
         
-        
-        <button onClick={() => router.push("./contacts")} className="flex items-center w-full p-2 text-center font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-            Add more contacts
-        </button>
-      </>
+          <div className=''>
+            <button onClick={() => router.push("./contacts")} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded my-10 mx-8">
+                Add more contacts
+            </button>
+            <br/>
+            <button onClick={() => router.push("./contactRequests")} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded mx-8">
+                Contact requests: {requests}
+            </button>
+          </div>
+      </div>
     );
   };
       
