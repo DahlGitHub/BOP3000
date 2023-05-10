@@ -72,8 +72,12 @@ const TeamMenu = ()  => {
 
   async function favTeam () {
     const favTeamDoc = await getDocs(collection(db, "users", auth.currentUser?.uid, "favTeam"));
-    const favTeamDataID = favTeamDoc.docs.map((doc) => doc.id);
-    setSelectedTeam(favTeamDataID[0]);
+    if(favTeamDoc.empty) {
+      return;
+    } else  {
+      const favTeamDataID = favTeamDoc.docs.map((doc) => doc.id);
+      setSelectedTeam(favTeamDataID[0]);
+    }
 
   }
   

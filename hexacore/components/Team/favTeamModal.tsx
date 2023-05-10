@@ -9,8 +9,13 @@ const FavTeamModal = ({isOpen, onClose, teamName, teamID, fetchTeams}) => {
     useEffect(() => {
         const getFavTeamID = async () => {
         const prevFavTeam = await getDocs(collection(db, "users", auth.currentUser?.uid, "favTeam"));
-        const favTeamID = prevFavTeam.docs[0].id;
-        setIsFavoriteTeam(teamID === favTeamID);
+            if(prevFavTeam.docs.length === 0) {
+                setIsFavoriteTeam(false);
+                return;
+            } else {
+                const favTeamID = prevFavTeam.docs[0].id;
+                setIsFavoriteTeam(teamID === favTeamID);
+            }
         };
     getFavTeamID();
     }, [teamID]);
@@ -18,13 +23,15 @@ const FavTeamModal = ({isOpen, onClose, teamName, teamID, fetchTeams}) => {
     const submit = async () => {
 
         const prevFavTeam = await getDocs(collection(db, "users", auth.currentUser?.uid, "favTeam"));
-        const favTeamID = prevFavTeam.docs[0].id;
-
+        if(prevFavTeam.docs.length !== 0) {
+            const favTeamID = prevFavTeam.docs[0].id;
+            await deleteDoc(doc(db, "users", auth.currentUser?.uid, "favTeam", favTeamID));
+        }
         const docRef = doc(db, "users", auth.currentUser?.uid, "favTeam", teamID);
         await setDoc(docRef, {
           teamID: teamID
         });
-        await deleteDoc(doc(db, "users", auth.currentUser?.uid, "favTeam", favTeamID));
+        
         
         onClose();
         await fetchTeams();
