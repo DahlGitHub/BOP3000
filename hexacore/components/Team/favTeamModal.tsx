@@ -17,7 +17,7 @@ const FavTeamModal = ({isOpen, onClose, teamName, teamID, fetchTeams}) => {
                 setIsFavoriteTeam(teamID === favTeamID);
             }
         };
-    getFavTeamID();
+        getFavTeamID();
     }, [teamID]);
   
     const submit = async () => {

@@ -6,6 +6,8 @@ import Chat from '../Chat/Chat';
 import Drawer from '../Drawer';
 import AvatarPicture from '../AvatarPicture';
 import { set } from 'firebase/database';
+import ContactRequests from './ContactRequests';
+import AddContacts from './AddContacts';
 
 const ContactList = () => {
   const router = useRouter()
@@ -41,20 +43,13 @@ const ContactList = () => {
     setContacts(results);
   }
 
-  async function fetchRequests() {
-    const querySnapshot = await getDocs(
-      collection(db, "users", auth.currentUser?.uid, "contact-requests")
-    );
-    
-    const count = querySnapshot.size;
-    setRequests(count);
-  }
+  
 
   useEffect(() => {
     
-    fetchRequests();
-      fetchContacts();
-    }, []); // Run this effect only once on component mount
+    fetchContacts();
+
+  }, []); // Run this effect only once on component mount
 
   const MainContent = () => {
     return (
@@ -69,12 +64,12 @@ const ContactList = () => {
           <p className="text-center py-4 px-4 text-sm font-medium text-gray-700 capitalize dark:text-white">No contacts found.</p>
         )}
         
-          <div className=''>
-            <button onClick={() => router.push("./contacts")} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded my-10 mx-8">
+          <div className='absolute inset-x-0 bottom-10 mb-20'>
+            <button onClick={() => handleAddContact()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded my-10 mx-8">
                 Add more contacts
             </button>
             <br/>
-            <button onClick={() => router.push("./contactRequests")} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded mx-8">
+            <button onClick={() => handleRequestOpen()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded mx-8">
                 Contact requests: {requests}
             </button>
           </div>
@@ -93,18 +88,47 @@ const ContactList = () => {
   function handleListClose() {
     setIsListOpen(false);
   }
+
+
+  // Contact requests
+  const [isRequestOpen, setIsRequestOpen] = React.useState(false);
+
+  function handleRequestOpen() {
+    setIsRequestOpen(true);
+  }
+
+  function handleRequestClose() {
+    setIsRequestOpen(false);
+  }
+
+  const handleAddContact = () => {
+    setChatID('')
+    setShowChat(false)
+  }
       
 
   return (
     <section className="bg-white dark:bg-gray-900 flex">
+      <ContactRequests isOpen={isRequestOpen} onClose={handleRequestClose} setInviteCount={setRequests}/>
         <div>
             <Drawer mainContent={<MainContent/>} title="Contacts" isOpen={isListOpen} open={handleListOpen} close={handleListClose} />
         </div>
-        <div>
+        <div
+          className={`${
+          chatID ? 'block' : 'hidden'
+        }`}
+        >
           {chatID.length > 0
             ? <Chat chatID={chatID}/>
             : null
           }
+        </div>
+        <div
+          className={`${
+          chatID ? 'hidden' : 'block'
+        }`}
+        >
+          <AddContacts/>
         </div>
   </section>
   )

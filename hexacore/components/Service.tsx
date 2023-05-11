@@ -44,7 +44,7 @@ return(
           <div className="flex justify-between mb-2">
               <div className="">
                 <h1 className="text-xl my-10 font-bold text-gray-900 dark:text-white">Hello {user.displayName}</h1>
-                <p className="text-gray-900 dark:text-white">If you have a question or issue be sure to give us some feedback</p>
+                <p className="text-gray-900 dark:text-white">If you have a question or feedback be sure to to send us a message</p>
               </div>
               
           </div>
@@ -62,7 +62,7 @@ return(
           </div>
 
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white font-bold" htmlFor="Feedback">
-                Feedback
+                Message
             </label>
               <textarea
                 name="Feedback"
@@ -76,7 +76,7 @@ return(
                   type="submit"
                   className="inline-flex flex-col justify-center items-center py-3 my-3 px-5 text-center text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
                   <FontAwesomeIcon icon={faPaperPlane} className='mb-1'/>
-                  <div className='text-sm'>Submit Feedback</div>
+                  <div className='text-sm'>Submit message</div>
                 </button>
         </form>
       </div>

@@ -4,14 +4,14 @@ import {useState, useEffect} from "react";
 
 
 const AddMembersModal = ({isOpen, onClose, teamuid}) => {
-    const [name, setName] = useState("");
-const [email, setEmail] = useState("");
-const [picture, setPicture] = useState("");
-const [addedUid, setAddedUid] = useState("");
-const [users, setUsers] = useState([]);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [picture, setPicture] = useState("");
+  const [addedUid, setAddedUid] = useState("");
+  const [users, setUsers] = useState([]);
 
-const [filteredResults, setFilteredResults] = useState([]);
-const [searchQuery, setSearchQuery] = useState("");
+  const [filteredResults, setFilteredResults] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
 
 useEffect(() => {

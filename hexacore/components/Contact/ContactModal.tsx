@@ -6,7 +6,7 @@ import AvatarPicture from '../AvatarPicture';
 const ContactModal = ({ isOpen, onClose, picture, name, uid, email }) => {
 
   
-  const submit = () => {
+  const submit = async () => {
     onClose()
 
     const addedUserDocData = {
@@ -19,12 +19,14 @@ const ContactModal = ({ isOpen, onClose, picture, name, uid, email }) => {
       uid: auth.currentUser?.uid
     }
 
-    if (!name) {
+    if (!uid) {
       console.log("contact addition failed.")
+      alert("Contact addition failed.")
         return
     } else {
-      setDoc(doc(db, "users", uid, "contact-requests", auth.currentUser?.uid), thisUserDocData)
-      setDoc(doc(db, "users", auth.currentUser?.uid, "sent-requests", uid), addedUserDocData)
+      await setDoc(doc(db, "users", uid, "contact-requests", auth.currentUser?.uid), thisUserDocData)
+      await setDoc(doc(db, "users", auth.currentUser?.uid, "sent-requests", uid), addedUserDocData)
+      alert("Contact request sent!")
     }
   }
 

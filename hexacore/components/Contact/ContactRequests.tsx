@@ -1,165 +1,147 @@
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { db, auth } from '../../firebase';
-import { collection, query, where, getDocs, getDoc, doc } from "firebase/firestore";
-import RequestModal from './RequestModal'
+import { auth,db } from '../../firebase';
+import { doc, collection, addDoc, setDoc, getFirestore, getDocs, query, getDoc, deleteDoc } from "firebase/firestore";
+import { Collapse, Input } from '@nextui-org/react';
+import {useState, useEffect} from "react";
+import { v4 as uuidv4 } from 'uuid'
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFolderPlus } from '@fortawesome/free-solid-svg-icons';
 import AvatarPicture from '../AvatarPicture';
 
-
-
-const ContactRequests = () => {
-  const [name, setName] = React.useState(null);
-  const [email, setEmail] = React.useState(null);
-  const [picture, setPicture] = React.useState(null);
-  const [addedUid, setAddedUid] = React.useState(null);
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [contact, setContact] = React.useState([]);
+const ContactRequests = ({isOpen, onClose, setInviteCount}) => {
   
-  const router = useRouter()
   const docImport = doc;
 
-  
+  const [invites, setInvites] = useState([]);
+  const [addedUid, setAddedUid] = useState(null);
 
-  function handleModalOpen() {
-    setIsModalOpen(true);
-  }
-  
-  function handleModalClose() {
-    setIsModalOpen(false);
-  }
-  
-  function contacts() {
-    router.push("/dashboard/contacts")
-  }
-
-  const handleClick = (props) => {
-
-    // For testing, console log skal fjernes
-    setPicture(props.picture);
-    console.log("Picture: " + props.picture);
-    setName(props.name);
-    console.log("Name: " + props.name);
-    setEmail(props.email);
-    console.log("Email: " + props.email)
-    setAddedUid(props.uid)
-    console.log("uid: " + props.uid)
-    
-
-    handleModalOpen()
-
-  };
-
-    
-    
   useEffect(() => {
-    async function fetchRequests() {
+    async function fetchInvites() {
       const querySnapshot = await getDocs(collection(db, "users", auth.currentUser?.uid, "contact-requests"));
-          const elements = [];
+    
+      const promises = querySnapshot.docs.map(async (doc, index) => {
+        const contactID = doc.data().uid;
         
-          const promises = querySnapshot.docs.map(async (doc) => {
-            const userId = doc.data().uid;
-            const userDoc = await getDoc(docImport(db, "users", userId));
-            const userData = userDoc.data();
-            const element = (
-
-              
-              <tr key={doc.id}>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0 w-10 h-10">
-                      <AvatarPicture picture={userData.picture} name={userData.name} containerWidth={10} containerHeight={10}/>
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-gray-900 whitespace-no-wrap">
-                        {userData.name}
-                      </p>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-no-wrap">
-                    {userData.email}
-                  </p>
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-no-wrap">
-                    2
-                  </p>
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <button  onClick={() => handleClick(userData)} className="bg-blue-600 font-semibold text-white p-2 w-32 rounded-full hover:bg-blue-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300 m-2">
-                    Respond
-                  </button>
-                </td>
-              </tr>
-            );
-        elements.push(element);
+        const contactDoc = await getDoc(docImport(db, "users", contactID));
+        const contactData = contactDoc.data();
+        const element = (
+          <div key={doc.id}  className="flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
+            <div className="text-left rtl:text-right flex">
+              <div className='mx-3'>
+                <AvatarPicture picture={contactData.picture} name={contactData.name} containerWidth={"10"} containerHeight={"10"}/>
+              </div>
+              <h1 className="text-lg font-medium text-gray-700 capitalize dark:text-white">{contactData.name}</h1>
+            </div>
+            <button onClick={() => submit(contactID)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded ml-2">Accept</button>
+            <button onClick={() => decline(contactID)} className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded ml-2">Decline</button>
+          </div>
+        );
+    
+        return element;
       });
+    
+      const results = await Promise.all(promises);
+      setInvites(results);
+      await setInviteCount(results.length);
+    }
+    
+     fetchInvites();
+    }, []); // Run this effect only once on component mount
 
-      await Promise.all(promises);
-      setContact(elements); // set the elements array instead of results
+
+
+    const submit = async (contactID) => {
+
+        if (contactID) {
+            const userRef = doc(db, "users", auth.currentUser?.uid, "contacts", contactID);
+            await setDoc(userRef, {
+              uid: contactID
+            });
+
+            const contactRef = doc(db, "users", contactID, "contacts", auth.currentUser?.uid);
+            await setDoc(contactRef, {
+                uid: auth.currentUser?.uid,
+            });
+
+            deleteDoc(doc(db, "users", auth.currentUser?.uid, "contact-requests", contactID));
+            deleteDoc(doc(db, "users", contactID, "sent-requests", auth.currentUser?.uid));
+            
+        }
+      onClose()
     }
 
-    fetchRequests();
-  }, []); // Run this effect only once on component mount
-        
+    const decline = async (contactID) => {
+        onClose()
+        if (addedUid) {
+            deleteDoc(doc(db, "users", auth.currentUser?.uid, "contact-requests", contactID));
+            deleteDoc(doc(db, "users", contactID, "sent-requests", auth.currentUser?.uid));
+            onClose();
+        }
+    }
 
-  return (
-    
-    <div className=' h-[calc(100vh-70px)] bg-white dark:text-white  dark:bg-gray-800'>
-        
-      <div className=" p-8 rounded min-w-fit min-h-fit z-1">
-        <RequestModal isOpen={isModalOpen} onClose={handleModalClose}  picture={picture} name={name} uid={addedUid} email={email}/>
-        
-          <div className="flex items-center pb-6">
+
+    return (
+      <div
+        className={`${
+          isOpen ? 'block' : 'hidden'
+        } fixed z-10 inset-0 overflow-y-auto`}
+      >
+        <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <div
+            className="fixed inset-0 transition-opacity"
+            aria-hidden="true"
+            onClick={onClose}
+          >
+            <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+          </div>
+          <span
+            className="hidden sm:inline-block sm:align-middle sm:h-screen"
+            aria-hidden="true"
+          ></span>
+          <div
+            className={`${
+              isOpen ? 'block' : 'hidden'
+            } inline-block align-bottom bg-white  dark:text-white  dark:bg-gray-800 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6`}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-headline"
+          >
             <div>
-              <h2 className=" font-semibold">Contact Requests</h2>
-              <span className="text-xs">Pending contact requests</span>
-            </div>
-            <div className="flex items-center justify-between">
-                <div className="lg:ml-40 ml-10 space-x-8">
-                  <button onClick={contacts} className="bg-blue-600 ml-80 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">Add Contacts</button>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-                <div className="inline-block max-w-fit shadow rounded-lg overflow-hidden">
-                  <table className="min-w-fit leading-normal">
-                    <thead>
-                      <tr>
-                        <th
-                          className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                          Name
-                        </th>
-                        <th
-                          className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                          Email
-                        </th>
-                        <th
-                          className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                          Mutual groups
-                        </th>
-                        <th
-                          className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                          Respond
-                        </th>
-                      </tr>
-                    </thead>
-                      
-                    <tbody>
-                      {contact.length ? contact.map((element) => element) : <p>No requests</p>}
-                    </tbody>  
-                  </table>
+              <div className="mt-3 text-center sm:mt-5">
+                <h3
+                  className="text-lg leading-6 font-medium"
+                  id="modal-headline"
+                >
+                  Contact requests
+                </h3>
+                <div className="mt-2">
+                  <div className="flex flex-col items-center pt-6 pr-6 pb-6 pl-6">
+
                   
+                   {invites.length > 0 ? invites : <p className="text-gray-500">No contact requests</p>} 
+
+                    
+                        
+                </div>
+          
+                
+                
                 </div>
               </div>
             </div>
+            <div className="mt-5 sm:mt-6">
+              <button onClick={onClose}
+                type="button"
+                className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                
+              >
+                Close
+              </button>
+            </div>
+          </div>
         </div>
-      
       </div>
-    
-  )
-}
+    )
+  }
 
-export default ContactRequests
+export default ContactRequests;
