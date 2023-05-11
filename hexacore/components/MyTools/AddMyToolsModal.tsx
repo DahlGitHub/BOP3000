@@ -1,4 +1,4 @@
-import { auth, storage, db } from '../../../../firebase';
+import { auth, db } from '../../firebase';
 import { doc, collection, addDoc, setDoc, getFirestore } from "firebase/firestore";
 import { Collapse, Input } from '@nextui-org/react';
 import {useState, useEffect} from "react";
@@ -7,28 +7,28 @@ import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolderPlus } from '@fortawesome/free-solid-svg-icons';
 
-const AddToolModal = ({isOpen, onClose, teamuid, tools}) => {
-  const userStorageRef = `users/teams`//id til gruppen skal her
+const AddMyToolsModal = ({isOpen, onClose, fetchTools}) => {
+  
   const [name, setName] = useState("");
   const [toolType, setToolType] = useState(null)
   
-  const submit = async () => {
-    const nameInp = name;
-    const toolTypeInp = toolType;
-    setName("");
-    setToolType(null);
-    onClose()
-    if (!nameInp && !toolTypeInp) {
-      console.log("none test")
-          return
-      } else if(!tools.find(tool => tool.key === name)){
-        await setDoc(doc(db, `teams/${teamuid}/tools/${name}`), {
-            name: name,
-            tool: toolType,
-        })
-    } 
-   
-  }  
+    const submit = async () => {
+        const nameInp = name;
+        const toolTypeInp = toolType;
+        setName("");
+        setToolType(null);
+        onClose()
+        if (!nameInp && !toolTypeInp) {
+            console.log("none test")
+            return
+        } else {
+            await setDoc(doc(db, `users/${auth.currentUser?.uid}/tools/${name}`), {
+                name: name,
+                tool: toolType,
+            })
+            fetchTools()
+        }
+    }
 
     return (
       <div
@@ -76,10 +76,6 @@ const AddToolModal = ({isOpen, onClose, teamuid, tools}) => {
 
                 <div onClick={() => setToolType("kanban")} className={`cursor-pointer text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2 ${toolType === "kanban" ? "ring-2 ring-[#38BDF8]" : ""}`}>
                     <h1>Kanban</h1>
-                </div>
-
-                <div onClick={() => setToolType("chat")} className={`cursor-pointer text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2 ${toolType === "chat" ? "ring-2 ring-[#38BDF8]" : ""}`}>
-                    <h1>Team Chat</h1>
                 </div>
 
                 <div onClick={() => setToolType("files")} className={`cursor-pointer text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2 ${toolType === "files" ? "ring-2 ring-[#38BDF8]" : ""}`}>
@@ -134,4 +130,4 @@ const AddToolModal = ({isOpen, onClose, teamuid, tools}) => {
     )
   }
 
-export default AddToolModal
+export default AddMyToolsModal
