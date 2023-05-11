@@ -123,7 +123,7 @@ const MyTools = () => {
 
     useEffect(() => {
         fetchTools();
-    }, [toolsi, showFiles]);
+    }, []);
 
 
     const MainContent = () => {
