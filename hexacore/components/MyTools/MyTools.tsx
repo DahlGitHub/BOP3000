@@ -42,30 +42,21 @@ const MyTools = () => {
           query(collection(db, "users", auth.currentUser?.uid, "tools"))
         );
         const newTools = querySnapshot.docs.map((doc) => {
-          const toolData = doc.data();
-      
-          if (toolsi.find((e) => e.tool === toolData.tool)) {
-            return (
-              <div
-                key={doc.id}
-                className='cursor-pointer m-3'
-                onClick={() => handleToolSelect(toolData.name, toolData.tool)}
-              >
-                <h3>
-                  <FontAwesomeIcon
-                    className='pr-2'
-                    icon={toolsi.find((e) => e.tool === toolData.tool).icon}
-                  />
-                  {toolData.name}
-                </h3>
-              </div>
-            );
-          } else {
-            return null;
-          }
+            const toolData = doc.data();
+          
+            if (toolsi.find((e) => e.tool === toolData.tool)) {
+              return {
+                id: doc.id,
+                name: toolData.name,
+                tool: toolData.tool,
+                icon: toolsi.find((e) => e.tool === toolData.tool).icon,
+              };
+            } else {
+              return null;
+            }
         });
         setTools(newTools.filter((tool) => tool !== null)); // Filter out null elements
-    };
+      };
 
     
     const toolsi = [
@@ -105,11 +96,6 @@ const MyTools = () => {
         setToolName(toolName);
     }
 
-    function handleKanbanSelect(toolName) {
-        setSelectedFiles(true);
-        setToolName(toolName);
-    }
-
     const showTool = () => {
         switch (toolType) {
           case "kanban":
@@ -123,7 +109,7 @@ const MyTools = () => {
 
     useEffect(() => {
         fetchTools();
-    }, [toolsi, showFiles]);
+    }, []);
 
 
     const MainContent = () => {
@@ -131,15 +117,29 @@ const MyTools = () => {
           <div>
             <div className='m-5'>
               <h1 className='text-xl'>Tools:</h1>
-              {tools}
+              {tools.map((tool) => (
+                <div
+                  key={tool.id}
+                  className='cursor-pointer m-3'
+                  onClick={() => handleToolSelect(tool.name, tool.tool)}
+                >
+                  <h3>
+                    <FontAwesomeIcon
+                      className='pr-2'
+                      icon={tool.icon}
+                    />
+                    {tool.name}
+                  </h3>
+                </div>
+              ))}
             </div>
-                <button type="button" onClick={() => handleToolModalOpen()} className="m-5 text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2">
-                    <FontAwesomeIcon className='pr-2' icon={faCogs}/>
-                    Add tool
-                </button>
-            </div>
-        )
-    }
+            <button type="button" onClick={() => handleToolModalOpen()} className="m-5 text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2">
+              <FontAwesomeIcon className='pr-2' icon={faCogs}/>
+              Add tool
+            </button>
+          </div>
+        );
+      }
 
 
     return(
