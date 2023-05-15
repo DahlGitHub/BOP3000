@@ -23,7 +23,7 @@ const DashboardSidebar = () => {
         {SidebarItems.map(({ ...item}) => {
           return (
          <li key={item.id} className="flex text-center">
-            <Link href={item.link} className="flex-inline w-full p-2.5 rounded-md text-gray-700 hover:bg-gray-100 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-600">
+            <Link href={item.link} className="flex-inline w-full p-2.5 text-gray-700 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-600">
                 {item.iconItem}
                 <span className="block text-[10px] ">{item.text}</span>
             </Link>
@@ -34,14 +34,14 @@ const DashboardSidebar = () => {
       <hr className="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700"/>
       <ul className='w-full'>
          <li className="flex text-center">
-            <Link href="/dashboard/settings" className="flex-inline w-full p-2.5 rounded-md  text-gray-700 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-600">
+            <Link href="/dashboard/settings" className="flex-inline w-full p-2.5  text-gray-700 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-600">
               <FontAwesomeIcon icon={faGears} />
               <span className="block text-[10px] ">Settings</span>
             </Link>
             
          </li>
          <li className="flex text-center">
-          <Link href="/dashboard/service" className="flex-inline w-full p-2.5 rounded-md  text-gray-700 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-600">
+          <Link href="/dashboard/service" className="flex-inline w-full p-2.5  text-gray-700 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-600">
                 <FontAwesomeIcon icon={faQuestionCircle} />
                 <span className="block text-[10px] ">Help</span>
               </Link>

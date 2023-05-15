@@ -13,6 +13,7 @@ import { auth, db } from '../../firebase';
 import Kanban from '../Kanban/Kanban';
 import FavTeamModal from './favTeamModal';
 import { faStar } from '@fortawesome/free-regular-svg-icons';
+import { set } from 'firebase/database';
 
 
 const TeamMenu = ()  => {
@@ -72,11 +73,14 @@ const TeamMenu = ()  => {
 
   async function favTeam () {
     const favTeamDoc = await getDocs(collection(db, "users", auth.currentUser?.uid, "favTeam"));
+    const favTeamDataID = favTeamDoc.docs.map((doc) => doc.id);
+    const teamDoc = await getDoc(doc(db, "teams", favTeamDoc.docs[0].id));
+    const favTeamName = teamDoc.data().name;
     if(favTeamDoc.empty) {
       return;
     } else  {
-      const favTeamDataID = favTeamDoc.docs.map((doc) => doc.id);
       setSelectedTeam(favTeamDataID[0]);
+      setSelectedTeamName(favTeamName);
     }
 
   }
