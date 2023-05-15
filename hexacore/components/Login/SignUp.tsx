@@ -9,11 +9,9 @@ import {
   Checkbox,
   Container,
 } from '@nextui-org/react';
-import { LoginMail } from '../components/LoginMail';
-import { LoginPassword } from '../components/LoginPassword';
 import Link from 'next/link';
 import {useState, useEffect} from "react";
-import {auth, registerWithEmailAndPassword, app} from "../firebase";
+import {auth, registerWithEmailAndPassword, app} from "../../firebase";
 import { useRouter } from 'next/navigation';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { getAuth} from 'firebase/auth';

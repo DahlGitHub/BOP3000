@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useLayoutEffect} from 'react';
+import React, { useState, useEffect} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComments, faFolderOpen, faFolderPlus, faSitemap, faUserCircle, faWindowMaximize } from '@fortawesome/free-solid-svg-icons';
+import { faComments, faFolderOpen, faFolderPlus, faWindowMaximize } from '@fortawesome/free-solid-svg-icons';
 import CreateTeam from './CreateTeamModal';
 import Drawer from '../Drawer';
 import TeamSpace from './TeamSpace/TeamSpace';
@@ -13,7 +13,6 @@ import { auth, db } from '../../firebase';
 import Kanban from '../Kanban/Kanban';
 import FavTeamModal from './favTeamModal';
 import { faStar } from '@fortawesome/free-regular-svg-icons';
-import { set } from 'firebase/database';
 
 
 const TeamMenu = ()  => {

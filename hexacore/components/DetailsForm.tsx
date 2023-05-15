@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Container } from "@nextui-org/react";
 import { auth, db, storage } from "../firebase"
-import { updateProfile } from "firebase/auth";
-import { doc, setDoc, updateDoc, getDoc } from "firebase/firestore";
+import { deleteUser, updateProfile } from "firebase/auth";
+import { doc, setDoc, updateDoc, getDoc, deleteDoc } from "firebase/firestore";
 import { useRouter } from 'next/navigation';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { collection, query, where, getDocs } from "firebase/firestore";
@@ -22,22 +22,84 @@ const DetailsForm = () => {
     const router = useRouter();
     const [fileUrl, setFileUrl] = useState(null);
     const [profilePicture, setProfilePicture] = useState(user?.photoURL ? user.photoURL : "https://cdn-icons-png.flaticon.com/512/147/147142.png");
-    const [originalData, setOriginalData] = useState(null);
     const [showUid, setShowUid] = useState(false);
+    const [deleteButtonPressed, setDeleteButtonPressed] = useState(false);
+    const [deleteConfirmed, setDeleteConfirmed] = useState(false);
+
+    const docImport = doc;
 
     useEffect(() => {
-        if (user) {
-            const docRef = doc(db, 'users', user.uid);
-            getDoc(docRef).then((doc) => {
-            if (doc.exists()) {
-                const data = doc.data();
-                setName(data.name || '');
-                setBio(data.bio || '');
-                setPhone(data.phone || '');
-            }
-            });
+      if (user) {
+          const docRef = doc(db, 'users', user.uid);
+          getDoc(docRef).then((doc) => {
+          if (doc.exists()) {
+              const data = doc.data();
+              setName(data.name || '');
+          }
+          });
+      }
+    }, [user]);
+
+    const handleDeleteConfirmaton = () => {
+      setDeleteConfirmed(true)
+      handleDeleteFromChat().then(() => {
+        handleDeleteFromTeam().then(() => {
+          handleDelete();
+        })
+      })
+    }
+
+    const handleDeleteFromChat = async () => {
+      const user = auth.currentUser
+      const contactsRef = collection(db, "users", user.uid, "contacts")
+      const contactsDocs = await getDocs(contactsRef)
+      contactsDocs.forEach(async (doc) => {
+        const chatID = "Chat/"+ [auth.currentUser.uid.toLowerCase(), doc.id.toLowerCase()].sort().join('')
+        deleteDoc(docImport(db, chatID))
+      })
+
+    }
+
+    const handleDeleteFromTeam = async () => {
+      const user = auth.currentUser
+      const userTeamsRef = collection(db, "users", user.uid, "teams")
+      const teamDocs = await getDocs(userTeamsRef)
+      teamDocs.forEach(async (doc) => {
+        const teamRef = docImport(db, "teams", doc.id)
+        const teamDoc = getDoc(teamRef)
+        if ((await teamDoc).exists()) {
+          const teamData = (await teamDoc).data()
+          deleteDoc(docImport(db, "teams", doc.id, "members", user.uid))
         }
-        }, [user]);
+      })
+    }
+      
+          
+      
+
+  const handleDelete = async () => {
+    if (deleteConfirmed) {
+      
+      const user = auth.currentUser;
+      deleteDoc(docImport(db, "users", user.uid));
+
+      deleteUser(user).then(() => {
+        alert("User deleted");
+      }).catch((error) => {
+        // An error ocurred
+        // ...
+        alert(error);
+      });
+
+      
+      toast.success("Deleted user!");
+      router.push("/");
+    } else {
+      setDeleteButtonPressed(false);
+    }
+  };
+
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -106,7 +168,7 @@ const DetailsForm = () => {
                       <div className="text-sm font-light text-gray-500 dark:text-gray-400">Developer at Hexacore</div>
                   </div>
                   <div className="space-y-0.5 font-medium dark:text-white text-left pt-4 mx-5">
-                    <div>
+                    <div className='grow'>
                         <button className='mr-2' onClick={() => setShowUid(!showUid)}>
                         {showUid ? <FontAwesomeIcon icon={faEyeSlash}/> : <FontAwesomeIcon icon={faEye}/>}
                         </button>User ID
@@ -117,7 +179,22 @@ const DetailsForm = () => {
                         <div className="text-sm font-light text-gray-500 dark:text-gray-400">{'*'.repeat(user.uid.length)}</div>
                         )}
                   </div>
+                  <div
+                      className={`${
+                        deleteButtonPressed ? 'hidden' : 'block'
+                      } dark:text-white`}>
+                        <button onClick={() => setDeleteButtonPressed(true)} className='bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded'>Delete user</button>
+                    </div>
+                  <div
+                      className={`${
+                        deleteButtonPressed ? 'block' : 'hidden'
+                      } dark:text-white`}
+                    >
+                      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded ml-2">Cancel</button>
+                      <button onClick={() => handleDeleteConfirmaton()} className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded ml-2">Delete my account</button>
+                  </div>
                 </div>
+                
            
             </div>
             <div className="max-w-3xl mx-auto py-8">
@@ -140,66 +217,7 @@ const DetailsForm = () => {
                     />
                 </div>
               </div>
-              <div className="mb-4">
-              <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-              <div className="relative">
-                    <span className="absolute inset-y-0 left-0 flex items-center p-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 dark:text-gray-100 rounded-l-lg pr-2">
-                        <FontAwesomeIcon icon={faAt}/>
-                    </span>
-                    <input
-                        type="text"
-                        name="email"
-                        id="email"
-                        className="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pl-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        value={user.email}
-                    />
-                </div>
-              </div>
-
-              <div className="mb-4">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="phone">
-                  Phone
-                </label>
-                <input
-                  type="number"
-                  name="phone"
-                  id="phone"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder='+47 123 45 678'
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                />
-              </div>
-            
-              <div className="flex justify-between mb-2">
-                <div>
-                <label htmlFor="address" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Address / Street</label>
-                <input disabled type="text" name="address" id="address" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="" placeholder="Disabled" />
-                </div>
-                <div>
-                <label htmlFor="city" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">City</label>
-                <input disabled type="text" name="city" id="city" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="" placeholder="Disabled" />
-                </div>
-                <div>
-                <label htmlFor="country" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Country</label>
-                <input disabled type="text" name="country" id="country" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="" placeholder="Disabled" />
-                </div>
-              </div>
-
-
-              <div className="mb-4">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="bio">
-                  Bio
-                </label>
-                <textarea
-                  name="bio"
-                  id="bio"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Enter a brief bio"
-                  value={bio || ''}
-                  onChange={(e) => setBio(e.target.value)}
-                />
-              </div>
+              
               <div className='flex justify-between items-center'>
                 <div>
                     <div className='flex space-x-2'>
