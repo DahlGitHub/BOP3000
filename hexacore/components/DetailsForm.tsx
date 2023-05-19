@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container } from "@nextui-org/react";
-import { auth, db, storage } from "../firebase"
-import { deleteUser, updateProfile } from "firebase/auth";
+import { db, storage, auth } from "../firebase"
+import { GoogleAuthProvider, deleteUser, updateProfile} from "firebase/auth";
 import { doc, setDoc, updateDoc, getDoc, deleteDoc } from "firebase/firestore";
 import { useRouter } from 'next/navigation';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
@@ -40,6 +40,8 @@ const DetailsForm = () => {
       }
     }, [user]);
 
+    /*
+
     const handleDeleteConfirmaton = () => {
       setDeleteConfirmed(true)
       handleDeleteFromChat().then(() => {
@@ -77,27 +79,44 @@ const DetailsForm = () => {
           
       
 
-  const handleDelete = async () => {
-    if (deleteConfirmed) {
-      
-      const user = auth.currentUser;
-      deleteDoc(docImport(db, "users", user.uid));
-
-      deleteUser(user).then(() => {
-        alert("User deleted");
-      }).catch((error) => {
-        // An error ocurred
-        // ...
-        alert(error);
-      });
-
-      
-      toast.success("Deleted user!");
-      router.push("/");
-    } else {
-      setDeleteButtonPressed(false);
-    }
-  };
+    
+    
+    const handleDelete = async () => {
+      if (deleteConfirmed) {
+        try {
+          // Prompt the user to reauthenticate before proceeding with deletion
+          const reauthenticate = async () => {
+            const user = auth.currentUser;
+            if (!user) throw new Error("User not found.");
+    
+            const provider = new GoogleAuthProvider();
+            await auth.signInWithPopup(provider);
+          };
+    
+          await reauthenticate();
+    
+          // User has been successfully reauthenticated, proceed with deletion
+          const user = auth.currentUser;
+          const userDocRef = doc(db, "users", user.uid);
+    
+          // Delete user document from Firestore
+          await deleteDoc(userDocRef);
+    
+          // Delete user from Firebase Authentication
+          await user.delete();
+    
+          toast.success("Deleted user!");
+          router.push("/");
+        } catch (error) {
+          // Reauthentication failed or deletion encountered an error
+          alert(error.message);
+        }
+      } else {
+        setDeleteButtonPressed(false);
+      }
+    };
+    
+  */  
 
 
 
@@ -179,6 +198,7 @@ const DetailsForm = () => {
                         <div className="text-sm font-light text-gray-500 dark:text-gray-400">{'*'.repeat(user.uid.length)}</div>
                         )}
                   </div>
+                  
                   <div
                       className={`${
                         deleteButtonPressed ? 'hidden' : 'block'
@@ -191,7 +211,7 @@ const DetailsForm = () => {
                       } dark:text-white`}
                     >
                       <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded ml-2">Cancel</button>
-                      <button onClick={() => handleDeleteConfirmaton()} className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded ml-2">Delete my account</button>
+                      <button /*</div>onClick={() => handleDeleteConfirmaton()}*/ className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded ml-2">Delete my account</button>
                   </div>
                 </div>
                 

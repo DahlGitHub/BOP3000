@@ -15,18 +15,19 @@ function initializeAppIfNecessary() {
     return getApp();
   } catch (any) {
     const firebaseConfig = {
-      apiKey: "AIzaSyCq3uvuimLnuVrF-f3f1VaN3VD5qip2ChQ",
-      authDomain: "hexacore-1c84b.firebaseapp.com",
-      databaseURL: "https://hexacore-1c84b-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "hexacore-1c84b",
-      storageBucket: "hexacore-1c84b.appspot.com",
-      messagingSenderId: "1090430226645",
-      appId: "1:1090430226645:web:b14a47eaf66fc1e9fc525c"
+      apiKey: process.env.REACT_APP_API_KEY,
+      authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+      projectId: process.env.REACT_APP_PROJECT_ID,
+      storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+      messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+      appId: process.env.REACT_APP_APP_ID,
+      measurementId: process.env.REACT_APP_MEASUREMENT_ID,
     };
 
-  return initializeApp(firebaseConfig);
+    return initializeApp(firebaseConfig);
   }
 }
+
 
 
 
