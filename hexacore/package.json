@@ -6,6 +6,7 @@
     "start": "next start",
     "type-check": "tsc"
   },
+  
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
@@ -21,6 +22,7 @@
     "@nextui-org/react": "^1.0.0-beta.12",
     "@react-aria/ssr": "^3.4.1",
     "algoliasearch": "^4.15.0",
+    "dotenv": "^16.0.3",
     "firebase": "^9.22.0",
     "font-awesome": "^4.7.0",
     "github-actions-node-versions": "^1.0.3",
