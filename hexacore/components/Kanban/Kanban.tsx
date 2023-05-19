@@ -2,7 +2,7 @@ import React from 'react'
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useEffect, useState } from "react";
 import { Button, Dropdown, Input } from "@nextui-org/react";
-import { collection, doc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useImmer } from 'use-immer';
 import Board from './Board';
@@ -19,11 +19,19 @@ export default function Home({id, membersId}) {
   const [members, setMembers] = useImmer([])
   const qMembers = query(collection(db, membersId))
   const getMembers = async () => {
-    const members = await getDocs(qMembers)
-    const membersData = members.docs.map((doc) => {
-      return doc.data()
-    })
-    setMembers(membersData)
+    try {
+      const members = await getDocs(qMembers)
+      const membersData = members.docs.map((memberDoc) => memberDoc.data())
+  
+      const userDataPromises = membersData.map(async (member) => {
+        const userSnapshot = await getDoc(doc(db, 'users', member.uid))
+        return userSnapshot.data()
+      })
+      const userData = await Promise.all(userDataPromises)
+      setMembers(userData)
+    } catch (error) {
+      console.error( error)
+    }
   }
 
   const onEnter = async (e) => {
@@ -35,7 +43,6 @@ export default function Home({id, membersId}) {
 
   useEffect(() => {
     setBoardData([])
-    console.log('useeffect')
     getMembers()
     const q = query(collection(db, id), orderBy('order', 'asc'))
     onSnapshot(q, (snapshot) => {
