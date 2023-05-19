@@ -10,6 +10,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { auth, db } from "../../../../firebase";
 import FileModal from "../../../File/FileModal";
 import TeamFileUpload from "./TeamFileUpload";
+import TeamDeleteFileModal from "./TeamDeleteFileModal";
 
 
 
@@ -162,7 +163,7 @@ const TeamFiles = ({clearTool, teamuid, folderName}) => {
                 } 
                 isOpen={isListOpen} open={handleListOpen} close={handleListClose} />
         </div>
-        <FileModal isOpen={isModalOpen} onClose={handleModalClose} fetch={fetchFiles} name={selectedFile ? selectedFile.name : "None"} size={selectedFile ? selectedFile.size : "None"}/>
+        <TeamDeleteFileModal isOpen={isModalOpen} onClose={handleModalClose} fetch={fetchFiles} name={selectedFile ? selectedFile.name : "None"} size={selectedFile ? selectedFile.size : "None"} folderName={folderName} teamuid={teamuid}/>
         {
         // Lag en metode for å vise fremvise de ulike metodene
         }
