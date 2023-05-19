@@ -64,8 +64,7 @@ export default function SignIn() {
             <TermsModal
                 isOpen={isTermsModalOpen}
                 onClose={handleTermsModalClose}
-                provider={provider}
-            />
+                provider={provider} email={undefined} name={undefined} password={undefined}            />
             <Container display="flex" alignItems="center" justify="center" css={{ minHeight: '100vh' }}>
                 <Card css={{ mw: '420px', p: '20px' }} variant="bordered">
                     <Text

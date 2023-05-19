@@ -5,6 +5,7 @@ import { faFile } from '@fortawesome/free-regular-svg-icons';
 import { auth,db, storage } from '../../../../firebase';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { doc, setDoc } from 'firebase/firestore';
+import { set } from 'firebase/database';
 
 
 const TeamFileUpload = ({fetch, teamuid, folderName}) => {
@@ -14,6 +15,7 @@ const TeamFileUpload = ({fetch, teamuid, folderName}) => {
     const [uploadDate, setUploadDate] = useState("");
     const [fileUrl, setFileUrl] = React.useState(null)
     const [fileName, setFileName] = React.useState(null)
+    const [progressTracker, setProgressTracker] = React.useState(0)
 
     const now = new Date();
     const dateString = now.toLocaleDateString();
@@ -31,45 +33,54 @@ const TeamFileUpload = ({fetch, teamuid, folderName}) => {
         const file = selectedFile;
         const storageRef = ref(storage, `/Files/${teamuid}/${folderName}/${fileName}`);
         const uploadTask = uploadBytesResumable(storageRef, file);
-    
-        uploadTask.on("state_changed",
-        (snapshot) => {
-            
-        },
-        (error) => {
+      
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setProgressTracker(progress)
+          },
+          (error) => {
             alert(error);
-        },
-        () => {
-            
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                setFileUrl(downloadURL)
-                console.log("FileUrl " + downloadURL);
-            });
-        }
-            
+          },
+          async () => {
+            try {
+              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+              setFileUrl(downloadURL);
+      
+              const docData = {
+                name: fileName,
+                file: downloadURL,
+                date: dateString,
+                size: fileSize,
+              };
+              await setDoc(
+                doc(
+                  db,
+                  "teams",
+                  teamuid,
+                  "tools",
+                  folderName,
+                  "files",
+                  fileName
+                ),
+                docData);
+      
+              fetch();
+      
+              alert("File added");
+            } catch (error) {
+              alert(error);
+            }
+          }
         );
-
-        const docData = {
-            
-            name: fileName,
-            file: fileUrl,
-            date: dateString,
-            size: fileSize
-        }
-        if (!fileUrl) {
-            return
-        } else {
-           await setDoc(doc(db, "teams", teamuid, "tools", folderName, "files", fileName), docData)
-           fetch()
-            
-            alert("File added")
-        }
-
+      
         // Hvis lastet opp, sett deretter filen til null ;)
         setSelectedFile(null);
         setFileSize("");
         setUploadDate(dateString);
-    };
+      };
+      
 
     const handleCancel = () => {
         setSelectedFile(null);
@@ -99,7 +110,7 @@ const TeamFileUpload = ({fetch, teamuid, folderName}) => {
                     </div>
                     <div className="flex items-center space-x-2 text-sm">
                         <button type="submit" onClick={handleSubmit} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full px-2 py-1 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                            Upload</button>
+                            {progressTracker > 0 ? "Upload is " + progressTracker + "% done" : "Upload"}</button>
                         <button type="button" onClick={handleCancel} className="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 rounded-lg text-sm px-2 py-1 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
                             <FontAwesomeIcon className='mx-1' icon={faTrashCan}/>Cancel</button>
                     </div>

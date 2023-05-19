@@ -6,9 +6,10 @@ import { faFolderPlus, faCogs, faBackward } from "@fortawesome/free-solid-svg-ic
 import AddToolModal from "./Tools/AddToolModal";
 import AddMembersModal from "./AddMembersModal";
 import { useRouter } from "next/router";
+import { ToastContainer } from "react-toastify";
 
 
-const TeamSpace = ({teamuid, name, clearTeam, tools, fetchTools, isMemberModalOpen, memberModalOnClose}) => {
+const TeamSpace = ({teamuid, name, clearTeam, alertInviteSuccess,tools, fetchTools, isMemberModalOpen, memberModalOnClose}) => {
 
     const [isListOpen, setIsListOpen] = React.useState(true);
     
@@ -93,7 +94,7 @@ const TeamSpace = ({teamuid, name, clearTeam, tools, fetchTools, isMemberModalOp
     return (
         <div className='h-[calc(100vh-70px)] bg-white  dark:text-white  dark:bg-gray-800'>
             <AddToolModal tools={tools} isOpen={isModalOpen} onClose={handleModalClose} teamuid={teamuid}/>
-            <AddMembersModal isOpen={isMemberModalOpen} onClose={memberModalOnClose} teamuid={teamuid}/>
+            <AddMembersModal alertInviteSuccess={alertInviteSuccess} isOpen={isMemberModalOpen} onClose={memberModalOnClose} teamuid={teamuid}/>
             
                 <div className='w-64'>
             

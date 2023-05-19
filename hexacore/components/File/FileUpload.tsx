@@ -14,6 +14,7 @@ const FileUpload = ({fetch}) => {
     const [uploadDate, setUploadDate] = useState("");
     const [fileUrl, setFileUrl] = React.useState(null)
     const [fileName, setFileName] = React.useState(null)
+    const [progressTracker, setProgressTracker] = React.useState(0)
 
     const now = new Date();
     const dateString = now.toLocaleDateString();
@@ -31,45 +32,43 @@ const FileUpload = ({fetch}) => {
         const file = selectedFile;
         const storageRef = ref(storage, `/Files/${fileName}`);
         const uploadTask = uploadBytesResumable(storageRef, file);
-    
-        uploadTask.on("state_changed",
-        (snapshot) => {
-            
-        },
-        (error) => {
+      
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setProgressTracker(progress)
+          },
+          (error) => {
             alert(error);
-        },
-        () => {
-            
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                setFileUrl(downloadURL)
-                console.log("FileUrl " + downloadURL);
-            });
-        }
-            
+          },
+          async () => {
+            try {
+              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+              setFileUrl(downloadURL);
+      
+              const docData = {
+                name: fileName,
+                file: downloadURL,
+                date: dateString,
+                size: fileSize,
+              };
+              await setDoc(doc(db, "users", auth.currentUser?.uid, "files", fileName), docData);
+      
+              fetch();
+      
+              alert("File added");
+            } catch (error) {
+              alert(error);
+            }
+          }
         );
-
-        const docData = {
-            
-            name: fileName,
-            file: fileUrl,
-            date: dateString,
-            size: fileSize
-        }
-        if (!fileUrl) {
-            return
-        } else {
-           await setDoc(doc(db, "users", auth.currentUser?.uid, "files", fileName), docData)
-           fetch()
-            
-            alert("File added")
-        }
-
+      
         // Hvis lastet opp, sett deretter filen til null ;)
         setSelectedFile(null);
         setFileSize("");
         setUploadDate(dateString);
-    };
+      };
 
     const handleCancel = () => {
         setSelectedFile(null);

@@ -1,4 +1,4 @@
-import { auth, db, signInWithGoogle, signInWithMicrosoft } from '../../firebase';
+import { auth, db, registerWithEmailAndPassword, signInWithGoogle, signInWithMicrosoft } from '../../firebase';
 import { doc, collection, addDoc, setDoc, getFirestore } from "firebase/firestore";
 import { Collapse, Input } from '@nextui-org/react';
 import {useState, useEffect} from "react";
@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolderPlus } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/router';
 
-const TermsModal = ({isOpen, onClose, provider}) => {
+const TermsModal = ({isOpen, onClose, provider, email, name, password}) => {
 
     const router = useRouter();
 
@@ -24,8 +24,18 @@ const TermsModal = ({isOpen, onClose, provider}) => {
                 router.push('./dashboard');
             })
             
-        } else {
+        } else if (provider === "Local"){
+          registerWithEmailAndPassword(name, email, password).then(() => {
             onClose();
+            router.push('./dashboard');
+          }
+          ).catch((error) => {
+            console.log(error);
+          }
+          )
+        } else {
+          console.log("Error: No provider specified");
+
         }
     }
     

@@ -13,6 +13,7 @@ import { auth, db } from '../../firebase';
 import Kanban from '../Kanban/Kanban';
 import FavTeamModal from './favTeamModal';
 import { faStar } from '@fortawesome/free-regular-svg-icons';
+import { ToastContainer, toast } from 'react-toastify';
 
 
 const TeamMenu = ()  => {
@@ -53,8 +54,8 @@ const TeamMenu = ()  => {
         const teamData = teamDoc.data();
         const favTeamCheck = favTeamDataID.includes(teamDoc.data().teamuid);
         const element = (
-          <div className="flex border-solid border-2 border-sky-500 w-fit h-fit rounded m-5">
-            <button key={teamData.teamuid} onClick={() => selectTeam(teamData.teamuid, teamData.name)} className="text-black dark:text-white text-lg font-bold rounded-l flex items-center w-fit px-5 py-2 transition-colors duration-200 dark:hover:bg-blue-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
+          <div key={teamData.teamuid} className="flex border-solid border-2 border-sky-500 w-fit h-fit rounded m-5">
+            <button onClick={() => selectTeam(teamData.teamuid, teamData.name)} className="text-black dark:text-white text-lg font-bold rounded-l flex items-center w-fit px-5 py-2 transition-colors duration-200 dark:hover:bg-blue-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
               {teamData.name}
             </button>
             <button onClick={() => handleFavTeamSelect(teamData.name, teamData.teamuid)} className="text-black dark:text-white text-lg font-bold rounded-r flex items-center w-fit py-2 px-2 transition-colors duration-200 dark:hover:bg-blue-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
@@ -187,6 +188,10 @@ const handleToolSelect = (toolName, type) => {
       setIsMemberModalOpen(false);
   }
 
+  const alertInviteSuccess = () => {
+    toast.success('Invite Sent');
+  };
+
   // Fav Team
   const [favTeamName, setFavTeamName] = React.useState(null);
   const [favTeamID, setFavTeamID] = React.useState(null);
@@ -261,7 +266,7 @@ const handleToolSelect = (toolName, type) => {
      {!selectedFiles ?
      (<div>
       <div className='w-64'>
-        <CreateTeam isOpen={isModalOpen} onClose={handleModalClose} />
+        <CreateTeam isOpen={isModalOpen} onClose={handleModalClose} fetchTeams={fetchTeams}/>
         <FavTeamModal isOpen={isFavTeamModalOpen} onClose={handleCloseFavTeam} teamName={favTeamName} teamID={favTeamID} fetchTeams={fetchTeams}/>
         <TeamInvitesModal isOpen={isInvitesOpen} onClose={handleInvitesClose} fetchTeams={fetchTeams} setInviteCount={setInviteCount}/>
         {!selectedTeam ?
@@ -269,7 +274,7 @@ const handleToolSelect = (toolName, type) => {
           <Drawer mainContent={<MainContent/>} title={<h1>Teams</h1>} isOpen={isListOpen} open={handleListOpen} close={handleListClose} />
         </div>)
         : ((<div>
-          <TeamSpace isMemberModalOpen={isMemberModalOpen} memberModalOnClose={handleMemberModalClose} tools={tools} fetchTools={fetchTools} teamuid={selectedTeam} name={selectedTeamName} clearTeam={clearTeam} />
+          <TeamSpace alertInviteSuccess={alertInviteSuccess} isMemberModalOpen={isMemberModalOpen} memberModalOnClose={handleMemberModalClose} tools={tools} fetchTools={fetchTools} teamuid={selectedTeam} name={selectedTeamName} clearTeam={clearTeam} />
         </div>))
         }
       </div>

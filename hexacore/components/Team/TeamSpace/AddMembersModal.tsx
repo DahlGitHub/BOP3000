@@ -3,9 +3,10 @@ import { doc, collection, addDoc, setDoc, getFirestore, query, where, getDocs, g
 import {useState, useEffect} from "react";
 import AvatarPicture from '../../AvatarPicture';
 import { get } from 'http';
+import { toast } from 'react-toastify';
 
 
-const AddMembersModal = ({isOpen, onClose, teamuid}) => {
+const AddMembersModal = ({isOpen, onClose, teamuid, alertInviteSuccess}) => {
   
   const [addedUid, setAddedUid] = useState("");
   const [users, setUsers] = useState([]);
@@ -39,8 +40,11 @@ const submit = async () => {
       uid: teamuid,
       inviter: auth.currentUser?.email,
       inviterName: auth.currentUser?.displayName,
-    });
+    }).then(() => {
     onClose();
+    alert("Invite sent");
+
+    });
   } else {
     alert("Please select a user");
   }

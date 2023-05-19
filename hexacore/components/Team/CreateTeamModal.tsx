@@ -5,7 +5,7 @@ import {useState, useEffect} from "react";
 import { v4 as uuidv4 } from 'uuid'
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
-const CreateTeamModal = ({isOpen, onClose}) => {
+const CreateTeamModal = ({isOpen, onClose, fetchTeams}) => {
     const userStorageRef = `users/groups`//id til gruppen skal her
     const [name, setName] = useState("");
 
@@ -29,7 +29,13 @@ const CreateTeamModal = ({isOpen, onClose}) => {
               setDoc(doc(db, `users/${user.uid}/teams/${teamuid}/`),{
                 teamuid: teamuid
               })
-            })
+            }).then(()=>{
+              fetchTeams()
+            }
+            ).catch((error) => {
+              console.log(error);
+            }
+            )
         }
     }
         
