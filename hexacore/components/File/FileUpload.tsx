@@ -57,7 +57,6 @@ const FileUpload = ({fetch}) => {
       
               fetch();
       
-              alert("File added");
             } catch (error) {
               alert(error);
             }

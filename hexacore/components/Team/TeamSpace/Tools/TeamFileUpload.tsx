@@ -67,8 +67,6 @@ const TeamFileUpload = ({fetch, teamuid, folderName}) => {
                 docData);
       
               fetch();
-      
-              alert("File added");
             } catch (error) {
               alert(error);
             }
