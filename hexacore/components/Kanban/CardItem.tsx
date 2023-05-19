@@ -17,6 +17,7 @@ function CardItem({ data, index, members, kanbanID }) {
   const q = query(collection(db, kanbanID), where('items', 'array-contains', data))
   const [selectedDate, setSelectedDate] = useState(data.date ? data.date.toDate() : null);
 
+
   const selectDate = async (date) => {
     if (date) {
       const docRef = await getDocs(q);
@@ -269,7 +270,9 @@ function CardItem({ data, index, members, kanbanID }) {
                       }}>
                       <Dropdown.Item key="label">Assigned people</Dropdown.Item>
                       {data.assignees.map((member) => {
+                        
                       if (members.length > 0) {
+                        
                         const assignee = members.find((m) => m.uid === member);
                         return (
                           <Dropdown.Item
