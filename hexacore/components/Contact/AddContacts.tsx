@@ -160,9 +160,9 @@ const AddContacts = () => {
                 
               </div>
               <div className="flex items-center ml-10 justify-between">
-                <div className="flex bg-gray-50 items-center p-2 rounded-md">
+                <div className="flex  items-center p-2 rounded-md">
                 <div>
-                    <input className='text-white dark:text-black rounded w-60 h-10' placeholder='Search for users' type="text" onChange={handleSearch} />
+                    <input className='m-4 rounded px-5 py-3 text-black border-solid border-2 border-sky-500' placeholder='Search for users' type="text" onChange={handleSearch} />
                     
                   </div>
                 </div>

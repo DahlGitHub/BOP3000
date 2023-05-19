@@ -72,19 +72,15 @@ const CreateTeamModal = ({isOpen, onClose}) => {
                 <div className="mt-2">
                   <div className="flex flex-col items-center pt-6 pr-6 pb-6 pl-6">
 
-                <Input
+                <input
                   name='teamNameInput'
                   id='teamNameInput'
                   type={"Name"}
                   aria-label="team name input"
                   onChange={e => { setName(e.currentTarget.value); }}
-                  clearable
-                  bordered            
-                  fullWidth
                   color="primary"
-                  size="lg"
                   placeholder="Team name"
-                  className='m-4'
+                  className='m-4 rounded px-5 py-3 text-black border-solid border-2 border-sky-500'
                     
                 />
                 

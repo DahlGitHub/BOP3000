@@ -295,7 +295,7 @@ const handleToolSelect = (toolName, type) => {
     }
 
       <div className="grow-0 top-15 right-0 h-[calc(100vh-70px)] max-w-40
-       bg-gray-800 text-white flex">
+       dark:bg-gray-800 border-solid text-white flex">
         <div
             className={`${
               selectedTeam ? 'block' : 'hidden'
