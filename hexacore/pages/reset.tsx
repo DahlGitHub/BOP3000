@@ -4,7 +4,6 @@ import { auth, sendPasswordReset, app } from "../firebase";
 import { useRouter } from 'next/navigation';
 import { getAuth } from 'firebase/auth';
 import Link from 'next/link';
-import { LoginMail } from '../components/LoginMail';
 import {
     Card,
     Spacer,
@@ -15,6 +14,8 @@ import {
     Checkbox,
     Container,
   } from '@nextui-org/react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 
 
 function Reset() {
@@ -50,7 +51,7 @@ function Reset() {
                                 color="primary"
                                 size="lg"
                                 placeholder="Email"
-                                contentLeft={<LoginMail fill="currentColor" size={undefined} height={undefined} width={undefined} />}
+                                contentLeft={<FontAwesomeIcon className='pr-2' icon={faEnvelope}/>}
                             />
                             <Spacer y={1} />
                             <Row>
