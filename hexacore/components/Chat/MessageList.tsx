@@ -36,11 +36,6 @@ export default ({id}) =>{
                 setMessages((messages) => [...messages, connect]);
             });
         }
-        
-
-        
-
-        
     };
 
     useEffect(() => {
