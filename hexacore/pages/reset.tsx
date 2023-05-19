@@ -15,7 +15,6 @@ import {
     Container,
   } from '@nextui-org/react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 
 
 function Reset() {
@@ -51,7 +50,7 @@ function Reset() {
                                 color="primary"
                                 size="lg"
                                 placeholder="Email"
-                                contentLeft={<FontAwesomeIcon className='pr-2' icon={faEnvelope}/>}
+                                contentLeft={<FontAwesomeIcon className='pr-2' icon="envelope" />}
                             />
                             <Spacer y={1} />
                             <Row>
