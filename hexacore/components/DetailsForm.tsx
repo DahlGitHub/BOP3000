@@ -128,8 +128,6 @@ const DetailsForm = () => {
 
         interface DocData {
             name?: string;
-            bio?: string;
-            phone?: string;
             picture?: string;
         }
       
@@ -137,19 +135,29 @@ const DetailsForm = () => {
 
       const docData: DocData = {};
       if (name !== previousData.name) docData.name = name;
-        if (bio !== previousData.bio) docData.bio = bio;
-        if (phone !== previousData.phone) docData.phone = phone;
       if (fileUrl) {
         await updateProfile(auth.currentUser, {
           photoURL: fileUrl
         });
-        docData.picture = fileUrl;
+        docData.picture = fileUrl
+      }
+      if (name !== previousData.name){
+        await updateProfile(auth.currentUser, {
+          displayName: name
+        });
       }
       if (Object.entries(docData).length === 0) {
         toast.warning("No changes to save.");
         return;
       }
-    //await updateDoc(doc(db, "users", auth.currentUser?.uid), docData);
+      if (auth.currentUser.uid) {
+        const userRef = doc(db, "users", auth.currentUser.uid);
+        await updateDoc(userRef, {
+          name: name,
+          picture: fileUrl
+        });
+        console.log("Document updated successfully!");
+      }
     toast.success("Updated profile settings!");
   }
 

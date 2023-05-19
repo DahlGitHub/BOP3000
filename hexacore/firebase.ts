@@ -1,3 +1,4 @@
+import { updateProfile } from 'firebase/auth';
 // Import the functions you need from the SDKs you need
 import{ GoogleAuthProvider, getAuth, signInWithPopup, signInWithEmailAndPassword,createUserWithEmailAndPassword,sendPasswordResetEmail, signOut} from "firebase/auth";
 import {getFirestore, query, getDocs,collection,where,addDoc, doc, setDoc} from "firebase/firestore";
@@ -35,18 +36,6 @@ function initializeAppIfNecessary() {
 const app = initializeAppIfNecessary();
 
 const auth = getAuth(app);
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    // User is signed in, see docs for a list of available properties
-    // https://firebase.google.com/docs/reference/js/firebase.User
-    const uid = user.uid;
-    // ...
-  } else {
-    // User is signed out
-    // ...
-  }
-});
-
 const db = getFirestore(app);
 const database = getDatabase(app);
 const storage = getStorage(app);
@@ -110,16 +99,24 @@ const logInWithEmailAndPassword = async (email, password) => {
 
 const registerWithEmailAndPassword = async (name, email, password) => {
   try {
-    const res = await createUserWithEmailAndPassword(auth, email, password);
-    const user = res.user;
-    await setDoc(doc(db, "users", user.uid), {
-      uid: user.uid,
-      name,
-      authProvider: "local",
-      email: user.email,
+    const res = await createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
+      // Signed in
+      const user = userCredential.user;
+      updateProfile(auth.currentUser, {
+        displayName: name
+      }).then(async () => {
+        await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        name,
+        authProvider: "local",
+        email: user.email,
     });
+      }).catch((error) => {
+        console.log(error);
+      });
+    })
   } catch (err) {
-
+    console.log(err);
   }
 };
 
