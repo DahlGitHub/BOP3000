@@ -6,9 +6,11 @@
     "start": "next start",
     "type-check": "tsc"
   },
+  
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@firebase/app-compat": "^0.2.10",
     "@fortawesome/fontawesome-svg-core": "^6.3.0",
     "@fortawesome/free-brands-svg-icons": "^6.4.0",
     "@fortawesome/free-regular-svg-icons": "^6.2.1",
@@ -21,8 +23,8 @@
     "@react-aria/ssr": "^3.4.1",
     "@swc/helpers": "^0.5.0",
     "algoliasearch": "^4.15.0",
-    "firebase": "^9.17.2",
-    "firebase-functions": "^3.23.0",
+    "dotenv": "^16.0.3",
+    "firebase": "^9.22.0",
     "font-awesome": "^4.7.0",
     "github-actions-node-versions": "^1.0.3",
     "http-proxy-middleware": "^2.0.6",

@@ -14,28 +14,33 @@ export default ({id}) =>{
     const [hasMore, setHasMore] = useState(true);
 
     const getNextMessages = async () => {
-        const lastMessage = messages[messages.length - 1];
-        const nextMessages = query(
-            collection(db, chatID + "/Messages/"),
-            orderBy("sentAt", "desc"),
-            limit(25),
-            startAfter(lastMessage.message.sentAt)
-        );
-
-        const querySnapshot = await getDocs(nextMessages);
-
-        if (querySnapshot.docs.length === 0) {
-            setHasMore(false);
+        if(messages.length >= 25){
+            const lastMessage = messages[messages.length - 1];
+            const nextMessages = query(
+                collection(db, chatID + "/Messages/"),
+                orderBy("sentAt", "desc"),
+                limit(25),
+                startAfter(lastMessage.message.sentAt)
+            );
+            const querySnapshot = await getDocs(nextMessages);
+            if (querySnapshot.docs.length === 0) {
+                setHasMore(false);
+            }
+            
+            querySnapshot.forEach((message) => {
+                const connect = {
+                user: chatters.current.get(message.data().uid),
+                message: message.data(),
+                messageId: message.id,
+                };
+                setMessages((messages) => [...messages, connect]);
+            });
         }
         
-        querySnapshot.forEach((message) => {
-            const connect = {
-            user: chatters.current.get(message.data().uid),
-            message: message.data(),
-            messageId: message.id,
-            };
-            setMessages((messages) => [...messages, connect]);
-        });
+
+        
+
+        
     };
 
     useEffect(() => {
@@ -124,22 +129,7 @@ export default ({id}) =>{
                 <div className="flex-inline">
                     {messages.slice(0).reverse().map((connect) => {
                         const key = connect.message.type === 'message' ? connect.messageId : connect.messageId
-                        if (connect.user.uid !== auth.currentUser?.uid && connect.message.type === 'message') {
-                            return (
-                                <div key={key} className="p-3 rounded-lg">
-                                    <div className="flex items-center justify-start flex-row group-hover:bg-gray-200 rounded-lg">
-                                        <img src={connect.user.photo} className="object-cover w-10 h-10 rounded-full mx-2" alt=""/>
-                                        <div className="flex-1 overflow-hidden">
-                                            <div>
-                                            <span className="text-gray-800 dark:text-gray-100">{connect.user.name}</span>
-                                            <span className="text-gray-400 text-xs mx-3">Their date</span>
-                                            </div>
-                                            <div className='dark:text-gray-200'>{connect.message.message}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            );
-                        } else if (connect.message.type === 'message') {
+                        if (connect.message.type === 'message') {
                             return <Message key={key} index={connect.messageId} message={connect} id={id} />;
                         } else if (connect.message.type === 'poll') {
                             return <Poll key={key} index={connect.messageId} pollData={connect} id={id} />;

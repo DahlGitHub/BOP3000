@@ -26,7 +26,16 @@ export default function Home({id, membersId}) {
     setMembers(membersData)
   }
 
+  const onEnter = async (e) => {
+    if (e.key === 'Enter') {
+      addBoard()
+    }
+  }
+
+
   useEffect(() => {
+    setBoardData([])
+    console.log('useeffect')
     getMembers()
     const q = query(collection(db, id), orderBy('order', 'asc'))
     onSnapshot(q, (snapshot) => {
@@ -56,7 +65,6 @@ export default function Home({id, membersId}) {
           })
           //må oppdatere order på alle boards
         }
-        
       });
     })
     if (process) {
@@ -109,20 +117,21 @@ export default function Home({id, membersId}) {
       name: newBoard,
       items: []
     })
+    setNewBoard('')
   }
   return (
-      <div className="pt-10 pl-5 flex flex-col w-full">
+      <div className="pt-10 pl-5 flex flex-col h-[calc(100vh-70px)] grow">
         {/* Board header */}
         <div className="flex flex-initial space-x-3">
           <div className="flex items-center mx-2">
             <h4 className="text-4xl font-bold text-gray-600">Kanban board</h4>
           </div>
-          <Input aria-label='addBoard' aria-hidden='false' value={newBoard} onChange={e => setNewBoard(e.target.value)} placeholder='Add a new list'></Input>
+          <Input aria-label='addBoard' aria-hidden='false' value={newBoard} onKeyDown={onEnter} onChange={(e) => {setNewBoard(e.target.value)} }  placeholder='Add a new list'></Input>
           <button className="p-2 px-3 text-sm text-center text-white rounded-xl bg-blue-700 sm:w-fit hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={addBoard}>Add</button>
         </div>
         {ready && (
           <DragDropContext onDragEnd={onDragEnd}>
-            <div className="flex w-full my-3 overflow-x-auto">
+            <div className="grow w-full my-3 overflow-x-auto h-full">
             <Droppable droppableId="droppable" type="BOARD" direction="horizontal">
               {(provided, snapshot) => (
               <div

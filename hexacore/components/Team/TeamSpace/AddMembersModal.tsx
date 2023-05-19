@@ -1,17 +1,17 @@
 import { auth, db } from '../../../firebase';
 import { doc, collection, addDoc, setDoc, getFirestore, query, where, getDocs, getDoc } from "firebase/firestore";
 import {useState, useEffect} from "react";
+import AvatarPicture from '../../AvatarPicture';
+import { get } from 'http';
 
 
 const AddMembersModal = ({isOpen, onClose, teamuid}) => {
-    const [name, setName] = useState("");
-const [email, setEmail] = useState("");
-const [picture, setPicture] = useState("");
-const [addedUid, setAddedUid] = useState("");
-const [users, setUsers] = useState([]);
+  
+  const [addedUid, setAddedUid] = useState("");
+  const [users, setUsers] = useState([]);
 
-const [filteredResults, setFilteredResults] = useState([]);
-const [searchQuery, setSearchQuery] = useState("");
+  const [filteredResults, setFilteredResults] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
 
 useEffect(() => {
@@ -46,62 +46,70 @@ const submit = async () => {
   }
 }
 
-useEffect(() => {
-  const getResults = async () => {
-    const isMember = async (uid) => {
-      if (teamuid) {
-        const q = query(
-          collection(db, "teams", teamuid, "members"),
-          where("uid", "==", uid)
-        );
-        const snapshot = await getDocs(q);
-        return snapshot.size > 0;
-      }
-    };
-
-    const results = await Promise.all(
-      users.map(async (hit) => {
-        if (
-          hit.uid !== auth.currentUser.uid &&
-          !(await isMember(hit.uid)) &&
-          (hit.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            hit.email.toLowerCase().includes(searchQuery.toLowerCase())) // Filter by search query
-        ) {
-          return (
-            <button
-              key={hit.uid}
-              className="flex items-center w-full px-5 py-2 hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30"
-              onClick={() =>
-                handleClick({
-                  objectID: hit.uid,
-                })
-              }
-            >
-              <img
-                className="object-cover w-8 h-8 rounded-full"
-                src={hit.picture}
-                alt=""
-              />
-              <div className="text-left rtl:text-right">
-                <h1 className="text-sm font-medium text-gray-700 capitalize dark:text-white">
-                  {hit.name}
-                </h1>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  {hit.email}
-                </p>
-              </div>
-            </button>
-          );
-        } else {
-          return null;
-        }
-      })
-    );
-
-    const filteredResults = results.filter((result) => result !== null);
-
-    setFilteredResults(filteredResults);
+const getResults = async () => {
+  const isMember = async (uid) => {
+    if (teamuid) {
+      const q = query(
+        collection(db, "teams", teamuid, "members"),
+        where("uid", "==", uid)
+      );
+      const snapshot = await getDocs(q);
+      return snapshot.size > 0;
+    }
   };
+
+  const filteredResults = await (await Promise.all(
+    users.map(async (hit) => {
+      const member = await isMember(hit.uid);
+      return {
+        uid: hit.uid,
+        name: hit.name,
+        email: hit.email,
+        picture: hit.picture,
+        isMember: member,
+      };
+    })
+  ))
+    .filter((hit) => (
+      hit.uid !== auth.currentUser.uid &&
+      !hit.isMember &&
+      (hit.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      hit.email.toLowerCase().includes(searchQuery.toLowerCase()))
+    ))
+    .map((hit) => (
+      <button
+        key={hit.uid}
+        className="flex items-center w-full px-5 py-2 hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30"
+        onClick={() => handleClick({ objectID: hit.uid })}
+      >
+        <AvatarPicture
+          picture={hit.picture}
+          name={hit.name}
+          containerWidth={10}
+          containerHeight={10}
+        />
+        <div className="text-left rtl:text-right">
+          <h1 className="text-sm font-medium text-gray-700 capitalize dark:text-white">
+            {hit.name}
+          </h1>
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            {hit.email}
+          </p>
+        </div>
+      </button>
+    ));
+
+  setFilteredResults(filteredResults);
+};
+
+useEffect(() => {
+  if (addedUid || users.length > 0) {
+    getResults();
+  }
+}, [users, teamuid, addedUid]);
+
+useEffect(() => {
+  
 
   if (addedUid || users.length > 0) {
     getResults();
@@ -111,6 +119,7 @@ useEffect(() => {
 
 const handleSearch = (event) => {
   setSearchQuery(event.target.value);
+  getResults();
 };
         
         
@@ -154,7 +163,7 @@ const handleSearch = (event) => {
 
                 
                   <div>
-                    <input className='text-white dark:text-black rounded w-60 h-10' type="text" onChange={handleSearch} />
+                    <input className='text-black rounded w-60 h-10 m-4 px-5 py-3 border-solid border-2 border-sky-500' type="text" onChange={handleSearch} />
                     {filteredResults}
                   </div>
                 

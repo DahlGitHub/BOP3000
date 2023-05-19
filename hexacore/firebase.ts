@@ -24,9 +24,10 @@ function initializeAppIfNecessary() {
       appId: "1:1090430226645:web:b14a47eaf66fc1e9fc525c"
     };
 
-  return initializeApp(firebaseConfig);
+    return initializeApp(firebaseConfig);
   }
 }
+
 
 
 

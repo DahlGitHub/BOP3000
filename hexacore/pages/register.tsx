@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Layout from '../components/Layout/Layout'
-import SignUp from '../components/SignUp'
+import SignUp from '../components/Login/SignUp'
 
 const Register = () => (
   <Layout title="Hexacore | Register">
