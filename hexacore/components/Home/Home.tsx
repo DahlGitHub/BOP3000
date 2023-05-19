@@ -14,7 +14,7 @@ const Home = () => {
     const docImport = doc;
 
     
-    const username = auth.currentUser?.email
+    const username = auth.currentUser?.displayName;
 
     useEffect(() => {
         async function fetchContacts() {
@@ -114,13 +114,9 @@ const Home = () => {
             </div>
             <div className='flex'>
                 <Profile name={username}/>
-                <div className={`${teams ? 'block' : 'hidden'} m-10 border-solid border-2 border-sky-500 rounded`} >
-                    <h1 className="text-xl p-5">Your teams:</h1>
-                    {teams}
-                </div>
                     
                 <div className={`${contacts ? 'block' : 'hidden'} m-10 border-solid border-2 border-sky-500 rounded`}>
-                    <h1 className="text-xl p-5">Contacts online:</h1>
+                    <h1 className="text-xl p-5">Contacts:</h1>
                     <div className="m-2">
                         {contacts}
                     </div>

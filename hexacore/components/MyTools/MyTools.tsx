@@ -73,6 +73,7 @@ const MyTools = () => {
             setShowFiles(true);
         } else if (type === "kanban") {
             setShowKanban(true);
+            setToolName(toolName);
         } else {
             setShowFiles(false);
             setShowKanban(false);
@@ -96,11 +97,13 @@ const MyTools = () => {
         setToolName(toolName);
     }
 
+    const kanbanID = "users/" + auth.currentUser?.uid + "/tools/kanban/" + toolName;
+
     const showTool = () => {
         switch (toolType) {
           case "kanban":
             return(
-              <Kanban id="/groups/a82bcf3fff364e71b2a8bb39903be3dd/kanbanid" membersId="/users" />
+              <Kanban id={kanbanID} membersId={"users/" + auth.currentUser?.uid + "/tools/"+ kanbanID +"/members"} />
             )
           case "files":
             handleFilesSelect(toolName)
