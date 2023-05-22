@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { Dropdown, Navbar, Text, Avatar, Image, Collapse } from "@nextui-org/react";
-import { auth, logout } from '../../../firebase';
+import { auth, logout } from '../../../firebase-config/firebase';
 import type { NextPage } from 'next'
 import Link from 'next/link';
 import Logo from "/public/images/hexacore.png";

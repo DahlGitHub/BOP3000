@@ -1,4 +1,4 @@
-import { db, auth } from '../../firebase';
+import { db, auth } from '../../firebase-config/firebase';
 import { collection, getDocs, getDoc, doc } from "firebase/firestore";
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';

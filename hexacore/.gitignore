@@ -40,3 +40,8 @@ next-env.d.ts
 
 # env
 .env
+
+hexacore/firebase.ts
+firebase.ts
+./firebase.ts
+firebase-config

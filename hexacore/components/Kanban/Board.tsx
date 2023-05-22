@@ -5,7 +5,7 @@ import { Droppable } from "react-beautiful-dnd";
 import { useEffect, useState } from "react";
 import { Dropdown} from "@nextui-org/react";
 import { arrayUnion, deleteDoc, doc, updateDoc } from 'firebase/firestore';
-import { db } from '../../firebase';
+import { db } from '../../firebase-config/firebase';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { createGuidId } from './Kanban';

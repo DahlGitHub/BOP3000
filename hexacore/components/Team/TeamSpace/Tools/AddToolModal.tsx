@@ -1,4 +1,4 @@
-import { auth, storage, db } from '../../../../firebase';
+import { auth, storage, db } from '../../../../firebase-config/firebase';
 import { doc, collection, addDoc, setDoc, getFirestore } from "firebase/firestore";
 import { Collapse, Input } from '@nextui-org/react';
 import {useState, useEffect} from "react";

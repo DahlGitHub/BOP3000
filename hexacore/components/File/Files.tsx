@@ -7,7 +7,7 @@ import { faCloudArrowUp, faFile, faFilePdf, faFilter, faList, faList12, faTracto
 import FileUpload from "./FileUpload";
 import FileFilter from "./FileFilter";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { auth, db } from "../../firebase";
+import { auth, db } from "../../firebase-config/firebase";
 import FileModal from "./FileModal";
 
 

@@ -1,6 +1,6 @@
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { auth, db } from "../../firebase";
+import { auth, db } from "../../firebase-config/firebase";
 import { useRouter } from "next/router";
 import AvatarPicture from "../AvatarPicture";
 import WelcomeMessage from "./WelcomeMessage";

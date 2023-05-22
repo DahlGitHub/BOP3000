@@ -1,10 +1,10 @@
 import MessageInput from './MessageInput'
 import MessageList from './MessageList'
 import { useRouter } from 'next/router';
-import { auth } from '../../firebase';
+import { auth } from '../../firebase-config/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { doc, setDoc } from 'firebase/firestore';
-import { db } from '../../firebase'
+import { db } from '../../firebase-config/firebase'
 import { useEffect, useState } from 'react';
 import CreatePoll from './CreatePoll';
 import { faMessage, faPoll } from '@fortawesome/free-solid-svg-icons';

@@ -1,5 +1,5 @@
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
-import { db } from "../../firebase";
+import { db } from "../../firebase-config/firebase";
 import AvatarPicture from "../AvatarPicture";
 
 async function fetchTeamMembers(selectedTeam, setTeamMembers) {

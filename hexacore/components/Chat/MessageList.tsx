@@ -1,5 +1,5 @@
 import { collection, query, onSnapshot, limit, orderBy, startAfter, getDocs } from 'firebase/firestore';
-import { db, auth } from '../../firebase'
+import { db, auth } from '../../firebase-config/firebase'
 import { useEffect, useRef, useState } from 'react';
 import { useImmer } from 'use-immer';
 import Message from './Message';

@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Dropdown } from "@nextui-org/react";
 import { collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
-import { db } from "../../firebase";
+import { db } from "../../firebase-config/firebase";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import AvatarPicture from "../AvatarPicture";

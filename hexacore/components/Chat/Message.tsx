@@ -1,7 +1,7 @@
 import { Dropdown } from "@nextui-org/react"
 import { deleteDoc, doc, updateDoc } from "firebase/firestore"
 import { useContext, useEffect, useRef, useState } from "react"
-import { db } from "../../firebase"
+import { db } from "../../firebase-config/firebase"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEllipsisH, faEllipsisV, faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { UserContext } from "../../context/UserContext"

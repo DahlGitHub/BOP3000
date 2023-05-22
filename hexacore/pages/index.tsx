@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Layout from '../components/Layout/Layout'
 import FrontPage from '../components/FrontPageComps/FrontPage'
-import { auth } from '../firebase'
+import { auth } from '../firebase-config/firebase'
 
 const IndexPage = () => (
 
