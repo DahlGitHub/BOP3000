@@ -1,4 +1,4 @@
-import { auth, db} from '../../firebase';
+import { auth,db } from "../../firebase-config/firebase";
 import { deleteDoc, doc, setDoc } from "firebase/firestore";
 
 

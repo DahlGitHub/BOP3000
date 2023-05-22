@@ -1,5 +1,5 @@
 import { deleteDoc, doc, setDoc } from "firebase/firestore";
-import { auth, db } from "../../../../firebase";
+import { db } from "../../../../firebase-config/firebase";
 
 
 const TeamDeleteFileModal = ({ isOpen, onClose, name, size, fetch, folderName, teamuid }) => {

@@ -1,6 +1,6 @@
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { auth, db } from "../../firebase";
+import { auth,db } from "../../firebase-config/firebase";
 import { useRouter } from "next/router";
 import AvatarPicture from "../AvatarPicture";
 import WelcomeMessage from "./WelcomeMessage";
@@ -108,7 +108,7 @@ const Home = () => {
                                 With our chat system you can easily send messages to eachother.
                             </p>
                         </div>
-                        <button onClick={() => router.push("/dashboard/contacts")} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add a contact</button>
+                        <button onClick={() => router.push("/dashboard/contactChat")} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add a contact</button>
                     </div>
                 </div>
             </div>

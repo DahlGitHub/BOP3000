@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { auth,db } from '../../firebase';
+import { auth, db } from '../../firebase-config/firebase';
 import { doc, collection, addDoc, setDoc, getFirestore, getDocs, query, getDoc, deleteDoc } from "firebase/firestore";
 
 const FavTeamModal = ({isOpen, onClose, teamName, teamID, fetchTeams}) => {

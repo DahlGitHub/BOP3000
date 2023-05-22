@@ -4,7 +4,7 @@ import { faBackward, faCogs, faComments, faFolderOpen, faWindowMaximize } from "
 import { useEffect, useState } from "react";
 import AddMyToolsModal from "./AddMyToolsModal";
 import { collection, getDocs, query } from "firebase/firestore";
-import { auth, db } from "../../firebase";
+import { auth, db } from "../../firebase-config/firebase";
 import MyFiles from "./MyFiles";
 import Kanban from "../Kanban/Kanban";
 import { set } from "firebase/database";

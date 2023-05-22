@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container } from "@nextui-org/react";
-import { db, storage, auth } from "../firebase"
+import { db, auth, storage } from '../firebase-config/firebase';
 import { GoogleAuthProvider, deleteUser, updateProfile} from "firebase/auth";
 import { doc, setDoc, updateDoc, getDoc, deleteDoc } from "firebase/firestore";
 import { useRouter } from 'next/navigation';

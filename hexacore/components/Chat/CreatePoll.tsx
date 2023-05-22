@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button, Input } from "@nextui-org/react"
 import { useContext, useState } from "react"
 import { Timestamp, addDoc, collection } from "firebase/firestore"
-import { db } from "../../firebase"
+import { db } from "../../firebase-config/firebase"
 import { UserContext } from "../../context/UserContext"
 
 

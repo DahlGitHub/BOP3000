@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ContactModal from './ContactModal'
 import Link from 'next/link';
-import { auth, db } from '../../firebase';
+import { auth, db } from '../../firebase-config/firebase';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import AvatarPicture from '../AvatarPicture';
 import ContactRequests from './ContactRequests';

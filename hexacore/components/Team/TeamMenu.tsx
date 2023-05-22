@@ -9,7 +9,7 @@ import Chat from '../Chat/Chat';
 import TeamInvitesModal from './TeamInvitesModal';
 import fetchTeamMembers from './fetchTeamMembers';
 import { collection, doc, getDoc, getDocs, query } from 'firebase/firestore';
-import { auth, db } from '../../firebase';
+import { auth, db } from '../../firebase-config/firebase';
 import Kanban from '../Kanban/Kanban';
 import FavTeamModal from './favTeamModal';
 import { faStar } from '@fortawesome/free-regular-svg-icons';

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Dashboard from "./Dashboard";
 import { UserContext } from "../../../context/UserContext";
-import { auth } from "../../../firebase";
+import { auth } from "../../../firebase-config/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Progress } from "@nextui-org/react";
 import DashboardHead from "./DashboardHead";
