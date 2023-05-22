@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Timestamp, addDoc, collection } from 'firebase/firestore';
-import { auth, db } from '../../firebase-config/firebase'
+import { auth,db } from '../../firebase-config/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 export default ({id}) =>{

@@ -1,11 +1,6 @@
-import { auth, storage, db } from '../../../../firebase-config/firebase';
+import { db } from "../../../../firebase-config/firebase";
 import { doc, collection, addDoc, setDoc, getFirestore } from "firebase/firestore";
-import { Collapse, Input } from '@nextui-org/react';
 import {useState, useEffect} from "react";
-import { v4 as uuidv4 } from 'uuid'
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolderPlus } from '@fortawesome/free-solid-svg-icons';
 
 const AddToolModal = ({isOpen, onClose, teamuid, tools}) => {
   const userStorageRef = `users/teams`//id til gruppen skal her

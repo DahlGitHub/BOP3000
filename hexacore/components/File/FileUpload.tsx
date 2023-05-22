@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { faTrashCan, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFile } from '@fortawesome/free-regular-svg-icons';
-import { auth, db, storage } from '../../firebase-config/firebase';
+import { auth,db,storage } from '../../firebase-config/firebase';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { doc, setDoc } from 'firebase/firestore';
 

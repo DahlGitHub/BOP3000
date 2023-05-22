@@ -1,4 +1,4 @@
-import { auth, db } from '../../../firebase-config/firebase';
+import { auth, db } from "../../../firebase-config/firebase";
 import { doc, collection, addDoc, setDoc, getFirestore, query, where, getDocs, getDoc } from "firebase/firestore";
 import {useState, useEffect} from "react";
 import AvatarPicture from '../../AvatarPicture';
