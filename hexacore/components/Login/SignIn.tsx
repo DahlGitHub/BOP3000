@@ -14,7 +14,7 @@ import {
 
 import Link from 'next/link'
 import {useState, useEffect} from "react";
-import {auth, logInWithEmailAndPassword, app, signInWithGoogle, signInWithMicrosoft} from "../../firebase";
+import { logInWithEmailAndPassword, app } from '../../firebase-config/firebase';
 import { useRouter } from 'next/navigation';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { getAuth } from 'firebase/auth';

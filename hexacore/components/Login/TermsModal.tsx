@@ -1,11 +1,4 @@
-import { auth, db, registerWithEmailAndPassword, signInWithGoogle, signInWithMicrosoft } from '../../firebase';
-import { doc, collection, addDoc, setDoc, getFirestore } from "firebase/firestore";
-import { Collapse, Input } from '@nextui-org/react';
-import {useState, useEffect} from "react";
-import { v4 as uuidv4 } from 'uuid'
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolderPlus } from '@fortawesome/free-solid-svg-icons';
+import { registerWithEmailAndPassword, signInWithGoogle, signInWithMicrosoft } from '../../firebase-config/firebase';
 import { useRouter } from 'next/router';
 
 const TermsModal = ({isOpen, onClose, provider, email, name, password}) => {

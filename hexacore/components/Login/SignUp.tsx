@@ -11,7 +11,7 @@ import {
 } from '@nextui-org/react';
 import Link from 'next/link';
 import {useState, useEffect} from "react";
-import {auth, registerWithEmailAndPassword, app} from "../../firebase";
+import {app } from '../../firebase-config/firebase';
 import { useRouter } from 'next/navigation';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { getAuth} from 'firebase/auth';

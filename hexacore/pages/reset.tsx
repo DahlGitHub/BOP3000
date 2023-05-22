@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, sendPasswordReset, app } from "../firebase";
+import { sendPasswordReset, app } from "../firebase-config/firebase";
 import { useRouter } from 'next/navigation';
 import { getAuth } from 'firebase/auth';
 import Link from 'next/link';

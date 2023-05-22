@@ -1,4 +1,4 @@
-import { auth, db} from '../../firebase';
+import { auth,db } from '../../firebase-config/firebase';
 import { doc, setDoc, deleteDoc } from "firebase/firestore";
 import { Spacer } from '@nextui-org/react';
 import AvatarPicture from '../AvatarPicture';
