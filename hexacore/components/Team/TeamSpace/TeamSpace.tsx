@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Drawer from "../../Drawer";
 import { Collapse } from "@nextui-org/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFolderPlus, faCogs, faBackward } from "@fortawesome/free-solid-svg-icons";
+import { faFolderPlus, faCogs, faBackward, faPeopleGroup } from "@fortawesome/free-solid-svg-icons";
 import AddToolModal from "./Tools/AddToolModal";
 import AddMembersModal from "./AddMembersModal";
 import { useRouter } from "next/router";
@@ -10,14 +10,11 @@ import { ToastContainer } from "react-toastify";
 import TeamSpaceSettings from "./Tools/TeamSpaceSettings";
 
 
-const TeamSpace = ({teamuid, name, clearTeam, alertInviteSuccess,tools, fetchTools, isMemberModalOpen, memberModalOnClose}) => {
+const TeamSpace = ({teamuid, name, clearTeam, alertInviteSuccess,tools, fetchTools, isMemberModalOpen, memberModalOnClose, setShowTeamMembers, showTeamMembers}) => {
 
     const [isListOpen, setIsListOpen] = React.useState(true);
-    const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
 
-    const handleSettingsOpen = () => {
-        setIsSettingsOpen(!isSettingsOpen);
-    }
+
 
     function handleListOpen() {
         setIsListOpen(true);
@@ -76,6 +73,10 @@ const TeamSpace = ({teamuid, name, clearTeam, alertInviteSuccess,tools, fetchToo
                         
                         Add tool
                 </button>
+                <button type="button" onClick={() => setShowTeamMembers(!showTeamMembers)} className="mx-5 text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2">
+                        <FontAwesomeIcon className='pr-2' icon={faPeopleGroup}/>
+                        Show members
+                </button>
             </div>
                 
         )
@@ -107,7 +108,7 @@ const TeamSpace = ({teamuid, name, clearTeam, alertInviteSuccess,tools, fetchToo
             <AddMembersModal alertInviteSuccess={alertInviteSuccess} isOpen={isMemberModalOpen} onClose={memberModalOnClose} teamuid={teamuid}/>
             <TeamSpaceSettings isOpen={isSettingsOpen} onClose={handleSettingsOpen} teamuid={teamuid} tools={tools}/>
             
-                <div className='w-64'>
+                <div>
             
                     
                     <Drawer mainContent={<MainContent/>} 

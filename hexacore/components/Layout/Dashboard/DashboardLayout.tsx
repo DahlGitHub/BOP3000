@@ -26,7 +26,7 @@ const DashboardLayout = ({ children }) => {
 
   return (
     <UserContext.Provider value={{user, loading, error}}>
-      <div className="min-h-screen">
+      <div className="min-h-screen dark:bg-gray-900">
       <DashboardHead />
       <div className="flex">
         <DashboardSidebar />
