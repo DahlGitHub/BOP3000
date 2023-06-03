@@ -34,6 +34,7 @@ const TeamMenu = ()  => {
     setSelectedTeamName(null);
     setTools([]);
     setSelectedTool(false);
+    setTeamMembers([]);
   }
   
   async function fetchTeams() {

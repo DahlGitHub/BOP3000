@@ -147,7 +147,7 @@ const MyTools = () => {
 
     return(
         <div className=" bg-white  dark:text-white  dark:bg-gray-800">
-            <AddMyToolsModal isOpen={isToolModalOpen} onClose={handleToolModalClose} fetchTools={fetchTools}/>
+            <AddMyToolsModal isOpen={isToolModalOpen} tools={tools} onClose={handleToolModalClose} fetchTools={fetchTools}/>
             <div className="flex">    
                 <div
                     className={`${

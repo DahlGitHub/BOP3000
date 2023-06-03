@@ -1,3 +1,4 @@
+import { set } from "firebase/database";
 import { db } from "../../../../firebase-config/firebase";
 import { doc, collection, addDoc, setDoc, getFirestore } from "firebase/firestore";
 import {useState, useEffect} from "react";
@@ -6,23 +7,29 @@ const AddToolModal = ({isOpen, onClose, teamuid, tools}) => {
   const userStorageRef = `users/teams`//id til gruppen skal her
   const [name, setName] = useState("");
   const [toolType, setToolType] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
+  
   
   const submit = async () => {
-    const nameInp = name;
-    const toolTypeInp = toolType;
-    setName("");
-    setToolType(null);
-    onClose()
-    if (!nameInp && !toolTypeInp) {
-      console.log("none test")
-          return
-      } else if(!tools.find(tool => tool.key === name)){
-        await setDoc(doc(db, `teams/${teamuid}/tools/${name}`), {
-            name: name,
-            tool: toolType,
-        })
-    } 
-   
+    if(toolType && name){
+      
+      
+      if(!tools.find(tool => tool.key === name)){
+          await setDoc(doc(db, `teams/${teamuid}/tools/${name}`), {
+              name: name,
+              tool: toolType,
+          }).then(() => {
+            setName("");
+            setToolType(null);
+            setErrorMessage(null);
+            onClose() 
+          })
+      } else if(tools.find(tool => tool.key === name)){
+        setErrorMessage("Toolname already exists")
+      }
+    } else {
+      setErrorMessage("Please enter a name for your tool.")
+    }
   }  
 
     return (
@@ -55,61 +62,78 @@ const AddToolModal = ({isOpen, onClose, teamuid, tools}) => {
             aria-modal="true"
             aria-labelledby="modal-headline"
           >
-            <div>
-              <div className="mt-3 text-center sm:mt-5">
-                <h3
-                  className="text-lg leading-6 font-medium"
-                  id="modal-headline"
-                >
-                  Add a tool
-                </h3>
+            <div className="mt-3 text-center sm:mt-5">
+                
+                
                 <div className="mt-2">
                   <div className="flex flex-col items-center pt-6 pr-6 pb-6 pl-6">
-                
-                  
-                <div>
+                  <div
+                  className={`${
+                    toolType ? 'hidden' : 'block'
+                  } `}
+                >
+                  <h3
+                  className="text-lg leading-6 font-medium mb-8"
+                  id="modal-headline"
+                >
+                  Select the type of tool you want to create
+                </h3>
+                    <div onClick={() => setToolType("kanban")} className={`cursor-pointer border-solid border-2 border-white text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2 ${toolType === "kanban" ? "ring-2 ring-[#38BDF8]" : ""}`}>
+                        <h1>Kanban</h1>
+                    </div>
 
-                <div onClick={() => setToolType("kanban")} className={`cursor-pointer text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2 ${toolType === "kanban" ? "ring-2 ring-[#38BDF8]" : ""}`}>
-                    <h1>Kanban</h1>
-                </div>
+                    <div onClick={() => setToolType("chat")} className={`cursor-pointer border-solid border-2 border-white text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2 ${toolType === "chat" ? "ring-2 ring-[#38BDF8]" : ""}`}>
+                        <h1>Team Chat</h1>
+                    </div>
 
-                <div onClick={() => setToolType("chat")} className={`cursor-pointer text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2 ${toolType === "chat" ? "ring-2 ring-[#38BDF8]" : ""}`}>
-                    <h1>Team Chat</h1>
-                </div>
-
-                <div onClick={() => setToolType("files")} className={`cursor-pointer text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2 ${toolType === "files" ? "ring-2 ring-[#38BDF8]" : ""}`}>
-                    <h1>File Folder</h1>
-                </div>
-
-                    
+                    <div onClick={() => setToolType("files")} className={`cursor-pointer border-solid border-2 border-white text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2 ${toolType === "files" ? "ring-2 ring-[#38BDF8]" : ""}`}>
+                        <h1>File Folder</h1>
+                    </div>      
+                  </div> 
+                  <div
+                    className={`${
+                      toolType ? 'block' : 'hidden'
+                    } `}
+                  >
+                    <h3
+                      className="text-lg leading-6 font-medium mb-8"
+                      id="modal-headline"
+                    >
+                      Enter the name of your {toolType} tool
+                    </h3>
+                    <h4 className="text-red-500">{errorMessage}</h4>
+                    <input
+                      name='toolNameInput'
+                      id='toolNameInput'
+                      type="text"
+                      aria-label="Tool input"
+                      value={name}
+                      onChange={e => { setName(e.currentTarget.value); }}
+                      
+                      color='primary'
+                      placeholder="Tool name"
+                      className=' text-black dark:text-white dark:bg-gray-800 border-solid border-gray-300 border-2 rounded-xl w-full h-12 pl-4 pr-4 pt-2 pb-2'
                         
-                </div>
-          
-                
-                <input
-                  name='toolNameInput'
-                  id='toolNameInput'
-                  type="text"
-                  aria-label="Tool input"
-                  value={name}
-                  onChange={e => { setName(e.currentTarget.value); }}
-                  
-                  color='primary'
-                  placeholder="Tool name"
-                  className='m-4 text-black dark:text-white dark:bg-gray-800 border-solid border-gray-300 border-2 rounded-xl w-full h-12 pl-4 pr-4 pt-2 pb-2'
+                    />
                     
-                />
-                
-                <div className="w-full mt-6">
-                  <a onClick={submit} className="flex text-center items-center justify-center w-full pt-4 pr-10 pb-4 pl-10 text-base
-                      font-medium text-white bg-blue-600 rounded-xl transition duration-500 ease-in-out transform
-                      hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                      Add tool</a>
-                </div>
+                    <div className="mt-6 mb-6 flex">
+                      
+                      <a onClick={submit} className="flex text-center items-center justify-center w-full pt-4 pr-10 pb-4 pl-10 text-base
+                          font-medium text-white bg-blue-600 rounded-xl transition duration-500 ease-in-out transform
+                          hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                          Add tool</a>
+                    </div>
+                    <button onClick={()=>{
+                        setName("");
+                        setToolType(null);
+                      }} className="bg-red-500 hover:bg-blue-700 text-white w-full pt-4 pr-10 pb-4 pl-10 text-base
+                      font-medium rounded-xl">
+                        Select a different tool type
+                      </button>
+                  </div>
               </div>
                 </div>
               </div>
-            </div>
             <div className="mt-5 sm:mt-6">
               <button onClick={(e)=>{
                 setName("");
