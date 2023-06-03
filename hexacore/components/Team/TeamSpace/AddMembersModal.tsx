@@ -4,11 +4,13 @@ import {useState, useEffect} from "react";
 import AvatarPicture from '../../AvatarPicture';
 import { get } from 'http';
 import { toast } from 'react-toastify';
+import { set } from "firebase/database";
 
 
 const AddMembersModal = ({isOpen, onClose, teamuid, alertInviteSuccess}) => {
   
   const [addedUid, setAddedUid] = useState("");
+  const [addedName, setAddedName] = useState("");
   const [users, setUsers] = useState([]);
 
   const [filteredResults, setFilteredResults] = useState([]);
@@ -31,6 +33,7 @@ useEffect(() => {
 
 const handleClick = (props) => {
   setAddedUid(props.objectID);
+  setAddedName(props.name);
 };
 
 const submit = async () => {
@@ -168,17 +171,21 @@ const handleSearch = (event) => {
                 
                   <div>
                     <input className='text-black rounded w-60 h-10 m-4 px-5 py-3 border-solid border-2 border-sky-500' type="text" onChange={handleSearch} />
+                    <div className={`${
+                        addedUid ? 'block' : 'hidden'
+                      } w-full`}>
+                      <a onClick={() => submit()} className="flex text-center items-center justify-center w-full pt-4 pr-10 pb-4 pl-10 text-base
+                          font-medium text-white bg-blue-600 rounded-xl transition duration-500 ease-in-out transform
+                          hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                          Invite {addedName} to your team</a>
+                    </div>
                     {filteredResults}
                   </div>
+                  
                 
                 <p className="mt-3 text-base leading-relaxed text-center text-black-200"></p>
                 
-                <div className="w-full mt-6">
-                  <a onClick={() => submit()} className="flex text-center items-center justify-center w-full pt-4 pr-10 pb-4 pl-10 text-base
-                      font-medium text-white bg-blue-600 rounded-xl transition duration-500 ease-in-out transform
-                      hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                      Send Invite</a>
-                </div>
+                
               </div>
                 </div>
               </div>

@@ -8,7 +8,7 @@ const SidebarItems = [
   { id: 1, iconItem: <FontAwesomeIcon icon={faHouse}/>, text: "Home",link: "/dashboard" },
   { id: 2, iconItem: <FontAwesomeIcon icon={faMessage}/>, text: "Contacts",link: "/dashboard/contactChat" },
   { id: 3, iconItem: <FontAwesomeIcon icon={faLayerGroup}/>, text: "Teams",link: "/dashboard/teams" },
-  { id: 4, iconItem: <FontAwesomeIcon icon={faBriefcase}/>, text: "Tools",link: "/dashboard/myTools" },
+  { id: 4, iconItem: <FontAwesomeIcon icon={faBriefcase}/>, text: "MyTools",link: "/dashboard/myTools" },
 ];
 
 const DashboardSidebar = () => {
