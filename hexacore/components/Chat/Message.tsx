@@ -28,7 +28,12 @@ export default ({index, message, id}) =>{
             setRows((editMessageValue.match(/\n/g)||[]).length+1)
         }
         
-    },[editMessageValue])
+    },[editMessageValue, message])
+
+
+    useEffect(() => {
+      setEditMessageValue(message.message.message);
+    }, [message]);
 
     const onTextAreaKeyPress = async (e) => {
         if (e.key === 'Escape') {
