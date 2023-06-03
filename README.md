@@ -11,7 +11,7 @@
 
 <h2>🚀 Demo</h2>
 
-[https://www.hexacore.no](https://www.hexacore.no)
+[https://hexacore.no](https://hexacore.no)
 
 <h2>
   
