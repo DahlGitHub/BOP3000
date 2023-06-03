@@ -149,27 +149,17 @@ const MyTools = () => {
         <div className=" bg-white  dark:text-white  dark:bg-gray-800">
             <AddMyToolsModal isOpen={isToolModalOpen} tools={tools} onClose={handleToolModalClose} fetchTools={fetchTools}/>
             <div className="flex">    
-                <div
-                    className={`${
-                    showFiles ? 'hidden' : 'block'
-                    } `}
-                >
-                    <div className='w-64'>
-                
-                        
+                    <div>
                         <Drawer mainContent={<MainContent/>} 
                             title={
                                 "My tools"
                             } 
                             isOpen={isListOpen} open={handleListOpen} close={handleListClose} 
                         />
-                        
                     </div>
-                    
-                </div>
                 {selectedTool && !selectedFiles ?
                         (
-                            <div className="grow flex bk-white overflow-auto dark:text-black">
+                            <div className="grow flex overflow-auto dark:text-black w-64">
                                 {showTool()}
                             </div>
                         ):
