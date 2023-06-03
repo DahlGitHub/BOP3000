@@ -5,7 +5,7 @@ import {useState, useEffect} from "react";
 
 const AddToolModal = ({isOpen, onClose, teamuid, tools}) => {
   const userStorageRef = `users/teams`//id til gruppen skal her
-  const [name, setName] = useState("");
+  const [name, setName] = useState(null);
   const [toolType, setToolType] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   
@@ -43,7 +43,7 @@ const AddToolModal = ({isOpen, onClose, teamuid, tools}) => {
             className="fixed inset-0 transition-opacity"
             aria-hidden="true"
             onClick={(e)=>{
-              setName("");
+              setName(null);
               setToolType(null);
               onClose(e);
             }}
@@ -136,7 +136,7 @@ const AddToolModal = ({isOpen, onClose, teamuid, tools}) => {
               </div>
             <div className="mt-5 sm:mt-6">
               <button onClick={(e)=>{
-                setName("");
+                setName(null);
                 setToolType(null);
                 onClose(e);
               }}

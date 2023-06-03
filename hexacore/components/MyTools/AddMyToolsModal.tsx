@@ -46,7 +46,7 @@ const AddMyToolsModal = ({isOpen, onClose, fetchTools, tools}) => {
             className="fixed inset-0 transition-opacity"
             aria-hidden="true"
             onClick={(e)=>{
-              setName("");
+              setName(null);
               setToolType(null);
               onClose(e);
             }}
@@ -133,7 +133,7 @@ const AddMyToolsModal = ({isOpen, onClose, fetchTools, tools}) => {
             </div>
             <div className="mt-5 sm:mt-6">
               <button onClick={(e)=>{
-                setName("");
+                setName(null);
                 setToolType(null);
                 onClose(e);
               }}
