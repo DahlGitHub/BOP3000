@@ -19,6 +19,7 @@ import { ToastContainer, toast } from 'react-toastify';
 const TeamMenu = ()  => {
 
   // Team
+  const [showTeamMembers, setShowTeamMembers] = useState(false);
   const [selectedTeam, setSelectedTeam] = React.useState(null);
   const [selectedTeamName, setSelectedTeamName] = React.useState(null);
   const [teamMembers, setTeamMembers] = React.useState([]);
@@ -266,7 +267,7 @@ const handleToolSelect = (toolName, type) => {
      
      {!selectedFiles ?
      (<div>
-      <div className='w-64'>
+      <div>
         <CreateTeam isOpen={isModalOpen} onClose={handleModalClose} fetchTeams={fetchTeams}/>
         <FavTeamModal isOpen={isFavTeamModalOpen} onClose={handleCloseFavTeam} teamName={favTeamName} teamID={favTeamID} fetchTeams={fetchTeams}/>
         <TeamInvitesModal isOpen={isInvitesOpen} onClose={handleInvitesClose} fetchTeams={fetchTeams} setInviteCount={setInviteCount}/>
@@ -275,7 +276,7 @@ const handleToolSelect = (toolName, type) => {
           <Drawer mainContent={<MainContent/>} title={<h1>Teams</h1>} isOpen={isListOpen} open={handleListOpen} close={handleListClose} />
         </div>)
         : ((<div>
-          <TeamSpace alertInviteSuccess={alertInviteSuccess} isMemberModalOpen={isMemberModalOpen} memberModalOnClose={handleMemberModalClose} tools={tools} fetchTools={fetchTools} teamuid={selectedTeam} name={selectedTeamName} clearTeam={clearTeam} />
+          <TeamSpace alertInviteSuccess={alertInviteSuccess} isMemberModalOpen={isMemberModalOpen} memberModalOnClose={handleMemberModalClose} tools={tools} fetchTools={fetchTools} teamuid={selectedTeam} name={selectedTeamName} clearTeam={clearTeam} setShowTeamMembers={setShowTeamMembers} showTeamMembers={showTeamMembers} />
         </div>))
         }
       </div>
@@ -291,7 +292,7 @@ const handleToolSelect = (toolName, type) => {
   
     {selectedTool && !selectedFiles ?
       (
-        <div className="grow flex bk-white overflow-auto">
+        <div className="grow flex overflow-auto">
           {showTool()}
         </div>
       ):
@@ -299,8 +300,8 @@ const handleToolSelect = (toolName, type) => {
         <div className='grow'></div>
       )
     }
-
-      <div className="grow-0 top-15 right-0 h-[calc(100vh-70px)] max-w-40
+      { showTeamMembers && (
+      <div className="fixed top-15 right-0 h-[calc(100vh-70px)] max-w-40
        dark:bg-gray-800 border-solid text-white flex">
         <div
             className={`${
@@ -336,6 +337,7 @@ const handleToolSelect = (toolName, type) => {
         </div>
       
       </div>
+      )}
     </section>
   )
 }
