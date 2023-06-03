@@ -14,7 +14,7 @@ const Drawer = ({mainContent, title, isOpen, open, close}) => {
                 isOpen ? 'block' : 'hidden'
             } `}
             >
-                <div className="absolute mx-2 my-3 left-15 z-50">
+                <div className="absolute mx-2 my-3 left-15 z-10">
                         <button onClick={close} className="w-full items-center p-1 mx-1 text-center bg-gray-200 text-[14px] font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700">
                         <FontAwesomeIcon icon={faChevronLeft}/>
                         </button>
@@ -37,7 +37,7 @@ const Drawer = ({mainContent, title, isOpen, open, close}) => {
                 isOpen ? 'hidden' : 'block'
             } `}
             >
-                    <div className="absolute mx-2 my-3 left-15 z-50">
+                    <div className="absolute mx-2 my-3 left-15 z-10">
                         <button onClick={open} className="w-full items-center p-1 mx-1 text-center bg-gray-200 text-[14px] font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700">
                         <FontAwesomeIcon icon={faChevronRight}/>
                         </button>
