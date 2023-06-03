@@ -52,11 +52,7 @@ export default ({id}) =>{
       <form className='w-full'>
       <label htmlFor="chat" className="sr-only">Your message</label>
         <div className="flex items-center rounded-lg">
-            <textarea id="chat" onKeyDown={sendMessage} onChange={type} value={message} rows={row} className="resize-none pl-4 h-10 focus:h-full break-words p-2 w-full text-sm text-gray-900 bg-white rounded-lg border  focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Type message..."></textarea>
-              {
-              // "Button doesn't work yet" 
-              }
-              
+            <textarea id="chat" onKeyDown={sendMessage} onChange={type} value={message} rows={row} className="resize-none pl-4 h-10 focus:h-full break-words p-2 w-full text-sm text-gray-900 bg-white rounded-lg border bg-gray-100 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Type message..."></textarea>
         </div>
       </form>
     </div>

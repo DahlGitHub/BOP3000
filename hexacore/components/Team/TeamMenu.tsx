@@ -257,7 +257,9 @@ const handleToolSelect = (toolName, type) => {
         )
       case "files":
         handleFilesSelect(toolName)
-    }
+      case "settings":
+        return null
+    } 
   }
       
 
