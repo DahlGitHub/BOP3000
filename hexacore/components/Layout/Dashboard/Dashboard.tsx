@@ -1,16 +1,10 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/router";
 import DashboardHead from "./DashboardHead";
+import { auth } from "../../../firebase-config/firebase";
 
 
 const Dashboard = () => {
-  
-
-  const router = useRouter();
-
-  const settings = () => {
-    router.push("/personalDetails")
-  }
 
   return ( 
   <>

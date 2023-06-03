@@ -17,16 +17,9 @@ const Home = () => {
     
     const username = auth.currentUser?.displayName;
 
-    const userLoggedIn = () => {
-        
-        if(!auth.currentUser) {
-            router.push("/login");
-        }
-    }
+    
 
     useEffect(() => {
-        
-        userLoggedIn();
         fetchContacts();
         fetchTeams()
     }, []); // Run this effect only once on component mount
