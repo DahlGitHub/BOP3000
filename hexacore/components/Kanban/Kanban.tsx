@@ -129,12 +129,14 @@ export default function Home({id, membersId}) {
   return (
       <div className="pt-10 pl-5 flex flex-col h-[calc(100vh-70px)] grow">
         {/* Board header */}
-        <div className="flex flex-initial space-x-3">
+        <div className="flex flex-col sm:flex-row items-start sm:space-y-0 sm:space-x-3 space-x-3 ">
           <div className="flex items-center mx-2">
             <h4 className="text-4xl font-bold text-gray-600">Kanban board</h4>
           </div>
+          <div className='flex space-x-2'>
           <Input aria-label='addBoard' aria-hidden='false' value={newBoard} onKeyDown={onEnter} onChange={(e) => {setNewBoard(e.target.value)} }  placeholder='Add a new list'></Input>
           <button className="p-2 px-3 text-sm text-center text-white rounded-xl bg-blue-700 sm:w-fit hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={addBoard}>Add</button>
+          </div>
         </div>
         {ready && (
           <DragDropContext onDragEnd={onDragEnd}>
