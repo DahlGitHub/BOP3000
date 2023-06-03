@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from 'next/link';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGears, faLayerGroup, faMessage, faInbox, faListCheck, faHouse, faFile, faFileLines, faBriefcase } from "@fortawesome/free-solid-svg-icons";
+import { faGears, faLayerGroup, faMessage, faInbox, faListCheck, faHouse, faFile, faFileLines, faBriefcase, faHamburger, faBarsStaggered } from "@fortawesome/free-solid-svg-icons";
 import { faQuestionCircle } from "@fortawesome/free-regular-svg-icons";
 
 const SidebarItems = [
@@ -12,13 +12,65 @@ const SidebarItems = [
 ];
 
 const DashboardSidebar = () => {
-  
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
   return ( 
   <>
+      <div className="sm:hidden fixed top-0 left-10 m-4 px-5 z-50">
+        <button
+          className="bg-gray-800 text-white fa-lg p-2 rounded-md"
+          onClick={toggleSidebar}
+        >
+          <FontAwesomeIcon icon={faBarsStaggered} />
+        </button>
+    </div>
 
-<div className="flex h-[calc(100vh-70px)]  transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
+    <div className={`fixed inset-0 left-0 w-1/3 top-[70px] bg-white border-r border-gray-200 z-40 sm:hidden transition-transform ${
+        sidebarOpen ? "translate-x-0" : "-translate-x-full"
+      } dark:bg-gray-800 dark:border-gray-700`}>
+        <div className="flex flex-col items-center space-y-10 py-2.5 p-2.5 h-full">
+        <div className="rounded-md bg-white dark:bg-gray-800">
+  <ul>
+    {SidebarItems.map(({ id, iconItem, text, link }) => (
+      <li key={id} className="flex text-center">
+        <Link href={link} className="flex-inline w-full p-2.5 text-gray-700 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-600">
+          <div className="flex items-center justify-left space-x-2">
+            {iconItem}
+            <span className="text-[10px]">{text}</span>
+          </div>
+        </Link>
+      </li>
+    ))}
+  </ul>
+  <hr className="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
+  <ul className="w-full">
+    <li className="flex text-center">
+      <Link href="/dashboard/settings" className="flex-inline w-full p-2.5 text-gray-700 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-600">
+        <div className="flex items-center justify-left space-x-2">
+          <FontAwesomeIcon icon={faGears} />
+          <span className="text-[10px]">Settings</span>
+        </div>
+      </Link>
+    </li>
+    <li className="flex text-center">
+      <Link href="/dashboard/service" className="flex-inline w-full p-2.5 text-gray-700 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-600">
+        <div className="flex items-center justify-left space-x-2">
+          <FontAwesomeIcon icon={faQuestionCircle} />
+          <span className="text-[10px]">Help</span>
+        </div>
+      </Link>
+    </li>
+  </ul>
+</div>
+        </div>
+      </div>
+
+<div className="flex h-[calc(100vh-70px)] hidden sm:block transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
   <div className="flex flex-col items-center space-y-10 py-2.5 p-2.5">
-    <div className=" rounded-md bg-white dark:bg-gray-800 ">
+    <div className="rounded-md bg-white dark:bg-gray-800 ">
       <ul>
         {SidebarItems.map(({ ...item}) => {
           return (
@@ -52,33 +104,6 @@ const DashboardSidebar = () => {
     </div>
   </div>
 </div>
-{
-/*<aside id="logo-sidebar" className="fixed top-0 pt-20 left-0 w-64 h-screen transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
-   <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-      <ul className="space-y-2">
-        {SidebarItems.map(({ ...item}) => {
-          return (
-         <li>
-            <Link href={item.link} className="flex items-center p-2 text-base font-normal text-gray-700 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                {item.icon}
-                <span className="flex-1 ml-3 whitespace-nowrap">{item.name}</span>
-            </Link>
-         </li>
-          )})}
-          </ul>
-         <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"/>
-         <ul className='w-full'>
-         <li>
-            <Link href="/dashboard/settings" className="flex items-center p-2 text-base font-normal text-gray-700 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-              <FontAwesomeIcon icon={faGears} />
-               <div className="flex-1 ml-3">Settings</div>
-            </Link>
-         </li>
-         
-      </ul>
-   </div>
-</aside>*/
-}
 
   </>
 )}
