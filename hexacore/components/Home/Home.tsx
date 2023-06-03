@@ -12,13 +12,21 @@ const Home = () => {
     const [contacts, setContacts] = useState([]);
     const [teams, setTeams] = useState([]);
     const docImport = doc;
+    const router = useRouter();
 
     
     const username = auth.currentUser?.displayName;
 
+    const userLoggedIn = () => {
+        
+        if(!auth.currentUser) {
+            router.push("/login");
+        }
+    }
+
     useEffect(() => {
         
-        
+        userLoggedIn();
         fetchContacts();
         fetchTeams()
     }, []); // Run this effect only once on component mount
@@ -80,8 +88,6 @@ const Home = () => {
   
         }
     }
-
-    const router = useRouter();
 
     return(
         <div className="bg-white dark:bg-gray-900 text-black dark:text-white h-[calc(100vh-70px)] ">
