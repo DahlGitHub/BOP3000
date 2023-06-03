@@ -11,7 +11,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-regular-svg-icons';
-import { faAt, faEyeSlash, faSave, faUpload, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faAt, faEyeSlash, faSave, faTrash, faUpload, faUser } from '@fortawesome/free-solid-svg-icons';
 
 const DetailsForm = () => {
     
@@ -182,112 +182,157 @@ const DetailsForm = () => {
    
    if(user){
     return (
-        <div className="bg-gray-100 min-h-screen dark:bg-gray-900">
-            <div className='max-w-3xl mx-auto pt-4'>
-                <div className='bg-white dark:bg-gray-800 rounded-lg p-3 flex'>
-                <img
-                    className="h-24 w-24 object-cover rounded-full mr-4"
-                    src={profilePicture}
-                    alt="Profile Picture"
-                  />
-                  <div className="space-y-0.5 font-medium dark:text-white text-left pt-4">
-                      <div>{user.displayName}</div>
-                      <div className="text-sm font-light text-gray-500 dark:text-gray-400">Developer at Hexacore</div>
-                  </div>
-                  <div className="space-y-0.5 font-medium dark:text-white text-left pt-4 mx-5">
-                    <div className='grow'>
-                        <button className='mr-2' onClick={() => setShowUid(!showUid)}>
-                        {showUid ? <FontAwesomeIcon icon={faEyeSlash}/> : <FontAwesomeIcon icon={faEye}/>}
-                        </button>User ID
-                    </div>
-                        {showUid ? (
-                        <div className={`text-sm font-light ${showUid ? '' : 'invisible'} text-gray-500 dark:text-gray-400`}>{user.uid}</div>
-                        ) : (
-                        <div className="text-sm font-light text-gray-500 dark:text-gray-400">{'*'.repeat(user.uid.length)}</div>
-                        )}
-                  </div>
-                  
-                  <div
-                      className={`${
-                        deleteButtonPressed ? 'hidden' : 'block'
-                      } dark:text-white`}>
-                        <button onClick={() => setDeleteButtonPressed(true)} className='bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded'>Delete user</button>
-                    </div>
-                  <div
-                      className={`${
-                        deleteButtonPressed ? 'block' : 'hidden'
-                      } dark:text-white`}
-                    >
-                      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded ml-2">Cancel</button>
-                      <button /*</div>onClick={() => handleDeleteConfirmaton()}*/ className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded ml-2">Delete my account</button>
-                  </div>
-                </div>
-                
-           
-            </div>
-            <div className="max-w-3xl mx-auto py-8">
-            <form onSubmit={handleSubmit} className="bg-white rounded-lg px-8 pb-5 dark:bg-gray-800">
-              <h2 className="py-4 dark:text-gray-100">Account Settings</h2>
-              <div className="mb-4">
-                <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Full Name</label>
-                <div className="relative">
-                    <span className="absolute inset-y-0 left-0 flex items-center p-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 dark:text-gray-100  rounded-l-lg pr-2">
-                        <FontAwesomeIcon icon={faUser}/>
-                    </span>
-                    <input
-                        type="text"
-                        name="name"
-                        id="name"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pl-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Enter your name"
-                        value={name || ''}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                </div>
-              </div>
-              
-              <div className='flex justify-between items-center'>
-                <div>
-                    <div className='flex space-x-2'>
-                        <div className='border-2 border-dashed border-gray-300 rounded-lg h-16'>
-                            <img
-                            className="h-16 w-16 object-cover rounded-full mr-5 p-2"
-                            src={profilePicture}
-                            alt="Profile Picture"
-                            />
-                        </div>
-                       <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-16 px-2 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400"><FontAwesomeIcon className="w-10 h-10 text-gray-400" icon={faUpload}/>Image (Max. 20 MB)</p>
-                        </div>
-                            
-                        <input
-                            type="file"
-                            id="dropzone-file"
-                            className="sr-only"
-                            onChange={handleFileChange}
-                            accept="image/*"
-                            max-size="20971520"
-                        />
-                        </label> 
-                    </div>
-                </div>
-                <div>
-                <button
-                    type="submit"
-                    className="inline-flex flex-col justify-center items-center py-3 px-5 text-center text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
-                    <FontAwesomeIcon icon={faSave} className='mb-1'/>
-                    <div className='text-sm'>Save changes</div>
-                    </button>
-                </div>
-              </div>
-            
-              
-            </form>
-          </div>
-          <ToastContainer />
+<div className="bg-gray-100 min-h-screen dark:bg-gray-900">
+  <div className="max-w-3xl mx-auto pt-4">
+    <div className="bg-white dark:bg-gray-800 rounded-lg p-3 flex flex-col sm:flex-row items-center">
+      <img
+        className="h-24 w-24 object-cover rounded-full mr-4 mb-3 sm:mb-0"
+        src={profilePicture}
+        alt="Profile Picture"
+      />
+      <div className="space-y-0.5 font-medium dark:text-white text-left">
+        <div>{user.displayName}</div>
+        <div className="text-sm font-light text-gray-500 dark:text-gray-400">
+          Developer at Hexacore
         </div>
+      </div>
+      <div className="space-y-0.5 font-medium dark:text-white text-left mx-5">
+        <div className="flex items-center">
+          <button
+            className="mr-2"
+            onClick={() => setShowUid(!showUid)}
+          >
+            {showUid ? (
+              <FontAwesomeIcon icon={faEyeSlash} />
+            ) : (
+              <FontAwesomeIcon icon={faEye} />
+            )}
+          </button>
+          <div className="text-xs">
+            {showUid ? (
+              <div className={`font-light ${showUid ? '' : 'invisible'}`}>
+                {user.uid}
+              </div>
+            ) : (
+              <div className="font-light">
+                {'*'.repeat(user.uid.length)}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      <div
+        className={`${
+          deleteButtonPressed ? 'hidden' : 'block'
+        } dark:text-white`}
+      >
+        <button
+          onClick={() => setDeleteButtonPressed(true)}
+          className="bg-gray-500 hover:bg-red-700 text-white font-semibold py-2 px-2 rounded mt-3 sm:mt-0"
+        >
+          <FontAwesomeIcon className='pr-2' icon={faTrash} />
+          Delete user
+        </button>
+      </div>
+      {/* Delete confirmation must be fixed or either overall removed*/}
+      <div
+        className={`${
+          deleteButtonPressed ? 'block' : 'hidden'
+        } dark:text-white`}>
+        <button className="bg-gray-500 hover:bg-gray-700 text-white font-semibold py-2 px-2 rounded ml-2">
+          Cancel
+        </button>
+        <button
+          /*</div>onClick={() => handleDeleteConfirmaton()}*/
+          className="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-2 rounded ml-2"
+        >
+          Delete my account
+        </button>
+      </div>
+    </div>
+  </div>
+  <div className="max-w-3xl mx-auto py-8">
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white rounded-lg px-8 pb-5 dark:bg-gray-800"
+    >
+      <h2 className="py-4 dark:text-gray-100">Account Settings</h2>
+      <div className="mb-4">
+        <label
+          htmlFor="name"
+          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        >
+          Full Name
+        </label>
+        <div className="relative">
+          <span className="absolute inset-y-0 left-0 flex items-center p-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 dark:text-gray-100 rounded-l-lg pr-2">
+            <FontAwesomeIcon icon={faUser} />
+          </span>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pl-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Enter your name"
+            value={name || ''}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="flex flex-col sm:flex-row justify-between items-left">
+        <div className="mb-4 sm:mb-0">
+          <div className="flex space-x-2">
+            <div className="border-2 border-dashed border-gray-300 rounded-lg h-16">
+              <img
+                className="h-16 w-16 object-cover rounded-full mr-5 p-2"
+                src={profilePicture}
+                alt="Profile Picture"
+              />
+            </div>
+            <label
+              htmlFor="dropzone-file"
+              className="flex flex-col items-center justify-center w-full h-16 px-2 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+            >
+              <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                  <span className="font-semibold">Click to upload</span> or
+                  drag and drop
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  <FontAwesomeIcon
+                    className="w-10 h-10 text-gray-400"
+                    icon={faUpload}
+                  />
+                  Image (Max. 20 MB)
+                </p>
+              </div>
+
+              <input
+                type="file"
+                id="dropzone-file"
+                className="sr-only"
+                onChange={handleFileChange}
+                accept="image/*"
+                max-size="20971520"
+              />
+            </label>
+          </div>
+        </div>
+        <div>
+          <button
+            type="submit"
+            className="inline-flex flex-col justify-center items-center py-3 px-5 text-center text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+          >
+            <FontAwesomeIcon icon={faSave} className="mb-1" />
+            <div className="text-sm">Save changes</div>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <ToastContainer />
+</div>
       );
    }
 }
