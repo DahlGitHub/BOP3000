@@ -7,6 +7,7 @@ import AddToolModal from "./Tools/AddToolModal";
 import AddMembersModal from "./AddMembersModal";
 import { useRouter } from "next/router";
 import { ToastContainer } from "react-toastify";
+import TeamSpaceSettings from "./Tools/TeamSpaceSettings";
 
 
 const TeamSpace = ({teamuid, name, clearTeam, alertInviteSuccess,tools, fetchTools, isMemberModalOpen, memberModalOnClose}) => {
