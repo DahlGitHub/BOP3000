@@ -15,7 +15,7 @@ function initializeAppIfNecessary() {
     return getApp();
   } catch (any) {
     const firebaseConfig = {
-      apiKey: "AIzaSyCq3uvuimLnuVrF-f3f1VaN3VD5qip2ChQ",
+      apiKey: "AIzaSyD31ttqwr4HO1tMeuZhtORfMKn4VW-9KGM",
       authDomain: "hexacore-1c84b.firebaseapp.com",
       databaseURL: "https://hexacore-1c84b-default-rtdb.europe-west1.firebasedatabase.app",
       projectId: "hexacore-1c84b",
@@ -24,7 +24,7 @@ function initializeAppIfNecessary() {
       appId: "1:1090430226645:web:b14a47eaf66fc1e9fc525c"
     };
 
-  return initializeApp(firebaseConfig);
+    return initializeApp(firebaseConfig);
   }
 }
 
