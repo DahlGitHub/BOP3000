@@ -19,7 +19,7 @@ const DashboardSidebar = () => {
   };
   return ( 
   <>
-      <div className="sm:hidden fixed top-0 left-10 m-4 px-5 z-50">
+      <div className="sm:hidden absolute top-0 left-10 m-4 px-5 z-50">
         <button
           className="bg-gray-800 text-white fa-lg p-2 rounded-md"
           onClick={toggleSidebar}
@@ -28,7 +28,7 @@ const DashboardSidebar = () => {
         </button>
     </div>
 
-    <div className={`fixed inset-0 left-0 w-1/3 top-[70px] bg-white border-r border-gray-200 z-40 sm:hidden transition-transform ${
+    <div className={`absolute inset-0 left-0 w-1/3 top-[70px] bg-white border-r border-gray-200 z-40 sm:hidden transition-transform ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       } dark:bg-gray-800 dark:border-gray-700`}>
         <div className="flex flex-col items-center space-y-10 py-2.5 p-2.5 h-full">
