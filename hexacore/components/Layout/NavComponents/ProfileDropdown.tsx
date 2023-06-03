@@ -72,13 +72,11 @@ export default () => {
     } else{
         return(
             <Navbar.Content>
-                <Link href='../login' className="bg-blue-600 text-white p-2">
-                    <span>Sign in</span>
-                    {/*<FontAwesomeIcon icon={faSignIn}/>*/}
+                <Link href='../login' className="rounded-md font-semibold bg-indigo-600 text-white px-3.5 py-2">
+                    <FontAwesomeIcon icon={faSignIn}/>
+                    <span className="text-sm mx-2">Sign in</span>
                 </Link>
-                <Link href='../register' className="bg-blue-600 text-white p-2">
-                    <span>Sign up</span>
-                </Link>
+  
             </Navbar.Content>
         )
     }
