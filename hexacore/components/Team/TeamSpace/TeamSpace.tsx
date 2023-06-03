@@ -13,8 +13,11 @@ import TeamSpaceSettings from "./Tools/TeamSpaceSettings";
 const TeamSpace = ({teamuid, name, clearTeam, alertInviteSuccess,tools, fetchTools, isMemberModalOpen, memberModalOnClose, setShowTeamMembers, showTeamMembers}) => {
 
     const [isListOpen, setIsListOpen] = React.useState(true);
+    const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
 
-
+    const handleSettingsOpen = () => {
+        setIsSettingsOpen(!isSettingsOpen);
+    }
 
     function handleListOpen() {
         setIsListOpen(true);
