@@ -18,7 +18,6 @@ const TeamSettingModal = ({isOpen, onClose, teamuid, tools}) => {
         })
     }, [tools, isOpen])
 
-console.log(tools)
     const deleteTeam = (e) => {
     }
     

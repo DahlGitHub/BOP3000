@@ -8,12 +8,13 @@ import TeamFiles from './TeamSpace/Tools/TeamFiles';
 import Chat from '../Chat/Chat';
 import TeamInvitesModal from './TeamInvitesModal';
 import fetchTeamMembers from './fetchTeamMembers';
-import { collection, doc, getDoc, getDocs, query } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, onSnapshot, query } from 'firebase/firestore';
 import { auth, db } from '../../firebase-config/firebase';
 import Kanban from '../Kanban/Kanban';
 import FavTeamModal from './favTeamModal';
 import { faStar } from '@fortawesome/free-regular-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
+import { useImmer } from 'use-immer';
 
 
 const TeamMenu = ()  => {
@@ -102,7 +103,7 @@ const TeamMenu = ()  => {
 
 
   // Tools
-  const [tools, setTools] = React.useState([]);
+  const [tools, setTools] = useImmer([]);
   const [toolName, setToolName] = React.useState(null);
   const [selectedTool, setSelectedTool] = React.useState(false);
   const [toolType , setToolType] = React.useState(null);
@@ -128,8 +129,8 @@ const handleToolSelect = (toolName, type) => {
   setToolName(toolName);
   setToolType(type);
 }
-
-  const fetchTools = async () => {
+/*
+  const fetchTools1h = async () => {
     const querySnapshot = await getDocs(query(collection(db, "teams", selectedTeam, "tools")));
       const newFiles = querySnapshot.docs.map((doc) => {
         const fileData = doc.data();
@@ -146,6 +147,44 @@ const handleToolSelect = (toolName, type) => {
         
       })
     setTools(newFiles)
+  }*/
+  const fetchTools = async () => {
+    setTools([])
+    const q = query(collection(db, "teams", selectedTeam, "tools"));
+    console.log("refresh")
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        const fileData = change.doc.data();
+        console.log(fileData)
+        console.log(change.doc.id)
+        if (change.type === "added") {
+          const tool = (
+            <div key={change.doc.id} className='cursor-pointer m-3' onClick={()=>handleToolSelect(fileData.name, fileData.tool)}>
+              <h3><FontAwesomeIcon className='pr-2' icon={toolsi.find((e)=> e.tool == fileData.tool).icon}/>{fileData.name}</h3>
+            </div>
+          )
+          setTools((prevState) => [...prevState, tool]);
+            
+        }
+        if (change.type === "modified") {
+          const tool = (
+            <div key={change.doc.id} className='cursor-pointer m-3' onClick={()=>handleToolSelect(fileData.name, fileData.tool)}>
+              <h3><FontAwesomeIcon className='pr-2' icon={toolsi.find((e)=> e.tool == fileData.tool).icon}/>{fileData.name}</h3>
+            </div>
+          )
+          setTools((tools)=>{
+            const index = tools.findIndex((tool)=> tool.key == change.doc.id);
+            const newTools = [...tools];
+            newTools[index] = tool;
+            return newTools;
+          })
+        }
+        if (change.type === "removed") {
+          setTools((prevState) => prevState.filter((tool) => tool.key !== change.doc.id));
+        }
+      })
+        
+    })  
   }
 
   // Files

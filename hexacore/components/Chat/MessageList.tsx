@@ -102,7 +102,7 @@ export default ({id}) =>{
 
     return () => {
         unsubscribe();
-    };
+    }
     }, [chatID, id]);
     
     return (
