@@ -241,20 +241,18 @@ const handleToolSelect = (toolName, type) => {
       </>
     )
   }
-  
-  const chatID = `teams/${selectedTeam}/tools/${toolName}`
-  const kanbanID = `teams/${selectedTeam}/tools/${toolName}/kanban`
+  const toolID = `teams/${selectedTeam}/tools/${toolName}`
   const kanbanMembers = `teams/${selectedTeam}/members`
 
   const showTool = () => {
     switch (toolType) {
       case "chat":
         return(   
-          <Chat chatID={chatID} />  
+          <Chat chatID={toolID} />  
         )
       case "kanban":
         return(
-          <Kanban id={kanbanID} membersId={kanbanMembers} />
+          <Kanban id={toolID} membersId={kanbanMembers} />
         )
       case "files":
         handleFilesSelect(toolName)

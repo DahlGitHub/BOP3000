@@ -97,13 +97,13 @@ const MyTools = () => {
         setToolName(toolName);
     }
 
-    const kanbanID = "users/" + auth.currentUser?.uid + "/tools/kanban/" + toolName;
+    const kanbanID = "users/" + auth.currentUser?.uid + "/tools/" + toolName;
 
     const showTool = () => {
         switch (toolType) {
           case "kanban":
             return(
-              <Kanban id={kanbanID} membersId={"users/" + auth.currentUser?.uid + "/tools/"+ kanbanID +"/members"} />
+              <Kanban id={kanbanID} membersId={kanbanID+"/members"} />
             )
           case "files":
             handleFilesSelect(toolName)

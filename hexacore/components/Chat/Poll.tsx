@@ -1,7 +1,7 @@
 import { Button, Progress } from "@nextui-org/react"
 import { UserContext } from "../../context/UserContext"
 import { useContext, useEffect, useState } from "react"
-import { arrayUnion, deleteDoc, doc, updateDoc } from "firebase/firestore"
+import { arrayRemove, arrayUnion, deleteDoc, doc, updateDoc } from "firebase/firestore"
 import { db } from "../../firebase-config/firebase"
 import { useImmer } from "use-immer"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -33,6 +33,31 @@ export default ({index, pollData, id})=>{
         }
     }, [votes])
 
+    const removeVote = () => {
+        const userOption = poll.votes.find(vote => vote.user === user.uid).option
+        const vote = {
+            user: user.uid,
+            option: userOption
+        }
+        updateDoc(doc(db, id+'/Messages/', pollData.messageId), {
+            votes: arrayRemove(vote)
+        }).then(() => {
+        })
+    }
+    const changeVote = async (option) => {
+        removeVote()
+        const vote = {
+            user: user.uid,
+            option: option
+        }
+       await updateDoc(doc(db, id+'/Messages/', pollData.messageId), {
+            votes: arrayUnion(vote)
+        }).then(() => {
+            setVoted(true)
+            setUserVoteIndex(poll.options.indexOf(option))
+        })
+    }
+
     useEffect(() => {
         setPoll(pollData.message)
         setVotes(draft => {
@@ -58,16 +83,17 @@ export default ({index, pollData, id})=>{
             setUserVoteIndex(poll.options.indexOf(option))
         })
     }
-
     return (
         <div key={index} className="rounded border-1 border-black border-solid bg-white dark:bg-gray-700 p-2 m-1 my-5">
           <div className="flex justify-between items-center mb-2 pb-1 rounded-t border-b  dark:border-gray-600">
             <span className="text-sm font-semibold text-gray-600 dark:text-gray-100">
             <FontAwesomeIcon className="w-5 mx-1" icon={faSquarePollVertical} />{poll.question}
             </span>
-            <button onClick={deletePoll} type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded text-xs p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-300 dark:hover:text-white" data-modal-toggle="defaultModal">
-              <FontAwesomeIcon icon={faXmark} />
-            </button>
+            {user.uid === pollData.user.uid && (
+                <button onClick={deletePoll} type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded text-xs p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-300 dark:hover:text-white" data-modal-toggle="defaultModal">
+                <FontAwesomeIcon icon={faXmark} />
+              </button>
+            )}
           </div>
           {poll.options.map((option, i) => {
             if (voted) {
@@ -82,7 +108,7 @@ export default ({index, pollData, id})=>{
                             {userVotedOption === option ? (
                               <FontAwesomeIcon className="w-5 mx-1" icon={faCheckCircle} />
                             ) : (
-                              <FontAwesomeIcon className="w-5 mx-1 text-xs" icon={faCircle} />
+                              <FontAwesomeIcon className="w-5 mx-1 text-xs cursor-pointer" icon={faCircle} onClick={()=>{changeVote(option)}} />
                             )}
                             {option}
                           </span>
@@ -113,69 +139,9 @@ export default ({index, pollData, id})=>{
                             <span className="text-xs">{option}</span>                      
                         </button>
                     </div>
-
                   );
             }
           })}
         </div>
       );
 }
-
-/*
-export default ({index, pollData, id})=>{
-    const {user} = useContext(UserContext)
-    const [voted, setVoted] = useState(false)
-    const [poll, setPoll] = useImmer(pollData.message)
-    const [votes, setVotes] = useImmer(poll.votes)
-
-    useEffect(()=>{
-        let votes = []
-        poll.options.forEach((option, i)=>{
-            votes[i] = 0
-        })
-        poll.votes.forEach((vote)=>{
-            votes[poll.options.indexOf(vote.option)]++
-        })
-        setVotes(votes)
-        if(poll.votes.find(votes => votes.user.includes(user.uid))){
-            setVoted(true)
-        }
-    }, [])
-
-    const deletePoll = async () => {
-        await deleteDoc(doc(db, id+'/Messages/', pollData.messageId))
-    }
-    const vote = (option) => {
-        const vote = {
-            user: user.uid,
-            option: option
-        }
-        updateDoc(doc(db, id+'/Messages/', pollData.messageId), {
-            votes: arrayUnion(vote)
-        })
-        setVoted(true)
-    }
-    return(
-        <div key={index} className="col-start-6 col-end-8 rounded border-2 border-black border-solid">
-            <span>{poll.question}</span>
-            <button onClick={deletePoll}>Delete</button>
-            {poll.options.map((option, i)=>{
-                if(voted){
-                    return(
-                        <div key={"poll"+ i} className="flex">
-                            <Progress className="" value={(votes[i]/poll.votes.length)*100}/>
-                            <button>{votes[i]}</button>
-                        </div>
-                    )
-                }else{
-                    return(
-                        <div key={"vote"+i} className="flex">
-                            <button onClick={()=>vote(option)}>{option}</button>
-                        </div>
-                    )
-                }
-            })
-            }
-        </div>
-    )
-}*/

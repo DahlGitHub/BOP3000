@@ -22,12 +22,14 @@ export default function SignUp() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [passwordConfirm, setPasswordConfirm] = useState("");
     const [name, setName] = useState("");
     const auth = getAuth(app);
     const [user, loading, error] = useAuthState(auth);
     const router = useRouter();
     const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
     const [provider, setProvider] = useState("");
+    const mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
     function handleTermsModalOpen () {
         setIsTermsModalOpen(true);
@@ -38,8 +40,23 @@ export default function SignUp() {
     }
 
     const setTerms = (provider: string) => {
-        setProvider(provider);
-        handleTermsModalOpen();
+        if(provider === 'Local'){
+            if(!email.match(mailformat)){
+                return alert("You have entered an invalid email address!");
+            } else if(name === ""){
+                return alert("Please enter your name");
+            }
+            if(password === passwordConfirm){
+                setProvider(provider);
+                handleTermsModalOpen();
+            } else{
+                alert("Passwords don't match");
+            }
+        } else{
+            setProvider(provider);
+            handleTermsModalOpen();
+        }
+        
     }
 
     return (
@@ -102,6 +119,22 @@ export default function SignUp() {
                         contentLeft={<FontAwesomeIcon className='pr-2' icon="key" />}
                         css={{ mb: '6px' }}
                     />
+                    <Spacer y={1} />
+                    <Input
+                        name='passwordConfirmInput'
+                        id='passwordConfirmInput'
+                        type={"password"}
+                        aria-label="Password confirm input"
+                        onChange={e => { setPasswordConfirm(e.currentTarget.value); }}
+                        clearable
+                        bordered
+                        fullWidth
+                        color="primary"
+                        size="lg"
+                        placeholder="Confirm Password"
+                        contentLeft={<FontAwesomeIcon className='pr-2' icon="key" />}
+                        css={{ mb: '6px' }}
+                    />
                     <Row justify="space-between">
                         <Link href="/login">Already have an account?</Link>
                     </Row>
@@ -111,7 +144,6 @@ export default function SignUp() {
                                 Sign up
                         </button>
                     <Spacer y={1} />
-                    <h2 className='font-bold text-lg'>Other providers</h2>
                     <button
                         className="inline-flex items-center justify-center px-5 py-3 my-3 mx-auto w-full text-base font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
                         onClick={() => setTerms("Google")}>
@@ -120,13 +152,6 @@ export default function SignUp() {
                         Login with Google
                     </button>
                     
-                    <button
-                        className="inline-flex items-center justify-center px-5 py-3 my-3 mx-auto w-full text-base font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
-                        onClick={() => setTerms("Microsoft")}>
-                        <img width={20} src='https://cdn-icons-png.flaticon.com/512/732/732221.png'></img>
-                        
-                        Login with Microsoft
-                    </button>
                     
                 </Card>
             </Container>

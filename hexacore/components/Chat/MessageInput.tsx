@@ -44,8 +44,6 @@ export default ({id}) =>{
         } else setRow((e.target.value.match(/\n/g)||[]).length+1);
       }
     }
-  // trenger å sette inn ny row på wordbreak. trenger å sette max row på hvor mange linjer som kommer.
-  // sette inn forskjellige knapper som emotes fildeling osv
   
   return ( 
     <div className='bottom-0 flex'>
