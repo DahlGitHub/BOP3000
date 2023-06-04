@@ -151,12 +151,9 @@ const handleToolSelect = (toolName, type) => {
   const fetchTools = async () => {
     setTools([])
     const q = query(collection(db, "teams", selectedTeam, "tools"));
-    console.log("refresh")
     const unsubscribe = onSnapshot(q, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
         const fileData = change.doc.data();
-        console.log(fileData)
-        console.log(change.doc.id)
         if (change.type === "added") {
           const tool = (
             <div key={change.doc.id} className='cursor-pointer m-3' onClick={()=>handleToolSelect(fileData.name, fileData.tool)}>
