@@ -15,6 +15,7 @@ export function createGuidId() {
 export default function Home({id, membersId}) {
   const [ready, setReady] = useState(false)
   const [boardData, setBoardData] = useState ([])
+  const [title, setTitle] = useState('')
   const [newBoard, setNewBoard] = useState('')
   const [members, setMembers] = useImmer([])
   const qMembers = query(collection(db, membersId))
@@ -40,11 +41,17 @@ export default function Home({id, membersId}) {
     }
   }
 
+  const getTitle = async () => {
+    const docRef = doc(db, id)
+    const docSnap = await getDoc(docRef)
+    setTitle(docSnap.data().name)
+  }
 
   useEffect(() => {
     setBoardData([])
     getMembers()
-    const q = query(collection(db, id), orderBy('order', 'asc'))
+    getTitle()
+    const q = query(collection(db, id+"/kanban"), orderBy('order', 'asc'))
     onSnapshot(q, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
         if (change.type === 'added') {
@@ -88,7 +95,7 @@ export default function Home({id, membersId}) {
       newBoardData.splice(re.source.index, 1);
       newBoardData.splice(re.destination.index, 0, dragItem);
       newBoardData.forEach(async (board, index) => {
-        await updateDoc(doc(db, id, board.id), {
+        await updateDoc(doc(db, id+"/kanban", board.id), {
           order: index
         })
       })
@@ -105,10 +112,10 @@ export default function Home({id, membersId}) {
         0,
         dragItem
       )
-      await updateDoc(doc(db, id, boardData[parseInt(re.source.droppableId)].id), {
+      await updateDoc(doc(db, id+"/kanban", boardData[parseInt(re.source.droppableId)].id), {
         items: boardData[parseInt(re.source.droppableId)].items
       })
-      await updateDoc(doc(db, id, boardData[parseInt(re.destination.droppableId)].id), {
+      await updateDoc(doc(db, id+"/kanban", boardData[parseInt(re.destination.droppableId)].id), {
         items: boardData[parseInt(re.destination.droppableId)].items
       })
     }
@@ -118,7 +125,7 @@ export default function Home({id, membersId}) {
     if(newBoard.length === 0) return;
     const boardId = createGuidId().toString()
     const setOrder = boardData.length === 0 ? 0 : boardData[boardData.length-1].order+1
-    await setDoc(doc(db, id, boardId), {
+    await setDoc(doc(db, id+"/kanban", boardId), {
       id: boardId,
       order: setOrder,
       name: newBoard,
@@ -131,7 +138,7 @@ export default function Home({id, membersId}) {
         {/* Board header */}
         <div className="flex flex-initial space-x-3">
           <div className="flex items-center mx-2">
-            <h4 className="text-4xl font-bold text-gray-600">Kanban board</h4>
+            <h4 className="text-4xl font-bold text-gray-600">{title}</h4>
           </div>
           <Input aria-label='addBoard' aria-hidden='false' value={newBoard} onKeyDown={onEnter} onChange={(e) => {setNewBoard(e.target.value)} }  placeholder='Add a new list'></Input>
           <button className="p-2 px-3 text-sm text-center text-white rounded-xl bg-blue-700 sm:w-fit hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={addBoard}>Add</button>
@@ -160,7 +167,7 @@ export default function Home({id, membersId}) {
                         board={board}
                         bIndex={bIndex}
                         members={members}
-                        kanbanID={id}/>
+                        kanbanID={id+"/kanban"}/>
                       </div>
                       )}
                     </Draggable>

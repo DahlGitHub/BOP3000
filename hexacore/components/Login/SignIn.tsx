@@ -107,10 +107,6 @@ export default function SignIn() {
                         css={{ mb: '6px' }}
                     />
                     <div className='flex justify-evenly'>
-                        <Checkbox>
-                            <p>Remember me</p>
-                        </Checkbox>
-                        
                         <Link href="/reset" className='m-3'>Forgotten password?</Link>
                     </div>
                     <button 
@@ -120,7 +116,6 @@ export default function SignIn() {
                     </button>
                     
                     <Link href="/register" className='inline-flex my-3 items-center justify-center px-5 py-3 mx-auto w-full text-base font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900'>Not registered yet? <br/> Click here to register a new account.</Link>
-                    <h2 className='font-bold text-lg'>Other providers</h2>
                     <button
                         className="inline-flex items-center justify-center px-5 py-3 my-3 mx-auto w-full text-base font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
                         onClick={() => setTerms("Google")}>
@@ -129,13 +124,6 @@ export default function SignIn() {
                         Login with Google
                     </button>
                     
-                    <button
-                        className="inline-flex items-center justify-center px-5 py-3 my-3 mx-auto w-full text-base font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
-                        onClick={() => setTerms("Microsoft")}>
-                        <img width={20} src='https://cdn-icons-png.flaticon.com/512/732/732221.png'></img>
-                        
-                        Login with Microsoft
-                    </button>
                     
                 </Card>
             </Container>
