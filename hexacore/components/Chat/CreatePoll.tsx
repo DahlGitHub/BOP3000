@@ -7,7 +7,7 @@ import { db } from "../../firebase-config/firebase"
 import { UserContext } from "../../context/UserContext"
 
 
-export default ({id}) => {
+export default ({id, setSelectedButton}) => {
     const [question, setQuestion] = useState('')
     const [options, setOptions] = useState(Array(2).fill(""))
     const {user} = useContext(UserContext)
@@ -45,6 +45,7 @@ export default ({id}) => {
         } else {
             setOutput(outputStack.length > 0 ? outputStack +  " and 2 options." : "Please enter at least 2 options.")
         }
+        setSelectedButton('Message')
     }
     return(
         <div className="mx-4">

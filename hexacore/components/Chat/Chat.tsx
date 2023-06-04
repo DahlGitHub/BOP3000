@@ -64,7 +64,7 @@ useEffect(()=>{
                   <span className='text-[12px] pr-2'><FontAwesomeIcon className='w-5 fa-sm mx-1' icon={faPoll}/>Poll</span>
                 </button>
                 </div>
-                {selectedButton === 'Message' ? <MessageInput id={chatId}/> : <CreatePoll id={chatId}/>}
+                {selectedButton === 'Message' ? <MessageInput id={chatId}/> : <CreatePoll id={chatId} setSelectedButton={setSelectedButton}/>}
               </div>
             </div>
           </div>
