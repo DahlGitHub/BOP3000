@@ -1,6 +1,6 @@
 import Drawer from "../Drawer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBackward, faCogs, faComments, faFolderOpen, faWindowMaximize } from "@fortawesome/free-solid-svg-icons";
+import { faBackward, faCogs, faComments, faFolderOpen, faWindowMaximize, faWrench } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import AddMyToolsModal from "./AddMyToolsModal";
 import { collection, getDocs, query } from "firebase/firestore";
@@ -137,7 +137,7 @@ const MyTools = () => {
               ))}
             </div>
             <button type="button" onClick={() => handleToolModalOpen()} className="m-5 text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2">
-              <FontAwesomeIcon className='pr-2' icon={faCogs}/>
+              <FontAwesomeIcon className='pr-2' icon={faWrench}/>
               Add tool
             </button>
           </div>
@@ -148,25 +148,31 @@ const MyTools = () => {
     return(
         <div className=" bg-white  dark:text-white  dark:bg-gray-800">
             <AddMyToolsModal isOpen={isToolModalOpen} tools={tools} onClose={handleToolModalClose} fetchTools={fetchTools}/>
-            <div className="flex">    
-                    <div>
-                        <Drawer mainContent={<MainContent/>} 
-                            title={
-                                "My tools"
-                            } 
-                            isOpen={isListOpen} open={handleListOpen} close={handleListClose} 
-                        />
-                    </div>
-                {selectedTool && !selectedFiles ?
-                        (
-                            <div className="grow flex overflow-auto dark:text-black w-64">
-                                {showTool()}
-                            </div>
-                        ):
-                        (
-                            <div className='grow'></div>
-                        )
-                }
+            <div
+                className={`${
+                showFiles ? 'hidden' : 'block'
+                } `}
+            >
+              <div className="flex">    
+                      <div>
+                          <Drawer mainContent={<MainContent/>} 
+                              title={
+                                  "My tools"
+                              } 
+                              isOpen={isListOpen} open={handleListOpen} close={handleListClose} 
+                          />
+                      </div>
+                  {selectedTool && !selectedFiles ?
+                          (
+                              <div className="grow flex overflow-auto dark:text-black w-64">
+                                  {showTool()}
+                              </div>
+                          ):
+                          (
+                              <div className='grow'></div>
+                          )
+                  }
+              </div>
             </div>
             <div
                 className={`${

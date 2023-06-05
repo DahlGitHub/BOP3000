@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Drawer from "../../Drawer";
 import { Collapse } from "@nextui-org/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFolderPlus, faCogs, faBackward, faPeopleGroup } from "@fortawesome/free-solid-svg-icons";
+import { faFolderPlus, faCogs, faBackward, faPeopleGroup, faWrench } from "@fortawesome/free-solid-svg-icons";
 import AddToolModal from "./Tools/AddToolModal";
 import AddMembersModal from "./AddMembersModal";
 import { useRouter } from "next/router";
@@ -72,7 +72,7 @@ const TeamSpace = ({teamuid, name, clearTeam, alertInviteSuccess,tools, fetchToo
                 </button>
                 
                 <button type="button" onClick={() => handleModalOpen()} className="m-5 text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2">
-                        <FontAwesomeIcon className='pr-2' icon={faCogs}/>
+                        <FontAwesomeIcon className='pr-2' icon={faWrench}/>
                         
                         Add tool
                 </button>

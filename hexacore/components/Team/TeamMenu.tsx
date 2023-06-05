@@ -12,7 +12,7 @@ import { collection, doc, getDoc, getDocs, onSnapshot, query } from 'firebase/fi
 import { auth, db } from '../../firebase-config/firebase';
 import Kanban from '../Kanban/Kanban';
 import FavTeamModal from './favTeamModal';
-import { faStar } from '@fortawesome/free-regular-svg-icons';
+import { faEnvelope, faStar } from '@fortawesome/free-regular-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
 import { useImmer } from 'use-immer';
 
@@ -21,6 +21,7 @@ const TeamMenu = ()  => {
 
   // Team
   const [showTeamMembers, setShowTeamMembers] = useState(false);
+  const [showTeamInvites, setShowTeamInvites] = useState(false);
   const [selectedTeam, setSelectedTeam] = React.useState(null);
   const [selectedTeamName, setSelectedTeamName] = React.useState(null);
   const [teamMembers, setTeamMembers] = React.useState([]);
@@ -273,6 +274,10 @@ const handleToolSelect = (toolName, type) => {
             
             Create a team
           </button>
+          <button type="button" onClick={() => setShowTeamInvites(!showTeamInvites)} className="mx-5 text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2">
+            <FontAwesomeIcon className='pr-2' icon={faEnvelope}/>
+            Show Teaminvites {inviteCount > 0 ? <span className='bg-red-500 text-white rounded-full px-2 py-1 text-xs font-bold ml-2'>{inviteCount}</span> : null}
+          </button>
         </div>
       </>
     )
@@ -355,25 +360,27 @@ const handleToolSelect = (toolName, type) => {
             </button>
           </div>
         </div>
-        <div
+        
+      
+      </div>
+      )}
+      <div
             className={`${
               selectedTeam ? 'hidden' : 'block'
             } ml-4`}
           >
-          <div className="p-4">
+          { showTeamInvites && (<div className="fixed top-15 right-0 h-[calc(100vh-70px)] max-w-40
+            dark:bg-gray-800 border-solid text-white p-6">
             <h1 className='text-xl'>Team Invites</h1>
-          
-          </div>
-            <div className="flex-1 p-4 overflow-y-auto">
-              <h1 className='text-black dark:text-white'>Pending team invites: {inviteCount}</h1>
+            <h1 className='text-black dark:text-white'>Pending team invites: {inviteCount}</h1>
               <button onClick={() => handleInvitesOpen()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded mt-10">
                 Go to team invites
-              </button>
-            </div>  
+              </button> 
+          
+          </div>
+          )}
         </div>
-      
-      </div>
-      )}
+        
     </section>
   )
 }

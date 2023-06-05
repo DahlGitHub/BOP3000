@@ -38,7 +38,7 @@ const MyFiles = ({handleFilesDeselect}) => {
 
   const MainContent = () => {
     return (
-      <div className="w-80">
+      <div className="w-70">
         <FileUpload fetch={fetchFiles}/>
         
         <div className="pl-0 mt-2 mr-2 mb-0 ml-2">
