@@ -17,7 +17,6 @@ function CardItem({ data, index, members, kanbanID }) {
   const q = query(collection(db, kanbanID), where('items', 'array-contains', data))
   const [selectedDate, setSelectedDate] = useState(data.date ? data.date.toDate() : null);
   const isMyTools = kanbanID.split('/')[0] === 'users'
-  console.log(isMyTools)
 
   const selectDate = async (date) => {
     if (date) {

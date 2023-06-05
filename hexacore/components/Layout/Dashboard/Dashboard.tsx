@@ -1,7 +1,5 @@
-import React, { useState, useMemo, useEffect } from "react";
-import { useRouter } from "next/router";
+import React from "react";
 import DashboardHead from "./DashboardHead";
-import { auth } from "../../../firebase-config/firebase";
 
 
 const Dashboard = () => {

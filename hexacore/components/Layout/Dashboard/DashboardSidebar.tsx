@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Link from 'next/link';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGears, faLayerGroup, faMessage, faInbox, faListCheck, faHouse, faFile, faFileLines, faBriefcase, faHamburger, faBarsStaggered } from "@fortawesome/free-solid-svg-icons";
+import { faGears, faLayerGroup, faMessage, faHouse, faBriefcase, faBarsStaggered } from "@fortawesome/free-solid-svg-icons";
 import { faQuestionCircle } from "@fortawesome/free-regular-svg-icons";
 
 const SidebarItems = [

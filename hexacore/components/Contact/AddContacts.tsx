@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import ContactModal from './ContactModal'
-import Link from 'next/link';
 import { auth, db } from '../../firebase-config/firebase';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import AvatarPicture from '../AvatarPicture';
-import ContactRequests from './ContactRequests';
 
 const AddContacts = () => {
   const [name, setName] = React.useState(null);
@@ -14,7 +11,6 @@ const AddContacts = () => {
   const [addedUid, setAddedUid] = React.useState(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [users, setUsers] = useState([]);
-  const router = useRouter()
 
   const [filteredResults, setFilteredResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");

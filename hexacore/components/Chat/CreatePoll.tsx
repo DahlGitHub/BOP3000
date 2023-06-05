@@ -1,6 +1,6 @@
 import { faSquarePlus, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Button, Input } from "@nextui-org/react"
+import { Button } from "@nextui-org/react"
 import { useContext, useState } from "react"
 import { Timestamp, addDoc, collection } from "firebase/firestore"
 import { db } from "../../firebase-config/firebase"

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Dashboard from "./Dashboard";
+
 import { UserContext } from "../../../context/UserContext";
 import { auth } from "../../../firebase-config/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -37,12 +37,10 @@ const DashboardLayout = ({ children }) => {
       color="secondary"
       status="secondary"/>
 
-      :
-      
+      : user &&
       <div className="w-full w-[calc(100vw-100px)]">
         { children }
       </div>
-      
       }
       </div>
     </div>

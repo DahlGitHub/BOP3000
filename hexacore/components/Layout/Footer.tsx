@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import {Container, Col, Grid, Spacer, Text } from "@nextui-org/react";
+import {Container, Text } from "@nextui-org/react";
 
 
 const Footer: NextPage = () => {

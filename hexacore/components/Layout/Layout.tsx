@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react'
 import NavBar from './NavBar'
-import Footer from './Footer'
 import HeadPage from './HeadPage'
 
 

@@ -3,7 +3,7 @@ import { deleteDoc, doc, updateDoc } from "firebase/firestore"
 import { useContext, useEffect, useRef, useState } from "react"
 import { db } from "../../firebase-config/firebase"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faEllipsisH, faEllipsisV, faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons"
+import { faEllipsisH, faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { UserContext } from "../../context/UserContext"
 
 
@@ -13,7 +13,6 @@ export default ({index, message, id}) =>{
     const [rows, setRows] = useState(1)
     const textAreaRef = useRef(null);
     const date = message.message.sentAt.toDate()
-    const [isEditing, setIsEditing] = useState(false);
     const {user} = useContext(UserContext)
 
     const deleteMessage = async () => {

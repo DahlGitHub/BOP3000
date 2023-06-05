@@ -1,13 +1,12 @@
 import Drawer from "../Drawer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBackward, faCogs, faComments, faFolderOpen, faWindowMaximize, faWrench } from "@fortawesome/free-solid-svg-icons";
+import { faComments, faFolderOpen, faWindowMaximize, faWrench } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import AddMyToolsModal from "./AddMyToolsModal";
 import { collection, getDocs, query } from "firebase/firestore";
 import { auth, db } from "../../firebase-config/firebase";
 import MyFiles from "./MyFiles";
 import Kanban from "../Kanban/Kanban";
-import { set } from "firebase/database";
 
 
 const MyTools = () => {

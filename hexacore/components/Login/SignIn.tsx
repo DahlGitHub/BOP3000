@@ -2,14 +2,9 @@ import React from 'react';
 import {
   Card,
   Spacer,
-  Button,
   Text,
   Input,
-  Row,
-  Checkbox,
   Container,
-  blue,
-  green,
 } from '@nextui-org/react';
 
 import Link from 'next/link'
@@ -18,7 +13,6 @@ import { logInWithEmailAndPassword, app } from '../../firebase-config/firebase';
 import { useRouter } from 'next/navigation';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { getAuth } from 'firebase/auth';
-import { color } from '@mui/system';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { faKey } from '@fortawesome/free-solid-svg-icons';

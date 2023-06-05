@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import { Navbar, Text } from "@nextui-org/react";
+import { Text } from "@nextui-org/react";
 import Link from 'next/link';
 import ProfileDropdown  from './NavComponents/ProfileDropdown'
 

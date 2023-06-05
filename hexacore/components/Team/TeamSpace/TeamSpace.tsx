@@ -5,8 +5,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFolderPlus, faCogs, faBackward, faPeopleGroup, faWrench } from "@fortawesome/free-solid-svg-icons";
 import AddToolModal from "./Tools/AddToolModal";
 import AddMembersModal from "./AddMembersModal";
-import { useRouter } from "next/router";
-import { ToastContainer } from "react-toastify";
 import TeamSpaceSettings from "./Tools/TeamSpaceSettings";
 
 

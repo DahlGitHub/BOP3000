@@ -1,13 +1,11 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { Navbar, Dropdown, Text, Avatar, Button } from "@nextui-org/react";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, logout } from "../../../firebase-config/firebase";
-import { doc, setDoc, addDoc, getDoc } from "firebase/firestore";
 import { useRouter } from 'next/navigation';
 import Link from 'next/link'
 import { faSignIn } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import AvatarPicture from "../../AvatarPicture";
 
 export default () => {
     

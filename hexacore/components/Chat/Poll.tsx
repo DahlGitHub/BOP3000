@@ -1,11 +1,10 @@
-import { Button, Progress } from "@nextui-org/react"
 import { UserContext } from "../../context/UserContext"
 import { useContext, useEffect, useState } from "react"
 import { arrayRemove, arrayUnion, deleteDoc, doc, updateDoc } from "firebase/firestore"
 import { db } from "../../firebase-config/firebase"
 import { useImmer } from "use-immer"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCheck, faQuestion, faSquarePollVertical, faX, faXmark } from "@fortawesome/free-solid-svg-icons"
+import { faSquarePollVertical, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { faCheckCircle, faCircle, faDotCircle } from "@fortawesome/free-regular-svg-icons"
 
 

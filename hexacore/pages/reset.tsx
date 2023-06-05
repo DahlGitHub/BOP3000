@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { sendPasswordReset, app } from "../firebase-config/firebase";
 import { useRouter } from 'next/navigation';
@@ -7,23 +7,17 @@ import Link from 'next/link';
 import {
     Card,
     Spacer,
-    Button,
     Text,
     Input,
     Row,
-    Checkbox,
     Container,
   } from '@nextui-org/react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 function Reset() {
-
-    const auth = getAuth(app);
     const router = useRouter();
-
     const [email, setEmail] = useState("");
-    const [user, loading, error] = useAuthState(auth);
 
     return (
         <div className="reset">

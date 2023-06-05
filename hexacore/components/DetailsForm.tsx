@@ -1,24 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Container } from "@nextui-org/react";
 import { db, auth, storage } from '../firebase-config/firebase';
-import { GoogleAuthProvider, deleteUser, updateProfile} from "firebase/auth";
-import { doc, setDoc, updateDoc, getDoc, deleteDoc } from "firebase/firestore";
+import { updateProfile} from "firebase/auth";
+import { doc, updateDoc, getDoc, deleteDoc } from "firebase/firestore";
 import { useRouter } from 'next/navigation';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import { collection, query, where, getDocs } from "firebase/firestore";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-regular-svg-icons';
-import { faAt, faEyeSlash, faSave, faTrash, faUpload, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faEyeSlash, faSave, faTrash, faUpload, faUser } from '@fortawesome/free-solid-svg-icons';
 
 const DetailsForm = () => {
     
     const [user, loading] = useAuthState(auth);
     const [name, setName] = useState('');
-    const [bio, setBio] = useState('');
-    const [phone, setPhone] = useState('');
     const router = useRouter();
     const [fileUrl, setFileUrl] = useState(null);
     const [profilePicture, setProfilePicture] = useState(user?.photoURL ? user.photoURL : "https://cdn-icons-png.flaticon.com/512/147/147142.png");

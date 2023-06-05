@@ -1,12 +1,9 @@
-import { Container } from "@nextui-org/react"
-import Layout from "../components/Layout/Layout"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faAt, faSave, faUser } from "@fortawesome/free-solid-svg-icons"
-import React, { useState, useEffect } from 'react';
-import { doc, getDoc, setDoc } from "firebase/firestore";
+
+import React, { useState } from 'react';
+import { doc, setDoc } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../firebase-config/firebase";
-import { ToastContainer, toast } from 'react-toastify';
 import { faPaperPlane } from "@fortawesome/free-regular-svg-icons";
 import { useRouter } from "next/router";
 
