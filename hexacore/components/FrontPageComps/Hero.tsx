@@ -1,5 +1,3 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {Container, Image, Row, Col, Grid, Card, Text } from "@nextui-org/react";
 import {useMediaQuery} from './../useMediaQuery.js'
 import Link from "next/link.js";
 

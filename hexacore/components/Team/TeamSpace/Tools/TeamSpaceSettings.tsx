@@ -1,11 +1,7 @@
-import { auth, storage, db } from '../../../../firebase-config/firebase';
-import { doc, collection, deleteDoc, setDoc, getFirestore, getDocs, updateDoc } from "firebase/firestore";
-import { Collapse, Input } from '@nextui-org/react';
+import { db } from '../../../../firebase-config/firebase';
+import { doc, collection, deleteDoc, getDocs, updateDoc } from "firebase/firestore";
 import {useState, useEffect} from "react";
-import { v4 as uuidv4 } from 'uuid'
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolderPlus } from '@fortawesome/free-solid-svg-icons';
 import { faSave, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 
 const TeamSettingModal = ({isOpen, onClose, teamuid, tools}) => {

@@ -1,24 +1,17 @@
-import React, { useState, useMemo, useEffect } from "react";
-import { getStorage, ref, listAll } from 'firebase/storage';
+import React, { useState, useEffect } from "react";
 import Drawer from "../../../Drawer";
 import FileLoader from "../../../File/FileLoader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBackward, faCloudArrowUp, faFile, faFilePdf, faFilter, faList, faList12, faTractor, faTrash, faTrashCan, faX, faXmark } from "@fortawesome/free-solid-svg-icons";
-import FileUpload from "../../../File/FileUpload";
+import { faBackward, faCloudArrowUp, faFilePdf, faList, faList12, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import FileFilter from "../../../File/FileFilter";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query } from "firebase/firestore";
 import { db } from "../../../../firebase-config/firebase";
-import FileModal from "../../../File/FileModal";
 import TeamFileUpload from "./TeamFileUpload";
 import TeamDeleteFileModal from "./TeamDeleteFileModal";
 
 
 
 const TeamFiles = ({clearTool, teamuid, folderName}) => {
-  
-  const storage = getStorage();
-  const listRef = ref(storage, `files/${teamuid}`)
-
   const totalStorage = 5;
   const [usedStorage, setUsedStorage] = useState(0);
 

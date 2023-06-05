@@ -1,7 +1,7 @@
 import React from 'react'
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useEffect, useState } from "react";
-import { Button, Dropdown, Input } from "@nextui-org/react";
+import { Input } from "@nextui-org/react";
 import { collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase-config/firebase';
 import { useImmer } from 'use-immer';

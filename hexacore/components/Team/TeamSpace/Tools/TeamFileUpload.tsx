@@ -5,7 +5,6 @@ import { faFile } from '@fortawesome/free-regular-svg-icons';
 import { db, storage } from '../../../../firebase-config/firebase';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { doc, setDoc } from 'firebase/firestore';
-import { set } from 'firebase/database';
 
 
 const TeamFileUpload = ({fetch, teamuid, folderName}) => {

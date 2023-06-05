@@ -1,5 +1,4 @@
 import React from 'react'
-import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import CardItem from "./CardItem";
 import { Droppable } from "react-beautiful-dnd";
 import { useEffect, useState } from "react";
@@ -9,7 +8,6 @@ import { db } from '../../firebase-config/firebase';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { createGuidId } from './Kanban';
-import { faPlusSquare } from '@fortawesome/free-regular-svg-icons';
 
 export default ({board, bIndex, members, kanbanID}) => {
     const [showEditListName, setShowEditListName] = useState(false)

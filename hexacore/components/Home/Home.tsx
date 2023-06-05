@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import { auth,db } from "../../firebase-config/firebase";
 import { useRouter } from "next/router";
 import AvatarPicture from "../AvatarPicture";
-import WelcomeMessage from "./WelcomeMessage";
-import { useAuthState } from "react-firebase-hooks/auth";
 import Profile from "./Profile";
 
 const Home = () => {

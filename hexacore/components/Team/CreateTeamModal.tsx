@@ -1,12 +1,9 @@
 import { auth,db } from '../../firebase-config/firebase';
-import { doc, collection, addDoc, setDoc, getFirestore } from "firebase/firestore";
-import { Input } from '@nextui-org/react';
-import {useState, useEffect} from "react";
+import { doc, setDoc } from "firebase/firestore";
+import {useState } from "react";
 import { v4 as uuidv4 } from 'uuid'
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
 const CreateTeamModal = ({isOpen, onClose, fetchTeams}) => {
-    const userStorageRef = `users/groups`//id til gruppen skal her
     const [name, setName] = useState("");
 
     const submit = async () => {

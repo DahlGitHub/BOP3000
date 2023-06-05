@@ -1,10 +1,8 @@
-import { set } from "firebase/database";
 import { db } from "../../../../firebase-config/firebase";
-import { doc, collection, addDoc, setDoc, getFirestore } from "firebase/firestore";
-import {useState, useEffect} from "react";
+import { doc, setDoc } from "firebase/firestore";
+import {useState} from "react";
 
 const AddToolModal = ({isOpen, onClose, teamuid, tools}) => {
-  const userStorageRef = `users/teams`//id til gruppen skal her
   const [name, setName] = useState(null);
   const [toolType, setToolType] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)

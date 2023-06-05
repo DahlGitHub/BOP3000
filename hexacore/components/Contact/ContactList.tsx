@@ -1,16 +1,13 @@
 import { db, auth } from '../../firebase-config/firebase';
 import { collection, getDocs, getDoc, doc } from "firebase/firestore";
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 import Chat from '../Chat/Chat';
 import Drawer from '../Drawer';
 import AvatarPicture from '../AvatarPicture';
-import { set } from 'firebase/database';
 import ContactRequests from './ContactRequests';
 import AddContacts from './AddContacts';
 
 const ContactList = () => {
-  const router = useRouter()
   const [contacts, setContacts] = React.useState([]);
   const docImport = doc;
   const [selectedChat, setSelectedChat] = useState(0)
@@ -145,24 +142,6 @@ const ContactList = () => {
         </div>
   </section>
   )
-/* gammel kode med at den lager en chat for hver av kontaktene
-    return (
-        <section className="bg-white dark:bg-gray-900 flex">
-        <div>
-            <Drawer mainContent={<MainContent/>} title="Contacts" isOpen={isListOpen} open={handleListOpen} close={handleListClose} />
-        </div>
-        <div>
-          {contacts.map((contact, index) => {
-            const chatID = "Chat/"+ [auth.currentUser.uid.toLowerCase(), contact.key.toLowerCase()].sort().join('')
-            if (showChat && selectedChat === index) {
-              return (
-                <Chat chatID={chatID}/>
-              )
-            }
-          })}
-        </div>
-      </section>
-    )*/
 }
 
 export default ContactList

@@ -1,7 +1,3 @@
-import { useAuthState } from "react-firebase-hooks/auth";
-import { faUser } from "@fortawesome/free-regular-svg-icons";
-
-
 const WelcomeMessage = ({name}) => {
     return (
         <div className="font-light text-gray-500 sm:text-lg dark:text-gray-400">

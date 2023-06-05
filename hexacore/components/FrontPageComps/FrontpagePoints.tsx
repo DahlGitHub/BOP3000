@@ -1,8 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import {Container, Image, Row, Col, Grid, Card, Text } from "@nextui-org/react";
-import {faLightbulb,faMedal,faPoll,faBolt,faBusinessTime,faBriefcase} from "@fortawesome/free-solid-svg-icons";
-import { faHouse } from '@fortawesome/free-solid-svg-icons'
+import {Container} from "@nextui-org/react";
+import {faMedal,faBolt,faBriefcase} from "@fortawesome/free-solid-svg-icons";
 
 const FrontpageCard = () => {
 

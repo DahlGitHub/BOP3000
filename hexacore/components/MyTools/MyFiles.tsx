@@ -1,22 +1,17 @@
-import React, { useState, useMemo, useEffect } from "react";
-import { getStorage, ref, listAll } from 'firebase/storage';
+import React, { useState, useEffect } from "react";
 import Drawer from "../Drawer";
 import FileLoader from "../File/FileLoader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCloudArrowUp, faFile, faFilePdf, faFilter, faList, faList12, faTractor, faTrash, faTrashCan, faX, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCloudArrowUp, faFilePdf, faList, faList12, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import FileUpload from "../File/FileUpload";
 import FileFilter from "../File/FileFilter";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query } from "firebase/firestore";
 import { auth, db } from "../../firebase-config/firebase";
 import FileModal from "../File/FileModal";
 
 
 
 const MyFiles = ({handleFilesDeselect}) => {
-  
-  const storage = getStorage();
-  const listRef = ref(storage, 'files/uid' )
-
   const totalStorage = 5;
   const [usedStorage, setUsedStorage] = useState(0);
 

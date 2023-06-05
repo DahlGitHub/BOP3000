@@ -2,31 +2,21 @@ import React from 'react';
 import {
   Card,
   Spacer,
-  Button,
   Text,
   Input,
   Row,
-  Checkbox,
   Container,
 } from '@nextui-org/react';
 import Link from 'next/link';
-import {useState, useEffect} from "react";
-import {app } from '../../firebase-config/firebase';
-import { useRouter } from 'next/navigation';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { getAuth} from 'firebase/auth';
+import {useState} from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TermsModal from './TermsModal';
 
 export default function SignUp() {
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState("");
     const [name, setName] = useState("");
-    const auth = getAuth(app);
-    const [user, loading, error] = useAuthState(auth);
-    const router = useRouter();
     const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
     const [provider, setProvider] = useState("");
     const mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;

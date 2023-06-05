@@ -13,7 +13,7 @@ import { auth, db } from '../../firebase-config/firebase';
 import Kanban from '../Kanban/Kanban';
 import FavTeamModal from './favTeamModal';
 import { faEnvelope, faStar } from '@fortawesome/free-regular-svg-icons';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useImmer } from 'use-immer';
 
 

@@ -1,11 +1,8 @@
-import {Container, Image, Row, Col, Grid, Card, Text } from "@nextui-org/react";
-import {useMediaQuery} from './useMediaQuery.js'
+import {Container } from "@nextui-org/react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 
 const UserSettings = () => {
-  const isMd = useMediaQuery(960);
-
 
   return (
     <Container lg>

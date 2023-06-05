@@ -1,11 +1,7 @@
 import { auth, db } from "../../../firebase-config/firebase";
-import { doc, collection, addDoc, setDoc, getFirestore, query, where, getDocs, getDoc } from "firebase/firestore";
+import { doc, collection,  setDoc, query, where, getDocs } from "firebase/firestore";
 import {useState, useEffect} from "react";
 import AvatarPicture from '../../AvatarPicture';
-import { get } from 'http';
-import { toast } from 'react-toastify';
-import { set } from "firebase/database";
-
 
 const AddMembersModal = ({isOpen, onClose, teamuid, alertInviteSuccess}) => {
   

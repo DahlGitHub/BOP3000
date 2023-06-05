@@ -1,5 +1,4 @@
-import React, { useState, useMemo } from "react";
-import Logo from "/public/images/hexacore.png";
+import React from "react";
 import { useRouter } from "next/router";
 import ProfileDropdown from "../NavComponents/ProfileDropdown";
 
