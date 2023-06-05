@@ -16,7 +16,8 @@ function CardItem({ data, index, members, kanbanID }) {
   const [title, setTitle] = useState(data.title)
   const q = query(collection(db, kanbanID), where('items', 'array-contains', data))
   const [selectedDate, setSelectedDate] = useState(data.date ? data.date.toDate() : null);
-
+  const isMyTools = kanbanID.split('/')[0] === 'users'
+  console.log(isMyTools)
 
   const selectDate = async (date) => {
     if (date) {
@@ -205,7 +206,7 @@ function CardItem({ data, index, members, kanbanID }) {
           <div className="justify-start">
           
             <DatePicker
-              className="w-12 text-xs bg-gray-100 p-1 rounded text-center"
+              className="w-12 text-xs bg-gray-100 p-1 mb-2 rounded text-center"
               selected={selectedDate}
               onChange={(date) => {
                
@@ -243,7 +244,8 @@ function CardItem({ data, index, members, kanbanID }) {
               }
             }
           })}
-
+            {!isMyTools &&
+            
               <li className="z-0">
                 <Dropdown>
                   <Dropdown.Button 
@@ -315,6 +317,7 @@ function CardItem({ data, index, members, kanbanID }) {
                     </Dropdown.Menu>
                 </Dropdown>
               </li>
+            }
             </ul>
           </div>
         </div>
