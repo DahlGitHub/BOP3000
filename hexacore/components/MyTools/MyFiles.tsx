@@ -42,15 +42,10 @@ const MyFiles = ({handleFilesDeselect}) => {
         <FileUpload fetch={fetchFiles}/>
         
         <div className="pl-0 mt-2 mr-2 mb-0 ml-2">
-        <FileFilter/>
+        
         </div>
         <div className="flex">
-        <button className="pl-0 mb-0"
-        onClick={toggleShowFullView}>
-          <div className="bg-gray-100 dark:bg-gray-600 p-3 rounded-lg mt-2 mr-2 mb-0 ml-2 hover:bg-gray-300 dark:hover:bg-gray-500 dark:text-gray-200">
-          {showFullView ? <FontAwesomeIcon icon={faList}/> : <FontAwesomeIcon icon={faList12}/>}
-          </div>
-        </button>
+
         
         <div className="pl-0 mb-0 w-96">
           <div className="bg-gray-100 p-3 rounded-lg mt-2 mr-2 mb-0 ml-2 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500">
@@ -61,9 +56,12 @@ const MyFiles = ({handleFilesDeselect}) => {
           </div>
         </div>
         </div>
-
+        <div>
+        <div className="overflow-y-auto max-h-96 my-5 z-10">
         {files}
-        
+        </div>
+        </div>
+
       </div>
     );
   };
