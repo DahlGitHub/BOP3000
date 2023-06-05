@@ -327,7 +327,7 @@ const DetailsForm = () => {
       </div>
     </form>
   </div>
-  <ToastContainer />
+  
 </div>
       );
    }

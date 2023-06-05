@@ -1,7 +1,8 @@
 import { auth,db } from '../../firebase-config/firebase';
 import { doc, setDoc } from "firebase/firestore";
 import AvatarPicture from '../AvatarPicture';
-
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ContactModal = ({ isOpen, onClose, picture, name, uid, email }) => {
 
@@ -21,12 +22,12 @@ const ContactModal = ({ isOpen, onClose, picture, name, uid, email }) => {
 
     if (!uid) {
       console.log("contact addition failed.")
-      alert("Contact addition failed.")
+      toast.warning("Contact addition failed.")
         return
     } else {
       await setDoc(doc(db, "users", uid, "contact-requests", auth.currentUser?.uid), thisUserDocData)
       await setDoc(doc(db, "users", auth.currentUser?.uid, "sent-requests", uid), addedUserDocData)
-      alert("Contact request sent!")
+      toast.success("Contact request sent!")
     }
   }
 
