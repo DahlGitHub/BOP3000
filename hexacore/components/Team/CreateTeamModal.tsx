@@ -20,7 +20,7 @@ const CreateTeamModal = ({isOpen, onClose, fetchTeams}) => {
                 teamuid: teamuid,
             }).then(async()=>{
               const user = auth.currentUser
-              setDoc(doc(db,`teams/${teamuid}/members/${teamuid}`), {
+              setDoc(doc(db,`teams/${teamuid}/members/${auth.currentUser?.uid}`), {
                 uid: user.uid,
               })
               setDoc(doc(db, `users/${user.uid}/teams/${teamuid}/`),{

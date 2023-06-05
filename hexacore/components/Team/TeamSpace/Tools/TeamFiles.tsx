@@ -33,20 +33,13 @@ const TeamFiles = ({clearTool, teamuid, folderName}) => {
 
   const MainContent = () => {
     return (
-      <div className="w-80">
+      <div className="w-70">
         <TeamFileUpload teamuid={teamuid} folderName={folderName} fetch={fetchFiles}/>
         
         <div className="pl-0 mt-2 mr-2 mb-0 ml-2">
-        <FileFilter/>
         </div>
         <div className="flex">
-        <button className="pl-0 mb-0"
-        onClick={toggleShowFullView}>
-          <div className="bg-gray-100 p-3 rounded-lg mt-2 mr-2 mb-0 ml-2 hover:bg-gray-300">
-          {showFullView ? <FontAwesomeIcon icon={faList}/> : <FontAwesomeIcon icon={faList12}/>}
-          </div>
-        </button>
-        
+
         <div className="pl-0 mb-0 w-96">
           <div className="bg-gray-100 p-3 rounded-lg mt-2 mr-2 mb-0 ml-2 hover:bg-gray-300">
             <FontAwesomeIcon className="text-gray-600 fa-sm" icon={faCloudArrowUp}/><span className="ml-2 text-[12px] text-gray-500">{formatBytes(usedStorage.toFixed(1))} / {totalStorage} GB storage used</span>
@@ -89,7 +82,7 @@ const TeamFiles = ({clearTool, teamuid, folderName}) => {
 
 
         return (
-          <div key={fileData.id} onClick={() => handleSelect(fileData)} className="cursor-pointer border shadow-sm p-3 rounded-lg pl-0 mt-2 mr-2 mb-0 ml-2 hover:bg-gray-100">
+          <div key={fileData.id} onClick={() => handleSelect(fileData)} className="cursor-pointer border shadow-sm p-3 rounded-lg pl-0 mt-2 mr-2 mb-0 ml-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-600">
               <div className="sm:flex sm:items-center sm:justify-between">
                 <div className="flex items-center flex-1 min-w-0">
                   <FontAwesomeIcon className="flex-shrink-0 object-cover rounded-full w-10 h-10 text-red-600 fa-2xl mx-3"  icon={faFilePdf}/>

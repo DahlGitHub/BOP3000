@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import ContactModal from './ContactModal'
 import { auth, db } from '../../firebase-config/firebase';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import AvatarPicture from '../AvatarPicture';
+import ContactRequests from './ContactRequests';
+import { debounce } from '@mui/material';
 
 const AddContacts = () => {
   const [name, setName] = React.useState(null);
@@ -40,12 +43,18 @@ const AddContacts = () => {
     setPicture(props.picture);
     handleModalOpen();
   };
-
+  
   const getResults = async () => {
     if (searchQuery === "") {
       setFilteredResults([]);
       return;
     }
+  
+    let counter = 0;
+    const resultsVar = [];
+    
+
+
     const isContact = async (uid) => {
       if (uid) {
         const q = query(
@@ -74,16 +83,16 @@ const AddContacts = () => {
 
 
 
-    const results = await Promise.all(
-      users.map(async (hit) => {
-        if (
-          hit.uid !== auth.currentUser.uid &&
-          !(await isContact(hit.uid)) &&
-          (hit.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            hit.email.toLowerCase().includes(searchQuery.toLowerCase())) // Filter by search query
-        ) {
-          return (
-            <tr key={hit.objectID}>
+    for (const hit of users) {
+      if (
+        counter < 10 && // Limit the results to 10
+        hit.uid !== auth.currentUser.uid &&
+        !(await isContact(hit.uid)) &&
+        (hit.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          hit.email.toLowerCase().includes(searchQuery.toLowerCase())) // Filter by search query
+      ) {
+        resultsVar.push(
+          <tr key={hit.objectID}>
                   <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 w-10 h-10">
@@ -106,35 +115,39 @@ const AddContacts = () => {
                     </p>
                   </td>
                   <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    <button
-                      onClick={() => handleClick(hit)}
-                      className="bg-blue-600 font-semibold text-white p-2 w-32 rounded-full hover:bg-blue-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300 m-2"
-                    >
-                      Add contact
-                    </button>
-                  </td>
-                </tr>
-          );
-        } else {
-          return null;
-        }
-      })
-    );
+              <button
+                onClick={() => handleClick(hit)}
+                className="bg-blue-600 font-semibold text-white p-2 w-32 rounded-full hover:bg-blue-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300 m-2"
+              >
+                Add contact
+              </button>
+            </td>
+            </tr>
+        );
+        counter++; // Increment the counter
+      }
+    }
 
-    const filteredResults = results.filter((result) => result !== null);
-
-    setFilteredResults(filteredResults);
+    setFilteredResults(resultsVar);
   };
 
+  const debounceDelay = 100;
+
+  const debouncedSearch = debounce(getResults, debounceDelay);
+
   useEffect(() => {
+    const fetchData = async () => {
+      await debouncedSearch();
+    };
+
     if (users.length > 0 || addedUid || searchQuery) {
-      getResults();
+      fetchData();
     }
   }, [users, addedUid, searchQuery]);
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
-    getResults();
+    debouncedSearch();
   };
     
   
