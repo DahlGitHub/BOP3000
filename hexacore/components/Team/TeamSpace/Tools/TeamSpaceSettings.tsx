@@ -9,7 +9,7 @@ const TeamSettingModal = ({isOpen, onClose, teamuid, tools}) => {
     useEffect(() => {
         setToolName([])
         tools.map((tool) => {
-          const newTool = {key: tool.key, value: tool.key}
+          const newTool = {key: tool.key, value: tool.props.children.key}
           setToolName((toolName) => [...toolName, newTool])
         })
     }, [tools, isOpen])
