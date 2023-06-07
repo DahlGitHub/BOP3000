@@ -164,7 +164,7 @@ const handleToolSelect = (toolName, type) => {
         }
         if (change.type === "modified") {
           const tool = (
-            <div key={change.doc.id + ";" + fileData.name} className='cursor-pointer m-3 hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 rounded-lg dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30' onClick={()=>handleToolSelect(change.doc.id, fileData.tool)}>
+            <div key={change.doc.id} className='cursor-pointer m-3 hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 rounded-lg dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30' onClick={()=>handleToolSelect(change.doc.id, fileData.tool)}>
               <h3 key={fileData.name}><FontAwesomeIcon className='pr-2' icon={toolsi.find((e)=> e.tool == fileData.tool).icon}/>{fileData.name}</h3>
             </div>
           )

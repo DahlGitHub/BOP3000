@@ -42,14 +42,12 @@ export default function Home({id, membersId}) {
     }
   }
 
-  const getTitle = async () => {
-    const docRef = doc(db, id)
-    const docSnap = await getDoc(docRef)
-    setTitle(docSnap.data().name)
-  }
+
   useEffect(() => {
     onSnapshot(doc(db, id), (snapshot) => {
-      console.log(snapshot.data())
+      if(snapshot.data() === undefined){
+        return
+      }
       setTitle(snapshot.data().name)
     })
   }, []);
