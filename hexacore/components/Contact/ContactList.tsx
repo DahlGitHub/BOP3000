@@ -59,6 +59,7 @@ function fetchContact(doc, index, userId, userData) {
   const MainContent = () => {
     return (
       <div>
+        <div className='overflow-auto h-96'>
         {contacts.length ? (
           <>
             {contacts.map((contact) => (
@@ -68,8 +69,8 @@ function fetchContact(doc, index, userId, userData) {
         ) : (
           <p className="text-center py-4 px-4 text-sm font-medium text-gray-700 capitalize dark:text-white">No contacts found.</p>
         )}
-        
-          <div className='absolute inset-x-0 bottom-10 mb-20'>
+        </div>
+          <div className='inset-x-0 bottom-10 mb-20'>
             <button onClick={() => handleAddContact()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded my-10 mx-8">
                 Add more contacts
             </button>
