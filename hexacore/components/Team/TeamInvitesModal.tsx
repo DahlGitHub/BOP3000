@@ -1,5 +1,5 @@
 import { auth,db } from '../../firebase-config/firebase';
-import { doc, collection, setDoc, getDocs, getDoc, deleteDoc } from "firebase/firestore";
+import { doc, collection, setDoc, getDocs, getDoc, deleteDoc, onSnapshot, query } from "firebase/firestore";
 import {useState, useEffect} from "react";
 
 const TeamInvitesModal = ({isOpen, onClose, setInviteCount, fetchTeams}) => {
@@ -11,32 +11,35 @@ const TeamInvitesModal = ({isOpen, onClose, setInviteCount, fetchTeams}) => {
 
   useEffect(() => {
     async function fetchInvites() {
-      const querySnapshot = await getDocs(collection(db, "users", auth.currentUser?.uid, "team-requests"));
-    
-      const promises = querySnapshot.docs.map(async (doc, index) => {
-        const teamID = doc.data().uid;
-        const inviter = doc.data().inviter;
-        const inviterName = doc.data().inviterName;
+      const q = query(collection(db, "users", auth.currentUser?.uid, "team-requests"));
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        snapshot.docChanges().forEach(async (change) => {
+          const teamID = change.doc.data().uid;
+        const inviter = change.doc.data().inviter;
+        const inviterName = change.doc.data().inviterName;
         const teamDoc = await getDoc(docImport(db, "teams", teamID));
         const teamData = teamDoc.data();
-        const element = (
-          <div key={doc.id}  className="flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
-            <div className="text-left rtl:text-right">
-                <h1 className="text-sm font-medium text-gray-700 capitalize dark:text-white">You have been invited to join {teamData.name}</h1>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Invite sent by {inviterName}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Email: {inviter}</p>
-            </div>
-            <button onClick={() => submit(teamID)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded ml-2">Accept</button>
-            <button onClick={() => decline(teamID)} className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded ml-2">Decline</button>
-          </div>
-        );
-    
-        return element;
-      });
-    
-      const results = await Promise.all(promises);
-      setInvites(results);
-      await setInviteCount(results.length);
+          if (change.type === "added") {
+            const element = (
+              <div key={change.doc.id}  className="flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
+                <div className="text-left rtl:text-right">
+                    <h1 className="text-sm font-medium text-gray-700 capitalize dark:text-white">You have been invited to join {teamData.name}</h1>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Invite sent by {inviterName}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Email: {inviter}</p>
+                </div>
+                <button onClick={() => submit(teamID)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded ml-2">Accept</button>
+                <button onClick={() => decline(teamID)} className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded ml-2">Decline</button>
+              </div>
+            );
+            setInvites(prevState => [...prevState, element]);
+            setInviteCount(prevState => prevState + 1);
+          }
+          if (change.type === "removed") {
+            setInvites(prevState => prevState.filter((item) => item.key !== change.doc.id));
+            setInviteCount(prevState => prevState - 1);
+          }
+        })
+      })
     }
     
      fetchInvites();
