@@ -95,6 +95,7 @@ const DetailsForm = () => {
     }
     
     const handleDelete = async () => {
+      const userData = await getDoc(docImport(db, "users", auth.currentUser.uid))
         try {
           // User has been successfully reauthenticated, proceed with deletion
           const user = auth.currentUser;
@@ -106,9 +107,16 @@ const DetailsForm = () => {
           const sentReqSub = await getDocs(collection(userDocRef, 'sent-requests'))
           const teamsSub = await getDocs(collection(userDocRef, 'teams'))
         
-          const deletecontactRequestSubcollectionsPromises = contactReqSub.docs.map((subDoc) => deleteDoc(subDoc.ref));
+          
+          const deletecontactRequestSubcollectionsPromises = contactReqSub.docs.map(async(subDoc) => {
+            const subSub = await deleteDoc(docImport(db, "users", subDoc.id, "contact-requests", user.uid))
+            deleteDoc(subDoc.ref)
+          });
           const deleteToolSubcollectionsPromises = toolsSub.docs.map((subDoc) => deleteDoc(subDoc.ref));
-          const deleteSentReqSubSubcollectionsPromises = sentReqSub.docs.map((subDoc) => deleteDoc(subDoc.ref));
+          const deleteSentReqSubSubcollectionsPromises = sentReqSub.docs.map((subDoc) => {
+            const subSub = deleteDoc(docImport(db, "users", subDoc.id, "sent-requests", user.uid))
+            deleteDoc(subDoc.ref)
+          });
           const deleteTeamsSubSubcollectionsPromises = teamsSub.docs.map((subDoc) => deleteDoc(subDoc.ref));
           await Promise.all(deletecontactRequestSubcollectionsPromises);
           await Promise.all(deleteSentReqSubSubcollectionsPromises);
@@ -117,12 +125,22 @@ const DetailsForm = () => {
           await deleteDoc(userDocRef);
     
           // Delete user from Firebase Authentication
-          auth.currentUser.delete();
+          auth.currentUser.delete().catch((error) => {
+            console.log(userData.data());
+            if(userData.data().authProvider === "google"){
+              signInWithGoogle().then(() => {
+                handleDeleteConfirmaton()
+                return
+              })
+            } else if(userData.data().authProvider === "local"){
+    
+            }
+          })
     
           toast.success("Deleted user!");
           router.push("/");
         } catch (error) {
-          // Reauthentication failed or deletion encountered an error
+          
           alert(error.message);
         }
     };
