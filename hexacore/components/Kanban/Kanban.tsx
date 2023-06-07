@@ -138,7 +138,7 @@ export default function Home({id, membersId}) {
     setNewBoard('')
   }
   return (
-      <div className="pt-10 pl-5 flex flex-col h-[calc(100vh-70px)] grow">
+      <div className="pt-10 pl-5 flex flex-col w-10 grow">
         {/* Board header */}
         <div className="flex flex-col sm:flex-row items-start sm:space-y-0 sm:space-x-3 space-x-3 ">
           <div className="flex items-center mx-2">
@@ -151,7 +151,7 @@ export default function Home({id, membersId}) {
         </div>
         {ready && (
           <DragDropContext onDragEnd={onDragEnd}>
-            <div className="grow w-full my-3 overflow-x-auto h-full">
+            <div className="grow w-full my-3 ">
             <Droppable droppableId="droppable" type="BOARD" direction="horizontal">
               {(provided, snapshot) => (
               <div
