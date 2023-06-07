@@ -15,14 +15,19 @@ const DashboardLayout = ({ children }) => {
   const router = useRouter();
 
   const userLoggedIn = () => {
-    if(!auth.currentUser) {
+    if (loading){
+
+    }else if(error) {
+      router.push("/login")
+    } else if(!user) {
       router.push("/login")
     }
   }
 
   useEffect(() => {
     userLoggedIn()
-  }, [])
+    console.log("test")
+  }, [user, error, loading])
 
   return (
     <UserContext.Provider value={{user, loading, error}}>
