@@ -40,7 +40,9 @@ const TeamSpace = ({teamuid, name, clearTeam, alertInviteSuccess,tools, fetchToo
                 {teamDropdown()}
                 <div className="m-5">
                     <h1 className="text-xl">Tools:</h1>
+                    <div className="overflow-auto h-96">
                     {tools}
+                    </div>
                 </div>
 
                 <button type="button" onClick={ ()=> handleSettingsOpen() } className="m-5 text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2">
