@@ -46,41 +46,55 @@ const AddContacts = () => {
   };
 
   const getResults = async () => {
-    if (searchQuery === "") {
-      setFilteredResults([]);
-      return;
+
+    const mutualContacts = async (uid) => {
+      if (uid) {
+        
+        const currentUserContactsRef = collection(db, "users", auth.currentUser?.uid, "contacts");
+        const contactUserContactsRef = collection(db, "users", uid, "contacts");
+        const currentUserContactsSnapshot = await getDocs(currentUserContactsRef);
+        const contactUserContactsSnapshot = await getDocs(contactUserContactsRef);
+        const currentUserContacts = currentUserContactsSnapshot.docs.map((doc) => doc.data());
+        const contactUserContacts = contactUserContactsSnapshot.docs.map((doc) => doc.data());
+        const mutualContacts = currentUserContacts.filter((contact) => contactUserContacts.some((contact2) => contact.uid === contact2.uid));
+        return mutualContacts.length;
+
     }
-
+  };
+  
     await fetchUsers();
-
+  
     const currentUserContactsRef = collection(
       db,
       "users",
       auth.currentUser?.uid,
       "contacts"
     );
-    const [currentUserContactsSnapshot, usersSnapshot] = await Promise.all([
-      getDocs(currentUserContactsRef),
-      getDocs(collection(db, "users"))
-    ]);
+    const currentUserContactsSnapshot = await getDocs(currentUserContactsRef);
+    const currentUserContacts = currentUserContactsSnapshot.docs.map((doc) => doc.data());
   
-    const currentUserContacts = currentUserContactsSnapshot.docs.map((doc) =>
-      doc.data()
-    );
-    const filteredUsers = usersSnapshot.docs
-      .map((doc) => doc.data())
-      .filter((user) => {
+    const filteredUsers = await (await Promise.all(
+      users.map(async (hit) => {
+        const mutualContactCount = await mutualContacts(hit.uid);
+        return { 
+          uid: hit.uid,
+          name: hit.name,
+          email: hit.email,
+          picture: hit.picture,
+          mutualContacts: mutualContactCount,
+        };
+      })
+    )).filter((hit) => {
         return (
-          user.uid !== auth.currentUser.uid &&
-          !(currentUserContacts.some((contact) => contact.uid === user.uid)) &&
-          (user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            user.email.toLowerCase().includes(searchQuery.toLowerCase()))
+          hit.uid !== auth.currentUser.uid &&
+          !(currentUserContacts.some((contact) => contact.uid === hit.uid)) &&
+          (hit.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            hit.email.toLowerCase().includes(searchQuery.toLowerCase()))
         );
       })
-      .slice(0, 10);
-
-    const resultsVar = filteredUsers.map((hit) => (
-      <tr key={hit.objectID}>
+      .slice(0, 10)
+      .map((hit) => (
+        <tr key={hit.uid}>
         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
           <div className="flex items-center">
             <div className="flex-shrink-0 w-10 h-10">
@@ -102,7 +116,7 @@ const AddContacts = () => {
         </td>
         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
           <p className="text-gray-900 text-center whitespace-no-wrap">
-            {mutualContacts(hit.uid, currentUserContacts)}
+            {hit.mutualContacts}
           </p>
         </td>
         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -116,23 +130,15 @@ const AddContacts = () => {
       </tr>
     ));
 
-    setFilteredResults(resultsVar);
+    setFilteredResults(filteredUsers);
   };
 
-  const mutualContacts = (uid, currentUserContacts) => {
-    // Calculate mutual contacts locally using the currentUserContacts array
-    
-    const contactUserContacts = users
-      .filter((user) => user.uid === uid)
-      .flatMap((user) => user.contacts.map((contact) => contact.uid));
-    const mutualContacts = currentUserContacts.filter((contact) =>
-      contactUserContacts.includes(contact.uid)
-    );
-    return mutualContacts.length;
-  };
+  
+  
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
+    
   };
 
   const handleSearchClick = () => {
@@ -161,8 +167,9 @@ const AddContacts = () => {
                 <div className="flex items-center py-2 rounded-md">
                 <div>
                     <input className='rounded px-5 py-3 text-black border-solid border-2 border-sky-500' placeholder='Search for users' type="text" onChange={handleSearch} />
-                    
+                    <button className='bg-blue-600 font-semibold text-white p-2 w-32 rounded-full hover:bg-blue-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300 m-2' onClick={handleSearchClick}>Search</button>
                   </div>
+                
                 </div>
 
                 </div>

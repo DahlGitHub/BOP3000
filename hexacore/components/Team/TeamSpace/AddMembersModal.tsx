@@ -111,14 +111,6 @@ useEffect(() => {
   }
 }, [users, teamuid, addedUid]);
 
-useEffect(() => {
-  
-
-  if (addedUid || users.length > 0) {
-    getResults();
-  }
-}, [users, teamuid, addedUid]);
-
 
 const handleSearch = (event) => {
   setSearchQuery(event.target.value);
