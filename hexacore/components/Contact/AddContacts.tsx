@@ -138,7 +138,6 @@ const AddContacts = () => {
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
-    
   };
 
   const handleSearchClick = () => {
