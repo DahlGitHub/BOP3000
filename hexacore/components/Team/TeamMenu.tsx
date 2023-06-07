@@ -96,7 +96,25 @@ const TeamMenu = ()  => {
 
   useEffect(() => {
     if (selectedTeam) {
-      fetchTeamMembers(selectedTeam, setTeamMembers);
+      const q = query(collection(db, "teams", selectedTeam, "members"));
+      setTeamMembers([]);
+      onSnapshot(q, (snapshot) => {
+      snapshot.docChanges().forEach(async (change) => {
+        if (change.type === "added") {
+          const userId = change.doc.data().uid
+          const userDoc = await getDoc(doc(db, "users", userId));
+          const userData = userDoc.data();
+          fetchTeamMembers(userData, setTeamMembers)
+        }
+        if (change.type === "modified") {
+            
+        }
+        if (change.type === "removed") {
+            setTeamMembers((prev) => prev.filter((member) => member.uid !== change.doc.data().uid));
+        }
+      })
+    })
+      
     }
   }, [selectedTeam]);
 
