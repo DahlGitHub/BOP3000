@@ -268,12 +268,12 @@ const handleToolSelect = (toolName, type) => {
 
         
         <div className='grid place-items-center'>
-          <button type="button" onClick={handleModalOpen} className="text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2">
+          <button type="button" onClick={handleModalOpen} className="text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30">
             <FontAwesomeIcon className='pr-2' icon={faFolderPlus}/>
             
             Create a team
           </button>
-          <button type="button" onClick={() => setShowTeamInvites(!showTeamInvites)} className="mx-5 text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2">
+          <button type="button" onClick={() => setShowTeamInvites(!showTeamInvites)} className="mx-5 text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30">
             <FontAwesomeIcon className='pr-2' icon={faEnvelope}/>
             Show Teaminvites {inviteCount > 0 ? <span className='bg-red-500 text-white rounded-full px-2 py-1 text-xs font-bold ml-2'>{inviteCount}</span> : null}
           </button>
@@ -342,13 +342,16 @@ const handleToolSelect = (toolName, type) => {
         <div className='grow'></div>
       )
     }
-      { showTeamMembers && (
-      <div className="absolute z-10 top-15 right-0 h-[calc(100vh-70px)] max-w-40
-       dark:bg-gray-800 bg-gray-200 border-solid text-gray-800 dark:text-white flex">
+    {
+
+
+    }
+    
+
+  <div className={`absolute z-10 top-15 right-0 h-[calc(100vh-70px)] transition-transform ${showTeamMembers ? "translate-x-0" : "translate-x-full"} dark:bg-gray-800 bg-gray-50 border-l dark:border-gray-700 text-gray-800 dark:text-white`}
+  >
         <div
-            className={`${
-              selectedTeam ? 'block' : 'hidden'
-            } ml-4`}
+
           >
           <div className="p-4">
             <h1 className='text-xl'>Team members</h1>
@@ -364,7 +367,7 @@ const handleToolSelect = (toolName, type) => {
         
       
       </div>
-      )}
+    
       <div
             className={`${
               selectedTeam ? 'hidden' : 'block'

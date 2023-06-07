@@ -106,7 +106,7 @@ export default ({id}) =>{
     }, [chatID, id]);
     
     return (
-        <div id="scrollableDiv" className="flex flex-col-reverse h-full overflow-x-auto">
+        <div id="scrollableDiv" className="flex flex-col-reverse h-full w-full overflow-x-auto">
             <InfiniteScroll 
                 dataLength={messages.length+1}
                 next={getNextMessages}
