@@ -117,8 +117,9 @@ const MyTools = () => {
     const MainContent = () => {
         return (
           <div>
-            <div className='m-5'>
-              <h1 className='text-xl'>Tools:</h1>
+            <div>
+              <h1 className='text-xl mx-5'>Tools:</h1>
+              <div className="overflow-auto h-96">
               {tools.map((tool) => (
                 <div
                   key={tool.id}
@@ -134,6 +135,7 @@ const MyTools = () => {
                   </h3>
                 </div>
               ))}
+              </div>
             </div>
             <button type="button" onClick={() => handleToolModalOpen()} className="m-5 text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2">
               <FontAwesomeIcon className='pr-2' icon={faWrench}/>
