@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ContactModal from './ContactModal'
 import { auth, db } from '../../firebase-config/firebase';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, limit, query, where } from 'firebase/firestore';
 import AvatarPicture from '../AvatarPicture';
 import ContactRequests from './ContactRequests';
 import { debounce } from '@mui/material';
@@ -14,7 +14,6 @@ const AddContacts = () => {
   const [addedUid, setAddedUid] = React.useState(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [users, setUsers] = useState([]);
-
   const [filteredResults, setFilteredResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -27,7 +26,9 @@ const AddContacts = () => {
   }
 
   const fetchUsers = async () => {
-    const querySnapshot = await getDocs(query(collection(db, "users")));
+    const querySnapshot = await getDocs(
+      query(collection(db, "users"), limit(100))
+    );
     const newFiles = querySnapshot.docs.map((doc) => doc.data());
     setUsers(newFiles);
   };
@@ -35,7 +36,7 @@ const AddContacts = () => {
   useEffect(() => {
     fetchUsers();
   }, []);
-  
+
   const handleClick = (props) => {
     setAddedUid(props.uid);
     setName(props.name);
@@ -43,111 +44,99 @@ const AddContacts = () => {
     setPicture(props.picture);
     handleModalOpen();
   };
-  
+
   const getResults = async () => {
     if (searchQuery === "") {
       setFilteredResults([]);
       return;
     }
+
+    await fetchUsers();
+
+    const currentUserContactsRef = collection(
+      db,
+      "users",
+      auth.currentUser?.uid,
+      "contacts"
+    );
+    const [currentUserContactsSnapshot, usersSnapshot] = await Promise.all([
+      getDocs(currentUserContactsRef),
+      getDocs(collection(db, "users"))
+    ]);
   
-    let counter = 0;
-    const resultsVar = [];
-    
-
-
-    const isContact = async (uid) => {
-      if (uid) {
-        const q = query(
-          collection(db, "users", auth.currentUser?.uid, "contacts"),
-          where("uid", "==", uid)
+    const currentUserContacts = currentUserContactsSnapshot.docs.map((doc) =>
+      doc.data()
+    );
+    const filteredUsers = usersSnapshot.docs
+      .map((doc) => doc.data())
+      .filter((user) => {
+        return (
+          user.uid !== auth.currentUser.uid &&
+          !(currentUserContacts.some((contact) => contact.uid === user.uid)) &&
+          (user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            user.email.toLowerCase().includes(searchQuery.toLowerCase()))
         );
-        const snapshot = await getDocs(q);
-        return snapshot.size > 0;
-      }
-    };
-  
-  const mutualContacts = async (uid) => {
-    if (uid) {
-      
-      const currentUserContactsRef = collection(db, "users", auth.currentUser?.uid, "contacts");
-      const contactUserContactsRef = collection(db, "users", uid, "contacts");
-      const currentUserContactsSnapshot = await getDocs(currentUserContactsRef);
-      const contactUserContactsSnapshot = await getDocs(contactUserContactsRef);
-      const currentUserContacts = currentUserContactsSnapshot.docs.map((doc) => doc.data());
-      const contactUserContacts = contactUserContactsSnapshot.docs.map((doc) => doc.data());
-      const mutualContacts = currentUserContacts.filter((contact) => contactUserContacts.some((contact2) => contact.uid === contact2.uid));
-      return mutualContacts.length;
+      })
+      .slice(0, 10);
 
-    }
-  };
+    const resultsVar = filteredUsers.map((hit) => (
+      <tr key={hit.objectID}>
+        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+          <div className="flex items-center">
+            <div className="flex-shrink-0 w-10 h-10">
+              <AvatarPicture
+                picture={hit.picture}
+                name={hit.name}
+                containerWidth={"10"}
+                containerHeight={"10"}
+              />
+            </div>
+            <div className="ml-3">
+              <p className="text-gray-900 whitespace-no-wrap">{hit.name}</p>
+            </div>
+          </div>
+        </td>
 
-
-
-    for (const hit of users) {
-      if (
-        counter < 10 && // Limit the results to 10
-        hit.uid !== auth.currentUser.uid &&
-        !(await isContact(hit.uid)) &&
-        (hit.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          hit.email.toLowerCase().includes(searchQuery.toLowerCase())) // Filter by search query
-      ) {
-        resultsVar.push(
-          <tr key={hit.objectID}>
-                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 w-10 h-10">
-                        <AvatarPicture picture={hit.picture} name={hit.name} containerWidth={"10"} containerHeight={"10"}/>
-                      </div>
-                      <div className="ml-3">
-                        <p className="text-gray-900 whitespace-no-wrap">
-                          {hit.name}
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-    
-                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    <p className="text-gray-900 whitespace-no-wrap">{hit.email}</p>
-                  </td>
-                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    <p className="text-gray-900 text-center whitespace-no-wrap">
-                      {await mutualContacts(hit.uid)}
-                    </p>
-                  </td>
-                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-              <button
-                onClick={() => handleClick(hit)}
-                className="bg-blue-600 font-semibold text-white p-2 w-32 rounded-full hover:bg-blue-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300 m-2"
-              >
-                Add contact
-              </button>
-            </td>
-            </tr>
-        );
-        counter++; // Increment the counter
-      }
-    }
+        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+          <p className="text-gray-900 whitespace-no-wrap">{hit.email}</p>
+        </td>
+        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+          <p className="text-gray-900 text-center whitespace-no-wrap">
+            {mutualContacts(hit.uid, currentUserContacts)}
+          </p>
+        </td>
+        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+          <button
+            onClick={() => handleClick(hit)}
+            className="bg-blue-600 font-semibold text-white p-2 w-32 rounded-full hover:bg-blue-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300 m-2"
+          >
+            Add contact
+          </button>
+        </td>
+      </tr>
+    ));
 
     setFilteredResults(resultsVar);
   };
 
-  const debounceDelay = 100;
-
-  const debouncedSearch = debounce(getResults, debounceDelay);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await debouncedSearch();
-    };
-
-    if (users.length > 0 || addedUid || searchQuery) {
-      fetchData();
-    }
-  }, [users, addedUid, searchQuery]);
+  const mutualContacts = (uid, currentUserContacts) => {
+    // Calculate mutual contacts locally using the currentUserContacts array
+    
+    const contactUserContacts = users
+      .filter((user) => user.uid === uid)
+      .flatMap((user) => user.contacts.map((contact) => contact.uid));
+    const mutualContacts = currentUserContacts.filter((contact) =>
+      contactUserContacts.includes(contact.uid)
+    );
+    return mutualContacts.length;
+  };
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
-    debouncedSearch();
+  };
+
+  const handleSearchClick = () => {
+    getResults();
   };
     
   
@@ -172,7 +161,7 @@ const AddContacts = () => {
                 <div className="flex  items-center p-2 rounded-md">
                 <div>
                     <input className='m-4 rounded px-5 py-3 text-black border-solid border-2 border-sky-500' placeholder='Search for users' type="text" onChange={handleSearch} />
-                    
+                    <button className='bg-blue-600 font-semibold text-white p-2 w-32 rounded-full hover:bg-blue-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300 m-2' onClick={handleSearchClick}>Search</button>
                   </div>
                 </div>
 

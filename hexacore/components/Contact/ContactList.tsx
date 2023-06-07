@@ -17,8 +17,8 @@ const ContactList = () => {
 
 function fetchContact(doc, index, userId, userData) {
       const chatID = "Chat/" + [auth.currentUser.uid.toLowerCase(), userId.toLowerCase()].sort().join('');
-      const truncatedName = userData.name.substring(0, 30); // Limit name to 30 characters
-      const truncatedEmail = userData.email.substring(0, 20); // Limit email to 20 characters
+      const truncatedName = userData?.name.substring(0, 30); // Limit name to 30 characters
+      const truncatedEmail = userData?.email.substring(0, 20); // Limit email to 20 characters
       const element = (
         <button
           key={doc.id}
