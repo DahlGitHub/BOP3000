@@ -8,7 +8,8 @@ import AddMembersModal from "./AddMembersModal";
 import TeamSpaceSettings from "./Tools/TeamSpaceSettings";
 
 
-const TeamSpace = ({teamuid, name, clearTeam, alertInviteSuccess,tools, fetchTools, isMemberModalOpen, memberModalOnClose, setShowTeamMembers, showTeamMembers}) => {
+const TeamSpace = ({teamuid, name, clearTeam, alertInviteSuccess,tools, fetchTools, 
+    isMemberModalOpen, memberModalOnClose, setShowTeamMembers, showTeamMembers, setSelectedTool, selectedToolName}) => {
 
     const [isListOpen, setIsListOpen] = React.useState(true);
     const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
@@ -107,7 +108,8 @@ const TeamSpace = ({teamuid, name, clearTeam, alertInviteSuccess,tools, fetchToo
         <div className='h-[calc(100vh-70px)] bg-white text-black  dark:text-white  dark:bg-gray-800'>
             <AddToolModal tools={tools} isOpen={isModalOpen} onClose={handleModalClose} teamuid={teamuid}/>
             <AddMembersModal alertInviteSuccess={alertInviteSuccess} isOpen={isMemberModalOpen} onClose={memberModalOnClose} teamuid={teamuid}/>
-            <TeamSpaceSettings isOpen={isSettingsOpen} onClose={handleSettingsOpen} teamuid={teamuid} tools={tools}/>
+            <TeamSpaceSettings isOpen={isSettingsOpen} onClose={handleSettingsOpen} 
+            teamuid={teamuid} tools={tools} setSelectedTool={setSelectedTool} selectedToolName={selectedToolName}/>
             
                 <div>
             

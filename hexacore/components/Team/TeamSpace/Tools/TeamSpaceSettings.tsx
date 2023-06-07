@@ -4,7 +4,7 @@ import {useState, useEffect} from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 
-const TeamSettingModal = ({isOpen, onClose, teamuid, tools}) => {
+const TeamSettingModal = ({isOpen, onClose, teamuid, tools, setSelectedTool, selectedToolName}) => {
     const [toolName, setToolName] = useState([])
     useEffect(() => {
         setToolName([])
@@ -12,7 +12,8 @@ const TeamSettingModal = ({isOpen, onClose, teamuid, tools}) => {
           const newTool = {key: tool.key, value: tool.props.children.key}
           setToolName((toolName) => [...toolName, newTool])
         })
-    }, [tools, isOpen])
+        
+    }, [tools, isOpen, selectedToolName])
 
     const deleteTeam = (e) => {
     }
@@ -36,16 +37,19 @@ const TeamSettingModal = ({isOpen, onClose, teamuid, tools}) => {
     }
 
     const deleteTool = async (tool) => {
+      if(tool.value === selectedToolName){
+        setSelectedTool(false)
+      }
+      setSelectedTool(false)
       const toolRef = doc(db, `teams/${teamuid}/tools/${tool.key}`);
-    
+
       const memberSub = await getDocs(collection(toolRef, 'Members'))
-      const kanbanSub = await getDocs(collection(toolRef, 'Kanban'));
+      const kanbanSub = await getDocs(collection(toolRef, 'kanban'));
       const filesSub = await getDocs(collection(toolRef, 'files'));
     
       const deleteMemberSubcollectionsPromises = memberSub.docs.map((subDoc) => deleteDoc(subDoc.ref));
       const deleteKanbanSubcollectionsPromises = kanbanSub.docs.map((subDoc) => deleteDoc(subDoc.ref));
       const deleteFilesSubcollectionsPromises = filesSub.docs.map((subDoc) => deleteDoc(subDoc.ref));
-    
       await deleteDoc(toolRef);
       await Promise.all(deleteMemberSubcollectionsPromises);
       await Promise.all(deleteKanbanSubcollectionsPromises);

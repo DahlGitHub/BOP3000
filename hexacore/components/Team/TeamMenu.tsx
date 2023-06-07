@@ -146,25 +146,7 @@ const handleToolSelect = (toolName, type) => {
   setToolName(toolName);
   setToolType(type);
 }
-/*
-  const fetchTools1h = async () => {
-    const querySnapshot = await getDocs(query(collection(db, "teams", selectedTeam, "tools")));
-      const newFiles = querySnapshot.docs.map((doc) => {
-        const fileData = doc.data();
-        
-        if (toolsi.find((e)=> e.tool == fileData.tool)) {
-          return (
-            <div key={doc.id} className='cursor-pointer m-3' onClick={()=>handleToolSelect(fileData.name, fileData.tool)}>
-              <h3><FontAwesomeIcon className='pr-2' icon={toolsi.find((e)=> e.tool == fileData.tool).icon}/>{fileData.name}</h3>
-            </div>
-          );
-        }else {
-          return null;
-        }
 
-      })
-    setTools(newFiles)
-  }*/
   const fetchTools = async () => {
     setTools([])
     const q = query(collection(db, "teams", selectedTeam, "tools"));
@@ -182,7 +164,7 @@ const handleToolSelect = (toolName, type) => {
         }
         if (change.type === "modified") {
           const tool = (
-            <div key={change.doc.id + ";" + fileData.name} className='cursor-pointer m-3 hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 rounded-lg dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30' onClick={()=>handleToolSelect(change.doc.id, fileData.tool)}>
+            <div key={change.doc.id} className='cursor-pointer m-3 hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 rounded-lg dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30' onClick={()=>handleToolSelect(change.doc.id, fileData.tool)}>
               <h3 key={fileData.name}><FontAwesomeIcon className='pr-2' icon={toolsi.find((e)=> e.tool == fileData.tool).icon}/>{fileData.name}</h3>
             </div>
           )
@@ -333,7 +315,9 @@ const handleToolSelect = (toolName, type) => {
           <Drawer mainContent={<MainContent/>} title={<h1>Teams</h1>} isOpen={isListOpen} open={handleListOpen} close={handleListClose} />
         </div>)
         : ((<div>
-          <TeamSpace alertInviteSuccess={alertInviteSuccess} isMemberModalOpen={isMemberModalOpen} memberModalOnClose={handleMemberModalClose} tools={tools} fetchTools={fetchTools} teamuid={selectedTeam} name={selectedTeamName} clearTeam={clearTeam} setShowTeamMembers={setShowTeamMembers} showTeamMembers={showTeamMembers} />
+          <TeamSpace alertInviteSuccess={alertInviteSuccess} isMemberModalOpen={isMemberModalOpen} memberModalOnClose={handleMemberModalClose}
+           tools={tools} selectedToolName={toolName} setSelectedTool={setSelectedTool} fetchTools={fetchTools} teamuid={selectedTeam} name={selectedTeamName} clearTeam={clearTeam} 
+           setShowTeamMembers={setShowTeamMembers} showTeamMembers={showTeamMembers} />
         </div>))
         }
       </div>

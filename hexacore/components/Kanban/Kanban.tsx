@@ -6,6 +6,7 @@ import { collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, u
 import { db } from '../../firebase-config/firebase';
 import { useImmer } from 'use-immer';
 import Board from './Board';
+import { set } from 'firebase/database';
 
 export function createGuidId() {
   const randomNumber = Math.floor(Math.random() * 1000000000000);
@@ -41,16 +42,19 @@ export default function Home({id, membersId}) {
     }
   }
 
-  const getTitle = async () => {
-    const docRef = doc(db, id)
-    const docSnap = await getDoc(docRef)
-    setTitle(docSnap.data().name)
-  }
+
+  useEffect(() => {
+    onSnapshot(doc(db, id), (snapshot) => {
+      if(snapshot.data() === undefined){
+        return
+      }
+      setTitle(snapshot.data().name)
+    })
+  }, []);
 
   useEffect(() => {
     setBoardData([])
     getMembers()
-    getTitle()
     const q = query(collection(db, id+"/kanban"), orderBy('order', 'asc'))
     onSnapshot(q, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
