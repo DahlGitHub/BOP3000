@@ -273,7 +273,7 @@ const handleToolSelect = (toolName, type) => {
             
             Create a team
           </button>
-          <button type="button" onClick={() => setShowTeamInvites(!showTeamInvites)} className="mx-2 my-0.5 text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30">
+          <button type="button" onClick={() => handleInvitesOpen()} className="mx-2 my-0.5 text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30">
             <FontAwesomeIcon className='pr-2' icon={faEnvelope}/>
             Show Team invites {inviteCount > 0 ? <span className='bg-red-500 text-white rounded-full px-2 py-1 text-xs font-bold ml-2'>{inviteCount}</span> : null}
           </button>

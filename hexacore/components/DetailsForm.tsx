@@ -39,24 +39,13 @@ const DetailsForm = () => {
 
     const handleDeleteConfirmaton = async () => {
       // Prompt the user to reauthenticate before proceeding with deletion
-      const user = await getDoc(docImport(db, "users", auth.currentUser.uid))
-      
-      try{
-        if(user.data().authProvider === "google"){
-          signInWithGoogle().then(() => {
-            handleDeleteConfirmaton()
-          })
-        } else if(user.data().authProvider === "local"){
-          
-          
-        }
-        /*
+      try{ 
         handleDeleteFromChat().then(() => {
           handleDeleteFromTeam().then(() => {
             handleDelete();
           })
         })
-        */
+        
       }catch(error){
         
       }
@@ -101,9 +90,9 @@ const DetailsForm = () => {
               const kanbanDocs = await getDocs(collection(teamRef, 'tools', subDoc.id, "kanban"))
               kanbanDocs.forEach(async (subSubDoc) => {
                 subSubDoc.data().items.forEach(async (item) => {
-                  if(item.members.includes(user.uid)){
-                    const index = item.members.indexOf(user.uid)
-                    item.members.splice(index, 1)
+                  if(item.assignees.includes(user.uid)){
+                    const index = item.assignees.indexOf(user.uid)
+                    item.assignees.splice(index, 1)
                     await updateDoc(docImport(db, "teams", doc.id, "tools", subDoc.id, "kanban", subSubDoc.id), {
                       items: item
                     })
@@ -145,20 +134,23 @@ const DetailsForm = () => {
           await Promise.all(deleteSentReqSubSubcollectionsPromises);
           await Promise.all(deleteToolSubcollectionsPromises);
           await Promise.all(deleteTeamsSubSubcollectionsPromises);
-    
+          deleteDoc(userDocRef)
           // Delete user from Firebase Authentication
           auth.currentUser.delete().catch((error) => {
             console.log(userData.data());
             if(userData.data().authProvider === "google"){
               signInWithGoogle().then(() => {
-                handleDeleteConfirmaton()
-                return
+                if(auth.currentUser === user){
+                  handleDeleteConfirmaton()
+                }
               })
             } else if(userData.data().authProvider === "local"){
               handleModalOpen()
-              handleDeleteConfirmaton()
+              if(auth.currentUser === user){
+                handleDeleteConfirmaton()
+              }
             }
-          }).then(() => {deleteDoc(userDocRef)} );
+          })
     
           toast.success("Deleted user!");
         } catch (error) {
