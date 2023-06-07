@@ -173,7 +173,7 @@ const handleToolSelect = (toolName, type) => {
         const fileData = change.doc.data();
         if (change.type === "added") {
           const tool = (
-            <div key={change.doc.id} className='cursor-pointer m-3 hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 rounded-lg dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30' onClick={()=>handleToolSelect(change.doc.id, fileData.tool)}>
+            <div key={change.doc.id} className='cursor-pointer px-2 py-0.5 my-1 hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 rounded-lg dark:focus:ring-gray-500 dark:hover:bg-gray-700' onClick={()=>handleToolSelect(change.doc.id, fileData.tool)}>
               <h3 key={fileData.name}><FontAwesomeIcon className='pr-2' icon={toolsi.find((e)=> e.tool == fileData.tool).icon}/>{fileData.name}</h3>
             </div>
           )
@@ -182,7 +182,7 @@ const handleToolSelect = (toolName, type) => {
         }
         if (change.type === "modified") {
           const tool = (
-            <div key={change.doc.id + ";" + fileData.name} className='cursor-pointer m-3 hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 rounded-lg dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30' onClick={()=>handleToolSelect(change.doc.id, fileData.tool)}>
+            <div key={change.doc.id + ";" + fileData.name} className='cursor-pointer m-3 hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 rounded-lg dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30' onClick={()=>handleToolSelect(change.doc.id, fileData.tool)}>
               <h3 key={fileData.name}><FontAwesomeIcon className='pr-2' icon={toolsi.find((e)=> e.tool == fileData.tool).icon}/>{fileData.name}</h3>
             </div>
           )
@@ -279,7 +279,7 @@ const handleToolSelect = (toolName, type) => {
     return(
       <>
 
-        <div>
+        <div className='overflow-auto h-96'>
           {teams}
         </div>
 
@@ -349,7 +349,7 @@ const handleToolSelect = (toolName, type) => {
   
     {selectedTool && !selectedFiles ?
       (
-        <div className="grow flex overflow-auto">
+        <div className="grow flex overflow-auto h-[calc(100vh-70px)]">
           {showTool()}
         </div>
       ):
@@ -358,8 +358,8 @@ const handleToolSelect = (toolName, type) => {
       )
     }
       { showTeamMembers && (
-      <div className="fixed top-15 right-0 h-[calc(100vh-70px)] max-w-40
-       dark:bg-gray-800 border-solid text-white flex">
+      <div className="absolute z-10 top-15 right-0 h-[calc(100vh-70px)] max-w-40
+       dark:bg-gray-800 bg-gray-200 border-solid text-gray-800 dark:text-white flex">
         <div
             className={`${
               selectedTeam ? 'block' : 'hidden'
@@ -371,7 +371,7 @@ const handleToolSelect = (toolName, type) => {
           </div>
           <div className="flex-1 p-4 overflow-y-auto">
             {teamMembers}
-            <button onClick={() => handleMemberModalOpen()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded mt-10">
+            <button onClick={() => handleMemberModalOpen()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded-md mt-10">
               Add more members to the team
             </button>
           </div>
