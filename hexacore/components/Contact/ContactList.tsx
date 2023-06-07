@@ -1,5 +1,5 @@
 import { db, auth } from '../../firebase-config/firebase';
-import { collection, getDocs, getDoc, doc } from "firebase/firestore";
+import { collection, getDocs, getDoc, doc, query, onSnapshot } from "firebase/firestore";
 import React, { useState, useEffect } from 'react';
 import Chat from '../Chat/Chat';
 import Drawer from '../Drawer';
@@ -15,13 +15,7 @@ const ContactList = () => {
   const [chatID, setChatID] = useState('')
   const [requests, setRequests] = useState(0)
 
-  async function fetchContacts() {
-    const querySnapshot = await getDocs(collection(db, "users", auth.currentUser?.uid, "contacts"));
-  
-    const promises = querySnapshot.docs.map(async (doc, index) => {
-      const userId = doc.data().uid;
-      const userDoc = await getDoc(docImport(db, "users", userId));
-      const userData = userDoc.data();
+function fetchContact(doc, index, userId, userData) {
       const chatID = "Chat/" + [auth.currentUser.uid.toLowerCase(), userId.toLowerCase()].sort().join('');
       const truncatedName = userData.name.substring(0, 30); // Limit name to 30 characters
       const truncatedEmail = userData.email.substring(0, 20); // Limit email to 20 characters
@@ -42,22 +36,23 @@ const ContactList = () => {
           </div>
         </button>
       );
-  
       return element;
-    });
-  
-    const results = await Promise.all(promises);
-    setContacts(results);
   }
-  
-  
-  
-
-  
-
   useEffect(() => {
-    
-    fetchContacts();
+    const q = query(collection(db, "users", auth.currentUser?.uid, "contacts"))
+    onSnapshot(q, (snapshot) => {
+      snapshot.docChanges().forEach(async (change) => {
+      const userId = change.doc.id
+      const userDoc = await getDoc(docImport(db, "users", userId));
+      const userData = userDoc.data();
+        if (change.type === "added") {
+          setContacts((prev) => [...prev, fetchContact(change.doc, contacts.length, userId, userData)])
+        }
+        if (change.type === "removed") {
+          setContacts((prev) => prev.filter((contact) => contact.key !== change.doc.id))
+        }
+      })
+    })
 
   }, []); // Run this effect only once on component mount
 
