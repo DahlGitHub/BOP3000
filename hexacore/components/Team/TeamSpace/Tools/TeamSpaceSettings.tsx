@@ -4,7 +4,7 @@ import {useState, useEffect} from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 
-const TeamSettingModal = ({isOpen, onClose, teamuid, tools}) => {
+const TeamSettingModal = ({isOpen, onClose, teamuid, tools, setSelectedTool, selectedToolName}) => {
     const [toolName, setToolName] = useState([])
     useEffect(() => {
         setToolName([])
@@ -36,6 +36,9 @@ const TeamSettingModal = ({isOpen, onClose, teamuid, tools}) => {
     }
 
     const deleteTool = async (tool) => {
+      if(tool.value === selectedToolName){
+        setSelectedTool(false)
+      }
       const toolRef = doc(db, `teams/${teamuid}/tools/${tool.key}`);
     
       const memberSub = await getDocs(collection(toolRef, 'Members'))
