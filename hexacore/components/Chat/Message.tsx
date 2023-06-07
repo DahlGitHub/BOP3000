@@ -1,10 +1,13 @@
 import { Dropdown } from "@nextui-org/react"
-import { deleteDoc, doc, updateDoc } from "firebase/firestore"
+import { arrayUnion, deleteDoc, doc, updateDoc, getDoc } from "firebase/firestore"
 import { useContext, useEffect, useRef, useState } from "react"
 import { db } from "../../firebase-config/firebase"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEllipsisH, faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { UserContext } from "../../context/UserContext"
+import { collection, onSnapshot } from "firebase/firestore";
+import { useImmer } from "use-immer"
+import { faFaceAngry, faHeart, faSadCry, faSmile, faThumbsDown, faThumbsUp } from "@fortawesome/free-regular-svg-icons"
 
 
 export default ({index, message, id}) =>{   
@@ -15,10 +18,49 @@ export default ({index, message, id}) =>{
     const date = message.message.sentAt.toDate()
     const {user} = useContext(UserContext)
 
+    const [reactions, setReactions] = useImmer(message.message.reactions ? message.message.reactions : [])
+ 
     const deleteMessage = async () => {
         await deleteDoc(doc(db, id+'/Messages/', message.messageId))
     }
+
+    const react = async (reaction) => {
+      // Update the reactions state based on user action
+      const userReactionIndex = reactions.findIndex(
+        (item) => item.reaction === reaction && item.user.includes(user.uid)
+      );
+  
+      if (userReactionIndex > -1) {
+        const updatedReactions = reactions.filter(
+          (item, index) => index !== userReactionIndex
+        );
+  
+        await updateDoc(doc(db, id + "/Messages/", message.messageId), {
+          reactions: updatedReactions
+        });
+      } else {
+        const updatedReactions = [...reactions, { reaction, user: [user.uid] }];
+  
+        await updateDoc(doc(db, id + "/Messages/", message.messageId), {
+          reactions: updatedReactions
+        });
+      }
+    };
+  
+    useEffect(() => {
+      const messageRef = collection(db, id + "/Messages");
+      const unsubscribe = onSnapshot(messageRef, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          if (change.doc.id === message.messageId) {
+            const updatedReactionsFromDB = change.doc.data().reactions || [];
+            setReactions(updatedReactionsFromDB);
+          }
+        });
+      });
     
+      return () => unsubscribe();
+    }, [id, message.messageId, setReactions]);
+
     useEffect(()=>{
         if(textAreaRef.current.scrollHeight > textAreaRef.current.clientHeight){
             const rowsNeeded = Math.ceil(textAreaRef.current.scrollHeight / 20)
@@ -80,6 +122,15 @@ export default ({index, message, id}) =>{
           disabled={canEditMessage} 
           value={editMessageValue}
         />
+        <span>
+        {reactions.map((reaction, index) => (
+          <span
+          key={index}
+          className={`text-xs mr-1 px-1 border-2 rounded-md ${reaction.user.includes(user.uid) ? 'border-blue-500 text-blue-500' : 'border-slate-400'}`}>
+            <FontAwesomeIcon icon={['far', reaction.reaction]} />
+          </span>
+          ))}
+        </span>
         {!canEditMessage && (
           <div className="flex space-x-1">
             <span className="text-xs dark:text-gray-100">enter to 
@@ -98,13 +149,13 @@ export default ({index, message, id}) =>{
         )}
       </div>
     </div>
-    <div className="absolute right-2.5 top-0">
+    <div className="absolute flex space-x-2 right-2.5 mr-3 hidden group-hover:flex -top-2.5 rounded bg-gray-300 dark:bg-gray-800 p-1 border border-gray-400 shadow-lg">
 
     {user.uid === message.user.uid && canEditMessage ?
       <Dropdown>
         <Dropdown.Trigger>
           <div className="tooltip" data-tip="More">
-            <button type="button" className='hidden group-hover:block dark:text-white text-[12px] mr-3 rounded bg-gray-300 dark:bg-gray-800 p-1 border border-gray-400 shadow-lg'><FontAwesomeIcon className="fa-lg" icon={faEllipsisH}/></button>
+            <button type="button" className='hidden group-hover:block dark:text-white text-[12px] rounded bg-gray-300 dark:bg-gray-800 p-1'><FontAwesomeIcon className="fa-lg" icon={faEllipsisH}/></button>
           </div>
         </Dropdown.Trigger>
         <Dropdown.Menu
@@ -124,6 +175,26 @@ export default ({index, message, id}) =>{
         </Dropdown.Menu>
       </Dropdown>
       :null}
+
+    <Dropdown>
+        <Dropdown.Trigger>
+          <div className="tooltip" data-tip="More">
+            <button type="button" className='dark:text-white text-[12px]'><FontAwesomeIcon className="fa-lg" icon={faSmile}/></button>
+          </div>
+        </Dropdown.Trigger>
+        <Dropdown.Menu
+        aria-label="Static Actions"
+        css={{ display: "flex", flexDirection: "row" }}
+        onAction={react}
+        >
+        <Dropdown.Item textValue="Smile" key="face-smile"><FontAwesomeIcon icon={faSmile}/></Dropdown.Item>
+        <Dropdown.Item textValue="Heart" key="heart"><FontAwesomeIcon icon={faHeart}/></Dropdown.Item>
+        <Dropdown.Item textValue="Thumbsup" key="thumbs-up"><FontAwesomeIcon icon={faThumbsUp}/></Dropdown.Item>
+        <Dropdown.Item textValue="ThumbsDown" key="thumbs-down"><FontAwesomeIcon icon={faThumbsDown}/></Dropdown.Item>
+        <Dropdown.Item textValue="Angry" key="face-angry"><FontAwesomeIcon icon={faFaceAngry}/></Dropdown.Item>
+        <Dropdown.Item textValue="SadCry" key="face-sad-cry"><FontAwesomeIcon icon={faSadCry}/></Dropdown.Item>
+      </Dropdown.Menu>
+      </Dropdown>
     </div>
   </div>
 </div>
