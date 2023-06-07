@@ -118,22 +118,25 @@ const DetailsForm = () => {
           const toolsSub = await getDocs(collection(userDocRef, 'tools'))
           const sentReqSub = await getDocs(collection(userDocRef, 'sent-requests'))
           const teamsSub = await getDocs(collection(userDocRef, 'teams'))
+          const favTeamSub = await getDocs(collection(userDocRef, "favTeam"))
         
           
           const deletecontactRequestSubcollectionsPromises = contactReqSub.docs.map(async(subDoc) => {
-            const subSub = await deleteDoc(docImport(db, "users", subDoc.id, "contact-requests", user.uid))
+            await deleteDoc(docImport(db, "users", subDoc.id, "contact-requests", user.uid))
             deleteDoc(subDoc.ref)
           });
           const deleteToolSubcollectionsPromises = toolsSub.docs.map((subDoc) => deleteDoc(subDoc.ref));
           const deleteSentReqSubSubcollectionsPromises = sentReqSub.docs.map((subDoc) => {
-            const subSub = deleteDoc(docImport(db, "users", subDoc.id, "sent-requests", user.uid))
+            deleteDoc(docImport(db, "users", subDoc.id, "sent-requests", user.uid))
             deleteDoc(subDoc.ref)
           });
           const deleteTeamsSubSubcollectionsPromises = teamsSub.docs.map((subDoc) => deleteDoc(subDoc.ref));
+          const deleteFavTeamsSubSubcollectionsPromises = favTeamSub.docs.map((subDoc) => deleteDoc(subDoc.ref));
           await Promise.all(deletecontactRequestSubcollectionsPromises);
           await Promise.all(deleteSentReqSubSubcollectionsPromises);
           await Promise.all(deleteToolSubcollectionsPromises);
           await Promise.all(deleteTeamsSubSubcollectionsPromises);
+          await Promise.all(deleteFavTeamsSubSubcollectionsPromises);
           deleteDoc(userDocRef)
           // Delete user from Firebase Authentication
           auth.currentUser.delete().catch((error) => {
