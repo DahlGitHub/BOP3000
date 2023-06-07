@@ -94,7 +94,24 @@ const DetailsForm = () => {
         const teamRef = docImport(db, "teams", doc.id)
         const teamDoc = getDoc(teamRef)
         if ((await teamDoc).exists()) {
-          const teamData = (await teamDoc).data()
+          const toolsSub = await getDocs(collection(teamRef, 'tools'))
+          toolsSub.docs.forEach(async (subDoc) => {
+            const tool = subDoc.data().tool
+            if(tool === "kanban"){
+              const kanbanDocs = await getDocs(collection(teamRef, 'tools', subDoc.id, "kanban"))
+              kanbanDocs.forEach(async (subSubDoc) => {
+                subSubDoc.data().items.forEach(async (item) => {
+                  if(item.members.includes(user.uid)){
+                    const index = item.members.indexOf(user.uid)
+                    item.members.splice(index, 1)
+                    await updateDoc(docImport(db, "teams", doc.id, "tools", subDoc.id, "kanban", subSubDoc.id), {
+                      items: item
+                    })
+                  }
+                })
+              })
+            }
+          })
           deleteDoc(docImport(db, "teams", doc.id, "members", user.uid))
         }
       })
