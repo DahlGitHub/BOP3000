@@ -121,7 +121,7 @@ function fetchContact(doc, index, userId, userData) {
         </div>
         <div
           className={`${
-          chatID ? 'block' : 'hidden'
+          chatID ? 'block w-full' : 'hidden'
         }`}
         >
           {chatID.length > 0
@@ -131,7 +131,7 @@ function fetchContact(doc, index, userId, userData) {
         </div>
         <div
           className={`${
-          chatID ? 'hidden' : 'block'
+          chatID ? 'hidden' : 'block w-full'
         }`}
         >
           <AddContacts/>
