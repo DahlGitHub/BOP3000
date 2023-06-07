@@ -123,7 +123,7 @@ const MyTools = () => {
               {tools.map((tool) => (
                 <div
                   key={tool.id}
-                  className='cursor-pointer m-3'
+                  className='cursor-pointer m-3 hover:bg-gray-200 dark:hover:bg-gray-700 px-2 py-0.5 rounded-md'
                   onClick={() => handleToolSelect(tool.name, tool.tool)}
                 >
                   <h3>
