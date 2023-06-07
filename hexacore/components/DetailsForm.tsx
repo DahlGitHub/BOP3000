@@ -266,7 +266,7 @@ const DetailsForm = () => {
         className={`${
           deleteButtonPressed ? 'block' : 'hidden'
         } dark:text-white`}>
-        <button className="bg-gray-500 hover:bg-gray-700 text-white font-semibold py-2 px-2 rounded ml-2">
+        <button onClick={()=>setDeleteButtonPressed(false)} className="bg-gray-500 hover:bg-gray-700 text-white font-semibold py-2 px-2 rounded ml-2">
           Cancel
         </button>
         <button
