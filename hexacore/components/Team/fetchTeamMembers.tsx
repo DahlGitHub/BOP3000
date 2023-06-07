@@ -1,15 +1,11 @@
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, onSnapshot, query } from "firebase/firestore";
 import { db } from "../../firebase-config/firebase";
 import AvatarPicture from "../AvatarPicture";
+import { useEffect } from "react";
+import { on } from "events";
+import { set } from "firebase/database";
 
-async function fetchTeamMembers(selectedTeam, setTeamMembers) {
-  const docImport = doc;
-  const querySnapshot = await getDocs(collection(db, "teams", selectedTeam, "members"));
-
-  const promises = querySnapshot.docs.map(async (doc, index) => {
-    const userId = doc.data().uid;
-    const userDoc = await getDoc(docImport(db, "users", userId));
-    const userData = userDoc.data();
+function fetchTeamMembers(userData, setTeamMembers) {
     const truncatedName = userData.name.substring(0, 30); // Limit name to 30 characters
     const truncatedEmail = userData.email.substring(0, 30); // Limit email to 30 characters
     const element = (
@@ -21,12 +17,7 @@ async function fetchTeamMembers(selectedTeam, setTeamMembers) {
         </div>
       </button>
     );
-
-    return element;
-  });
-
-  const results = await Promise.all(promises);
-  setTeamMembers(results);
+    setTeamMembers((prev) => [...prev, element]);
 }
 
 export default fetchTeamMembers;
