@@ -1,5 +1,5 @@
 import { auth,db } from '../../firebase-config/firebase';
-import { doc, collection, setDoc, getDocs, getDoc, deleteDoc } from "firebase/firestore";
+import { doc, collection, setDoc, getDocs, getDoc, deleteDoc, onSnapshot, query } from "firebase/firestore";
 import {useState, useEffect} from "react";
 import AvatarPicture from '../AvatarPicture';
 
@@ -12,36 +12,38 @@ const ContactRequests = ({isOpen, onClose, setInviteCount}) => {
 
   useEffect(() => {
     async function fetchInvites() {
-      const querySnapshot = await getDocs(collection(db, "users", auth.currentUser?.uid, "contact-requests"));
-    
-      const promises = querySnapshot.docs.map(async (doc, index) => {
-        const contactID = doc.data().uid;
-        
-        const contactDoc = await getDoc(docImport(db, "users", contactID));
-        const contactData = contactDoc.data();
-        const element = (
-          <div key={doc.id}  className="flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
-            <div className="text-left rtl:text-right flex">
-              <div className='mx-3'>
-                <AvatarPicture picture={contactData.picture} name={contactData.name} containerWidth={"10"} containerHeight={"10"}/>
+      const q = query(collection(db, "users", auth.currentUser?.uid, "contact-requests"));
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        snapshot.docChanges().forEach(async (change) => {
+          const contactID = change.doc.data().uid;
+          const contactDoc = await getDoc(docImport(db, "users", contactID));
+          const contactData = contactDoc.data();
+          if (change.type === "added") {
+            const element = (
+              <div key={change.doc.id}  className="flex items-center w-full px-5 py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">
+                <div className="text-left rtl:text-right flex">
+                  <div className='mx-3'>
+                    <AvatarPicture picture={contactData.picture} name={contactData.name} containerWidth={"10"} containerHeight={"10"}/>
+                  </div>
+                  <h1 className="text-lg font-medium text-gray-700 capitalize dark:text-white">{contactData.name}</h1>
+                </div>
+                <button onClick={() => submit(contactID)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded ml-2">Accept</button>
+                <button onClick={() => decline(contactID)} className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded ml-2">Decline</button>
               </div>
-              <h1 className="text-lg font-medium text-gray-700 capitalize dark:text-white">{contactData.name}</h1>
-            </div>
-            <button onClick={() => submit(contactID)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded ml-2">Accept</button>
-            <button onClick={() => decline(contactID)} className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded ml-2">Decline</button>
-          </div>
-        );
-    
-        return element;
-      });
-    
-      const results = await Promise.all(promises);
-      setInvites(results);
-      await setInviteCount(results.length);
+            )
+            setInvites(prevState => [...prevState, element]);
+            setInviteCount(prevState => prevState + 1);
+          }
+          if (change.type === "removed") {
+            setInvites(prevState => prevState.filter((item) => item.key !== change.doc.id));
+            setInviteCount(prevState => prevState - 1);
+          }
+        })
+      })
     }
     
      fetchInvites();
-    }, []); // Run this effect only once on component mount
+    }, []);
 
 
 
@@ -64,7 +66,6 @@ const ContactRequests = ({isOpen, onClose, setInviteCount}) => {
         }
       onClose()
     }
-
     const decline = async (contactID) => {
         onClose()
         if (addedUid) {
@@ -73,7 +74,6 @@ const ContactRequests = ({isOpen, onClose, setInviteCount}) => {
             onClose();
         }
     }
-
 
     return (
       <div
