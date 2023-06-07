@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-regular-svg-icons';
 import { faEyeSlash, faSave, faTrash, faUpload, faUser } from '@fortawesome/free-solid-svg-icons';
+import DetailsFormLocalSignInModal from './DetailsFormLocalSignInModal';
 
 const DetailsForm = () => {
     const [user, loading] = useAuthState(auth);
@@ -39,20 +40,25 @@ const DetailsForm = () => {
     const handleDeleteConfirmaton = async () => {
       // Prompt the user to reauthenticate before proceeding with deletion
       const user = await getDoc(docImport(db, "users", auth.currentUser.uid))
+      
       try{
-        handleDeleteFromChat().then(() => {
-          handleDeleteFromTeam().then(() => {
-            handleDelete();
-          })
-        })
-      }catch(error){
         if(user.data().authProvider === "google"){
           signInWithGoogle().then(() => {
             handleDeleteConfirmaton()
           })
         } else if(user.data().authProvider === "local"){
-
+          
+          
         }
+        /*
+        handleDeleteFromChat().then(() => {
+          handleDeleteFromTeam().then(() => {
+            handleDelete();
+          })
+        })
+        */
+      }catch(error){
+        
       }
       
     }
@@ -122,7 +128,6 @@ const DetailsForm = () => {
           await Promise.all(deleteSentReqSubSubcollectionsPromises);
           await Promise.all(deleteToolSubcollectionsPromises);
           await Promise.all(deleteTeamsSubSubcollectionsPromises);
-          await deleteDoc(userDocRef);
     
           // Delete user from Firebase Authentication
           auth.currentUser.delete().catch((error) => {
@@ -133,9 +138,10 @@ const DetailsForm = () => {
                 return
               })
             } else if(userData.data().authProvider === "local"){
-    
+              handleModalOpen()
+              handleDeleteConfirmaton()
             }
-          })
+          }).then(() => {deleteDoc(userDocRef)} );
     
           toast.success("Deleted user!");
           router.push("/");
@@ -206,10 +212,21 @@ const DetailsForm = () => {
       }
     );
   };
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleModalOpen = () => {
+    setIsOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsOpen(false);
+  };
    
    if(user){
     return (
 <div className="bg-gray-100 dark:bg-gray-900">
+  <DetailsFormLocalSignInModal isOpen={isOpen} onClose={handleModalClose} handleDeleteConfirmation={handleDeleteConfirmaton}/>
   <div className="max-w-3xl mx-auto pt-4">
     <div className="bg-white dark:bg-gray-800 rounded-lg p-3 flex flex-col sm:flex-row items-center">
       <img
