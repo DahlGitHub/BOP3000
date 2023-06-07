@@ -348,18 +348,21 @@ const handleToolSelect = (toolName, type) => {
     }
     
 
-  <div className={`absolute z-10 top-15 right-0 h-[calc(100vh-70px)] transition-transform ${showTeamMembers ? "translate-x-0" : "translate-x-full"} dark:bg-gray-800 bg-gray-50 border-l dark:border-gray-700 text-gray-800 dark:text-white`}
-  >
+    { showTeamMembers && (
+      <div className="fixed top-15 right-0 h-[calc(100vh-70px)] max-w-40
+       dark:bg-gray-800 border-l bg-gray-50 text-white flex">
         <div
-
+            className={`${
+              selectedTeam ? 'block' : 'hidden'
+            } ml-1`}
           >
-          <div className="p-4">
-            <h1 className='text-xl'>Team members</h1>
+          <div className="">
+            <h1 className='text-xl ml-4 text-gray-800 dark:text-gray-100'>Team members</h1>
           
           </div>
           <div className="flex-1 p-4 overflow-y-auto">
             {teamMembers}
-            <button onClick={() => handleMemberModalOpen()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded-md mt-10">
+            <button onClick={() => handleMemberModalOpen()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded mt-10">
               Add more members to the team
             </button>
           </div>
@@ -367,7 +370,7 @@ const handleToolSelect = (toolName, type) => {
         
       
       </div>
-    
+      )}
       <div
             className={`${
               selectedTeam ? 'hidden' : 'block'
