@@ -46,18 +46,18 @@ const TeamSpace = ({teamuid, name, clearTeam, alertInviteSuccess,tools, fetchToo
                     </div>
                 </div>
 
-                <button type="button" onClick={ ()=> handleSettingsOpen() } className="m-5 text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2">
+                <button type="button" onClick={ ()=> handleSettingsOpen() } className="mx-2 my-0.5 text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 ">
                         <FontAwesomeIcon className='pr-2' icon={faCogs}/>
                         
                         Settings
                 </button>
                 
-                <button type="button" onClick={() => handleModalOpen()} className="m-5 text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2">
+                <button type="button" onClick={() => handleModalOpen()} className="mx-2 my-0.5 text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 ">
                         <FontAwesomeIcon className='pr-2' icon={faWrench}/>
                         
                         Add tool
                 </button>
-                <button type="button" onClick={() => setShowTeamMembers(!showTeamMembers)} className="mx-5 text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2">
+                <button type="button" onClick={() => setShowTeamMembers(!showTeamMembers)} className="mx-2 my-0.5 text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30">
                         <FontAwesomeIcon className='pr-2' icon={faPeopleGroup}/>
                         Show members
                 </button>
