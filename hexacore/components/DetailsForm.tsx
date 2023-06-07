@@ -144,7 +144,6 @@ const DetailsForm = () => {
           }).then(() => {deleteDoc(userDocRef)} );
     
           toast.success("Deleted user!");
-          router.push("/");
         } catch (error) {
           
           alert(error.message);
