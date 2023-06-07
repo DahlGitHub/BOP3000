@@ -147,7 +147,7 @@ const AddContacts = () => {
 
         <div className="bg-white dark:bg-gray-800 p-8 min-h-fit">
           <ContactModal isOpen={isModalOpen} onClose={handleModalClose}  picture={picture} name={name} uid={addedUid} email={email}/>
-            <div className="flex items-center pb-6">
+            <div className="flex-inline items-left">
             
               
               <div className='flex'>
@@ -157,11 +157,11 @@ const AddContacts = () => {
                 </div>
                 
               </div>
-              <div className="flex items-center ml-10 justify-between">
-                <div className="flex  items-center p-2 rounded-md">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center py-2 rounded-md">
                 <div>
-                    <input className='m-4 rounded px-5 py-3 text-black border-solid border-2 border-sky-500' placeholder='Search for users' type="text" onChange={handleSearch} />
-                    <button className='bg-blue-600 font-semibold text-white p-2 w-32 rounded-full hover:bg-blue-700 focus:outline-none focus:ring shadow-lg hover:shadow-none transition-all duration-300 m-2' onClick={handleSearchClick}>Search</button>
+                    <input className='rounded px-5 py-3 text-black border-solid border-2 border-sky-500' placeholder='Search for users' type="text" onChange={handleSearch} />
+                    
                   </div>
                 </div>
 
