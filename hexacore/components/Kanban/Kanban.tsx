@@ -35,7 +35,7 @@ export default function Home({id, membersId}) {
     }
   }
 
-  const onEnter = async (e) => {
+ const onEnter = async (e) => {
     if (e.key === 'Enter') {
       addBoard()
     }
