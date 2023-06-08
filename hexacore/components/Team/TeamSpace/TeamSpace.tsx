@@ -39,28 +39,30 @@ const TeamSpace = ({teamuid, name, clearTeam, alertInviteSuccess,tools, fetchToo
             <div>
                 
                 {teamDropdown()}
+                <div className="mt-3">
+                    <div className="flex flex-row">
+                    <button type="button" onClick={ ()=> handleSettingsOpen() } className="mx-2 my-0.5 p-3 text-xs text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 ">
+                        <FontAwesomeIcon icon={faCogs}/>
+                    </button>
+                
+                    <button type="button" onClick={() => handleModalOpen()} className="my-0.5 p-2.5 text-xs text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg  text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 ">
+                        <FontAwesomeIcon className='pr-2' icon={faWrench}/>
+                        Add tool
+                    </button>
+                    </div>
+                    <button type="button" onClick={() => setShowTeamMembers(!showTeamMembers)} className="mx-2 my-0.5 p-2.5 text-xs text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30">
+                        <FontAwesomeIcon className='pr-2' icon={faPeopleGroup}/>
+                        Show Members
+                    </button> 
+                </div>
                 <div className="m-5">
                     <h1 className="text-xl">Tools:</h1>
                     <div className="overflow-auto h-96">
                     {tools}
                     </div>
                 </div>
-
-                <button type="button" onClick={ ()=> handleSettingsOpen() } className="mx-2 my-0.5 text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 ">
-                        <FontAwesomeIcon className='pr-2' icon={faCogs}/>
-                        
-                        Settings
-                </button>
                 
-                <button type="button" onClick={() => handleModalOpen()} className="mx-2 my-0.5 text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 ">
-                        <FontAwesomeIcon className='pr-2' icon={faWrench}/>
-                        
-                        Add tool
-                </button>
-                <button type="button" onClick={() => setShowTeamMembers(!showTeamMembers)} className="mx-2 my-0.5 text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30">
-                        <FontAwesomeIcon className='pr-2' icon={faPeopleGroup}/>
-                        Show members
-                </button>
+                
             </div>
                 
         )
