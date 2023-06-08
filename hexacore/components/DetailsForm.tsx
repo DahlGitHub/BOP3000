@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { db, auth, storage } from '../firebase-config/firebase';
-import { updateProfile} from "firebase/auth";
-import { doc, updateDoc, getDoc, deleteDoc } from "firebase/firestore";
+import { db, auth, storage, signInWithGoogle, signInWithMicrosoft } from '../firebase-config/firebase';
+import { GoogleAuthProvider, reauthenticateWithCredential, signInWithPopup, updateProfile} from "firebase/auth";
+import { doc, updateDoc, getDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
 import { useRouter } from 'next/navigation';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-regular-svg-icons';
 import { faEyeSlash, faSave, faTrash, faUpload, faUser } from '@fortawesome/free-solid-svg-icons';
+import DetailsFormLocalSignInModal from './DetailsFormLocalSignInModal';
 
 const DetailsForm = () => {
-    
     const [user, loading] = useAuthState(auth);
     const [name, setName] = useState('');
     const router = useRouter();
@@ -20,7 +20,6 @@ const DetailsForm = () => {
     const [profilePicture, setProfilePicture] = useState(user?.photoURL ? user.photoURL : "https://cdn-icons-png.flaticon.com/512/147/147142.png");
     const [showUid, setShowUid] = useState(false);
     const [deleteButtonPressed, setDeleteButtonPressed] = useState(false);
-    const [deleteConfirmed, setDeleteConfirmed] = useState(false);
 
     const docImport = doc;
 
@@ -36,15 +35,21 @@ const DetailsForm = () => {
       }
     }, [user]);
 
-    /*
+    
 
-    const handleDeleteConfirmaton = () => {
-      setDeleteConfirmed(true)
-      handleDeleteFromChat().then(() => {
-        handleDeleteFromTeam().then(() => {
-          handleDelete();
+    const handleDeleteConfirmaton = async () => {
+      // Prompt the user to reauthenticate before proceeding with deletion
+      try{ 
+        handleDeleteFromChat().then(() => {
+          handleDeleteFromTeam().then(() => {
+            handleDelete();
+          })
         })
-      })
+        
+      }catch(error){
+        
+      }
+      
     }
 
     const handleDeleteFromChat = async () => {
@@ -53,7 +58,19 @@ const DetailsForm = () => {
       const contactsDocs = await getDocs(contactsRef)
       contactsDocs.forEach(async (doc) => {
         const chatID = "Chat/"+ [auth.currentUser.uid.toLowerCase(), doc.id.toLowerCase()].sort().join('')
-        deleteDoc(docImport(db, chatID))
+        const chatRef = docImport(db, chatID)
+        
+        const messagesSub = await getDocs(collection(chatRef, 'Messages'))
+        const membersSub = await getDocs(collection(chatRef, 'Members'))
+
+        const deleteMembersSubSubcollectionsPromises = membersSub.docs.map((subDoc) => deleteDoc(subDoc.ref));
+        const deleteMessagesSubSubcollectionsPromises = messagesSub.docs.map((subDoc) => deleteDoc(subDoc.ref));
+
+        await Promise.all(deleteMembersSubSubcollectionsPromises);
+        await Promise.all(deleteMessagesSubSubcollectionsPromises);
+        console.log("contactId: "+doc.id + "; user id: " + user.uid)
+        deleteDoc(docImport(db, "users", doc.id, "contacts", user.uid))
+        deleteDoc(chatRef)
       })
 
     }
@@ -66,53 +83,84 @@ const DetailsForm = () => {
         const teamRef = docImport(db, "teams", doc.id)
         const teamDoc = getDoc(teamRef)
         if ((await teamDoc).exists()) {
-          const teamData = (await teamDoc).data()
+          const toolsSub = await getDocs(collection(teamRef, 'tools'))
+          toolsSub.docs.forEach(async (subDoc) => {
+            const tool = subDoc.data().tool
+            if(tool === "kanban"){
+              const kanbanDocs = await getDocs(collection(teamRef, 'tools', subDoc.id, "kanban"))
+              kanbanDocs.forEach(async (subSubDoc) => {
+                subSubDoc.data().items.forEach(async (item) => {
+                  if(item.assignees.includes(user.uid)){
+                    const index = item.assignees.indexOf(user.uid)
+                    item.assignees.splice(index, 1)
+                    await updateDoc(docImport(db, "teams", doc.id, "tools", subDoc.id, "kanban", subSubDoc.id), {
+                      items: item
+                    })
+                  }
+                })
+              })
+            }
+          })
           deleteDoc(docImport(db, "teams", doc.id, "members", user.uid))
         }
       })
     }
-      
-          
-      
-
-    
     
     const handleDelete = async () => {
-      if (deleteConfirmed) {
+      const userData = await getDoc(docImport(db, "users", auth.currentUser.uid))
         try {
-          // Prompt the user to reauthenticate before proceeding with deletion
-          const reauthenticate = async () => {
-            const user = auth.currentUser;
-            if (!user) throw new Error("User not found.");
-    
-            const provider = new GoogleAuthProvider();
-            await auth.signInWithPopup(provider);
-          };
-    
-          await reauthenticate();
-    
           // User has been successfully reauthenticated, proceed with deletion
           const user = auth.currentUser;
           const userDocRef = doc(db, "users", user.uid);
     
           // Delete user document from Firestore
-          await deleteDoc(userDocRef);
-    
+          const contactReqSub = await getDocs(collection(userDocRef, 'contact-requests'))
+          const toolsSub = await getDocs(collection(userDocRef, 'tools'))
+          const sentReqSub = await getDocs(collection(userDocRef, 'sent-requests'))
+          const teamsSub = await getDocs(collection(userDocRef, 'teams'))
+          const favTeamSub = await getDocs(collection(userDocRef, "favTeam"))
+        
+          
+          const deletecontactRequestSubcollectionsPromises = contactReqSub.docs.map(async(subDoc) => {
+            await deleteDoc(docImport(db, "users", subDoc.id, "contact-requests", user.uid))
+            deleteDoc(subDoc.ref)
+          });
+          const deleteToolSubcollectionsPromises = toolsSub.docs.map((subDoc) => deleteDoc(subDoc.ref));
+          const deleteSentReqSubSubcollectionsPromises = sentReqSub.docs.map((subDoc) => {
+            deleteDoc(docImport(db, "users", subDoc.id, "sent-requests", user.uid))
+            deleteDoc(subDoc.ref)
+          });
+          const deleteTeamsSubSubcollectionsPromises = teamsSub.docs.map((subDoc) => deleteDoc(subDoc.ref));
+          const deleteFavTeamsSubSubcollectionsPromises = favTeamSub.docs.map((subDoc) => deleteDoc(subDoc.ref));
+          await Promise.all(deletecontactRequestSubcollectionsPromises);
+          await Promise.all(deleteSentReqSubSubcollectionsPromises);
+          await Promise.all(deleteToolSubcollectionsPromises);
+          await Promise.all(deleteTeamsSubSubcollectionsPromises);
+          await Promise.all(deleteFavTeamsSubSubcollectionsPromises);
+          deleteDoc(userDocRef)
           // Delete user from Firebase Authentication
-          await user.delete();
+          auth.currentUser.delete().catch((error) => {
+            console.log(userData.data());
+            if(userData.data().authProvider === "google"){
+              signInWithGoogle().then(() => {
+                if(auth.currentUser === user){
+                  handleDeleteConfirmaton()
+                }
+              })
+            } else if(userData.data().authProvider === "local"){
+              handleModalOpen()
+              if(auth.currentUser === user){
+                handleDeleteConfirmaton()
+              }
+            }
+          })
     
           toast.success("Deleted user!");
-          router.push("/");
         } catch (error) {
-          // Reauthentication failed or deletion encountered an error
+          
           alert(error.message);
         }
-      } else {
-        setDeleteButtonPressed(false);
-      }
     };
-    
-  */  
 
 
 
@@ -175,10 +223,21 @@ const DetailsForm = () => {
       }
     );
   };
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleModalOpen = () => {
+    setIsOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsOpen(false);
+  };
    
    if(user){
     return (
-<div className="bg-gray-100 min-h-screen dark:bg-gray-900">
+<div className="bg-gray-100 dark:bg-gray-900">
+  <DetailsFormLocalSignInModal isOpen={isOpen} onClose={handleModalClose} handleDeleteConfirmation={handleDeleteConfirmaton}/>
   <div className="max-w-3xl mx-auto pt-4">
     <div className="bg-white dark:bg-gray-800 rounded-lg p-3 flex flex-col sm:flex-row items-center">
       <img
@@ -235,11 +294,11 @@ const DetailsForm = () => {
         className={`${
           deleteButtonPressed ? 'block' : 'hidden'
         } dark:text-white`}>
-        <button className="bg-gray-500 hover:bg-gray-700 text-white font-semibold py-2 px-2 rounded ml-2">
+        <button onClick={()=>setDeleteButtonPressed(false)} className="bg-gray-500 hover:bg-gray-700 text-white font-semibold py-2 px-2 rounded ml-2">
           Cancel
         </button>
         <button
-          /*</div>onClick={() => handleDeleteConfirmaton()}*/
+          onClick={() => handleDeleteConfirmaton()}
           className="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-2 rounded ml-2"
         >
           Delete my account

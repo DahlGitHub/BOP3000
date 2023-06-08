@@ -6,6 +6,7 @@ import { collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, u
 import { db } from '../../firebase-config/firebase';
 import { useImmer } from 'use-immer';
 import Board from './Board';
+import { set } from 'firebase/database';
 
 export function createGuidId() {
   const randomNumber = Math.floor(Math.random() * 1000000000000);
@@ -41,16 +42,19 @@ export default function Home({id, membersId}) {
     }
   }
 
-  const getTitle = async () => {
-    const docRef = doc(db, id)
-    const docSnap = await getDoc(docRef)
-    setTitle(docSnap.data().name)
-  }
+
+  useEffect(() => {
+    onSnapshot(doc(db, id), (snapshot) => {
+      if(snapshot.data() === undefined){
+        return
+      }
+      setTitle(snapshot.data().name)
+    })
+  }, []);
 
   useEffect(() => {
     setBoardData([])
     getMembers()
-    getTitle()
     const q = query(collection(db, id+"/kanban"), orderBy('order', 'asc'))
     onSnapshot(q, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
@@ -134,10 +138,10 @@ export default function Home({id, membersId}) {
     setNewBoard('')
   }
   return (
-      <div className="pt-10 pl-5 flex flex-col h-[calc(100vh-70px)] grow">
+      <div className="pt-10 pl-5 flex flex-col w-10 grow">
         {/* Board header */}
-        <div className="flex flex-col sm:flex-row items-start sm:space-y-0 sm:space-x-3 space-x-3 ">
-          <div className="flex items-center mx-2">
+        <div className="flex-row items-start sm:space-y-0 sm:space-x-3 space-x-3 ">
+          <div className="flex items-center mx-3 mb-3">
             <h4 className="text-4xl font-bold text-gray-600">{title}</h4>
           </div>
           <div className='flex space-x-2'>
@@ -147,7 +151,7 @@ export default function Home({id, membersId}) {
         </div>
         {ready && (
           <DragDropContext onDragEnd={onDragEnd}>
-            <div className="grow w-full my-3 overflow-x-auto h-full">
+            <div className="grow w-full my-3 ">
             <Droppable droppableId="droppable" type="BOARD" direction="horizontal">
               {(provided, snapshot) => (
               <div

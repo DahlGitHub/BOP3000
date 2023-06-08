@@ -78,7 +78,8 @@ const TeamMenu = ()  => {
   async function favTeam () {
     const favTeamDoc = await getDocs(collection(db, "users", auth.currentUser?.uid, "favTeam"));
     const favTeamDataID = favTeamDoc.docs.map((doc) => doc.id);
-    const teamDoc = await getDoc(doc(db, "teams", favTeamDoc.docs[0].id));
+    if(favTeamDoc.empty) return;
+    const teamDoc = await getDoc(doc(db, "teams", favTeamDoc.docs[0]?.id));
     const favTeamName = teamDoc.data().name;
     if(favTeamDoc.empty) {
       return;
@@ -96,7 +97,25 @@ const TeamMenu = ()  => {
 
   useEffect(() => {
     if (selectedTeam) {
-      fetchTeamMembers(selectedTeam, setTeamMembers);
+      const q = query(collection(db, "teams", selectedTeam, "members"));
+      setTeamMembers([]);
+      onSnapshot(q, (snapshot) => {
+      snapshot.docChanges().forEach(async (change) => {
+        if (change.type === "added") {
+          const userId = change.doc.data().uid
+          const userDoc = await getDoc(doc(db, "users", userId));
+          const userData = userDoc.data();
+          fetchTeamMembers(userData, setTeamMembers)
+        }
+        if (change.type === "modified") {
+            
+        }
+        if (change.type === "removed") {
+            setTeamMembers((prev) => prev.filter((member) => member.uid !== change.doc.data().uid));
+        }
+      })
+    })
+      
     }
   }, [selectedTeam]);
 
@@ -128,25 +147,7 @@ const handleToolSelect = (toolName, type) => {
   setToolName(toolName);
   setToolType(type);
 }
-/*
-  const fetchTools1h = async () => {
-    const querySnapshot = await getDocs(query(collection(db, "teams", selectedTeam, "tools")));
-      const newFiles = querySnapshot.docs.map((doc) => {
-        const fileData = doc.data();
-        
-        if (toolsi.find((e)=> e.tool == fileData.tool)) {
-          return (
-            <div key={doc.id} className='cursor-pointer m-3' onClick={()=>handleToolSelect(fileData.name, fileData.tool)}>
-              <h3><FontAwesomeIcon className='pr-2' icon={toolsi.find((e)=> e.tool == fileData.tool).icon}/>{fileData.name}</h3>
-            </div>
-          );
-        }else {
-          return null;
-        }
 
-      })
-    setTools(newFiles)
-  }*/
   const fetchTools = async () => {
     setTools([])
     const q = query(collection(db, "teams", selectedTeam, "tools"));
@@ -155,7 +156,7 @@ const handleToolSelect = (toolName, type) => {
         const fileData = change.doc.data();
         if (change.type === "added") {
           const tool = (
-            <div key={change.doc.id} className='cursor-pointer m-3 hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 rounded-lg dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30' onClick={()=>handleToolSelect(change.doc.id, fileData.tool)}>
+            <div key={change.doc.id} className='cursor-pointer px-2 py-0.5 my-1 hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 rounded-lg dark:focus:ring-gray-500 dark:hover:bg-gray-700' onClick={()=>handleToolSelect(change.doc.id, fileData.tool)}>
               <h3 key={fileData.name}><FontAwesomeIcon className='pr-2' icon={toolsi.find((e)=> e.tool == fileData.tool).icon}/>{fileData.name}</h3>
             </div>
           )
@@ -164,7 +165,7 @@ const handleToolSelect = (toolName, type) => {
         }
         if (change.type === "modified") {
           const tool = (
-            <div key={change.doc.id + ";" + fileData.name} className='cursor-pointer m-3 hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 rounded-lg dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30' onClick={()=>handleToolSelect(change.doc.id, fileData.tool)}>
+            <div key={change.doc.id} className='cursor-pointer m-3 hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 rounded-lg dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30' onClick={()=>handleToolSelect(change.doc.id, fileData.tool)}>
               <h3 key={fileData.name}><FontAwesomeIcon className='pr-2' icon={toolsi.find((e)=> e.tool == fileData.tool).icon}/>{fileData.name}</h3>
             </div>
           )
@@ -261,20 +262,20 @@ const handleToolSelect = (toolName, type) => {
     return(
       <>
 
-        <div>
+        <div className='overflow-auto h-96'>
           {teams}
         </div>
 
         
-        <div className='grid place-items-center'>
-          <button type="button" onClick={handleModalOpen} className="text-white p-5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2">
+        <div className='grid place-items-left'>
+          <button type="button" onClick={handleModalOpen} className="text-white mx-2 my-0.5 bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30">
             <FontAwesomeIcon className='pr-2' icon={faFolderPlus}/>
             
             Create a team
           </button>
-          <button type="button" onClick={() => setShowTeamInvites(!showTeamInvites)} className="mx-5 text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 mr-2 mb-2">
+          <button type="button" onClick={() => handleInvitesOpen()} className="mx-2 my-0.5 text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30">
             <FontAwesomeIcon className='pr-2' icon={faEnvelope}/>
-            Show Teaminvites {inviteCount > 0 ? <span className='bg-red-500 text-white rounded-full px-2 py-1 text-xs font-bold ml-2'>{inviteCount}</span> : null}
+            Show Team invites {inviteCount > 0 ? <span className='bg-red-500 text-white rounded-full px-2 py-1 text-xs font-bold ml-2'>{inviteCount}</span> : null}
           </button>
         </div>
       </>
@@ -315,7 +316,9 @@ const handleToolSelect = (toolName, type) => {
           <Drawer mainContent={<MainContent/>} title={<h1>Teams</h1>} isOpen={isListOpen} open={handleListOpen} close={handleListClose} />
         </div>)
         : ((<div>
-          <TeamSpace alertInviteSuccess={alertInviteSuccess} isMemberModalOpen={isMemberModalOpen} memberModalOnClose={handleMemberModalClose} tools={tools} fetchTools={fetchTools} teamuid={selectedTeam} name={selectedTeamName} clearTeam={clearTeam} setShowTeamMembers={setShowTeamMembers} showTeamMembers={showTeamMembers} />
+          <TeamSpace alertInviteSuccess={alertInviteSuccess} isMemberModalOpen={isMemberModalOpen} memberModalOnClose={handleMemberModalClose}
+           tools={tools} selectedToolName={toolName} setSelectedTool={setSelectedTool} fetchTools={fetchTools} teamuid={selectedTeam} name={selectedTeamName} clearTeam={clearTeam} 
+           setShowTeamMembers={setShowTeamMembers} showTeamMembers={showTeamMembers} />
         </div>))
         }
       </div>
@@ -331,7 +334,7 @@ const handleToolSelect = (toolName, type) => {
   
     {selectedTool && !selectedFiles ?
       (
-        <div className="grow flex overflow-auto">
+        <div className="grow flex overflow-auto h-[calc(100vh-70px)]">
           {showTool()}
         </div>
       ):
@@ -339,16 +342,22 @@ const handleToolSelect = (toolName, type) => {
         <div className='grow'></div>
       )
     }
-      { showTeamMembers && (
+    {
+
+
+    }
+    
+
+    { showTeamMembers && (
       <div className="fixed top-15 right-0 h-[calc(100vh-70px)] max-w-40
-       dark:bg-gray-800 border-solid text-white flex">
+       dark:bg-gray-800 border-l bg-gray-50 text-white flex">
         <div
             className={`${
               selectedTeam ? 'block' : 'hidden'
-            } ml-4`}
+            } ml-1`}
           >
-          <div className="p-4">
-            <h1 className='text-xl'>Team members</h1>
+          <div className="">
+            <h1 className='text-xl ml-4 text-gray-800 dark:text-gray-100'>Team members</h1>
           
           </div>
           <div className="flex-1 p-4 overflow-y-auto">

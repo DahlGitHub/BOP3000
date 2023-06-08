@@ -4,7 +4,7 @@ const AvatarPicture = ({ picture, name, containerWidth, containerHeight }) => {
         picture ? (
           <div className={`w-${containerWidth} h-${containerHeight}`}>
             <img
-              src={picture}
+              src={picture ? picture : ""}
               width="36"
               height="36"
               className="rounded-full"

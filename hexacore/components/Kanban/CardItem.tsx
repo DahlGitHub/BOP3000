@@ -38,8 +38,6 @@ function CardItem({ data, index, members, kanbanID }) {
   };
 
   const assignMember = async (member) => {
-    //mangler å sette index på arrayet
-    // ENDRE GROUPS.PHOTO til GROUPS.PICTURE :: Users har .picture
     const type = member.toString().split(' ')
     const docRef = await getDocs(q)
     docRef.docs.forEach(async(docs) => {

@@ -26,7 +26,6 @@ const DashboardLayout = ({ children }) => {
 
   useEffect(() => {
     userLoggedIn()
-    console.log("test")
   }, [user, error, loading])
 
   return (
