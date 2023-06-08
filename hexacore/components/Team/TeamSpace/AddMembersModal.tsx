@@ -82,7 +82,7 @@ const getResults = async () => {
     .map((hit) => (
       <button
         key={hit.uid}
-        className="flex items-center w-full px-5 py-2 hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm text-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30"
+        className="flex items-center w-full px-5 py-2 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm text-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30"
         onClick={() => handleClick({ objectID: hit.uid })}
       >
         <AvatarPicture
@@ -167,7 +167,9 @@ const handleSearch = (event) => {
                           hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                           Invite {addedName} to your team</a>
                     </div>
+                    <div className="overflow-y-auto h-96">
                     {filteredResults}
+                    </div>
                   </div>
                   
                 
